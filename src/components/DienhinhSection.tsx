@@ -6,7 +6,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
 import { getBestImageUrl } from '@/lib/image-utils';
 
-interface NewsItem {
+interface DienhinhItem {
   id: string;
   title: string;
   description?: string;
@@ -16,48 +16,48 @@ interface NewsItem {
   viewCount: number;
 }
 
-export default function NewsSection() {
-  const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
+export default function DienhinhSection() {
+  const [dienhinhItems, setDienhinhItems] = useState<DienhinhItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
-    const fetchNews = async () => {
+    const fetchDienhinh = async () => {
       try {
-        const response = await fetch('/api/content/news');
+        const response = await fetch('/api/content/dienhinh');
         if (response.ok) {
           const data = await response.json();
-          setNewsItems(data.slice(0, 5)); // Only show 5 latest news items
+          setDienhinhItems(data.slice(0, 5)); // Only show 5 latest items
         }
       } catch (error) {
-        console.error('Error fetching news:', error);
+        console.error('Error fetching điển hình:', error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchNews();
+    fetchDienhinh();
   }, []);
 
   const nextSlide = useCallback(() => {
-    setCurrentIndex((prev) => (prev + 1) % newsItems.length);
-  }, [newsItems.length]);
+    setCurrentIndex((prev) => (prev + 1) % dienhinhItems.length);
+  }, [dienhinhItems.length]);
 
   const prevSlide = useCallback(() => {
-    setCurrentIndex((prev) => (prev - 1 + newsItems.length) % newsItems.length);
-  }, [newsItems.length]);
+    setCurrentIndex((prev) => (prev - 1 + dienhinhItems.length) % dienhinhItems.length);
+  }, [dienhinhItems.length]);
 
   // Auto-advance carousel
   useEffect(() => {
-    if (newsItems.length <= 1) return;
+    if (dienhinhItems.length <= 1) return;
 
     const interval = setInterval(nextSlide, 5000); // Change slide every 5 seconds
     return () => clearInterval(interval);
-  }, [newsItems.length, nextSlide]);
+  }, [dienhinhItems.length, nextSlide]);
 
   if (loading) {
     return (
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-white">
         <div className="container mx-auto px-6">
           <div className="animate-pulse">
             <div className="h-8 bg-gray-200 rounded w-1/3 mb-8 mx-auto"></div>
@@ -75,7 +75,7 @@ export default function NewsSection() {
     );
   }
 
-  if (newsItems.length === 0) {
+  if (dienhinhItems.length === 0) {
     return null;
   }
 
@@ -84,11 +84,11 @@ export default function NewsSection() {
       <div className="container mx-auto px-6">
         <div className="text-center mb-12">
           <Link
-            href="/news"
+            href="/dienhinh"
             className="inline-block group"
           >
-            <h2 className="text-3xl font-bold text-gray-800 mb-4 md:text-4xl hover:text-blue-600 transition-colors">
-              Tin Tức
+            <h2 className="text-3xl font-bold text-gray-800 mb-4 md:text-4xl hover:text-blue-600 transition-colors font-montserrat">
+              Điển Hình
             </h2>
           </Link>
         </div>
@@ -100,7 +100,7 @@ export default function NewsSection() {
               className="flex transition-transform duration-500 ease-in-out"
               style={{ transform: `translateX(-${currentIndex * 100}%)` }}
             >
-              {newsItems.map((item) => (
+              {dienhinhItems.map((item) => (
                 <Link
                   key={item.id}
                   href={`/content/${item.id}`}
@@ -128,11 +128,11 @@ export default function NewsSection() {
                             '/uploads/ip7lluumcn7wXoTaxZWrL_1758272559937.jpg'
                           ];
                           // Use a different image for each item based on index
-                          const imageIndex = newsItems.findIndex(news => news.id === item.id) % existingImages.length;
+                          const imageIndex = dienhinhItems.findIndex(dienhinh => dienhinh.id === item.id) % existingImages.length;
                           imageUrl = existingImages[imageIndex];
                         }
 
-                        console.log('News item:', item.title, 'ID:', item.id, 'thumbnailUrl:', item.thumbnailUrl, 'imageUrl:', item.imageUrl, 'using:', imageUrl);
+                        console.log('Điển hình item:', item.title, 'ID:', item.id, 'thumbnailUrl:', item.thumbnailUrl, 'imageUrl:', item.imageUrl, 'using:', imageUrl);
 
                         return imageUrl ? (
                           <Image
@@ -187,19 +187,19 @@ export default function NewsSection() {
           </div>
 
           {/* Navigation Buttons */}
-          {newsItems.length > 1 && (
+          {dienhinhItems.length > 1 && (
             <>
               <button
                 onClick={prevSlide}
                 className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg transition-all duration-300 z-10"
-                aria-label="Previous news item"
+                aria-label="Previous điển hình item"
               >
                 <ChevronLeft className="w-6 h-6" />
               </button>
               <button
                 onClick={nextSlide}
                 className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg transition-all duration-300 z-10"
-                aria-label="Next news item"
+                aria-label="Next điển hình item"
               >
                 <ChevronRight className="w-6 h-6" />
               </button>
@@ -207,9 +207,9 @@ export default function NewsSection() {
           )}
 
           {/* Dots Indicator */}
-          {newsItems.length > 1 && (
+          {dienhinhItems.length > 1 && (
             <div className="flex justify-center mt-6 space-x-2">
-              {newsItems.map((_, index) => (
+              {dienhinhItems.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentIndex(index)}
@@ -218,7 +218,7 @@ export default function NewsSection() {
                       ? 'bg-blue-600 scale-110'
                       : 'bg-gray-300 hover:bg-gray-400'
                   }`}
-                  aria-label={`Go to news item ${index + 1}`}
+                  aria-label={`Go to điển hình item ${index + 1}`}
                 />
               ))}
             </div>
