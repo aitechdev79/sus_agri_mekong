@@ -1,0 +1,6 @@
+# This file ensures the uploads directory is tracked by git
+# Placeholder images should be added here:
+# - hero.jpg (hero section background)
+# - icon.png (about section illustration)
+# - featured.jpg (featured content thumbnail)
+# - logos/ directory with partner logos (vcci.png, oxfam.png, hcm.png)
