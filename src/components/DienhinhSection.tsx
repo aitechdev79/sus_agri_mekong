@@ -81,16 +81,19 @@ export default function DienhinhSection() {
 
   return (
     <section className="py-16 bg-gray-50">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-12">
+      <div className="container mx-auto px-6 max-w-6xl">
+        <div className="mb-12">
           <Link
-            href="/dienhinh"
+            href="/stories"
             className="inline-block group"
           >
-            <h2 className="text-3xl font-bold text-gray-800 mb-4 md:text-4xl hover:text-blue-600 transition-colors font-montserrat">
+            <h2 className="text-3xl font-bold text-gray-800 mb-4 md:text-4xl hover:text-blue-600 transition-colors font-montserrat text-left">
               Điển Hình
             </h2>
           </Link>
+          <p className="text-lg text-gray-600 font-montserrat text-left max-w-3xl">
+            Khám phá những câu chuyện thành công và mô hình điển hình trong phát triển bền vững chuỗi giá trị tôm và lúa.
+          </p>
         </div>
 
         {/* Carousel Container */}

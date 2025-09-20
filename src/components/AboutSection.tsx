@@ -51,6 +51,65 @@ export default function AboutSection() {
               </div>
             </div>
 
+            {/* CTA Button */}
+            <div className="mb-8">
+              <Link
+                href="/about-us"
+                className="inline-block font-montserrat font-bold text-sm text-white bg-green-600 hover:bg-green-700 transition-all duration-300 px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105"
+                aria-label="Khám phá về chúng tôi"
+              >
+                Khám phá
+              </Link>
+            </div>
+
+            {/* Business Members Section */}
+            <div>
+              <h3 className="mb-6 text-3xl font-bold text-gray-800 md:text-4xl font-montserrat">
+                Doanh nghiệp thành viên
+              </h3>
+              <p className="mb-6 text-lg text-gray-600 leading-relaxed font-montserrat">
+                Các doanh nghiệp đóng góp kiến thức chuyên môn, kinh nghiệm thực tiễn và nguồn lực để phát triển cộng đồng. Tham gia nền tảng giúp doanh nghiệp kết nối với nông dân, mở rộng thị trường và xây dựng uy tín thương hiệu bền vững.
+              </p>
+
+              {/* Member Logos */}
+              <div className="mb-6 flex items-center space-x-6">
+                <div className="relative h-18 w-30">
+                  <Image
+                    src="/members/01-Greenfeed.png"
+                    alt="Greenfeed Logo"
+                    fill
+                    className="object-contain"
+                    sizes="120px"
+                  />
+                </div>
+                <div className="relative h-18 w-30">
+                  <Image
+                    src="/members/02-CP.jpg"
+                    alt="CP Logo"
+                    fill
+                    className="object-contain"
+                    sizes="120px"
+                  />
+                </div>
+                <div className="relative h-18 w-30">
+                  <Image
+                    src="/members/03-binhdien.jpg"
+                    alt="Binh Dien Logo"
+                    fill
+                    className="object-contain"
+                    sizes="120px"
+                  />
+                </div>
+              </div>
+              <Link
+                href="/members"
+                className="inline-block font-montserrat font-bold text-sm text-white bg-green-600 hover:bg-green-700 transition-all duration-300 px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105"
+                aria-label="Xem danh sách thành viên"
+              >
+                Thành viên
+              </Link>
+            </div>
+
           </div>
 
           {/* Image */}

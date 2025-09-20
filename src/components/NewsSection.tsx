@@ -58,7 +58,7 @@ export default function NewsSection() {
   if (loading) {
     return (
       <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-6">
+        <div className="container mx-auto px-6 max-w-6xl">
           <div className="animate-pulse">
             <div className="h-8 bg-gray-200 rounded w-1/3 mb-8 mx-auto"></div>
             <div className="relative max-w-4xl mx-auto">
@@ -81,16 +81,19 @@ export default function NewsSection() {
 
   return (
     <section className="py-16 bg-gray-50">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-12">
+      <div className="container mx-auto px-6 max-w-6xl">
+        <div className="mb-12">
           <Link
             href="/news"
             className="inline-block group"
           >
-            <h2 className="text-3xl font-bold text-gray-800 mb-4 md:text-4xl hover:text-blue-600 transition-colors">
+            <h2 className="text-3xl font-bold text-gray-800 mb-4 md:text-4xl hover:text-blue-600 transition-colors font-montserrat text-left">
               Tin Tức
             </h2>
           </Link>
+          <p className="text-lg text-gray-600 font-montserrat text-left max-w-3xl">
+            Cập nhật những tin tức và xu hướng mới nhất về nông nghiệp bền vững từ khắp nơi trên thế giới.
+          </p>
         </div>
 
         {/* Carousel Container */}

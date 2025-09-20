@@ -1,7 +1,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Calendar, ArrowLeft, Eye } from 'lucide-react';
+import { Calendar, Eye } from 'lucide-react';
 import { notFound } from 'next/navigation';
+import NavigationBar from '@/components/NavigationBar';
+import Footer from '@/components/Footer';
 
 interface ContentItem {
   id: string;
@@ -99,34 +101,9 @@ export default async function ContentDetailPage({
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center space-x-4">
-            <Link
-              href="/"
-              className="inline-flex items-center text-blue-600 hover:text-blue-700 transition-colors"
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Về trang chủ
-            </Link>
-            {content.type === 'NEWS' && (
-              <>
-                <span className="text-gray-400">|</span>
-                <Link
-                  href="/news"
-                  className="inline-flex items-center text-blue-600 hover:text-blue-700 transition-colors"
-                >
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Về trang Tin tức
-                </Link>
-              </>
-            )}
-          </div>
-        </div>
-      </header>
+      <NavigationBar />
 
-      <main className="container mx-auto px-6 py-8">
+      <main className="container mx-auto px-6 py-20">
         <div className="max-w-4xl mx-auto">
           <article className="bg-white rounded-lg shadow-sm overflow-hidden">
             {/* Content Header */}
@@ -207,30 +184,10 @@ export default async function ContentDetailPage({
               </div>
             )}
           </article>
-
-          {/* Navigation Back */}
-          <div className="mt-8 text-center">
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              {content.type === 'NEWS' && (
-                <Link
-                  href="/news"
-                  className="inline-flex items-center bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
-                >
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Quay lại Tin tức
-                </Link>
-              )}
-              <Link
-                href="/"
-                className="inline-flex items-center bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Quay lại trang chủ
-              </Link>
-            </div>
-          </div>
         </div>
       </main>
+
+      <Footer />
     </div>
   );
 }

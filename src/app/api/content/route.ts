@@ -24,7 +24,13 @@ export async function GET(request: NextRequest) {
     }
 
     if (type) {
-      where.type = type
+      // Handle multiple types separated by comma
+      if (type.includes(',')) {
+        const types = type.split(',').map(t => t.trim())
+        where.type = { in: types }
+      } else {
+        where.type = type
+      }
     }
 
     if (featured) {
@@ -33,8 +39,12 @@ export async function GET(request: NextRequest) {
 
     if (search) {
       where.OR = [
-        { title: { contains: search, mode: 'insensitive' } },
-        { description: { contains: search, mode: 'insensitive' } }
+        { title: { contains: search } },
+        { titleEn: { contains: search } },
+        { description: { contains: search } },
+        { descriptionEn: { contains: search } },
+        { content: { contains: search } },
+        { contentEn: { contains: search } }
       ]
     }
 

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Header } from '@/components/layout/Header'
+import NavigationBar from '@/components/NavigationBar'
 import { ContentCard } from '@/components/content/ContentCard'
 import { SearchFilters } from '@/components/content/SearchFilters'
 import { Search, Filter } from 'lucide-react'
@@ -91,9 +91,9 @@ export default function LibraryPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header currentPath="/library" />
+      <NavigationBar />
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-20">
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">

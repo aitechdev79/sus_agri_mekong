@@ -12,25 +12,25 @@ export default function ToolsGrid() {
       description: 'Tìm kiếm và khám phá thư viện tài liệu phong phú về thực hành tốt',
       href: '/library?search=true',
       icon: Search,
-      color: 'bg-blue-500',
+      color: 'bg-blue-600',
       backgroundImage: '/tools/shrimp.png',
     },
     {
       id: 'policy',
       title: 'Chính Sách & Hướng Dẫn',
       description: 'Tìm hiểu các chính sách và hướng dẫn chính thức về nuôi tôm và trồng lúa',
-      href: '/library?type=POLICY',
+      href: '/guidance-policy',
       icon: FileText,
-      color: 'bg-green-500',
+      color: 'bg-green-600',
       backgroundImage: '/tools/rice.png',
     },
   ];
 
   return (
     <section className="py-16 bg-gray-50">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-800 mb-4 md:text-4xl font-montserrat">
+      <div className="container mx-auto px-6 max-w-6xl">
+        <div className="mb-12">
+          <h2 className="text-3xl font-bold text-gray-800 mb-4 md:text-4xl font-montserrat text-left">
             Công Cụ Hỗ Trợ
           </h2>
         </div>
@@ -40,7 +40,8 @@ export default function ToolsGrid() {
             <Link
               key={tool.id}
               href={tool.href}
-              className="group relative bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+              className="group relative bg-white rounded-lg shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-300 hover:-translate-y-2 border-2 border-transparent hover:border-blue-200"
+              style={{ boxShadow: '0 25px 50px rgba(0, 0, 0, 0.3)' }}
               aria-label={`${tool.title} - ${tool.description}`}
             >
               {/* Background Image */}
@@ -52,7 +53,7 @@ export default function ToolsGrid() {
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
-                <div className="absolute inset-0 bg-white bg-opacity-70"></div>
+                <div className="absolute inset-0 bg-white bg-opacity-50"></div>
               </div>
 
               {/* Content */}

@@ -159,3 +159,29 @@ The platform implements a complete content lifecycle:
 4. **Publishing**: Approved content moves through status workflow (DRAFT → PUBLISHED → ARCHIVED)
 5. **Analytics**: Track views, downloads, and user interactions
 6. **User Engagement**: Comments (with approval), bookmarks, and notifications
+
+## Common Development Tasks
+
+### Running a single test
+The project doesn't have a test suite configured yet. When implementing tests, consider:
+```bash
+# Install testing dependencies first
+npm install --save-dev jest @testing-library/react @testing-library/jest-dom
+
+# Run tests (after setup)
+npm test
+```
+
+### Creating new API endpoints
+Follow the existing pattern in `/src/app/api/`:
+1. Create route file: `route.ts` in appropriate directory
+2. Implement HTTP methods (GET, POST, PUT, DELETE)
+3. Add authentication check using `getServerSession(authOptions)`
+4. Include proper error handling and validation
+
+### Adding new content types
+To add a new content type:
+1. Update Prisma schema enum `ContentType` in `/prisma/schema.prisma`
+2. Run `npx prisma migrate dev` to update database
+3. Update TypeScript types in `/src/types/`
+4. Add corresponding UI components and API handlers

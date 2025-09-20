@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import NavigationBar from '@/components/NavigationBar'
 
 export default function SignUpPage() {
   const [formData, setFormData] = useState({
@@ -101,10 +102,10 @@ export default function SignUpPage() {
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="max-w-md w-full space-y-8">
           <div>
-            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 font-montserrat">
               Xác thực số điện thoại
             </h2>
-            <p className="mt-2 text-center text-sm text-gray-600">
+            <p className="mt-2 text-center text-sm text-gray-600 font-montserrat">
               Mã OTP đã được gửi đến số {formData.phone}
             </p>
           </div>
@@ -115,21 +116,21 @@ export default function SignUpPage() {
                 required
                 value={otp}
                 onChange={(e) => setOtp(e.target.value)}
-                className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500"
+                className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500 font-montserrat"
                 placeholder="Nhập mã OTP"
                 maxLength={6}
               />
             </div>
 
             {error && (
-              <div className="text-red-600 text-sm text-center">{error}</div>
+              <div className="text-red-600 text-sm text-center font-montserrat">{error}</div>
             )}
 
             <div>
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700"
+                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 font-montserrat"
               >
                 {isLoading ? 'Đang xác thực...' : 'Xác thực'}
               </Button>
@@ -141,15 +142,17 @@ export default function SignUpPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full space-y-8">
+    <div className="min-h-screen bg-gray-50">
+      <NavigationBar />
+      <div className="flex items-center justify-center pt-20 pb-8">
+        <div className="max-w-md w-full space-y-8">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 font-montserrat">
             Tạo tài khoản mới
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="mt-2 text-center text-sm text-gray-600 font-montserrat">
             Hoặc{' '}
-            <Link href="/auth/signin" className="font-medium text-green-600 hover:text-green-500">
+            <Link href="/auth/signin" className="font-medium text-green-600 hover:text-green-500 font-montserrat">
               đăng nhập vào tài khoản có sẵn
             </Link>
           </p>
@@ -162,7 +165,7 @@ export default function SignUpPage() {
               required
               value={formData.name}
               onChange={handleChange}
-              className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500"
+              className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500 font-montserrat"
               placeholder="Họ và tên"
             />
 
@@ -172,7 +175,7 @@ export default function SignUpPage() {
               required
               value={formData.email}
               onChange={handleChange}
-              className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500"
+              className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500 font-montserrat"
               placeholder="Địa chỉ email"
             />
 
@@ -182,7 +185,7 @@ export default function SignUpPage() {
               required
               value={formData.phone}
               onChange={handleChange}
-              className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500"
+              className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500 font-montserrat"
               placeholder="Số điện thoại (VD: 0901234567)"
             />
 
@@ -191,7 +194,7 @@ export default function SignUpPage() {
               required
               value={formData.province}
               onChange={handleChange}
-              className="relative block w-full px-3 py-2 border border-gray-300 text-gray-900 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500"
+              className="relative block w-full px-3 py-2 border border-gray-300 text-gray-900 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500 font-montserrat"
             >
               <option value="">Chọn tỉnh/thành phố</option>
               {provinces.map((province) => (
@@ -204,7 +207,7 @@ export default function SignUpPage() {
               name="organization"
               value={formData.organization}
               onChange={handleChange}
-              className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500"
+              className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500 font-montserrat"
               placeholder="Tổ chức/Doanh nghiệp (không bắt buộc)"
             />
 
@@ -214,7 +217,7 @@ export default function SignUpPage() {
               required
               value={formData.password}
               onChange={handleChange}
-              className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500"
+              className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500 font-montserrat"
               placeholder="Mật khẩu"
             />
 
@@ -224,25 +227,26 @@ export default function SignUpPage() {
               required
               value={formData.confirmPassword}
               onChange={handleChange}
-              className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500"
+              className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500 font-montserrat"
               placeholder="Xác nhận mật khẩu"
             />
           </div>
 
           {error && (
-            <div className="text-red-600 text-sm text-center">{error}</div>
+            <div className="text-red-600 text-sm text-center font-montserrat">{error}</div>
           )}
 
           <div>
             <Button
               type="submit"
               disabled={isLoading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 font-montserrat"
             >
               {isLoading ? 'Đang đăng ký...' : 'Đăng ký'}
             </Button>
           </div>
         </form>
+        </div>
       </div>
     </div>
   )

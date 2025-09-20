@@ -4,8 +4,9 @@ import Link from 'next/link';
 import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import NavigationBar from '@/components/NavigationBar';
+import Footer from '@/components/Footer';
 
-interface NewsItem {
+interface StoryItem {
   id: string;
   title: string;
   description?: string;
@@ -14,7 +15,7 @@ interface NewsItem {
 }
 
 interface PaginatedResponse {
-  contents: NewsItem[];
+  contents: StoryItem[];
   pagination: {
     page: number;
     limit: number;
@@ -23,28 +24,28 @@ interface PaginatedResponse {
   };
 }
 
-export default function NewsPage() {
-  const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
+export default function StoriesPage() {
+  const [storyItems, setStoryItems] = useState<StoryItem[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const itemsPerPage = 5; // 5 items per page for better pagination demonstration
 
   useEffect(() => {
-    fetchNews(currentPage);
+    fetchStories(currentPage);
   }, [currentPage]);
 
-  const fetchNews = async (page: number) => {
+  const fetchStories = async (page: number) => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/content?type=NEWS&page=${page}&limit=${itemsPerPage}`);
+      const response = await fetch(`/api/content?type=STORY&page=${page}&limit=${itemsPerPage}`);
       if (response.ok) {
         const data: PaginatedResponse = await response.json();
-        setNewsItems(data.contents);
+        setStoryItems(data.contents);
         setTotalPages(data.pagination.pages);
       }
     } catch (error) {
-      console.error('Error fetching news:', error);
+      console.error('Error fetching stories:', error);
     } finally {
       setLoading(false);
     }
@@ -139,11 +140,11 @@ export default function NewsPage() {
           {/* Page Title */}
           <header className="mb-8">
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
-              Tin Tức
+              Điển Hình
             </h1>
           </header>
 
-          {/* News List */}
+          {/* Stories List */}
           {loading ? (
             <div className="space-y-4">
               {[...Array(10)].map((_, i) => (
@@ -153,7 +154,7 @@ export default function NewsPage() {
           ) : (
             <div className="bg-white rounded-lg shadow-sm">
               <ul className="divide-y divide-gray-200">
-                {newsItems.map((item, index) => (
+                {storyItems.map((item, index) => (
                   <li key={item.id}>
                     <Link
                       href={`/content/${item.id}`}
@@ -192,9 +193,9 @@ export default function NewsPage() {
                 ))}
               </ul>
 
-              {newsItems.length === 0 && (
+              {storyItems.length === 0 && (
                 <div className="text-center py-12 text-gray-500">
-                  Không có tin tức nào
+                  Không có điển hình nào
                 </div>
               )}
             </div>
@@ -234,6 +235,8 @@ export default function NewsPage() {
           )}
         </div>
       </main>
+
+      <Footer />
     </div>
   );
 }

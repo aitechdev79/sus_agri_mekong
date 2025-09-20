@@ -4,6 +4,7 @@ import AboutSection from '@/components/AboutSection';
 import ToolsGrid from '@/components/ToolsGrid';
 import SignUpSection from '@/components/SignUpSection';
 import DienhinhSection from '@/components/DienhinhSection';
+import HoatDongSection from '@/components/HoatDongSection';
 import NewsSection from '@/components/NewsSection';
 
 export default function Home() {
@@ -13,8 +14,9 @@ export default function Home() {
         <HeroSection />
         <AboutSection />
         <DienhinhSection />
-        <NewsSection />
         <ToolsGrid />
+        <HoatDongSection />
+        <NewsSection />
         <SignUpSection />
       </main>
       <Footer />

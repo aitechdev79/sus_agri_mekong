@@ -2,6 +2,8 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Calendar, Eye, User, ArrowLeft } from 'lucide-react';
+import NavigationBar from '@/components/NavigationBar';
+import Footer from '@/components/Footer';
 
 interface NewsContent {
   id: string;
@@ -51,20 +53,9 @@ export default async function NewsPage({ params }: { params: Promise<{ id: strin
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm">
-        <div className="container mx-auto px-6 py-4">
-          <Link
-            href="/"
-            className="inline-flex items-center text-blue-600 hover:text-blue-700 transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Về trang chủ
-          </Link>
-        </div>
-      </header>
+      <NavigationBar />
 
-      <main className="container mx-auto px-6 py-8">
+      <main className="container mx-auto px-6 py-20">
         <article className="max-w-4xl mx-auto">
           {/* Article Header */}
           <header className="mb-8">
@@ -156,27 +147,10 @@ export default async function NewsPage({ params }: { params: Promise<{ id: strin
             </div>
           )}
 
-          {/* Back to News Button */}
-          <div className="border-t pt-8 mt-12">
-            <div className="flex justify-between items-center">
-              <Link
-                href="/news"
-                className="inline-flex items-center text-blue-600 hover:text-blue-700 transition-colors"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Xem tất cả tin tức
-              </Link>
-
-              <Link
-                href="/"
-                className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                Về trang chủ
-              </Link>
-            </div>
-          </div>
         </article>
       </main>
+
+      <Footer />
     </div>
   );
 }

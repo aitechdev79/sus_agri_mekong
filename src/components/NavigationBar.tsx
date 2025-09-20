@@ -26,12 +26,6 @@ export default function NavigationBar() {
           <div className="hidden md:flex items-center space-x-8">
             <div className="flex items-center space-x-8">
               <Link
-                href="/values"
-                className="font-montserrat font-normal text-base text-gray-800 uppercase tracking-wide hover:underline hover:text-green-500 transition-colors"
-              >
-                Giá trị
-              </Link>
-              <Link
                 href="/library"
                 className="font-montserrat font-normal text-base text-gray-800 uppercase tracking-wide hover:underline hover:text-green-500 transition-colors"
               >
@@ -44,26 +38,20 @@ export default function NavigationBar() {
                 Tin tức
               </Link>
               <Link
-                href="/about"
+                href="/about-us"
                 className="font-montserrat font-normal text-base text-gray-800 uppercase tracking-wide hover:underline hover:text-green-500 transition-colors"
               >
                 Về chúng tôi
               </Link>
             </div>
 
-            {/* Login and CTA Buttons */}
-            <div className="flex items-center space-x-4">
+            {/* Login Button */}
+            <div className="flex items-center">
               <Link
                 href="/auth/signin"
                 className="font-montserrat font-normal text-base text-gray-800 hover:text-green-500 transition-colors"
               >
                 ĐĂNG NHẬP
-              </Link>
-              <Link
-                href="/join"
-                className="font-montserrat font-bold text-base text-white bg-green-500 hover:bg-green-600 transition-colors px-6 py-3 rounded-lg"
-              >
-                THAM GIA →
               </Link>
             </div>
           </div>
@@ -83,13 +71,6 @@ export default function NavigationBar() {
           <div className="md:hidden bg-white/95 backdrop-blur-sm border-t border-white/20">
             <div className="flex flex-col space-y-4 px-6 py-6">
               <Link
-                href="/values"
-                className="font-montserrat font-normal text-base text-gray-800 uppercase tracking-wide hover:text-green-600 transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Giá trị
-              </Link>
-              <Link
                 href="/library"
                 className="font-montserrat font-normal text-base text-gray-800 uppercase tracking-wide hover:text-green-600 transition-colors"
                 onClick={() => setIsMenuOpen(false)}
@@ -104,7 +85,7 @@ export default function NavigationBar() {
                 Tin tức
               </Link>
               <Link
-                href="/about"
+                href="/about-us"
                 className="font-montserrat font-normal text-base text-gray-800 uppercase tracking-wide hover:text-green-600 transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
@@ -116,13 +97,6 @@ export default function NavigationBar() {
                 onClick={() => setIsMenuOpen(false)}
               >
                 ĐĂNG NHẬP
-              </Link>
-              <Link
-                href="/join"
-                className="font-montserrat font-bold text-base text-white bg-green-500 hover:bg-green-600 transition-colors px-6 py-3 rounded-lg text-center w-full"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                THAM GIA →
               </Link>
             </div>
           </div>

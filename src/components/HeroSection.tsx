@@ -87,9 +87,9 @@ export default function HeroSection() {
             {/* CTA Button - Below subheadline */}
             <div>
               <Link
-                href="/library"
+                href="/about-us"
                 className="inline-block font-montserrat font-bold text-sm text-white bg-green-600 hover:bg-green-700 transition-all duration-300 px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105"
-                aria-label="Khám phá thư viện tài liệu"
+                aria-label="Khám phá về chúng tôi"
               >
                 Khám phá
               </Link>
