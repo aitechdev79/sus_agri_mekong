@@ -16,11 +16,7 @@ interface NewsItem {
   viewCount: number;
 }
 
-interface NewsSectionProps {
-  locale?: string;
-}
-
-export default function NewsSection({ locale }: NewsSectionProps) {
+export default function NewsSection() {
   const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -133,6 +129,7 @@ export default function NewsSection({ locale }: NewsSectionProps) {
                         return imageUrl ? (
                           imageUrl.startsWith('data:image/') ? (
                             // Use regular img tag for data URLs to avoid Next.js Image optimization issues
+                            // eslint-disable-next-line @next/next/no-img-element
                             <img
                               src={imageUrl}
                               alt={item.title}

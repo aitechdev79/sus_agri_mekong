@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import Link from 'next/link';
 import { Calendar, Eye } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import NavigationBar from '@/components/NavigationBar';

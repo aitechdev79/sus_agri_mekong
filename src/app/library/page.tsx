@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import NavigationBar from '@/components/NavigationBar'
 import { ContentCard } from '@/components/content/ContentCard'
 import { SearchFilters } from '@/components/content/SearchFilters'
@@ -23,11 +23,7 @@ export default function LibraryPage() {
     pages: 0
   })
 
-  useEffect(() => {
-    loadContents()
-  }, [searchTerm, selectedCategory, selectedType, currentPage])
-
-  const loadContents = async () => {
+  const loadContents = useCallback(async () => {
     try {
       setLoading(true)
       const params = new URLSearchParams({
@@ -50,7 +46,11 @@ export default function LibraryPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [currentPage, pagination.limit, searchTerm, selectedCategory, selectedType])
+
+  useEffect(() => {
+    loadContents()
+  }, [loadContents])
 
   const handleSearch = (term: string) => {
     setSearchTerm(term)

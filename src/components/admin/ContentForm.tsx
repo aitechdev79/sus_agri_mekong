@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { FileUploadZone } from '@/components/upload/FileUploadZone'
 import { FileManager } from '@/components/upload/FileManager'
 import Image from 'next/image'
-import { FormContent, ContentFormProps } from '@/types/content'
+import { ContentFormProps } from '@/types/content'
 
 export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
   const [loading, setLoading] = useState(false)
@@ -474,7 +474,7 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
                 <div className="ml-3">
                   <p className="text-sm text-amber-700">
                     <strong>Hình ảnh hiển thị:</strong> Chỉ những hình ảnh được tải lên thủ công sẽ hiển thị trong carousel tin tức.
-                    Hiện tại chỉ hỗ trợ hình ảnh dưới 1MB. Trường "News URL" dùng để liên kết đến bài báo gốc.
+                    Hiện tại chỉ hỗ trợ hình ảnh dưới 1MB. Trường &ldquo;News URL&rdquo; dùng để liên kết đến bài báo gốc.
                   </p>
                 </div>
               </div>
