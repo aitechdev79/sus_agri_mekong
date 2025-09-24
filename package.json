@@ -9,6 +9,7 @@
     "lint": "eslint",
     "db:migrate": "prisma migrate deploy",
     "db:seed": "node scripts/seed.js",
+    "db:reset-admin": "node scripts/reset-admin.js",
     "postinstall": "prisma generate"
   },
   "dependencies": {
