@@ -120,13 +120,25 @@ export default function NewsSection({ locale }: NewsSectionProps) {
                         // Try to find uploaded image based on content ID or use fallback
                         let imageUrl = null;
 
-                        // First check if thumbnailUrl or imageUrl point to uploaded files
-                        if (item.thumbnailUrl && item.thumbnailUrl.includes('/uploads/')) {
-                          imageUrl = getBestImageUrl(item.thumbnailUrl, null);
-                        } else if (item.imageUrl && item.imageUrl.includes('/uploads/')) {
-                          imageUrl = getBestImageUrl(null, item.imageUrl);
-                        } else {
-                          // Fallback to existing uploaded images
+                        // First check if thumbnailUrl exists (including data URLs)
+                        if (item.thumbnailUrl) {
+                          if (item.thumbnailUrl.includes('/uploads/')) {
+                            imageUrl = getBestImageUrl(item.thumbnailUrl, null);
+                          } else if (item.thumbnailUrl.startsWith('data:image/')) {
+                            // Use data URL directly
+                            imageUrl = item.thumbnailUrl;
+                          }
+                        } else if (item.imageUrl) {
+                          if (item.imageUrl.includes('/uploads/')) {
+                            imageUrl = getBestImageUrl(null, item.imageUrl);
+                          } else if (item.imageUrl.startsWith('data:image/')) {
+                            // Use data URL directly
+                            imageUrl = item.imageUrl;
+                          }
+                        }
+
+                        // If no valid image found, use fallback images
+                        if (!imageUrl) {
                           const existingImages = [
                             '/uploads/featured.jpg',
                             '/uploads/7x6zNkYYzkL-3mNtZ100N_1758273405111.jpg',
@@ -139,7 +151,7 @@ export default function NewsSection({ locale }: NewsSectionProps) {
                           imageUrl = existingImages[imageIndex];
                         }
 
-                        console.log('News item:', item.title, 'ID:', item.id, 'thumbnailUrl:', item.thumbnailUrl, 'imageUrl:', item.imageUrl, 'using:', imageUrl);
+                        console.log('News item:', item.title, 'ID:', item.id, 'thumbnailUrl:', item.thumbnailUrl ? item.thumbnailUrl.substring(0, 50) : 'none', 'imageUrl:', item.imageUrl ? item.imageUrl.substring(0, 50) : 'none', 'using:', imageUrl ? imageUrl.substring(0, 50) : 'none');
 
                         return imageUrl ? (
                           <Image
