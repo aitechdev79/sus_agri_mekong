@@ -8,12 +8,16 @@ interface Content {
   id: string
   title: string
   titleEn?: string
+  description: string
+  content: string
   type: string
   category: string
+  tags: string
   status: string
   isFeatured: boolean
   isPublic: boolean
   viewCount: number
+  updatedAt: string
   author: {
     name: string
     role: string
