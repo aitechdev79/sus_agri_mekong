@@ -52,6 +52,6 @@ export default withAuth(
 );
 
 export const config = {
-  // Match only internationalized pathnames and protected routes
-  matcher: ['/((?!_next|favicon.ico|uploads).*)']
+  // Match only internationalized pathnames and protected routes, exclude static assets
+  matcher: ['/((?!_next|favicon.ico|uploads|hero|images|.*\\.jpg|.*\\.png|.*\\.gif|.*\\.svg|.*\\.webp).*)']
 };
