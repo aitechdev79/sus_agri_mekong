@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
-import Link from 'next/link';
-import { Calendar, Eye, User, ArrowLeft } from 'lucide-react';
+import { Calendar, Eye, User } from 'lucide-react';
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
 

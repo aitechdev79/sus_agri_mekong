@@ -2,7 +2,7 @@ import { withAuth } from 'next-auth/middleware';
 import { NextRequest } from 'next/server';
 
 const authMiddleware = withAuth(
-  function onSuccess(_req) {
+  function onSuccess() {
     return;
   },
   {

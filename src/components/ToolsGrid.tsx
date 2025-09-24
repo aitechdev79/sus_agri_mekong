@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Search, FileText, MessageSquare } from 'lucide-react';
+import { Search, FileText } from 'lucide-react';
 
 export default function ToolsGrid() {
   const tools = [

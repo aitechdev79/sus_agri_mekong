@@ -203,6 +203,7 @@ export function FileUploadZone({
   }
 
   const getFileIcon = (file: File) => {
+    // eslint-disable-next-line jsx-a11y/alt-text -- This is a Lucide icon, not an img element
     if (file.type.startsWith('image/')) return <Image className="w-5 h-5" />
     if (file.type.startsWith('video/')) return <Video className="w-5 h-5" />
     if (file.type === 'application/pdf') return <FileText className="w-5 h-5" />

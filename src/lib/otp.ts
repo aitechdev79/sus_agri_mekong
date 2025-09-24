@@ -29,9 +29,7 @@ export async function sendSMS(phone: string, message: string): Promise<void> {
 
 export async function sendEmail(
   to: string,
-  subject: string,
-  _text: string,
-  _html?: string
+  subject: string
 ): Promise<void> {
   // In production, integrate with email provider
   console.log(`Email to ${to}: ${subject}`)
