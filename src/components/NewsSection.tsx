@@ -40,11 +40,18 @@ export default function NewsSection() {
   }, []);
 
   const nextSlide = useCallback(() => {
-    setCurrentIndex((prev) => (prev + 1) % newsItems.length);
+    setCurrentIndex((prev) => {
+      // For 3-item display, max index is length - 3
+      const maxIndex = Math.max(0, newsItems.length - 3);
+      return prev >= maxIndex ? 0 : prev + 1;
+    });
   }, [newsItems.length]);
 
   const prevSlide = useCallback(() => {
-    setCurrentIndex((prev) => (prev - 1 + newsItems.length) % newsItems.length);
+    setCurrentIndex((prev) => {
+      const maxIndex = Math.max(0, newsItems.length - 3);
+      return prev <= 0 ? maxIndex : prev - 1;
+    });
   }, [newsItems.length]);
 
   // Auto-advance carousel
@@ -97,17 +104,17 @@ export default function NewsSection() {
         </div>
 
         {/* Carousel Container */}
-        <div className="relative max-w-4xl mx-auto">
+        <div className="relative max-w-6xl mx-auto">
           <div className="overflow-hidden rounded-lg">
             <div
               className="flex transition-transform duration-500 ease-in-out"
-              style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+              style={{ transform: `translateX(-${currentIndex * (100/3)}%)` }}
             >
               {newsItems.map((item) => (
                 <Link
                   key={item.id}
                   href={`/content/${item.id}`}
-                  className="w-full flex-shrink-0 group cursor-pointer"
+                  className="w-1/3 flex-shrink-0 group cursor-pointer px-2"
                 >
                   <article className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
                     {/* Image */}
@@ -218,9 +225,9 @@ export default function NewsSection() {
           )}
 
           {/* Dots Indicator */}
-          {newsItems.length > 1 && (
+          {newsItems.length > 3 && (
             <div className="flex justify-center mt-6 space-x-2">
-              {newsItems.map((_, index) => (
+              {Array.from({ length: Math.max(1, newsItems.length - 2) }, (_, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentIndex(index)}
@@ -229,7 +236,7 @@ export default function NewsSection() {
                       ? 'bg-blue-600 scale-110'
                       : 'bg-gray-300 hover:bg-gray-400'
                   }`}
-                  aria-label={`Go to news item ${index + 1}`}
+                  aria-label={`Go to position ${index + 1}`}
                 />
               ))}
             </div>
