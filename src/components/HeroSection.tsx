@@ -44,7 +44,7 @@ export default function HeroSection() {
         }}
       >
         <Image
-          src={isMobile ? '/hero/hero-mobile.jpg' : '/hero/hero-main.jpg'}
+          src={isMobile ? '/hero-mobile.jpg' : '/hero-main.jpg'}
           alt="Nông nghiệp bền vững đồng bằng sông Cửu Long"
           fill
           priority
