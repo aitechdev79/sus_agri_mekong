@@ -91,7 +91,7 @@ export default function DienHinhSection() {
       <div className="container mx-auto px-6 max-w-6xl">
         <div className="mb-12">
           <Link
-            href="/library?type=STORY"
+            href="/dien-hinh"
             className="inline-block group"
           >
             <h2 className="text-3xl font-bold text-gray-800 mb-4 md:text-4xl hover:text-green-600 transition-colors font-montserrat text-left">
