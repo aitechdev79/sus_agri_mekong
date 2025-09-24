@@ -49,6 +49,27 @@ function getContentTypeLabel(type: string): string {
   return typeMap[type] || type;
 }
 
+function formatContentWithParagraphs(content: string): string {
+  // If content already contains HTML tags, return as is
+  if (content.includes('<p>') || content.includes('<br>') || content.includes('<div>')) {
+    return content;
+  }
+
+  // Split by double line breaks first (paragraph breaks)
+  const paragraphs = content.split(/\n\s*\n/);
+
+  // Convert each paragraph, handling single line breaks within paragraphs
+  const formattedParagraphs = paragraphs
+    .filter(paragraph => paragraph.trim().length > 0)
+    .map(paragraph => {
+      // Replace single line breaks with <br> tags within paragraphs
+      const formattedParagraph = paragraph.trim().replace(/\n/g, '<br>');
+      return `<p>${formattedParagraph}</p>`;
+    });
+
+  return formattedParagraphs.join('\n');
+}
+
 function getBestImageUrl(thumbnailUrl?: string, imageUrl?: string): string | null {
   // If thumbnailUrl starts with './uploads/', convert to absolute path
   if (thumbnailUrl && thumbnailUrl.startsWith('./uploads/')) {
@@ -142,7 +163,7 @@ export default async function ContentDetailPage({
                   textAlign: 'justify',
                   textAlignLast: 'left'
                 }}
-                dangerouslySetInnerHTML={{ __html: content.content }}
+                dangerouslySetInnerHTML={{ __html: formatContentWithParagraphs(content.content) }}
               />
 
               {/* Source Link */}
