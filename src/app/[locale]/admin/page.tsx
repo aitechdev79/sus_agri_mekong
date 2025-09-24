@@ -44,6 +44,7 @@ interface ContentItem {
   isFeatured?: boolean;
   author: {
     name: string;
+    role: string;
   };
 }
 
