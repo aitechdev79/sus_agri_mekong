@@ -5,6 +5,7 @@ import AboutSection from '@/components/AboutSection';
 import FeaturedContent from '@/components/FeaturedContent';
 import ToolsGrid from '@/components/ToolsGrid';
 import CommunityCarousel from '@/components/CommunityCarousel';
+import StorySection from '@/components/StorySection';
 import SignUpSection from '@/components/SignUpSection';
 import NewsSection from '@/components/NewsSection';
 
@@ -20,6 +21,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
         <FeaturedContent />
         <ToolsGrid />
         <CommunityCarousel />
+        <StorySection />
         <SignUpSection />
         <NewsSection />
       </main>
