@@ -87,15 +87,13 @@ export function ContentCard({ content }: ContentCardProps) {
         )}
 
         {/* Media Content */}
-        {(content.imageUrl || content.videoUrl) && (
-          <div className="mb-4">
-            <MediaContent
-              imageUrl={content.imageUrl}
-              videoUrl={content.videoUrl}
-              title={content.title}
-            />
-          </div>
-        )}
+        <div className="mb-4">
+          <MediaContent
+            imageUrl={content.imageUrl}
+            videoUrl={content.videoUrl}
+            title={content.title}
+          />
+        </div>
 
         {/* Category */}
         <div className="mb-4">
