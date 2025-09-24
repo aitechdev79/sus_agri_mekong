@@ -3,7 +3,6 @@ import HeroSection from '@/components/HeroSection';
 import AboutSection from '@/components/AboutSection';
 import ToolsGrid from '@/components/ToolsGrid';
 import SignUpSection from '@/components/SignUpSection';
-import DienhinhSection from '@/components/DienhinhSection';
 import HoatDongSection from '@/components/HoatDongSection';
 import NewsSection from '@/components/NewsSection';
 
@@ -13,7 +12,6 @@ export default function Home() {
       <main>
         <HeroSection />
         <AboutSection />
-        <DienhinhSection />
         <ToolsGrid />
         <HoatDongSection />
         <NewsSection />
