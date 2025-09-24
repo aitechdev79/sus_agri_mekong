@@ -28,12 +28,12 @@ export default function LibraryPage() {
       setLoading(true)
       const params = new URLSearchParams({
         page: currentPage.toString(),
-        limit: pagination.limit.toString()
+        limit: pagination.limit.toString(),
+        type: selectedType || 'STORY,ARTICLE,GUIDE,POLICY' // Default to library content types
       })
 
       if (searchTerm) params.append('search', searchTerm)
       if (selectedCategory) params.append('category', selectedCategory)
-      if (selectedType) params.append('type', selectedType)
 
       const response = await fetch(`/api/content?${params}`)
       if (response.ok) {
