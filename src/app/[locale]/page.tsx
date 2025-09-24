@@ -10,6 +10,7 @@ import NewsSection from '@/components/NewsSection';
 
 export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
+  // Force deployment refresh - StorySection removed
 
   return (
     <div className="min-h-screen">
