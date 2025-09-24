@@ -7,9 +7,7 @@ export async function GET(request: Request) {
       where: {
         status: 'PUBLISHED',
         isPublic: true,
-        type: {
-          in: ['ARTICLE', 'STORY', 'NEWS'], // Including dedicated NEWS content type
-        },
+        type: 'NEWS', // Only NEWS content type
       },
       select: {
         id: true,
