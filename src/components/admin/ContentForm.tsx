@@ -26,7 +26,7 @@ interface Content {
 }
 
 interface ContentFormProps {
-  content?: Content
+  content?: Content | null
   onClose: () => void
   userRole: string
 }

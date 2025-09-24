@@ -26,10 +26,22 @@ import {
 interface ContentItem {
   id: string;
   title: string;
+  description?: string;
+  content?: string;
   type: string;
+  category?: string;
+  tags?: string;
   status: string;
   viewCount: number;
   createdAt: string;
+  fileUrl?: string;
+  fileType?: string;
+  fileSize?: number;
+  thumbnailUrl?: string;
+  imageUrl?: string;
+  videoUrl?: string;
+  isPublic?: boolean;
+  isFeatured?: boolean;
   author: {
     name: string;
   };
