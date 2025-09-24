@@ -16,7 +16,11 @@ interface NewsItem {
   viewCount: number;
 }
 
-export default function NewsSection() {
+interface NewsSectionProps {
+  locale?: string;
+}
+
+export default function NewsSection({ locale }: NewsSectionProps) {
   const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
