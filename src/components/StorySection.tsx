@@ -113,26 +113,37 @@ export default function StorySection() {
         </div>
 
         {/* Debug Info - Remove in production */}
-        <div className="text-center mb-4 p-2 bg-yellow-100 rounded">
-          <small>Debug: {stories.length} stories, currentIndex: {currentIndex}</small>
+        <div className="text-center mb-4 p-4 bg-yellow-200 border-2 border-yellow-500 rounded-lg">
+          <div className="text-lg font-bold text-black">
+            DEBUG: {stories.length} stories loaded, currentIndex: {currentIndex}
+          </div>
+          <div className="text-sm text-gray-700 mt-2">
+            Container width: {stories.length * (100/3)}%, Transform: translateX(-{currentIndex * (100/3)}%)
+          </div>
         </div>
 
         {/* Carousel Container */}
         <div className="relative max-w-6xl mx-auto">
-          <div className="overflow-hidden rounded-lg">
+          <div className="overflow-hidden rounded-lg" style={{ width: '100%' }}>
             <div
               className="flex transition-transform duration-500 ease-in-out"
               style={{
                 transform: `translateX(-${currentIndex * (100/3)}%)`,
-                width: `${stories.length * (100/3)}%`
+                width: `${stories.length * (100/3)}%`,
+                display: 'flex',
+                flexWrap: 'nowrap'
               }}
             >
               {stories.map((story) => (
-                <Link
+                <div
                   key={story.id}
-                  href={`/content/${story.id}`}
-                  className="w-1/3 flex-shrink-0 group cursor-pointer px-2"
+                  className="w-1/3 flex-shrink-0 px-2"
+                  style={{ minWidth: '33.333333%' }}
                 >
+                  <Link
+                    href={`/content/${story.id}`}
+                    className="block group cursor-pointer"
+                  >
                     <article className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
                       {/* Image */}
                       <div className="relative h-64 md:h-80 overflow-hidden">
@@ -213,7 +224,8 @@ export default function StorySection() {
                         )}
                       </div>
                     </article>
-                </Link>
+                  </Link>
+                </div>
               ))}
             </div>
           </div>
