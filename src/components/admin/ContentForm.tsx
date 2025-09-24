@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Button } from '@/components/ui/button'
 import { FileUploadZone } from '@/components/upload/FileUploadZone'
 import { FileManager } from '@/components/upload/FileManager'
@@ -10,23 +10,137 @@ import { FormContent, ContentFormProps } from '@/types/content'
 export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
   const [loading, setLoading] = useState(false)
   const [showFileManager, setShowFileManager] = useState(false)
-  const [formData, setFormData] = useState({
-    title: content?.title || '',
-    description: content?.description || '',
-    content: content?.content || '',
-    category: content?.category || '',
-    type: content?.type || 'ARTICLE',
-    tags: content?.tags || '',
-    isFeatured: content?.isFeatured || false,
-    isPublic: content?.isPublic !== false,
-    status: content?.status || 'DRAFT',
-    fileUrl: content?.fileUrl || '',
-    fileType: content?.fileType || '',
-    fileSize: content?.fileSize || 0,
-    thumbnailUrl: content?.thumbnailUrl || '',
-    imageUrl: content?.imageUrl || '',
-    videoUrl: content?.videoUrl || ''
-  })
+  const [autoSaveStatus, setAutoSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle')
+  const [showRestoredNotice, setShowRestoredNotice] = useState(false)
+
+  // Generate a unique key for this form session
+  const formStorageKey = `content-form-${content?.id || 'new'}`
+
+  // Initialize form data with content or from localStorage
+  const getInitialFormData = () => {
+    if (content) {
+      // If editing existing content, use content data
+      return {
+        title: content.title || '',
+        description: content.description || '',
+        content: content.content || '',
+        category: content.category || '',
+        type: content.type || 'ARTICLE',
+        tags: content.tags || '',
+        isFeatured: content.isFeatured || false,
+        isPublic: content.isPublic !== false,
+        status: content.status || 'DRAFT',
+        fileUrl: content.fileUrl || '',
+        fileType: content.fileType || '',
+        fileSize: content.fileSize || 0,
+        thumbnailUrl: content.thumbnailUrl || '',
+        imageUrl: content.imageUrl || '',
+        videoUrl: content.videoUrl || ''
+      }
+    } else {
+      // If creating new content, try to restore from localStorage
+      try {
+        const saved = localStorage.getItem(formStorageKey)
+        if (saved) {
+          const parsedData = JSON.parse(saved)
+          if (parsedData.title) {
+            // Show notice that data was restored
+            setTimeout(() => setShowRestoredNotice(true), 500)
+            setTimeout(() => setShowRestoredNotice(false), 5000)
+          }
+          return parsedData
+        }
+      } catch (error) {
+        console.error('Error loading saved form data:', error)
+      }
+
+      // Default values for new content
+      return {
+        title: '',
+        description: '',
+        content: '',
+        category: '',
+        type: 'ARTICLE',
+        tags: '',
+        isFeatured: false,
+        isPublic: true,
+        status: 'DRAFT',
+        fileUrl: '',
+        fileType: '',
+        fileSize: 0,
+        thumbnailUrl: '',
+        imageUrl: '',
+        videoUrl: ''
+      }
+    }
+  }
+
+  const [formData, setFormData] = useState(getInitialFormData)
+
+  // Auto-save to localStorage when form data changes (debounced)
+  const saveToLocalStorage = useCallback(() => {
+    if (!content) { // Only save drafts for new content
+      try {
+        setAutoSaveStatus('saving')
+        localStorage.setItem(formStorageKey, JSON.stringify(formData))
+        setTimeout(() => setAutoSaveStatus('saved'), 500)
+        setTimeout(() => setAutoSaveStatus('idle'), 3000)
+      } catch (error) {
+        console.error('Error saving form data:', error)
+        setAutoSaveStatus('idle')
+      }
+    }
+  }, [formData, formStorageKey, content])
+
+  // Auto-save effect with debouncing
+  useEffect(() => {
+    const timer = setTimeout(saveToLocalStorage, 1000) // Save after 1 second of inactivity
+    return () => clearTimeout(timer)
+  }, [saveToLocalStorage])
+
+  // Clear saved data when form is successfully submitted
+  const clearSavedData = () => {
+    try {
+      localStorage.removeItem(formStorageKey)
+    } catch (error) {
+      console.error('Error clearing saved data:', error)
+    }
+  }
+
+  // Check if there's saved data
+  const hasSavedData = () => {
+    if (content) return false // Don't show for existing content
+    try {
+      const saved = localStorage.getItem(formStorageKey)
+      return saved && saved !== '{}' && JSON.parse(saved).title
+    } catch {
+      return false
+    }
+  }
+
+  // Clear draft data
+  const clearDraft = () => {
+    if (confirm('Bạn có chắc chắn muốn xóa bản nháp đã lưu?')) {
+      clearSavedData()
+      setFormData({
+        title: '',
+        description: '',
+        content: '',
+        category: '',
+        type: 'ARTICLE',
+        tags: '',
+        isFeatured: false,
+        isPublic: true,
+        status: 'DRAFT',
+        fileUrl: '',
+        fileType: '',
+        fileSize: 0,
+        thumbnailUrl: '',
+        imageUrl: '',
+        videoUrl: ''
+      })
+    }
+  }
 
   const categories = [
     { value: 'shrimp_farming', label: 'Nuôi tôm' },
@@ -84,6 +198,7 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
       })
 
       if (response.ok) {
+        clearSavedData() // Clear saved draft after successful submission
         onClose()
       } else {
         const error = await response.json()
@@ -102,9 +217,48 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
       <div className="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-screen overflow-y-auto">
         <div className="sticky top-0 bg-white border-b px-6 py-4">
           <div className="flex justify-between items-center">
-            <h2 className="text-xl font-bold">
-              {content ? 'Chỉnh sửa nội dung' : 'Thêm nội dung mới'}
-            </h2>
+            <div className="flex items-center space-x-4">
+              <h2 className="text-xl font-bold">
+                {content ? 'Chỉnh sửa nội dung' : 'Thêm nội dung mới'}
+              </h2>
+
+              {/* Auto-save indicator */}
+              {!content && (
+                <div className="flex items-center text-sm">
+                  {autoSaveStatus === 'saving' && (
+                    <span className="text-blue-600 flex items-center">
+                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Đang lưu...
+                    </span>
+                  )}
+                  {autoSaveStatus === 'saved' && (
+                    <span className="text-green-600 flex items-center">
+                      <svg className="mr-1 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                      Đã lưu bản nháp
+                    </span>
+                  )}
+                </div>
+              )}
+
+              {/* Clear draft button for new content with saved data */}
+              {!content && hasSavedData() && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={clearDraft}
+                  className="text-red-600 hover:text-red-700 text-xs"
+                >
+                  Xóa bản nháp
+                </Button>
+              )}
+            </div>
+
             <button
               onClick={onClose}
               className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
@@ -113,6 +267,24 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
             </button>
           </div>
         </div>
+
+        {/* Restored data notification */}
+        {showRestoredNotice && (
+          <div className="bg-blue-50 border-l-4 border-blue-400 p-4 mx-6 mt-4">
+            <div className="flex">
+              <div className="flex-shrink-0">
+                <svg className="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <p className="text-sm text-blue-700">
+                  <strong>Bản nháp đã được khôi phục!</strong> Dữ liệu từ phiên làm việc trước đã được tự động khôi phục.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           <div className="space-y-4">
@@ -335,7 +507,7 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
                     variant="ghost"
                     size="sm"
                     onClick={() => {
-                      setFormData(prev => ({
+                      setFormData((prev: typeof formData) => ({
                         ...prev,
                         fileUrl: '',
                         fileType: '',
@@ -360,7 +532,7 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
                   onUploadComplete={(files) => {
                     if (files.length > 0) {
                       const file = files[0]
-                      setFormData(prev => ({
+                      setFormData((prev: typeof formData) => ({
                         ...prev,
                         fileUrl: file.url,
                         fileType: file.type || '',
@@ -461,7 +633,7 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
             <div className="p-6">
               <FileManager
                 onSelectFile={(file) => {
-                  setFormData(prev => ({
+                  setFormData((prev: typeof formData) => ({
                     ...prev,
                     fileUrl: file.fileUrl,
                     fileType: file.fileType,
