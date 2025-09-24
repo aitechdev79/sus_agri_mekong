@@ -21,7 +21,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
         <ToolsGrid />
         <CommunityCarousel />
         <SignUpSection />
-        <NewsSection locale={locale} />
+        <NewsSection />
       </main>
       <Footer />
     </div>
