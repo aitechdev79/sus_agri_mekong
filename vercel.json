@@ -1,7 +1,8 @@
 {
   "build": {
     "env": {
-      "ENABLE_EXPERIMENTAL_COREPACK": "1"
+      "ENABLE_EXPERIMENTAL_COREPACK": "1",
+      "PRISMA_GENERATE_DATAPROXY": "true"
     }
   },
   "functions": {
@@ -14,11 +15,5 @@
   "env": {
     "NEXTAUTH_URL": "https://sus-agri-mekong.vercel.app",
     "NODE_ENV": "production"
-  },
-  "build": {
-    "env": {
-      "ENABLE_EXPERIMENTAL_COREPACK": "1",
-      "PRISMA_GENERATE_DATAPROXY": "true"
-    }
   }
 }

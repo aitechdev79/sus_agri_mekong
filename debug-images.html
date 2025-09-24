@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Debug Test</title>
+</head>
+<body>
+    <h1>Hero Image Debug Test</h1>
+
+    <h2>Desktop Hero Image</h2>
+    <img src="/hero/hero-main.jpg" alt="Hero Main" style="max-width: 500px;">
+
+    <h2>Mobile Hero Image</h2>
+    <img src="/hero/hero-mobile.jpg" alt="Hero Mobile" style="max-width: 300px;">
+
+    <h2>Next.js Image Component Test</h2>
+    <p>Check browser developer tools Network tab to see if images are loading</p>
+
+    <script>
+        // Check if images load
+        const images = document.querySelectorAll('img');
+        images.forEach((img, index) => {
+            img.onload = () => console.log(`Image ${index + 1} loaded successfully`);
+            img.onerror = () => console.error(`Image ${index + 1} failed to load`);
+        });
+    </script>
+</body>
+</html>

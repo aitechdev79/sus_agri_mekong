@@ -5,6 +5,9 @@ const nextConfig: NextConfig = {
     forceSwcTransforms: true,
   },
   images: {
+    unoptimized: false, // Enable image optimization on Vercel
+    dangerouslyAllowSVG: true,
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     remotePatterns: [
       // Vietnamese media domains
       {
