@@ -179,8 +179,8 @@ export const hasMedia = (content: BaseContent): content is BaseContent & MediaFi
   return 'thumbnailUrl' in content || 'imageUrl' in content || 'videoUrl' in content;
 };
 
-export const hasCounts = (content: any): content is ContentWithCounts => {
-  return content && '_count' in content;
+export const hasCounts = (content: unknown): content is ContentWithCounts => {
+  return typeof content === 'object' && content !== null && '_count' in content;
 };
 
 // ===== API RESPONSE TYPES =====
@@ -197,8 +197,8 @@ export interface ContentListResponse<T = AdminContent> {
 }
 
 // Specific typed responses
-export interface AdminContentListResponse extends ContentListResponse<AdminContent> {}
-export interface MinimalContentListResponse extends ContentListResponse<MinimalContent> {}
+export type AdminContentListResponse = ContentListResponse<AdminContent>;
+export type MinimalContentListResponse = ContentListResponse<MinimalContent>;
 
 export interface ContentResponse {
   content: AdminContent;
