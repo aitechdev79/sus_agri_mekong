@@ -10,7 +10,7 @@ export function ContentCard({ content }: ContentCardProps) {
       ARTICLE: { color: 'bg-blue-100 text-blue-800', text: 'Bài viết' },
       VIDEO: { color: 'bg-red-100 text-red-800', text: 'Video' },
       DOCUMENT: { color: 'bg-purple-100 text-purple-800', text: 'Tài liệu' },
-      STORY: { color: 'bg-orange-100 text-orange-800', text: 'Câu chuyện' },
+      STORY: { color: 'bg-orange-100 text-orange-800', text: 'Điển hình' },
       GUIDE: { color: 'bg-indigo-100 text-indigo-800', text: 'Hướng dẫn' },
       POLICY: { color: 'bg-pink-100 text-pink-800', text: 'Chính sách' },
       INFOGRAPHIC: { color: 'bg-teal-100 text-teal-800', text: 'Infographic' }

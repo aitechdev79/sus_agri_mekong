@@ -17,7 +17,7 @@ export function SearchFilters({ selectedCategory, selectedType, onFilterChange }
     { value: 'ARTICLE', label: 'Bài viết' },
     { value: 'VIDEO', label: 'Video' },
     { value: 'DOCUMENT', label: 'Tài liệu' },
-    { value: 'STORY', label: 'Câu chuyện' },
+    { value: 'STORY', label: 'Điển hình' },
     { value: 'GUIDE', label: 'Hướng dẫn' },
     { value: 'POLICY', label: 'Chính sách' },
     { value: 'INFOGRAPHIC', label: 'Infographic' },
