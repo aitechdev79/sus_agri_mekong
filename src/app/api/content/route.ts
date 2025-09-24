@@ -1,19 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-
-interface ContentWhereFilter {
-  status: string
-  isPublic: boolean
-  category?: string
-  type?: string
-  isFeatured?: boolean
-  OR?: Array<{
-    title?: { contains: string; mode: 'insensitive' }
-    description?: { contains: string; mode: 'insensitive' }
-    tags?: { contains: string; mode: 'insensitive' }
-  }>
-}
+import { Prisma } from '@prisma/client'
 import { requireAuth } from '@/lib/auth-middleware'
+import { ContentType } from '@/types/content'
+
+// Use Prisma's generated types for proper type safety
+type ContentWhereInput = Prisma.ContentWhereInput
 
 export async function GET(request: NextRequest) {
   try {
@@ -27,7 +19,7 @@ export async function GET(request: NextRequest) {
 
     const skip = (page - 1) * limit
 
-    const where: ContentWhereFilter = {
+    const where: ContentWhereInput = {
       status: 'PUBLISHED',
       isPublic: true
     }
@@ -39,10 +31,10 @@ export async function GET(request: NextRequest) {
     if (type) {
       // Handle multiple types separated by comma
       if (type.includes(',')) {
-        const types = type.split(',').map(t => t.trim())
+        const types = type.split(',').map(t => t.trim() as ContentType)
         where.type = { in: types }
       } else {
-        where.type = type
+        where.type = type as ContentType
       }
     }
 
@@ -53,11 +45,9 @@ export async function GET(request: NextRequest) {
     if (search) {
       where.OR = [
         { title: { contains: search } },
-        { titleEn: { contains: search } },
         { description: { contains: search } },
-        { descriptionEn: { contains: search } },
         { content: { contains: search } },
-        { contentEn: { contains: search } }
+        { tags: { contains: search } }
       ]
     }
 

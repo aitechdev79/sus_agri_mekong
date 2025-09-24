@@ -1,16 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { requireAuth } from '@/lib/auth-middleware'
 import { prisma } from '@/lib/prisma'
+import { Prisma } from '@prisma/client'
 
-interface FileWhereFilter {
-  authorId: string
-  fileUrl: { not: null }
-  fileType?: { startsWith: string }
-  OR?: Array<{
-    title?: { contains: string; mode: 'insensitive' }
-    tags?: { contains: string; mode: 'insensitive' }
-  }>
-}
+// Use Prisma's generated types for proper type safety
+type ContentWhereInput = Prisma.ContentWhereInput
 
 export async function GET(request: NextRequest) {
   try {
@@ -31,19 +25,19 @@ export async function GET(request: NextRequest) {
 
     const skip = (page - 1) * limit
 
-    const where: FileWhereFilter = {
+    const where: ContentWhereInput = {
       authorId: user.id,
       fileUrl: { not: null }
     }
 
     if (type) {
-      where.fileType = { contains: type }
+      where.fileType = { startsWith: type }
     }
 
     if (search) {
       where.OR = [
-        { title: { contains: search, mode: 'insensitive' } },
-        { description: { contains: search, mode: 'insensitive' } }
+        { title: { contains: search } },
+        { tags: { contains: search } }
       ]
     }
 
