@@ -32,6 +32,8 @@ export default function StorySection() {
         const response = await fetch(`/api/content/stories?_t=${Date.now()}`);
         if (response.ok) {
           const data = await response.json();
+          console.log('StorySection - Stories loaded:', data.length);
+          console.log('StorySection - First story:', data[0]?.title?.substring(0, 30));
           setStories(data);
         }
       } catch (error) {
@@ -110,12 +112,20 @@ export default function StorySection() {
           </p>
         </div>
 
+        {/* Debug Info - Remove in production */}
+        <div className="text-center mb-4 p-2 bg-yellow-100 rounded">
+          <small>Debug: {stories.length} stories, currentIndex: {currentIndex}</small>
+        </div>
+
         {/* Carousel Container */}
         <div className="relative max-w-6xl mx-auto">
           <div className="overflow-hidden rounded-lg">
             <div
               className="flex transition-transform duration-500 ease-in-out"
-              style={{ transform: `translateX(-${currentIndex * (100/3)}%)` }}
+              style={{
+                transform: `translateX(-${currentIndex * (100/3)}%)`,
+                width: `${stories.length * (100/3)}%`
+              }}
             >
               {stories.map((story) => (
                 <Link
