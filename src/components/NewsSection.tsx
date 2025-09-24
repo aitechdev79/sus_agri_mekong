@@ -117,41 +117,18 @@ export default function NewsSection({ locale }: NewsSectionProps) {
                     {/* Image */}
                     <div className="relative h-64 md:h-80 overflow-hidden">
                       {(() => {
-                        // Try to find uploaded image based on content ID or use fallback
+                        // Only use manually uploaded images (thumbnailUrl)
                         let imageUrl = null;
 
-                        // First check if thumbnailUrl exists (including data URLs)
+                        // Only check thumbnailUrl (manually uploaded images)
                         if (item.thumbnailUrl) {
                           if (item.thumbnailUrl.includes('/uploads/')) {
                             imageUrl = getBestImageUrl(item.thumbnailUrl, null);
                           } else if (item.thumbnailUrl.startsWith('data:image/')) {
-                            // Use data URL directly
+                            // Use data URL directly for uploaded images
                             imageUrl = item.thumbnailUrl;
                           }
-                        } else if (item.imageUrl) {
-                          if (item.imageUrl.includes('/uploads/')) {
-                            imageUrl = getBestImageUrl(null, item.imageUrl);
-                          } else if (item.imageUrl.startsWith('data:image/')) {
-                            // Use data URL directly
-                            imageUrl = item.imageUrl;
-                          }
                         }
-
-                        // If no valid image found, use fallback images
-                        if (!imageUrl) {
-                          const existingImages = [
-                            '/uploads/featured.jpg',
-                            '/uploads/7x6zNkYYzkL-3mNtZ100N_1758273405111.jpg',
-                            '/uploads/EBb3o_4rA5l6B02V9IjVM_1758273443756.jpg',
-                            '/uploads/fQQVTxVWUdSmtpzB4YG_L_1758272142092.jpg',
-                            '/uploads/ip7lluumcn7wXoTaxZWrL_1758272559937.jpg'
-                          ];
-                          // Use a different image for each item based on index
-                          const imageIndex = newsItems.findIndex(news => news.id === item.id) % existingImages.length;
-                          imageUrl = existingImages[imageIndex];
-                        }
-
-                        console.log('News item:', item.title, 'ID:', item.id, 'thumbnailUrl:', item.thumbnailUrl ? item.thumbnailUrl.substring(0, 50) : 'none', 'imageUrl:', item.imageUrl ? item.imageUrl.substring(0, 50) : 'none', 'using:', imageUrl ? imageUrl.substring(0, 50) : 'none');
 
                         return imageUrl ? (
                           imageUrl.startsWith('data:image/') ? (
@@ -161,24 +138,29 @@ export default function NewsSection({ locale }: NewsSectionProps) {
                               alt={item.title}
                               className="w-full h-full object-contain"
                               onError={(e) => {
-                                console.error('Image failed to load:', imageUrl, e);
+                                console.error('Uploaded image failed to load:', imageUrl, e);
                               }}
                             />
                           ) : (
-                            // Use Next.js Image for regular URLs
+                            // Use Next.js Image for uploaded file URLs
                             <Image
                               src={imageUrl}
                               alt={item.title}
                               fill
                               className="object-contain"
                               onError={(e) => {
-                                console.error('Image failed to load:', imageUrl, e);
+                                console.error('Uploaded image failed to load:', imageUrl, e);
                               }}
                             />
                           )
                         ) : (
-                          <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                            <span className="text-gray-500">Không có hình ảnh</span>
+                          <div className="w-full h-full bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center">
+                            <div className="text-center">
+                              <svg className="w-12 h-12 text-green-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                              </svg>
+                              <span className="text-green-600 text-sm font-medium">Tin tức</span>
+                            </div>
                           </div>
                         );
                       })()}

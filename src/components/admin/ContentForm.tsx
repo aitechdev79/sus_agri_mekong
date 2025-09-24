@@ -416,33 +416,19 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Image URL
+                  News URL
                 </label>
                 <input
                   type="url"
                   name="imageUrl"
                   value={formData.imageUrl}
                   onChange={handleChange}
-                  placeholder="https://example.com/image.jpg"
+                  placeholder="https://example.com/news-article"
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                 />
                 <p className="text-xs text-gray-500 mt-1">
-                  Link to image that will be displayed in the content
+                  Link to news article or external source
                 </p>
-                {formData.imageUrl && (
-                  <div className="mt-2">
-                    <Image
-                      src={formData.imageUrl}
-                      alt="Preview"
-                      width={128}
-                      height={96}
-                      className="w-32 h-24 object-cover rounded-md border"
-                      onError={(e) => {
-                        e.currentTarget.style.display = 'none';
-                      }}
-                    />
-                  </div>
-                )}
               </div>
 
               <div>
@@ -487,8 +473,8 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
                 </div>
                 <div className="ml-3">
                   <p className="text-sm text-amber-700">
-                    <strong>Hạn chế tải file:</strong> Hiện tại chỉ hỗ trợ hình ảnh dưới 1MB.
-                    Với file lớn hơn, vui lòng sử dụng dịch vụ lưu trữ bên ngoài và dán link vào ô &ldquo;Image URL&rdquo; bên trên.
+                    <strong>Hình ảnh hiển thị:</strong> Chỉ những hình ảnh được tải lên thủ công sẽ hiển thị trong carousel tin tức.
+                    Hiện tại chỉ hỗ trợ hình ảnh dưới 1MB. Trường "News URL" dùng để liên kết đến bài báo gốc.
                   </p>
                 </div>
               </div>
