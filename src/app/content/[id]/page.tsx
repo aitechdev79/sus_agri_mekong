@@ -109,20 +109,14 @@ export default async function ContentDetailPage({
               )}
 
               {/* Meta Information */}
-              <div className="flex items-center justify-between text-sm text-gray-500 mb-6">
-                <div className="flex items-center space-x-6">
-                  <div className="flex items-center">
-                    <Calendar className="w-4 h-4 mr-2" />
-                    <span>Ngày đăng: {formatDate(content.createdAt)}</span>
-                  </div>
-                  <div className="flex items-center">
-                    <Eye className="w-4 h-4 mr-2" />
-                    <span>{content.viewCount.toLocaleString('vi-VN')} lượt xem</span>
-                  </div>
+              <div className="flex items-center space-x-6 text-sm text-gray-500 mb-6">
+                <div className="flex items-center">
+                  <Calendar className="w-4 h-4 mr-2" />
+                  <span>Ngày đăng: {formatDate(content.createdAt)}</span>
                 </div>
-                <div className="text-right">
-                  <div className="font-medium text-gray-700">{content.author.name}</div>
-                  <div className="text-gray-500">{content.author.role}</div>
+                <div className="flex items-center">
+                  <Eye className="w-4 h-4 mr-2" />
+                  <span>{content.viewCount.toLocaleString('vi-VN')} lượt xem</span>
                 </div>
               </div>
             </div>
@@ -143,7 +137,11 @@ export default async function ContentDetailPage({
             {/* Main Content */}
             <div className="p-8">
               <div
-                className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:leading-relaxed"
+                className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:leading-relaxed text-justify"
+                style={{
+                  textAlign: 'justify',
+                  textAlignLast: 'left'
+                }}
                 dangerouslySetInnerHTML={{ __html: content.content }}
               />
 
