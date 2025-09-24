@@ -2,6 +2,16 @@ import { NextRequest, NextResponse } from 'next/server'
 import { requireAuth } from '@/lib/auth-middleware'
 import { prisma } from '@/lib/prisma'
 
+interface FileWhereFilter {
+  authorId: string
+  fileUrl: { not: null }
+  fileType?: { startsWith: string }
+  OR?: Array<{
+    title?: { contains: string; mode: 'insensitive' }
+    tags?: { contains: string; mode: 'insensitive' }
+  }>
+}
+
 export async function GET(request: NextRequest) {
   try {
     const user = await requireAuth(request)
@@ -21,7 +31,7 @@ export async function GET(request: NextRequest) {
 
     const skip = (page - 1) * limit
 
-    const where: any = {
+    const where: FileWhereFilter = {
       authorId: user.id,
       fileUrl: { not: null }
     }

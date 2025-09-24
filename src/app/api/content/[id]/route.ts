@@ -6,6 +6,24 @@ interface RouteParams {
   params: { id: string }
 }
 
+interface ContentUpdateData {
+  title: string
+  description: string
+  content: string
+  type: string
+  category: string
+  tags: string
+  isPublic: boolean
+  videoUrl?: string | null
+  imageUrl?: string | null
+  thumbnailUrl?: string | null
+  fileUrl?: string | null
+  fileType?: string | null
+  fileSize?: number | null
+  isFeatured?: boolean
+  status?: string
+}
+
 export async function GET(
   request: NextRequest,
   { params }: RouteParams
@@ -158,7 +176,7 @@ export async function PUT(
     console.log('Full data received:', { type, category, title })
 
     // Only admins can modify featured status or change status of published content
-    const updateData: any = {
+    const updateData: ContentUpdateData = {
       title,
       description,
       content: contentText,

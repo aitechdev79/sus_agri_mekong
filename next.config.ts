@@ -91,7 +91,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  webpack: (config: any) => {
+  webpack: (config: { resolve: { fallback: Record<string, boolean | string> } }) => {
     config.resolve.fallback = {
       ...config.resolve.fallback,
       fs: false,

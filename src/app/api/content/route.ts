@@ -1,5 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+
+interface ContentWhereFilter {
+  status: string
+  isPublic: boolean
+  category?: string
+  type?: string
+  isFeatured?: boolean
+  OR?: Array<{
+    title?: { contains: string; mode: 'insensitive' }
+    description?: { contains: string; mode: 'insensitive' }
+    tags?: { contains: string; mode: 'insensitive' }
+  }>
+}
 import { requireAuth } from '@/lib/auth-middleware'
 
 export async function GET(request: NextRequest) {
@@ -14,7 +27,7 @@ export async function GET(request: NextRequest) {
 
     const skip = (page - 1) * limit
 
-    const where: any = {
+    const where: ContentWhereFilter = {
       status: 'PUBLISHED',
       isPublic: true
     }
