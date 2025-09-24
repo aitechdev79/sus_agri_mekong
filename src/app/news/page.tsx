@@ -37,7 +37,7 @@ export default function NewsPage() {
   const fetchNews = async (page: number) => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/content?type=NEWS&page=${page}&limit=${itemsPerPage}`);
+      const response = await fetch(`/api/content?type=NEWS,ARTICLE&page=${page}&limit=${itemsPerPage}`);
       if (response.ok) {
         const data: PaginatedResponse = await response.json();
         setNewsItems(data.contents);
