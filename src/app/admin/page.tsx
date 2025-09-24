@@ -25,9 +25,8 @@ interface ContentItem {
   createdAt: string
   updatedAt: string
   author: {
-    id: string
     name: string
-    email: string
+    role: string
   }
 }
 
