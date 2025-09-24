@@ -31,7 +31,7 @@ export default function NewsSection({ locale }: NewsSectionProps) {
         const response = await fetch(`/api/content/news?_t=${Date.now()}`);
         if (response.ok) {
           const data = await response.json();
-          setNewsItems(data.slice(0, 5)); // Only show 5 latest news items
+          setNewsItems(data); // Show all available news items
         }
       } catch (error) {
         console.error('Error fetching news:', error);
@@ -154,15 +154,28 @@ export default function NewsSection({ locale }: NewsSectionProps) {
                         console.log('News item:', item.title, 'ID:', item.id, 'thumbnailUrl:', item.thumbnailUrl ? item.thumbnailUrl.substring(0, 50) : 'none', 'imageUrl:', item.imageUrl ? item.imageUrl.substring(0, 50) : 'none', 'using:', imageUrl ? imageUrl.substring(0, 50) : 'none');
 
                         return imageUrl ? (
-                          <Image
-                            src={imageUrl}
-                            alt={item.title}
-                            fill
-                            className="object-contain"
-                            onError={(e) => {
-                              console.error('Image failed to load:', imageUrl, e);
-                            }}
-                          />
+                          imageUrl.startsWith('data:image/') ? (
+                            // Use regular img tag for data URLs to avoid Next.js Image optimization issues
+                            <img
+                              src={imageUrl}
+                              alt={item.title}
+                              className="w-full h-full object-contain"
+                              onError={(e) => {
+                                console.error('Image failed to load:', imageUrl, e);
+                              }}
+                            />
+                          ) : (
+                            // Use Next.js Image for regular URLs
+                            <Image
+                              src={imageUrl}
+                              alt={item.title}
+                              fill
+                              className="object-contain"
+                              onError={(e) => {
+                                console.error('Image failed to load:', imageUrl, e);
+                              }}
+                            />
+                          )
                         ) : (
                           <div className="w-full h-full bg-gray-200 flex items-center justify-center">
                             <span className="text-gray-500">Không có hình ảnh</span>
