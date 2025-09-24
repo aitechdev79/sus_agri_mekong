@@ -40,10 +40,6 @@ export function FileManager({ onSelectFile, multiple = false, showUpload = true 
     pages: 0
   })
 
-  useEffect(() => {
-    loadFiles()
-  }, [loadFiles])
-
   const loadFiles = useCallback(async () => {
     try {
       setLoading(true)
@@ -67,6 +63,10 @@ export function FileManager({ onSelectFile, multiple = false, showUpload = true 
       setLoading(false)
     }
   }, [searchTerm, filterType, currentPage, pagination.limit])
+
+  useEffect(() => {
+    loadFiles()
+  }, [loadFiles])
 
   const handleUploadComplete = () => {
     setShowUploadZone(false)

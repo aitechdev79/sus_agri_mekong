@@ -42,7 +42,7 @@ export function MediaContent({ imageUrl, videoUrl, title }: MediaContentProps) {
         <div className="w-full">
           <div className="relative w-full h-0 pb-[56.25%] rounded-lg overflow-hidden shadow-md">
             <iframe
-              src={getYouTubeEmbedUrl(videoUrl)}
+              src={getYouTubeEmbedUrl(videoUrl) || undefined}
               title={title || 'YouTube video'}
               className="absolute top-0 left-0 w-full h-full"
               frameBorder="0"

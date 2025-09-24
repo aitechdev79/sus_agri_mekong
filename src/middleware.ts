@@ -1,38 +1,38 @@
 import { withAuth } from 'next-auth/middleware';
-import { NextRequest } from 'next/server';
 
-const authMiddleware = withAuth(
-  function onSuccess() {
+export default withAuth(
+  // withAuth middleware function
+  function middleware(req) {
+    // Custom logic can go here if needed
     return;
   },
   {
     callbacks: {
       authorized: ({ token, req }) => {
+        // Skip all middleware for API routes
+        if (req.nextUrl.pathname.startsWith('/api/')) {
+          return true;
+        }
+
+        // Allow public paths
+        const publicPaths = ['/auth/signin', '/auth/signup'];
+        const isPublicPath = publicPaths.some(path => req.nextUrl.pathname.startsWith(path));
+
+        if (isPublicPath) {
+          return true;
+        }
+
         // Allow access to admin routes only for ADMIN and MODERATOR roles
         if (req.nextUrl.pathname.startsWith('/admin')) {
           return token?.role === 'ADMIN' || token?.role === 'MODERATOR';
         }
-        return true;
+
+        // For other protected routes, just require a valid token
+        return !!token;
       },
     },
   }
 );
-
-export default function middleware(req: NextRequest) {
-  // Skip all middleware for API routes
-  if (req.nextUrl.pathname.startsWith('/api/')) {
-    return;
-  }
-
-  const publicPaths = ['/auth/signin', '/auth/signup'];
-  const isPublicPath = publicPaths.some(path => req.nextUrl.pathname.startsWith(path));
-
-  if (isPublicPath) {
-    return;
-  }
-
-  return (authMiddleware as typeof authMiddleware)(req);
-}
 
 export const config = {
   // Match only internationalized pathnames and protected routes

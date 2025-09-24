@@ -363,9 +363,9 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
                       setFormData(prev => ({
                         ...prev,
                         fileUrl: file.url,
-                        fileType: file.type,
-                        fileSize: file.size,
-                        thumbnailUrl: file.thumbnailUrl || (file.type.startsWith('image/') ? file.url : '')
+                        fileType: file.type || '',
+                        fileSize: file.size || 0,
+                        thumbnailUrl: file.thumbnailUrl || (file.type?.startsWith('image/') ? file.url : '')
                       }))
                     }
                   }}
@@ -378,7 +378,7 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
 
                 <Button
                   type="button"
-                  variant="outline"
+                  variant="secondary"
                   onClick={() => setShowFileManager(true)}
                   className="w-full"
                 >
@@ -460,7 +460,7 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
             </div>
             <div className="p-6">
               <FileManager
-                onSelectFile={(file: { id?: string; url: string; name?: string }) => {
+                onSelectFile={(file) => {
                   setFormData(prev => ({
                     ...prev,
                     fileUrl: file.fileUrl,

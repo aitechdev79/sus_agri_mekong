@@ -174,10 +174,10 @@ export function ContentTable({ contents, onEdit, onDelete, onBulkAction, userRol
                     </div>
                     <div className="flex space-x-1 ml-2">
                       {content.isFeatured && (
-                        <Star className="w-4 h-4 text-yellow-500" title="Nổi bật" />
+                        <Star className="w-4 h-4 text-yellow-500" />
                       )}
                       {!content.isPublic && (
-                        <Users className="w-4 h-4 text-gray-500" title="Riêng tư" />
+                        <Users className="w-4 h-4 text-gray-500" />
                       )}
                     </div>
                   </div>

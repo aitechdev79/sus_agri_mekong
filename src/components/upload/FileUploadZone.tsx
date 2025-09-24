@@ -13,11 +13,20 @@ interface UploadedFile {
   progress?: number
 }
 
+interface UploadedFileData {
+  id?: string
+  url: string
+  name?: string
+  size?: number
+  type?: string
+  thumbnailUrl?: string
+}
+
 interface FileUploadZoneProps {
   multiple?: boolean
   accept?: string
   maxSize?: number // in MB
-  onUploadComplete?: (files: { id?: string; url: string; name?: string }[]) => void
+  onUploadComplete?: (files: UploadedFileData[]) => void
   onUploadError?: (error: string) => void
   className?: string
   fileOnly?: boolean // If true, uploads files without creating content records
@@ -36,29 +45,6 @@ export function FileUploadZone({
   const [isDragOver, setIsDragOver] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
-
-  const handleDragOver = useCallback((e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragOver(true)
-  }, [])
-
-  const handleDragLeave = useCallback((e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragOver(false)
-  }, [])
-
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragOver(false)
-
-    const droppedFiles = Array.from(e.dataTransfer.files)
-    handleFiles(droppedFiles)
-  }, [handleFiles])
-
-  const handleFileInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFiles = Array.from(e.target.files || [])
-    handleFiles(selectedFiles)
-  }, [handleFiles])
 
   const handleFiles = useCallback((selectedFiles: File[]) => {
     const validFiles: UploadedFile[] = []
@@ -82,6 +68,29 @@ export function FileUploadZone({
       setFiles(prev => [...prev, ...validFiles])
     }
   }, [maxSize, multiple, onUploadError])
+
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragOver(true)
+  }, [])
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragOver(false)
+  }, [])
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragOver(false)
+
+    const droppedFiles = Array.from(e.dataTransfer.files)
+    handleFiles(droppedFiles)
+  }, [handleFiles])
+
+  const handleFileInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFiles = Array.from(e.target.files || [])
+    handleFiles(selectedFiles)
+  }, [handleFiles])
 
   const uploadFiles = async () => {
     if (files.length === 0) return
@@ -169,7 +178,14 @@ export function FileUploadZone({
                 } : f
               ))
 
-              onUploadComplete?.([result.file])
+              onUploadComplete?.([{
+                id: result.file.id,
+                url: result.file.url,
+                name: result.file.originalName || result.file.fileName,
+                size: result.file.size,
+                type: result.file.type,
+                thumbnailUrl: result.file.thumbnailUrl
+              }])
             } else {
               throw new Error(result.error || 'Upload failed')
             }
