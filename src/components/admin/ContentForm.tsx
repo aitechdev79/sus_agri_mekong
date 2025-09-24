@@ -9,20 +9,25 @@ import Image from 'next/image'
 interface Content {
   id: string
   title: string
-  description: string
-  content: string
+  description?: string
+  content?: string
   type: string
-  category: string
-  tags: string
+  category?: string
+  tags?: string
   fileUrl?: string
   fileType?: string
   fileSize?: number
   thumbnailUrl?: string
   imageUrl?: string
   videoUrl?: string
-  isPublic: boolean
-  isFeatured: boolean
+  isPublic?: boolean
+  isFeatured?: boolean
   status: string
+  viewCount?: number
+  createdAt?: string
+  author?: {
+    name: string
+  }
 }
 
 interface ContentFormProps {
