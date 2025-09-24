@@ -126,6 +126,42 @@ npm run db:seed
 3. **NextAuth Errors**: Ensure `NEXTAUTH_URL` matches your domain exactly
 4. **Missing Content**: Run `npm run db:seed` after migration
 
+### ⚠️ **CRITICAL: Environment variable not found: DATABASE_URL**
+
+If you see this error in Vercel logs:
+```
+Error [PrismaClientInitializationError]:
+Invalid prisma.content.findMany() invocation:
+error: Environment variable not found: DATABASE_URL.
+```
+
+**Immediate Fix Steps:**
+1. Go to your Vercel project dashboard
+2. Click **Settings** → **Environment Variables**
+3. Add `DATABASE_URL` with your PostgreSQL connection string
+4. **Important**: Add for all environments (Production, Preview, Development)
+5. Click **Redeploy** to apply the changes
+
+**Database URL Format:**
+```
+postgresql://username:password@hostname:port/database_name?sslmode=require
+```
+
+**Quick Database Setup Options:**
+
+### Option 1: Neon PostgreSQL (Recommended - Free)
+1. Go to [console.neon.tech/signup](https://console.neon.tech/signup)
+2. Sign up with GitHub or email
+3. Create a new project (name: `good-practices-platform`)
+4. Copy the connection string from the dashboard
+   Format: `postgresql://username:password@host/database?sslmode=require`
+
+### Option 2: Supabase (Free)
+- **Supabase** (Free): https://supabase.com - Full backend platform
+
+### Option 3: Railway (Free tier)
+- **Railway** (Free tier): https://railway.app - Simple deployment
+
 ### Build Commands:
 - Build: `prisma generate && next build`
 - Start: `next start`

@@ -27,7 +27,11 @@
       "Bash(git remote add:*)",
       "Bash(git push:*)",
       "Bash(tree:*)",
-      "Bash(PRISMA_USER_CONSENT_FOR_DANGEROUS_AI_ACTION=\"yes\" npx prisma migrate reset --force)"
+      "Bash(PRISMA_USER_CONSENT_FOR_DANGEROUS_AI_ACTION=\"yes\" npx prisma migrate reset --force)",
+      "WebFetch(domain:neon.tech)",
+      "WebFetch(domain:neon.com)",
+      "Bash(chmod:*)",
+      "Bash(npm run:*)"
     ],
     "deny": [],
     "ask": []

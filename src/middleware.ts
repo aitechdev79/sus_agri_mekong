@@ -15,8 +15,25 @@ export default withAuth(
         }
 
         // Allow public paths
-        const publicPaths = ['/auth/signin', '/auth/signup'];
-        const isPublicPath = publicPaths.some(path => req.nextUrl.pathname.startsWith(path));
+        const publicPaths = [
+          '/',
+          '/auth/signin',
+          '/auth/signup',
+          '/about-us',
+          '/join-us',
+          '/members',
+          '/news',
+          '/stories',
+          '/library',
+          '/content',
+          '/guidance-policy',
+          '/vi', // Internationalized routes
+          '/en'
+        ];
+        const isPublicPath = publicPaths.some(path =>
+          req.nextUrl.pathname === path ||
+          req.nextUrl.pathname.startsWith(path + '/')
+        );
 
         if (isPublicPath) {
           return true;
