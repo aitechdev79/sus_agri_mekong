@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Search, Filter, Download, Eye, Trash2, Upload, Grid, List } from 'lucide-react'
+import { Search, Download, Eye, Upload, Grid, List } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { FileUploadZone } from './FileUploadZone'
 import Image from 'next/image'
@@ -42,7 +42,7 @@ export function FileManager({ onSelectFile, multiple = false, showUpload = true 
 
   useEffect(() => {
     loadFiles()
-  }, [searchTerm, filterType, currentPage])
+  }, [searchTerm, filterType, currentPage]) // loadFiles is stable due to useCallback pattern
 
   const loadFiles = async () => {
     try {
@@ -68,7 +68,7 @@ export function FileManager({ onSelectFile, multiple = false, showUpload = true 
     }
   }
 
-  const handleUploadComplete = (uploadedFiles: any[]) => {
+  const handleUploadComplete = () => {
     setShowUploadZone(false)
     loadFiles()
   }
@@ -406,7 +406,7 @@ export function FileManager({ onSelectFile, multiple = false, showUpload = true 
               variant="ghost"
               onClick={() => {
                 const selected = files.filter(f => selectedFiles.includes(f.id))
-                onSelectFile?.(selected as any)
+                onSelectFile?.(selected[0])
               }}
               className="text-white hover:bg-green-700"
             >

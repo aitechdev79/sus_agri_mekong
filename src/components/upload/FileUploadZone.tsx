@@ -17,7 +17,7 @@ interface FileUploadZoneProps {
   multiple?: boolean
   accept?: string
   maxSize?: number // in MB
-  onUploadComplete?: (files: any[]) => void
+  onUploadComplete?: (files: { id?: string; url: string; name?: string }[]) => void
   onUploadError?: (error: string) => void
   className?: string
   fileOnly?: boolean // If true, uploads files without creating content records
@@ -53,12 +53,12 @@ export function FileUploadZone({
 
     const droppedFiles = Array.from(e.dataTransfer.files)
     handleFiles(droppedFiles)
-  }, [])
+  }, [handleFiles])
 
   const handleFileInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = Array.from(e.target.files || [])
     handleFiles(selectedFiles)
-  }, [])
+  }, [handleFiles])
 
   const handleFiles = useCallback((selectedFiles: File[]) => {
     const validFiles: UploadedFile[] = []

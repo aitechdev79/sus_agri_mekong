@@ -19,7 +19,7 @@ This is a Next.js 15 application called "Good Practices Platform" (Nền Tảng 
 # Development server
 npm run dev
 
-# Build for production
+# Build for production (includes Prisma generate)
 npm run build
 
 # Start production server
@@ -31,26 +31,38 @@ npm run lint
 # TypeScript compilation check
 npx tsc --noEmit
 
+# Database migration for deployment
+npm run db:migrate
+
+# Seed database with sample data
+npm run db:seed
+
 # Combined pre-commit checks
 npm run lint && npx tsc --noEmit && npm run build
 ```
 
 ## Database Management
 
-The application uses Prisma with SQLite:
+The application uses Prisma with PostgreSQL (configured for deployment) and SQLite for development:
 
 ```bash
 # Generate Prisma client after schema changes
 npx prisma generate
 
-# Run database migrations
+# Run database migrations (development)
 npx prisma migrate dev
 
-# Reset database
-npx prisma migrate reset
+# Deploy migrations (production)
+npx prisma migrate deploy
+
+# Reset database (use with caution - dangerous operation)
+PRISMA_USER_CONSENT_FOR_DANGEROUS_AI_ACTION="yes" npx prisma migrate reset --force
 
 # View database in Prisma Studio
 npx prisma studio
+
+# Seed database with sample data
+node scripts/seed.js
 ```
 
 ## Architecture Overview
@@ -116,15 +128,21 @@ cp .env.example .env.local
 
 Key variables for local development:
 ```
-DATABASE_URL="file:./dev.db"
+DATABASE_URL="file:./dev.db"  # SQLite for development
 NEXTAUTH_SECRET="your-secret-key"
 NEXTAUTH_URL="http://localhost:3000"
+```
+
+For production deployment (PostgreSQL):
+```
+DATABASE_URL="postgresql://username:password@localhost:5432/good_practices_db"
 ```
 
 Optional services (for full functionality):
 - **SMS/OTP**: Twilio credentials for phone verification
 - **Email**: SMTP settings for notifications
 - **File Upload**: Upload directory and size limits
+- **Admin Settings**: Admin email configuration
 
 ## Testing and Quality Assurance
 
@@ -139,7 +157,7 @@ npm run build         # Ensure build passes
 
 - **React/Next.js Version**: Uses React 19 with Next.js 15 and experimental SWC transforms
 - **Locale Configuration**: App is configured for Vietnamese locale (`lang="vi"`) with next-intl support
-- **Database**: Uses SQLite for development (file:./dev.db), consider PostgreSQL for production
+- **Database**: Uses PostgreSQL for production deployment and SQLite for development (file:./dev.db)
 - **File Storage**: Uploads stored in `/public/uploads/` directory with multer integration
 - **Authentication**: NextAuth.js v4 with JWT strategy, custom sign-in page at `/auth/signin`, and OTP verification
 - **Image Handling**: Configured for Vietnamese media domains (vnmediacdn.com, vnexpress.net, tuoitre.vn, thanhnien.vn) plus common services
@@ -148,7 +166,7 @@ npm run build         # Ensure build passes
 - **Internationalization**: Primary Vietnamese with optional English content support
 - **TypeScript Paths**: Uses `@/*` alias for `./src/*` imports
 - **ESLint**: Uses ESLint v9 with Next.js configuration
-- **Tailwind**: Uses Tailwind CSS v4 with PostCSS integration
+- **Tailwind**: Uses Tailwind CSS v4 with PostCSS integration (no separate config file - uses @tailwindcss/postcss)
 
 ## Content Management Workflow
 
@@ -162,7 +180,17 @@ The platform implements a complete content lifecycle:
 
 ## Common Development Tasks
 
-### Running a single test
+### Database Seeding
+The project includes a comprehensive seed script for development:
+```bash
+# Seed database with sample users and content
+npm run db:seed
+
+# Reset and reseed database
+npx prisma migrate reset && npm run db:seed
+```
+
+### Running tests
 The project doesn't have a test suite configured yet. When implementing tests, consider:
 ```bash
 # Install testing dependencies first
