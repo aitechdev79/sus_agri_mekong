@@ -41,4 +41,4 @@ export async function GET() {
   }
 }
 
-export const revalidate = 3600; // Cache for 1 hour
+export const revalidate = 60; // Cache for 1 minute (consistent with news)
