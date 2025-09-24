@@ -10,6 +10,17 @@
       "maxDuration": 30
     }
   },
+  "headers": [
+    {
+      "source": "/hero/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400"
+        }
+      ]
+    }
+  ],
   "regions": ["iad1"],
   "crons": [],
   "env": {

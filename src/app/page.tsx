@@ -1,5 +1,6 @@
 import Footer from '@/components/Footer';
 import HeroSection from '@/components/HeroSection';
+import HeroSectionFixed from '@/components/HeroSectionFixed';
 import HeroSectionDebug from '@/components/HeroSectionDebug';
 import AboutSection from '@/components/AboutSection';
 import ToolsGrid from '@/components/ToolsGrid';
@@ -12,7 +13,7 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       <main>
-        <HeroSection />
+        <HeroSectionFixed />
         <HeroSectionDebug />
         <AboutSection />
         <DienhinhSection />

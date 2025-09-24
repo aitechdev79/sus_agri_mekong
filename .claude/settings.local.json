@@ -31,7 +31,8 @@
       "WebFetch(domain:neon.tech)",
       "WebFetch(domain:neon.com)",
       "Bash(chmod:*)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(git ls-tree:*)"
     ],
     "deny": [],
     "ask": []

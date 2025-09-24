@@ -4,6 +4,8 @@ const nextConfig: NextConfig = {
   experimental: {
     forceSwcTransforms: true,
   },
+  trailingSlash: false,
+  assetPrefix: '',
   images: {
     unoptimized: false, // Enable image optimization on Vercel
     dangerouslyAllowSVG: true,
@@ -44,6 +46,12 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'images.unsplash.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.unsplash.com',
         port: '',
         pathname: '/**',
       },
