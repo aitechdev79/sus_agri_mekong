@@ -3,35 +3,7 @@
 import { useState } from 'react'
 import { Edit, Trash2, Eye, Star, Users } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-
-interface Content {
-  id: string
-  title: string
-  titleEn?: string
-  description: string
-  content: string
-  type: string
-  category: string
-  tags: string
-  status: string
-  isFeatured: boolean
-  isPublic: boolean
-  viewCount: number
-  updatedAt: string
-  author: {
-    name: string
-    role: string
-  }
-  createdAt: string
-}
-
-interface ContentTableProps {
-  contents: Content[]
-  onEdit: (content: Content) => void
-  onDelete: (contentId: string) => void
-  onBulkAction: (ids: string[], action: string) => void
-  userRole: string
-}
+import { AdminContent, ContentTableProps } from '@/types/content'
 
 export function ContentTable({ contents, onEdit, onDelete, onBulkAction, userRole }: ContentTableProps) {
   const [selectedIds, setSelectedIds] = useState<string[]>([])
@@ -122,14 +94,14 @@ export function ContentTable({ contents, onEdit, onDelete, onBulkAction, userRol
               <Button
                 size="sm"
                 variant="ghost"
-                onClick={() => onBulkAction(selectedIds, 'publish')}
+                onClick={() => onBulkAction?.('publish', selectedIds)}
               >
                 Xuất bản
               </Button>
               <Button
                 size="sm"
                 variant="ghost"
-                onClick={() => onBulkAction(selectedIds, 'draft')}
+                onClick={() => onBulkAction?.('draft', selectedIds)}
               >
                 Chuyển về nháp
               </Button>
@@ -138,14 +110,14 @@ export function ContentTable({ contents, onEdit, onDelete, onBulkAction, userRol
                   <Button
                     size="sm"
                     variant="ghost"
-                    onClick={() => onBulkAction(selectedIds, 'feature')}
+                    onClick={() => onBulkAction?.('feature', selectedIds)}
                   >
                     Đặt nổi bật
                   </Button>
                   <Button
                     size="sm"
                     variant="ghost"
-                    onClick={() => onBulkAction(selectedIds, 'archive')}
+                    onClick={() => onBulkAction?.('archive', selectedIds)}
                   >
                     Lưu trữ
                   </Button>
@@ -247,7 +219,7 @@ export function ContentTable({ contents, onEdit, onDelete, onBulkAction, userRol
                       <Eye className="w-4 h-4" />
                     </button>
                     <button
-                      onClick={() => onDelete(content.id)}
+                      onClick={() => onDelete(content)}
                       className="text-red-600 hover:text-red-800 p-1"
                       title="Xóa"
                     >

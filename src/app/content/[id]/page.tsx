@@ -4,27 +4,9 @@ import { Calendar, Eye } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
+import { PublicContent } from '@/types/content';
 
-interface ContentItem {
-  id: string;
-  title: string;
-  description?: string;
-  content: string;
-  type: string;
-  category: string;
-  imageUrl?: string;
-  thumbnailUrl?: string;
-  videoUrl?: string;
-  viewCount: number;
-  status: string;
-  author: {
-    name: string;
-    role: string;
-  };
-  createdAt: string;
-}
-
-async function getContent(contentId: string): Promise<ContentItem | null> {
+async function getContent(contentId: string): Promise<PublicContent | null> {
   try {
     const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/content/${contentId}`, {
       next: { revalidate: 300 }, // Cache for 5 minutes

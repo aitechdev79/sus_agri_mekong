@@ -1,27 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { requireAuth, requireModerator } from '@/lib/auth-middleware'
+import { UpdateContentData } from '@/types/content'
 
 interface RouteParams {
   params: Promise<{ id: string }>
-}
-
-interface ContentUpdateData {
-  title: string
-  description: string
-  content: string
-  type: string
-  category: string
-  tags: string
-  isPublic: boolean
-  videoUrl?: string | null
-  imageUrl?: string | null
-  thumbnailUrl?: string | null
-  fileUrl?: string | null
-  fileType?: string | null
-  fileSize?: number | null
-  isFeatured?: boolean
-  status?: string
 }
 
 export async function GET(
@@ -176,7 +159,7 @@ export async function PUT(
     console.log('Full data received:', { type, category, title })
 
     // Only admins can modify featured status or change status of published content
-    const updateData: ContentUpdateData = {
+    const updateData: UpdateContentData = {
       title,
       description,
       content: contentText,

@@ -2,27 +2,7 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Calendar, Eye, User, ArrowLeft } from 'lucide-react';
-
-interface NewsContent {
-  id: string;
-  title: string;
-  titleEn?: string;
-  description?: string;
-  descriptionEn?: string;
-  content: string;
-  contentEn?: string;
-  type: string;
-  imageUrl?: string;
-  thumbnailUrl?: string;
-  videoUrl?: string;
-  viewCount: number;
-  createdAt: string;
-  author: {
-    id: string;
-    name?: string;
-    organization?: string;
-  };
-}
+import { NewsContent } from '@/types/content';
 
 async function getNewsContent(id: string): Promise<NewsContent | null> {
   try {

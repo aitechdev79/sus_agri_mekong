@@ -20,34 +20,7 @@ import {
   Edit,
   Trash2
 } from 'lucide-react';
-
-// FORCE REFRESH - TESTING ADMIN PAGE
-
-interface ContentItem {
-  id: string;
-  title: string;
-  description: string;
-  content: string;
-  type: string;
-  category: string;
-  tags: string;
-  status: string;
-  viewCount: number;
-  createdAt: string;
-  updatedAt: string;
-  fileUrl?: string;
-  fileType?: string;
-  fileSize?: number;
-  thumbnailUrl?: string;
-  imageUrl?: string;
-  videoUrl?: string;
-  isPublic: boolean;
-  isFeatured: boolean;
-  author: {
-    name: string;
-    role: string;
-  };
-}
+import { AdminContent } from '@/types/content';
 
 interface Stats {
   totalUsers: number;
@@ -68,13 +41,13 @@ export default function AdminPage() {
     totalViews: 0,
     pendingSubmissions: 0
   });
-  const [recentContent, setRecentContent] = useState<ContentItem[]>([]);
+  const [recentContent, setRecentContent] = useState<AdminContent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   // Content management state
   const [showForm, setShowForm] = useState(false);
-  const [editingContent, setEditingContent] = useState<ContentItem | null>(null);
-  const [contents, setContents] = useState([]);
+  const [editingContent, setEditingContent] = useState<AdminContent | null>(null);
+  const [contents, setContents] = useState<AdminContent[]>([]);
 
   useEffect(() => {
     console.log('🔄 ADMIN PAGE EFFECT - Status:', status, 'Session exists:', !!session, 'Role:', session?.user?.role);
@@ -143,7 +116,7 @@ export default function AdminPage() {
     setShowForm(true);
   };
 
-  const handleEditContent = (content: ContentItem) => {
+  const handleEditContent = (content: AdminContent) => {
     setEditingContent(content);
     setShowForm(true);
   };
@@ -154,13 +127,13 @@ export default function AdminPage() {
     fetchAdminData(); // Refresh data
   };
 
-  const handleDeleteContent = async (contentId: string) => {
+  const handleDeleteContent = async (content: AdminContent) => {
     if (!confirm('Bạn có chắc chắn muốn xóa nội dung này?')) {
       return;
     }
 
     try {
-      const response = await fetch(`/api/content/${contentId}`, {
+      const response = await fetch(`/api/content/${content.id}`, {
         method: 'DELETE'
       });
 
@@ -175,7 +148,7 @@ export default function AdminPage() {
     }
   };
 
-  const handleBulkAction = async (ids: string[], action: string) => {
+  const handleBulkAction = async (action: string, ids: string[]) => {
     try {
       const response = await fetch('/api/admin/content', {
         method: 'PATCH',
@@ -355,7 +328,7 @@ export default function AdminPage() {
                       <button
                         className="p-2 text-red-600 hover:bg-red-50 rounded"
                         title="Xóa"
-                        onClick={() => handleDeleteContent(item.id)}
+                        onClick={() => handleDeleteContent(item)}
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>

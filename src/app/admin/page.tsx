@@ -9,33 +9,14 @@ import { ContentForm } from '@/components/admin/ContentForm'
 import { StatsCards } from '@/components/admin/StatsCards'
 import { Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-
-interface ContentItem {
-  id: string
-  title: string
-  description: string
-  content: string
-  type: string
-  category: string
-  tags: string
-  status: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED'
-  viewCount: number
-  isPublic: boolean
-  isFeatured: boolean
-  createdAt: string
-  updatedAt: string
-  author: {
-    name: string
-    role: string
-  }
-}
+import { AdminContent } from '@/types/content'
 
 export default function AdminPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const [showForm, setShowForm] = useState(false)
-  const [editingContent, setEditingContent] = useState<ContentItem | null>(null)
-  const [contents, setContents] = useState<ContentItem[]>([])
+  const [editingContent, setEditingContent] = useState<AdminContent | null>(null)
+  const [contents, setContents] = useState<AdminContent[]>([])
   const [loading, setLoading] = useState(true)
   const [stats, setStats] = useState({
     total: 0,
@@ -67,9 +48,9 @@ export default function AdminPage() {
 
         // Calculate stats with null checks
         const total = contentList.length
-        const published = contentList.filter((c: ContentItem) => c.status === 'PUBLISHED').length
-        const draft = contentList.filter((c: ContentItem) => c.status === 'DRAFT').length
-        const totalViews = contentList.reduce((sum: number, c: ContentItem) => sum + (c.viewCount || 0), 0)
+        const published = contentList.filter((c: AdminContent) => c.status === 'PUBLISHED').length
+        const draft = contentList.filter((c: AdminContent) => c.status === 'DRAFT').length
+        const totalViews = contentList.reduce((sum: number, c: AdminContent) => sum + (c.viewCount || 0), 0)
 
         setStats({ total, published, draft, totalViews })
       } else {
@@ -89,7 +70,7 @@ export default function AdminPage() {
     setShowForm(true)
   }
 
-  const handleEditContent = (content: ContentItem) => {
+  const handleEditContent = (content: AdminContent) => {
     setEditingContent(content)
     setShowForm(true)
   }
@@ -100,13 +81,13 @@ export default function AdminPage() {
     loadContents()
   }
 
-  const handleDeleteContent = async (contentId: string) => {
+  const handleDeleteContent = async (content: AdminContent) => {
     if (!confirm('Bạn có chắc chắn muốn xóa nội dung này?')) {
       return
     }
 
     try {
-      const response = await fetch(`/api/content/${contentId}`, {
+      const response = await fetch(`/api/content/${content.id}`, {
         method: 'DELETE'
       })
 
@@ -121,7 +102,7 @@ export default function AdminPage() {
     }
   }
 
-  const handleBulkAction = async (ids: string[], action: string) => {
+  const handleBulkAction = async (action: string, ids: string[]) => {
     try {
       const response = await fetch('/api/admin/content', {
         method: 'PATCH',

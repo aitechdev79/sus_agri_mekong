@@ -6,31 +6,10 @@ import { ContentCard } from '@/components/content/ContentCard'
 import { SearchFilters } from '@/components/content/SearchFilters'
 import { Search, Filter } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-
-interface Content {
-  id: string
-  title: string
-  titleEn?: string
-  description?: string
-  descriptionEn?: string
-  type: string
-  category: string
-  viewCount: number
-  downloadCount: number
-  isFeatured: boolean
-  author: {
-    name: string
-    role: string
-  }
-  createdAt: string
-  _count: {
-    comments: number
-    bookmarks: number
-  }
-}
+import { LibraryContent } from '@/types/content'
 
 export default function LibraryPage() {
-  const [contents, setContents] = useState<Content[]>([])
+  const [contents, setContents] = useState<LibraryContent[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('')

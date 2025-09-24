@@ -5,36 +5,7 @@ import { Button } from '@/components/ui/button'
 import { FileUploadZone } from '@/components/upload/FileUploadZone'
 import { FileManager } from '@/components/upload/FileManager'
 import Image from 'next/image'
-
-interface Content {
-  id: string
-  title: string
-  description?: string
-  content?: string
-  type: string
-  category?: string
-  tags?: string
-  fileUrl?: string
-  fileType?: string
-  fileSize?: number
-  thumbnailUrl?: string
-  imageUrl?: string
-  videoUrl?: string
-  isPublic?: boolean
-  isFeatured?: boolean
-  status: string
-  viewCount?: number
-  createdAt?: string
-  author?: {
-    name: string
-  }
-}
-
-interface ContentFormProps {
-  content?: Content | null
-  onClose: () => void
-  userRole: string
-}
+import { FormContent, ContentFormProps } from '@/types/content'
 
 export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
   const [loading, setLoading] = useState(false)

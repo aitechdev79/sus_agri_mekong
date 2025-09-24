@@ -5,28 +5,10 @@ import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
-
-interface ContentItem {
-  id: string;
-  title: string;
-  description?: string;
-  type: string;
-  createdAt: string;
-  viewCount: number;
-}
-
-interface PaginatedResponse {
-  contents: ContentItem[];
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    pages: number;
-  };
-}
+import { MinimalContent, MinimalContentListResponse } from '@/types/content';
 
 export default function GuidancePolicyPage() {
-  const [contentItems, setContentItems] = useState<ContentItem[]>([]);
+  const [contentItems, setContentItems] = useState<MinimalContent[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -49,7 +31,7 @@ export default function GuidancePolicyPage() {
 
       const response = await fetch(url);
       if (response.ok) {
-        const data: PaginatedResponse = await response.json();
+        const data: MinimalContentListResponse = await response.json();
         setContentItems(data.contents);
         setTotalPages(data.pagination.pages);
       }

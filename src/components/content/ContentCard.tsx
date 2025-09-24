@@ -2,30 +2,7 @@ import Link from 'next/link'
 import { Eye, Download, MessageCircle, Bookmark, Clock, User } from 'lucide-react'
 import { MediaContent } from './MediaContent'
 import { LocalizedContent } from '../LocalizedContent'
-
-interface ContentCardProps {
-  content: {
-    id: string
-    title: string
-    description?: string
-    type: string
-    category: string
-    viewCount: number
-    downloadCount: number
-    isFeatured: boolean
-    imageUrl?: string
-    videoUrl?: string
-    author: {
-      name: string
-      role: string
-    }
-    createdAt: string
-    _count: {
-      comments: number
-      bookmarks: number
-    }
-  }
-}
+import { ContentCardProps } from '@/types/content'
 
 export function ContentCard({ content }: ContentCardProps) {
   const getTypeBadge = (type: string) => {
