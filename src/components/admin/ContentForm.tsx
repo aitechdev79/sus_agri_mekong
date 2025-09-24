@@ -4,9 +4,29 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { FileUploadZone } from '@/components/upload/FileUploadZone'
 import { FileManager } from '@/components/upload/FileManager'
+import Image from 'next/image'
+
+interface Content {
+  id: string
+  title: string
+  description: string
+  content: string
+  type: string
+  category: string
+  tags: string
+  fileUrl?: string
+  fileType?: string
+  fileSize?: number
+  thumbnailUrl?: string
+  imageUrl?: string
+  videoUrl?: string
+  isPublic: boolean
+  isFeatured: boolean
+  status: string
+}
 
 interface ContentFormProps {
-  content?: any
+  content?: Content
   onClose: () => void
   userRole: string
 }
@@ -263,9 +283,11 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
                 </p>
                 {formData.imageUrl && (
                   <div className="mt-2">
-                    <img
+                    <Image
                       src={formData.imageUrl}
                       alt="Preview"
+                      width={128}
+                      height={96}
                       className="w-32 h-24 object-cover rounded-md border"
                       onError={(e) => {
                         e.currentTarget.style.display = 'none';
@@ -314,9 +336,11 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
                   <div className="flex items-center space-x-3">
                     <div className="w-12 h-12 bg-white rounded border flex items-center justify-center">
                       {formData.thumbnailUrl ? (
-                        <img
+                        <Image
                           src={formData.thumbnailUrl}
                           alt="Thumbnail"
+                          width={48}
+                          height={48}
                           className="w-full h-full object-cover rounded"
                         />
                       ) : (
@@ -460,7 +484,7 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
             </div>
             <div className="p-6">
               <FileManager
-                onSelectFile={(file: any) => {
+                onSelectFile={(file: { id?: string; url: string; name?: string }) => {
                   setFormData(prev => ({
                     ...prev,
                     fileUrl: file.fileUrl,

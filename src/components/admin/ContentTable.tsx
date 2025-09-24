@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Edit, Trash2, Eye, Star, Archive, Globe, Users } from 'lucide-react'
+import { Edit, Trash2, Eye, Star, Users } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 interface Content {

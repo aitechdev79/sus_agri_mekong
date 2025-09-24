@@ -30,8 +30,8 @@ export async function sendSMS(phone: string, message: string): Promise<void> {
 export async function sendEmail(
   to: string,
   subject: string,
-  text: string,
-  html?: string
+  _text: string,
+  _html?: string
 ): Promise<void> {
   // In production, integrate with email provider
   console.log(`Email to ${to}: ${subject}`)

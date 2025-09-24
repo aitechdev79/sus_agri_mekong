@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Search, Download, Eye, Upload, Grid, List } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { FileUploadZone } from './FileUploadZone'
@@ -42,9 +42,9 @@ export function FileManager({ onSelectFile, multiple = false, showUpload = true 
 
   useEffect(() => {
     loadFiles()
-  }, [searchTerm, filterType, currentPage]) // loadFiles is stable due to useCallback pattern
+  }, [loadFiles])
 
-  const loadFiles = async () => {
+  const loadFiles = useCallback(async () => {
     try {
       setLoading(true)
       const params = new URLSearchParams({
@@ -66,7 +66,7 @@ export function FileManager({ onSelectFile, multiple = false, showUpload = true 
     } finally {
       setLoading(false)
     }
-  }
+  }, [searchTerm, filterType, currentPage, pagination.limit])
 
   const handleUploadComplete = () => {
     setShowUploadZone(false)

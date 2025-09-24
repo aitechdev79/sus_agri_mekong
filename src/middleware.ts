@@ -2,7 +2,7 @@ import { withAuth } from 'next-auth/middleware';
 import { NextRequest } from 'next/server';
 
 const authMiddleware = withAuth(
-  function onSuccess(req) {
+  function onSuccess(_req) {
     return;
   },
   {
@@ -31,7 +31,7 @@ export default function middleware(req: NextRequest) {
     return;
   }
 
-  return (authMiddleware as any)(req);
+  return (authMiddleware as typeof authMiddleware)(req);
 }
 
 export const config = {
