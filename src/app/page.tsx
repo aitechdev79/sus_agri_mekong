@@ -5,6 +5,7 @@ import ToolsGrid from '@/components/ToolsGrid';
 import SignUpSection from '@/components/SignUpSection';
 import HoatDongSection from '@/components/HoatDongSection';
 import NewsSection from '@/components/NewsSection';
+import DienHinhSection from '@/components/DienHinhSection';
 
 export default function Home() {
   return (
@@ -15,6 +16,7 @@ export default function Home() {
         <ToolsGrid />
         <HoatDongSection />
         <NewsSection />
+        <DienHinhSection />
         <SignUpSection />
       </main>
       <Footer />

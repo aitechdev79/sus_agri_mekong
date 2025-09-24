@@ -7,6 +7,7 @@ import ToolsGrid from '@/components/ToolsGrid';
 import CommunityCarousel from '@/components/CommunityCarousel';
 import SignUpSection from '@/components/SignUpSection';
 import NewsSection from '@/components/NewsSection';
+import DienHinhSection from '@/components/DienHinhSection';
 
 export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -23,6 +24,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
         <CommunityCarousel />
         <SignUpSection />
         <NewsSection />
+        <DienHinhSection />
       </main>
       <Footer />
     </div>
