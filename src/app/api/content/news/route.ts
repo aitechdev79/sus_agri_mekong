@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
     const newsItems = await prisma.content.findMany({
       where: {
@@ -38,7 +38,12 @@ export async function GET() {
       });
     });
 
-    return NextResponse.json(newsItems);
+    const response = NextResponse.json(newsItems);
+
+    // Add cache control headers for better cache management
+    response.headers.set('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
+
+    return response;
   } catch (error) {
     console.error('Error fetching news:', error);
     return NextResponse.json(
@@ -48,4 +53,4 @@ export async function GET() {
   }
 }
 
-export const revalidate = 3600; // Cache for 1 hour
+export const revalidate = 60; // Cache for 1 minute (more responsive to content changes)

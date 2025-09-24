@@ -28,7 +28,7 @@ export default function NewsSection({ locale }: NewsSectionProps) {
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const response = await fetch('/api/content/news');
+        const response = await fetch(`/api/content/news?_t=${Date.now()}`);
         if (response.ok) {
           const data = await response.json();
           setNewsItems(data.slice(0, 5)); // Only show 5 latest news items
