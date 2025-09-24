@@ -477,6 +477,23 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-gray-800">File đính kèm</h3>
 
+            {/* Upload limitations notice */}
+            <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+              <div className="flex">
+                <div className="flex-shrink-0">
+                  <svg className="h-5 w-5 text-amber-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M8.485 3.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 3.495zM10 6a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 6zm0 9a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div className="ml-3">
+                  <p className="text-sm text-amber-700">
+                    <strong>Hạn chế tải file:</strong> Hiện tại chỉ hỗ trợ hình ảnh dưới 1MB.
+                    Với file lớn hơn, vui lòng sử dụng dịch vụ lưu trữ bên ngoài và dán link vào ô &ldquo;Image URL&rdquo; bên trên.
+                  </p>
+                </div>
+              </div>
+            </div>
+
             {/* Current File */}
             {formData.fileUrl && (
               <div className="border rounded-lg p-4 bg-gray-50">

@@ -187,7 +187,11 @@ export function FileUploadZone({
                 thumbnailUrl: result.file.thumbnailUrl
               }])
             } else {
-              throw new Error(result.error || 'Upload failed')
+              const errorMsg = result.error || 'Upload failed'
+              if (result.suggestion) {
+                throw new Error(`${errorMsg}\n\nGợi ý: ${result.suggestion}`)
+              }
+              throw new Error(errorMsg)
             }
           } catch (error) {
             setFiles(prev => prev.map(f =>
@@ -278,6 +282,11 @@ export function FileUploadZone({
         <p className="text-xs text-gray-400 mt-1">
           Kích thước tối đa: {maxSize}MB {multiple && '• Có thể chọn nhiều file'}
         </p>
+        {fileOnly && (
+          <p className="text-xs text-amber-600 mt-2 bg-amber-50 px-2 py-1 rounded">
+            ⚠️ Hiện tại chỉ hỗ trợ hình ảnh dưới 1MB trên Vercel
+          </p>
+        )}
       </div>
 
       {/* Hidden file input */}
