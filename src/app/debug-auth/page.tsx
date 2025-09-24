@@ -64,6 +64,18 @@ export default function DebugAuthPage() {
     }
   };
 
+  const setupAdmin = async () => {
+    try {
+      const response = await fetch('/api/setup/admin', { method: 'POST' });
+      const data = await response.json();
+      setDbInfo(data);
+      // Refresh database info after setup
+      setTimeout(checkDatabase, 1000);
+    } catch (error) {
+      setDbInfo({ success: false, error: error instanceof Error ? error.message : 'Unknown error' });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 py-12">
       <div className="max-w-4xl mx-auto px-6">
@@ -72,12 +84,20 @@ export default function DebugAuthPage() {
 
           {/* Database Info */}
           <div className="mb-8">
-            <button
-              onClick={checkDatabase}
-              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-            >
-              Check Database Connection
-            </button>
+            <div className="space-x-2">
+              <button
+                onClick={checkDatabase}
+                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+              >
+                Check Database Connection
+              </button>
+              <button
+                onClick={setupAdmin}
+                className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700"
+              >
+                Setup Admin Users
+              </button>
+            </div>
 
             {dbInfo && (
               <div className="mt-4 p-4 bg-gray-50 rounded">
