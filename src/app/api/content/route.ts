@@ -46,8 +46,7 @@ export async function GET(request: NextRequest) {
       where.OR = [
         { title: { contains: search } },
         { description: { contains: search } },
-        { content: { contains: search } },
-        { tags: { contains: search } }
+        { content: { contains: search } }
       ]
     }
 
