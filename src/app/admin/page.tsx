@@ -10,12 +10,33 @@ import { StatsCards } from '@/components/admin/StatsCards'
 import { Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
+interface ContentItem {
+  id: string
+  title: string
+  description: string
+  content: string
+  type: string
+  category: string
+  tags: string
+  status: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED'
+  viewCount: number
+  isPublic: boolean
+  isFeatured: boolean
+  createdAt: string
+  updatedAt: string
+  author: {
+    id: string
+    name: string
+    email: string
+  }
+}
+
 export default function AdminPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const [showForm, setShowForm] = useState(false)
-  const [editingContent, setEditingContent] = useState(null)
-  const [contents, setContents] = useState([])
+  const [editingContent, setEditingContent] = useState<ContentItem | null>(null)
+  const [contents, setContents] = useState<ContentItem[]>([])
   const [loading, setLoading] = useState(true)
   const [stats, setStats] = useState({
     total: 0,
@@ -47,9 +68,9 @@ export default function AdminPage() {
 
         // Calculate stats with null checks
         const total = contentList.length
-        const published = contentList.filter((c: any) => c.status === 'PUBLISHED').length
-        const draft = contentList.filter((c: any) => c.status === 'DRAFT').length
-        const totalViews = contentList.reduce((sum: number, c: any) => sum + (c.viewCount || 0), 0)
+        const published = contentList.filter((c: ContentItem) => c.status === 'PUBLISHED').length
+        const draft = contentList.filter((c: ContentItem) => c.status === 'DRAFT').length
+        const totalViews = contentList.reduce((sum: number, c: ContentItem) => sum + (c.viewCount || 0), 0)
 
         setStats({ total, published, draft, totalViews })
       } else {
@@ -69,7 +90,7 @@ export default function AdminPage() {
     setShowForm(true)
   }
 
-  const handleEditContent = (content: any) => {
+  const handleEditContent = (content: ContentItem) => {
     setEditingContent(content)
     setShowForm(true)
   }

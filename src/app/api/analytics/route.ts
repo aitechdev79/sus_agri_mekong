@@ -2,6 +2,24 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { requireAuth } from '@/lib/auth-middleware'
 
+interface AnalyticsWhere {
+  createdAt: {
+    gte: Date
+  }
+  event?: string
+}
+
+interface DailyStats {
+  [date: string]: {
+    [event: string]: number
+  }
+}
+
+interface AnalyticsItem {
+  event: string
+  createdAt: Date
+}
+
 export async function POST(request: NextRequest) {
   try {
     const user = await requireAuth(request)
@@ -51,7 +69,7 @@ export async function GET(request: NextRequest) {
     const startDate = new Date()
     startDate.setDate(startDate.getDate() - days)
 
-    const where: any = {
+    const where: AnalyticsWhere = {
       createdAt: {
         gte: startDate
       }
@@ -106,7 +124,7 @@ export async function GET(request: NextRequest) {
     ])
 
     // Group analytics by day
-    const dailyStats = analytics.reduce((acc: any, item) => {
+    const dailyStats = analytics.reduce((acc: DailyStats, item: AnalyticsItem) => {
       const date = item.createdAt.toISOString().split('T')[0]
       if (!acc[date]) {
         acc[date] = {}
