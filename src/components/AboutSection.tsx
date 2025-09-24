@@ -75,7 +75,7 @@ export default function AboutSection() {
               <div className="mb-6 flex items-center space-x-6">
                 <div className="relative h-18 w-30">
                   <Image
-                    src="/members/01-Greenfeed.png"
+                    src="/01-Greenfeed.png"
                     alt="Greenfeed Logo"
                     fill
                     className="object-contain"
@@ -84,7 +84,7 @@ export default function AboutSection() {
                 </div>
                 <div className="relative h-18 w-30">
                   <Image
-                    src="/members/02-CP.jpg"
+                    src="/02-CP.jpg"
                     alt="CP Logo"
                     fill
                     className="object-contain"
@@ -93,7 +93,7 @@ export default function AboutSection() {
                 </div>
                 <div className="relative h-18 w-30">
                   <Image
-                    src="/members/03-binhdien.jpg"
+                    src="/03-binhdien.jpg"
                     alt="Binh Dien Logo"
                     fill
                     className="object-contain"
@@ -116,7 +116,7 @@ export default function AboutSection() {
           <div className="flex items-center justify-start">
             <div className="relative h-80 w-full max-w-md">
               <Image
-                src="/about_us/supply_chain_art.png"
+                src="/supply_chain_art.png"
                 alt="Minh họa chuỗi cung ứng bền vững"
                 fill
                 className="object-contain"

@@ -59,7 +59,7 @@ export default function JoinUsPage() {
           }}
         >
           <Image
-            src="/hero/hero_members.jpg"
+            src="/hero_members.jpg"
             alt="Tham gia mạng lưới hợp tác"
             fill
             priority

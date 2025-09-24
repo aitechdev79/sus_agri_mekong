@@ -8,12 +8,12 @@ import Footer from '@/components/Footer';
 export default function MembersPage() {
 
   const memberLogos = [
-    { id: 1, name: 'Greenfeed', src: '/members/01-Greenfeed.png' },
-    { id: 2, name: 'CP', src: '/members/02-CP.jpg' },
-    { id: 3, name: 'Bình Điền', src: '/members/03-binhdien.jpg' },
-    { id: 4, name: 'VCCI', src: '/members/04-VCCI.jpg' },
-    { id: 5, name: 'Oxfam', src: '/members/05-Oxfam.png' },
-    { id: 6, name: 'Lộc Trời', src: '/members/06-loctroi.png' },
+    { id: 1, name: 'Greenfeed', src: '/01-Greenfeed.png' },
+    { id: 2, name: 'CP', src: '/02-CP.jpg' },
+    { id: 3, name: 'Bình Điền', src: '/03-binhdien.jpg' },
+    { id: 4, name: 'VCCI', src: '/04-VCCI.jpg' },
+    { id: 5, name: 'Oxfam', src: '/05-Oxfam.png' },
+    { id: 6, name: 'Lộc Trời', src: '/06-loctroi.png' },
   ];
 
   return (
@@ -44,7 +44,7 @@ export default function MembersPage() {
           }}
         >
           <Image
-            src="/hero/hero_members.jpg"
+            src="/hero_members.jpg"
             alt="Doanh nghiệp Việt Nam cùng chung tay phát triển"
             fill
             priority
@@ -130,7 +130,7 @@ export default function MembersPage() {
               <div className="flex-shrink-0">
                 <div className="relative w-64 h-64 md:w-80 md:h-80">
                   <Image
-                    src="/members/art_members.png"
+                    src="/art_members.png"
                     alt="Thành viên hợp tác"
                     fill
                     className="object-contain scale-120"
