@@ -140,7 +140,7 @@ export default function DienHinhSection() {
                             <img
                               src={imageUrl}
                               alt={item.title}
-                              className="w-full h-full object-contain block"
+                              className="w-full h-full object-cover block"
                               style={{ display: 'block', margin: 0, padding: 0 }}
                               onError={(e) => {
                                 console.error('Uploaded image failed to load:', imageUrl, e);
@@ -152,7 +152,7 @@ export default function DienHinhSection() {
                               src={imageUrl}
                               alt={item.title}
                               fill
-                              className="object-contain block"
+                              className="object-cover block"
                               style={{ display: 'block', margin: 0, padding: 0 }}
                               onError={(e) => {
                                 console.error('Uploaded image failed to load:', imageUrl, e);
