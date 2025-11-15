@@ -6,6 +6,8 @@ import NavigationBar from './NavigationBar';
 
 export default function HeroSection() {
   const [videoHeight, setVideoHeight] = useState<number>(0);
+  const [videoError, setVideoError] = useState<boolean>(false);
+  const [videoLoaded, setVideoLoaded] = useState<boolean>(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -15,7 +17,19 @@ export default function HeroSection() {
         const aspectRatio = video.videoHeight / video.videoWidth;
         const calculatedHeight = window.innerWidth * aspectRatio;
         setVideoHeight(calculatedHeight);
+        setVideoLoaded(true);
+
+        // Ensure video plays after metadata is loaded
+        video.play().catch((err) => {
+          console.error('Video autoplay failed:', err);
+          // Autoplay might be blocked, but video is still functional
+        });
       }
+    };
+
+    const handleVideoError = (e: Event) => {
+      console.error('Video failed to load:', e);
+      setVideoError(true);
     };
 
     const handleResize = () => {
@@ -25,12 +39,19 @@ export default function HeroSection() {
     const video = videoRef.current;
     if (video) {
       video.addEventListener('loadedmetadata', handleVideoLoad);
+      video.addEventListener('error', handleVideoError);
       window.addEventListener('resize', handleResize);
+
+      // Trigger load if video is already loaded
+      if (video.readyState >= 2) {
+        handleVideoLoad();
+      }
     }
 
     return () => {
       if (video) {
         video.removeEventListener('loadedmetadata', handleVideoLoad);
+        video.removeEventListener('error', handleVideoError);
       }
       window.removeEventListener('resize', handleResize);
     };
@@ -61,21 +82,46 @@ export default function HeroSection() {
           bottom: 0
         }}
       >
-        <video
-          ref={videoRef}
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="w-full h-full object-cover"
-          style={{
-            objectFit: 'cover',
-            objectPosition: 'center center'
-          }}
-        >
-          <source src="/videos/hero-background.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
+        {videoError ? (
+          // Fallback to image if video fails to load
+          <div
+            className="w-full h-full bg-cover bg-center"
+            style={{
+              backgroundImage: 'url(/hero-main.jpg)',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center center'
+            }}
+          />
+        ) : (
+          <video
+            ref={videoRef}
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+            className="w-full h-full object-cover"
+            style={{
+              objectFit: 'cover',
+              objectPosition: 'center center',
+              display: videoLoaded ? 'block' : 'none'
+            }}
+          >
+            <source src="/videos/hero-background.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        )}
+        {/* Loading placeholder while video loads */}
+        {!videoLoaded && !videoError && (
+          <div
+            className="w-full h-full bg-cover bg-center"
+            style={{
+              backgroundImage: 'url(/hero-main.jpg)',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center center'
+            }}
+          />
+        )}
       </div>
 
       {/* Main Hero Content */}
