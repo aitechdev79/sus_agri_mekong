@@ -22,10 +22,10 @@ export default function SignUpSection() {
           {/* Main Content */}
           <div className="text-white mb-12">
             <h2 className="text-3xl font-bold mb-6 md:text-4xl font-montserrat">
-              Tham gia cộng đồng của chúng tôi
+              Trở thành đối tác
             </h2>
             <p className="text-lg mb-8 text-blue-100 max-w-2xl mx-auto font-montserrat">
-              Đăng ký ngay để truy cập đầy đủ nội dung và kết nối với cộng đồng nông dân, chuyên gia
+              Đối tác doanh nghiệp được cập nhật các chương trình mới nhất, kết nối với cộng đồng doanh nghiệp, chuyên gia và nông dân
             </p>
 
 
