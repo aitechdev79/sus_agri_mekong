@@ -130,7 +130,7 @@ export default function HeroSection() {
           <div className="max-w-2xl">
             {/* Main Headline - Left aligned */}
             <div className="mb-6">
-              <h1 className="font-montserrat font-bold text-red-600 text-left" style={{ lineHeight: '1.1', letterSpacing: '0.5px' }}>
+              <h1 className="font-montserrat font-bold text-white text-left" style={{ lineHeight: '1.1', letterSpacing: '0.5px' }}>
                 {/* 24px mobile, 32px tablet, 48px desktop */}
                 <div className="text-2xl md:text-3xl lg:text-5xl">
                   Nông nghiệp bền vững
@@ -146,7 +146,7 @@ export default function HeroSection() {
 
             {/* Subheadline - Left aligned */}
             <div className="mb-6">
-              <p className="font-montserrat font-normal text-red-600 text-left max-w-lg text-xs md:text-sm lg:text-xl" style={{ lineHeight: '1.5' }}>
+              <p className="font-montserrat font-normal text-white text-left max-w-lg text-xs md:text-sm lg:text-xl" style={{ lineHeight: '1.5' }}>
                 Phát triển bền vững để đảm bảo chuỗi cung ứng an toàn.
               </p>
             </div>
