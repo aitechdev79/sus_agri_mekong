@@ -114,11 +114,11 @@ export default function DienHinhSection() {
                 <Link
                   key={item.id}
                   href={`/content/${item.id}`}
-                  className="w-1/3 flex-shrink-0 group cursor-pointer px-2"
+                  className="w-full md:w-1/2 lg:w-1/3 flex-shrink-0 group cursor-pointer px-2"
                 >
-                  <article className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                  <article className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow h-full flex flex-col">
                     {/* Image */}
-                    <div className="relative h-64 md:h-80 overflow-hidden block">
+                    <div className="relative h-80 overflow-hidden block flex-shrink-0">
                       {(() => {
                         // Only use manually uploaded images (thumbnailUrl)
                         let imageUrl = null;
@@ -173,7 +173,7 @@ export default function DienHinhSection() {
                     </div>
 
                     {/* Content */}
-                    <div className="p-6">
+                    <div className="p-6 flex-grow flex flex-col">
                       {/* Date */}
                       <div className="flex items-center text-sm text-gray-500 mb-3">
                         <Calendar className="w-4 h-4 mr-2" />
