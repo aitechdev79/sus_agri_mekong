@@ -118,7 +118,7 @@ export default function NewsSection() {
                 >
                   <article className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
                     {/* Image */}
-                    <div className="relative h-64 md:h-80 overflow-hidden">
+                    <div className="relative h-64 md:h-80 overflow-hidden block">
                       {(() => {
                         // Only use manually uploaded images (thumbnailUrl)
                         let imageUrl = null;
@@ -140,7 +140,8 @@ export default function NewsSection() {
                             <img
                               src={imageUrl}
                               alt={item.title}
-                              className="w-full h-full object-contain"
+                              className="w-full h-full object-cover block"
+                              style={{ display: 'block', margin: 0, padding: 0 }}
                               onError={(e) => {
                                 console.error('Uploaded image failed to load:', imageUrl, e);
                               }}
@@ -151,7 +152,8 @@ export default function NewsSection() {
                               src={imageUrl}
                               alt={item.title}
                               fill
-                              className="object-contain"
+                              className="object-cover block"
+                              style={{ display: 'block', margin: 0, padding: 0 }}
                               onError={(e) => {
                                 console.error('Uploaded image failed to load:', imageUrl, e);
                               }}
