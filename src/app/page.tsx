@@ -13,10 +13,10 @@ export default function Home() {
       <main>
         <HeroSection />
         <AboutSection />
+        <DienHinhSection />
         <ToolsGrid />
         <HoatDongSection />
         <NewsSection />
-        <DienHinhSection />
         <SignUpSection />
       </main>
       <Footer />
