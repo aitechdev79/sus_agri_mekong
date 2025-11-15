@@ -5,65 +5,34 @@ import { useState, useEffect, useRef } from 'react';
 import NavigationBar from './NavigationBar';
 
 export default function HeroSection() {
-  const [videoHeight, setVideoHeight] = useState<number>(0);
   const [videoError, setVideoError] = useState<boolean>(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  // This useEffect is now MUCH simpler.
+  // Its only job is to listen for a loading error.
   useEffect(() => {
-    const handleVideoLoad = () => {
-      if (videoRef.current) {
-        const video = videoRef.current;
-        const aspectRatio = video.videoHeight / video.videoWidth;
-        const calculatedHeight = window.innerWidth * aspectRatio;
-        setVideoHeight(calculatedHeight);
+    const video = videoRef.current;
 
-        // Ensure video plays after metadata is loaded
-        video.play().catch((err) => {
-          console.error('Video autoplay failed:', err);
-          // Autoplay might be blocked, but video is still functional
-        });
-      }
-    };
+    if (!video) return;
 
     const handleVideoError = (e: Event) => {
       console.error('Video failed to load:', e);
       setVideoError(true);
     };
 
-    const handleResize = () => {
-      handleVideoLoad();
-    };
-
-    const video = videoRef.current;
-    if (video) {
-      video.addEventListener('loadedmetadata', handleVideoLoad);
-      video.addEventListener('error', handleVideoError);
-      video.addEventListener('canplay', handleVideoLoad);
-      window.addEventListener('resize', handleResize);
-
-      // Trigger load if video is already loaded
-      if (video.readyState >= 2) {
-        handleVideoLoad();
-      }
-    }
+    video.addEventListener('error', handleVideoError);
 
     return () => {
-      if (video) {
-        video.removeEventListener('loadedmetadata', handleVideoLoad);
-        video.removeEventListener('error', handleVideoError);
-        video.removeEventListener('canplay', handleVideoLoad);
-      }
-      window.removeEventListener('resize', handleResize);
+      video.removeEventListener('error', handleVideoError);
     };
-  }, []);
+  }, []); // Empty dependency array is correct
 
   return (
     <section
-      className="relative overflow-hidden w-screen"
+      className="relative overflow-hidden w-screen min-h-[75vh]"
       style={{
-        height: videoHeight > 0 ? `${videoHeight}px` : '75vh',
         marginLeft: 'calc(50% - 50vw)',
-        marginRight: 'calc(50% - 50vw)'
+        marginRight: 'calc(50% - 50vw)',
       }}
     >
       {/* Navigation Bar */}
@@ -99,11 +68,11 @@ export default function HeroSection() {
             loop
             muted
             playsInline
-            preload="metadata"
+            preload="auto"
             className="w-full h-full object-cover"
             style={{
               objectFit: 'cover',
-              objectPosition: 'center center'
+              objectPosition: 'center center',
             }}
           >
             <source src="/videos/hero-background.mp4" type="video/mp4" />
@@ -113,7 +82,7 @@ export default function HeroSection() {
       </div>
 
       {/* Main Hero Content */}
-      <div className="relative flex h-full items-center pt-16" style={{ zIndex: 10 }}>
+      <div className="relative flex h-full min-h-[75vh] items-center pt-16" style={{ zIndex: 10 }}>
         <div className="max-w-6xl px-6 w-full mx-auto">
           <div className="max-w-2xl">
             {/* Main Headline - Left aligned */}
