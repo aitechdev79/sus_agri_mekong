@@ -6,13 +6,14 @@ export default function SignUpSection() {
 
   return (
     <section className="py-16 relative" style={{ backgroundColor: '#1e40af' }}>
-      {/* Background SVG with opacity */}
+      {/* Background Image with opacity */}
       <div
         className="absolute inset-0"
         style={{
-          backgroundImage: `url('/wavey-fingerprint.svg')`,
-          backgroundSize: 'auto',
-          backgroundRepeat: 'repeat',
+          backgroundImage: `url('/canhdong_Flickr.jpg')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
           opacity: 0.6
         }}
       ></div>
