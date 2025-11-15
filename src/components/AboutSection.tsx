@@ -68,7 +68,7 @@ export default function AboutSection() {
           <div className="flex items-center justify-start">
             <div className="relative h-80 w-full max-w-md">
               <Image
-                src="/supply_chain_art.png"
+                src="/art_members.png"
                 alt="Minh họa chuỗi cung ứng bền vững"
                 fill
                 className="object-contain"
