@@ -25,17 +25,26 @@ export default function SignUpSection() {
               Trở thành đối tác
             </h2>
             <p className="text-lg mb-8 text-blue-100 max-w-2xl mx-auto font-montserrat">
-              Đối tác doanh nghiệp được cập nhật các chương trình mới nhất, kết nối với cộng đồng doanh nghiệp, chuyên gia và nông dân
+              Đối tác doanh nghiệp được cập nhật các chương trình và nội dung mới nhất. Được kết nối với cộng đồng doanh nghiệp, chuyên gia và nông dân
             </p>
 
 
-            <Link
-              href="/auth/signup"
-              className="inline-block bg-white text-blue-600 px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transition-colors shadow-lg font-montserrat"
-              aria-label="Đăng ký ngay"
-            >
-              Đăng ký ngay
-            </Link>
+            <div className="flex gap-4 justify-center">
+              <Link
+                href="/auth/signup"
+                className="inline-block bg-white text-blue-600 px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transition-colors shadow-lg font-montserrat"
+                aria-label="Đăng ký"
+              >
+                Đăng ký
+              </Link>
+              <Link
+                href="/members"
+                className="inline-block bg-white text-blue-600 px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transition-colors shadow-lg font-montserrat"
+                aria-label="Thành viên"
+              >
+                Thành viên
+              </Link>
+            </div>
           </div>
 
 
