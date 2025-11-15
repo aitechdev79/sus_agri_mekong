@@ -1,28 +1,46 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import NavigationBar from './NavigationBar';
 
 export default function HeroSection() {
-  const [isMobile, setIsMobile] = useState(false);
+  const [videoHeight, setVideoHeight] = useState<number>(0);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    const checkIsMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+    const handleVideoLoad = () => {
+      if (videoRef.current) {
+        const video = videoRef.current;
+        const aspectRatio = video.videoHeight / video.videoWidth;
+        const calculatedHeight = window.innerWidth * aspectRatio;
+        setVideoHeight(calculatedHeight);
+      }
     };
 
-    checkIsMobile();
-    window.addEventListener('resize', checkIsMobile);
-    return () => window.removeEventListener('resize', checkIsMobile);
+    const handleResize = () => {
+      handleVideoLoad();
+    };
+
+    const video = videoRef.current;
+    if (video) {
+      video.addEventListener('loadedmetadata', handleVideoLoad);
+      window.addEventListener('resize', handleResize);
+    }
+
+    return () => {
+      if (video) {
+        video.removeEventListener('loadedmetadata', handleVideoLoad);
+      }
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   return (
     <section
       className="relative overflow-hidden w-screen"
       style={{
-        height: '75vh',
+        height: videoHeight > 0 ? `${videoHeight}px` : '75vh',
         marginLeft: 'calc(50% - 50vw)',
         marginRight: 'calc(50% - 50vw)'
       }}
@@ -30,12 +48,12 @@ export default function HeroSection() {
       {/* Navigation Bar */}
       <NavigationBar />
 
-      {/* Background Image */}
+      {/* Background Video */}
       <div
         className="absolute inset-0"
         style={{
           width: '100vw',
-          height: '75vh',
+          height: '100%',
           position: 'absolute',
           top: 0,
           left: 0,
@@ -43,18 +61,21 @@ export default function HeroSection() {
           bottom: 0
         }}
       >
-        <Image
-          src={isMobile ? '/hero-mobile.jpg' : '/hero-main.jpg'}
-          alt="Nông nghiệp bền vững đồng bằng sông Cửu Long"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
+        <video
+          ref={videoRef}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover"
           style={{
             objectFit: 'cover',
             objectPosition: 'center center'
           }}
-        />
+        >
+          <source src="/videos/hero-background.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
       </div>
 
       {/* Main Hero Content */}
