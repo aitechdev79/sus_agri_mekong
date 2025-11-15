@@ -20,6 +20,7 @@ export default function NewsSection() {
   const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [resetTimer, setResetTimer] = useState(0);
 
   useEffect(() => {
     const fetchNews = async () => {
@@ -54,13 +55,23 @@ export default function NewsSection() {
     });
   }, [newsItems.length]);
 
+  const handleNextSlide = useCallback(() => {
+    nextSlide();
+    setResetTimer(prev => prev + 1); // Reset timer
+  }, [nextSlide]);
+
+  const handlePrevSlide = useCallback(() => {
+    prevSlide();
+    setResetTimer(prev => prev + 1); // Reset timer
+  }, [prevSlide]);
+
   // Auto-advance carousel
   useEffect(() => {
     if (newsItems.length <= 1) return;
 
     const interval = setInterval(nextSlide, 5000); // Change slide every 5 seconds
     return () => clearInterval(interval);
-  }, [newsItems.length, nextSlide]);
+  }, [newsItems.length, nextSlide, resetTimer]);
 
   if (loading) {
     return (
@@ -210,14 +221,14 @@ export default function NewsSection() {
           {newsItems.length > 1 && (
             <>
               <button
-                onClick={prevSlide}
+                onClick={handlePrevSlide}
                 className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg transition-all duration-300 z-10"
                 aria-label="Previous news item"
               >
                 <ChevronLeft className="w-6 h-6" />
               </button>
               <button
-                onClick={nextSlide}
+                onClick={handleNextSlide}
                 className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg transition-all duration-300 z-10"
                 aria-label="Next news item"
               >
