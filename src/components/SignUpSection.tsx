@@ -31,11 +31,11 @@ export default function SignUpSection() {
 
             <div className="flex gap-4 justify-center">
               <Link
-                href="/auth/signup"
+                href="/join-us"
                 className="inline-block bg-white text-blue-600 px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transition-colors shadow-lg font-montserrat"
-                aria-label="Đăng ký"
+                aria-label="Tham gia"
               >
-                Đăng ký
+                Tham gia
               </Link>
               <Link
                 href="/members"
