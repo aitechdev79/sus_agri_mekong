@@ -29,7 +29,7 @@ export default function AboutSection() {
           {/* Text Content */}
           <div className="flex flex-col justify-center">
             <h2 className="mb-6 text-3xl font-bold text-gray-800 md:text-4xl font-montserrat">
-              Chúng tôi làm gì?
+              Tầm nhìn, sứ mạng
             </h2>
             <p className="mb-6 text-lg text-gray-600 leading-relaxed font-montserrat">
               Tạo ra một không gian để các nông dân, chuyên gia và tổ chức chia sẻ kiến thức, kinh nghiệm và thực hành tốt nhất trong chuỗi giá trị tôm và lúa. Hãy cùng xây dựng một cộng đồng học tập bền vững.
