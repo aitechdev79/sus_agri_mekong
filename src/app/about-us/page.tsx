@@ -2,17 +2,6 @@
 
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
-import dynamic from 'next/dynamic';
-
-// Dynamically import PPPVisualization to ensure it only loads on client-side
-const PPPVisualization = dynamic(() => import('@/components/PPPVisualization'), {
-  ssr: false,
-  loading: () => (
-    <div className="w-full h-[600px] bg-gray-900 flex items-center justify-center">
-      <div className="text-white font-montserrat">Đang tải mô hình 3D...</div>
-    </div>
-  ),
-});
 
 export default function AboutUsPage() {
   return (
@@ -34,20 +23,6 @@ export default function AboutUsPage() {
               Cổng thông tin là sáng kiến của VCCI-HCM, được hình thành với sứ mệnh cung cấp nguồn dữ liệu,
               thông tin minh bạch, chính xác và đáng tin cậy, đặt nền móng cho tương lai phát triển bền vững của Việt Nam.
             </p>
-          </div>
-        </section>
-
-        {/* PPP Visualization Section */}
-        <section className="py-16 bg-gray-50">
-          <div className="container mx-auto px-6 max-w-6xl">
-            <h2 className="font-montserrat font-bold text-3xl md:text-4xl text-gray-800 mb-4 text-center">
-              Mô Hình Hợp Tác Công-Tư-Dân (PPP)
-            </h2>
-            <p className="text-lg text-gray-600 leading-relaxed font-montserrat text-center max-w-4xl mx-auto mb-12">
-              Cổng thông tin VCCI-HCM là trung tâm kết nối ba trụ cột phát triển bền vững:
-              Nhà nước, Doanh nghiệp, và Xã hội dân sự.
-            </p>
-            <PPPVisualization />
           </div>
         </section>
 
