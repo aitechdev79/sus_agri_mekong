@@ -8,7 +8,7 @@ import { NewsContent } from '@/types/content';
 async function getNewsContent(id: string): Promise<NewsContent | null> {
   try {
     const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/content/${id}`, {
-      cache: 'no-store', // Ensure fresh data for view count
+      cache: 'force-cache', // Static generation - cache the page
     });
 
     if (!response.ok) {
@@ -19,6 +19,27 @@ async function getNewsContent(id: string): Promise<NewsContent | null> {
   } catch (error) {
     console.error('Error fetching news content:', error);
     return null;
+  }
+}
+
+// Generate static params for all news items at build time
+export async function generateStaticParams() {
+  try {
+    const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/content/news`, {
+      cache: 'force-cache',
+    });
+
+    if (!response.ok) {
+      return [];
+    }
+
+    const news = await response.json();
+    return news.map((item: NewsContent) => ({
+      id: item.id,
+    }));
+  } catch (error) {
+    console.error('Error generating static params:', error);
+    return [];
   }
 }
 
