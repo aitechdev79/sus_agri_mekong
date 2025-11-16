@@ -32,8 +32,14 @@ export default function AboutUsPage() {
                   Đặt nền móng cho tương lai phát triển bền vững của Việt Nam thông qua việc kết nối các bên liên quan
                   và cung cấp thông tin chất lượng cao.
                 </p>
-                <p className="text-lg text-gray-700 leading-relaxed font-montserrat">
+                <p className="text-lg text-gray-700 leading-relaxed font-montserrat mb-4">
                   Đây là không gian tập hợp và chia sẻ các mô hình thực tiễn, chính sách và thông tin bền trách nhiệm và phát triển bền vững.
+                </p>
+                <p className="text-lg text-gray-700 leading-relaxed font-montserrat">
+                  Thông qua cơ chế PPP, cổng thông tin không chỉ đơn thuần là kho dữ liệu mà còn là cầu nối tin cậy,
+                  nơi ba bên cùng chia sẻ trách nhiệm, kết nối nguồn lực và đồng kiến tạo giá trị. Đây chính là nền tảng
+                  để hình thành một hệ sinh thái phát triển bền vững toàn diện, trong đó mọi thành phần xã hội đều được
+                  lắng nghe, tham gia và thụ hưởng lợi ích chung.
                 </p>
               </div>
 
@@ -56,16 +62,6 @@ export default function AboutUsPage() {
         {/* Mission & Vision Details */}
         <section className="py-16 bg-white">
           <div className="container mx-auto px-6 max-w-6xl">
-            {/* PPP Description */}
-            <div className="mb-12 text-center max-w-4xl mx-auto">
-              <p className="text-lg text-gray-700 leading-relaxed font-montserrat">
-                Thông qua cơ chế PPP, cổng thông tin không chỉ đơn thuần là kho dữ liệu mà còn là cầu nối tin cậy,
-                nơi ba bên cùng chia sẻ trách nhiệm, kết nối nguồn lực và đồng kiến tạo giá trị. Đây chính là nền tảng
-                để hình thành một hệ sinh thái phát triển bền vững toàn diện, trong đó mọi thành phần xã hội đều được
-                lắng nghe, tham gia và thụ hưởng lợi ích chung.
-              </p>
-            </div>
-
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
               {/* Nhà nước */}
               <div className="relative pt-16 p-6 bg-green-50 rounded-lg">
