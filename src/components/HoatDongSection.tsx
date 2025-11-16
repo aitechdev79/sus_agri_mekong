@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Leaf, Waves } from 'lucide-react';
 
 export default function HoatDongSection() {
   const activities = [
@@ -11,18 +10,14 @@ export default function HoatDongSection() {
       title: 'Dự án Lúa Bền vững Đồng bằng Sông Cửu Long',
       description: 'Phát triển mô hình canh tác lúa thân thiện môi trường, tiết kiệm nước và tăng năng suất tại các tỉnh đồng bằng sông Cửu Long.',
       href: '/activities/rice-sustainability',
-      icon: Leaf,
-      color: 'bg-green-500',
-      backgroundImage: '/tools/rice.png',
+      backgroundImage: '/duan_lua_benvung.jpg',
     },
     {
       id: 'shrimp-aquaculture',
       title: 'Chương trình Nuôi Tôm Sinh thái Bền vững',
       description: 'Xây dựng chuỗi giá trị nuôi tôm bền vững từ giống đến sản phẩm cuối, ứng dụng công nghệ cao và thân thiện với môi trường.',
       href: '/activities/shrimp-aquaculture',
-      icon: Waves,
-      color: 'bg-blue-500',
-      backgroundImage: '/tools/shrimp.png',
+      backgroundImage: '/tom_baclieu.jpg',
     },
   ];
 
@@ -38,14 +33,16 @@ export default function HoatDongSection() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-6xl mx-auto">
+          {/* Empty space for first column on desktop */}
+          <div className="hidden md:block"></div>
+
           {activities.map((activity) => (
             <Link
               key={activity.id}
               href={activity.href}
-              className="group relative bg-white rounded-2xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-300 hover:-translate-y-2 border-2 border-teal-200 hover:border-teal-300"
+              className="group relative rounded-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 aspect-[2/3]"
               aria-label={`${activity.title} - ${activity.description}`}
-              style={{ boxShadow: '0 20px 50px rgba(0, 0, 0, 0.3)' }}
             >
               {/* Background Image */}
               <div className="absolute inset-0">
@@ -53,21 +50,20 @@ export default function HoatDongSection() {
                   src={activity.backgroundImage}
                   alt={`${activity.title} background`}
                   fill
-                  className="object-cover"
+                  className="object-cover group-hover:scale-105 transition-transform duration-300"
                   sizes="(max-width: 768px) 100vw, 50vw"
+                  priority
                 />
-                <div className="absolute inset-0 bg-white bg-opacity-15"></div>
+                {/* Lighter gradient only at bottom for text readability */}
+                <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/50 to-transparent"></div>
               </div>
 
-              {/* Content */}
-              <div className="relative z-10 flex flex-col items-center text-center p-10">
-                <div className={`${activity.color} rounded-full p-6 mb-8 group-hover:scale-125 transition-all duration-300 shadow-xl`}>
-                  <activity.icon className="w-10 h-10 text-white" />
-                </div>
-                <h3 className="text-2xl font-black text-gray-900 mb-6 font-montserrat tracking-tight leading-tight">
+              {/* Content - Left Aligned at Bottom */}
+              <div className="relative z-10 h-full flex flex-col justify-end p-6">
+                <h3 className="text-lg md:text-xl font-bold text-white mb-3 md:mb-0 md:group-hover:mb-3 transition-all duration-300 font-montserrat">
                   {activity.title}
                 </h3>
-                <p className="text-gray-700 flex-grow font-montserrat leading-relaxed text-lg font-bold">
+                <p className="text-white/90 text-sm md:text-base font-montserrat md:max-h-0 md:overflow-hidden md:opacity-0 md:group-hover:max-h-32 md:group-hover:opacity-100 transition-all duration-300">
                   {activity.description}
                 </p>
               </div>
