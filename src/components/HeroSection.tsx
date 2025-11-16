@@ -53,14 +53,7 @@ export default function HeroSection() {
               </h1>
             </div>
 
-            {/* Subheadline - Left aligned */}
-            <div className="mb-6">
-              <p className="font-montserrat font-normal text-white text-left max-w-lg text-xs md:text-sm lg:text-xl" style={{ lineHeight: '1.5' }}>
-                Phát triển bền vững để đảm bảo chuỗi cung ứng an toàn.
-              </p>
-            </div>
-
-            {/* CTA Button - Below subheadline */}
+            {/* CTA Button - Below headline */}
             <div>
               <Link
                 href="/about-us"
