@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Search, FileText } from 'lucide-react';
 
 export default function ToolsGrid() {
   const tools = [
@@ -11,18 +10,14 @@ export default function ToolsGrid() {
       title: 'Thư Viện',
       description: 'Khám phá thư viện tài liệu phong phú về thực hành tốt',
       href: '/library',
-      icon: Search,
-      color: 'bg-blue-600',
-      backgroundImage: '/tools/shrimp.png',
+      backgroundImage: '/thuvien_grok.jpg',
     },
     {
       id: 'policy',
       title: 'Chính Sách & Hướng Dẫn',
       description: 'Tìm hiểu các chính sách và hướng dẫn chính thức về nuôi tôm và trồng lúa',
       href: '/guidance-policy',
-      icon: FileText,
-      color: 'bg-green-600',
-      backgroundImage: '/tools/rice.png',
+      backgroundImage: '/chinhsach_grok.jpg',
     },
   ];
 
@@ -47,13 +42,12 @@ export default function ToolsGrid() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
           {tools.map((tool) => (
             <Link
               key={tool.id}
               href={tool.href}
-              className="group relative bg-white rounded-lg shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-300 hover:-translate-y-2 border-2 border-transparent hover:border-blue-200"
-              style={{ boxShadow: '0 25px 50px rgba(0, 0, 0, 0.3)' }}
+              className="group relative rounded-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 aspect-[4/3]"
               aria-label={`${tool.title} - ${tool.description}`}
             >
               {/* Background Image */}
@@ -62,21 +56,20 @@ export default function ToolsGrid() {
                   src={tool.backgroundImage}
                   alt={`${tool.title} background`}
                   fill
-                  className="object-cover"
+                  className="object-cover group-hover:scale-105 transition-transform duration-300"
                   sizes="(max-width: 768px) 100vw, 50vw"
+                  priority
                 />
-                <div className="absolute inset-0 bg-white bg-opacity-50"></div>
+                {/* Lighter gradient only at bottom for text readability */}
+                <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/50 to-transparent"></div>
               </div>
 
-              {/* Content */}
-              <div className="relative z-10 flex flex-col items-center text-center p-6">
-                <div className={`${tool.color} rounded-full p-4 mb-4 group-hover:scale-110 transition-transform`}>
-                  <tool.icon className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-800 mb-3 font-montserrat">
+              {/* Content - Left Aligned at Bottom */}
+              <div className="relative z-10 h-full flex flex-col justify-end p-8">
+                <h3 className="text-2xl md:text-3xl font-bold text-white mb-3 font-montserrat">
                   {tool.title}
                 </h3>
-                <p className="text-gray-600 mb-4 flex-grow font-montserrat">
+                <p className="text-white/90 text-base md:text-lg font-montserrat">
                   {tool.description}
                 </p>
               </div>
