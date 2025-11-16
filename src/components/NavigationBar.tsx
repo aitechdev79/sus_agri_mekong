@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Home } from 'lucide-react';
 
 export default function NavigationBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -49,6 +49,13 @@ export default function NavigationBar() {
           <div className="hidden md:flex items-center space-x-8">
             <div className="flex items-center space-x-8">
               <Link
+                href="/"
+                className="font-montserrat font-normal text-base text-gray-800 hover:text-green-500 transition-colors"
+                aria-label="Trang chủ"
+              >
+                <Home className="w-5 h-5" />
+              </Link>
+              <Link
                 href="/library"
                 className="font-montserrat font-normal text-base text-gray-800 uppercase tracking-wide hover:underline hover:text-green-500 transition-colors"
               >
@@ -93,6 +100,15 @@ export default function NavigationBar() {
         {isMenuOpen && (
           <div className="md:hidden bg-white/95 backdrop-blur-sm border-t border-white/20">
             <div className="flex flex-col space-y-4 px-6 py-6">
+              <Link
+                href="/"
+                className="font-montserrat font-normal text-base text-gray-800 hover:text-green-600 transition-colors flex items-center gap-2"
+                onClick={() => setIsMenuOpen(false)}
+                aria-label="Trang chủ"
+              >
+                <Home className="w-5 h-5" />
+                <span className="uppercase tracking-wide">Trang chủ</span>
+              </Link>
               <Link
                 href="/library"
                 className="font-montserrat font-normal text-base text-gray-800 uppercase tracking-wide hover:text-green-600 transition-colors"
