@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
+import Image from 'next/image';
+import { Calendar, ChevronLeft, ChevronRight, Eye } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import NavigationBar from '@/components/NavigationBar';
 
@@ -11,6 +12,8 @@ interface NewsItem {
   description?: string;
   createdAt: string;
   viewCount: number;
+  thumbnailUrl?: string;
+  imageUrl?: string;
 }
 
 interface PaginatedResponse {
@@ -159,31 +162,51 @@ export default function NewsPage() {
                       href={`/content/${item.id}`}
                       className="block px-6 py-4 hover:bg-gray-50 transition-colors"
                     >
-                      <div className="flex items-start justify-between">
-                        <div className="flex items-start space-x-3 flex-1">
-                          <span className="text-gray-500 font-medium flex-shrink-0 mt-1">
-                            {(currentPage - 1) * itemsPerPage + index + 1}.
-                          </span>
-                          <div className="flex-1 min-w-0">
-                            <h2 className="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors">
-                              {item.title}
-                            </h2>
-                            {item.description && (
-                              <p className="text-sm text-gray-600 italic mt-1 line-clamp-2">
-                                {item.description}
-                              </p>
-                            )}
-                          </div>
+                      <div className="flex items-center gap-4">
+                        {/* Number */}
+                        <span className="text-gray-500 font-medium flex-shrink-0">
+                          {(currentPage - 1) * itemsPerPage + index + 1}.
+                        </span>
+
+                        {/* Thumbnail Image */}
+                        <div className="relative w-20 h-20 md:w-24 md:h-24 flex-shrink-0 bg-gray-100 rounded overflow-hidden">
+                          {item.thumbnailUrl || item.imageUrl ? (
+                            <Image
+                              src={item.thumbnailUrl || item.imageUrl || ''}
+                              alt={item.title}
+                              fill
+                              className="object-cover"
+                              sizes="(max-width: 768px) 80px, 96px"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center bg-gray-200">
+                              <Calendar className="w-8 h-8 text-gray-400" />
+                            </div>
+                          )}
                         </div>
 
-                        {/* Meta info */}
-                        <div className="flex items-center space-x-4 text-sm text-gray-500 ml-4 flex-shrink-0">
-                          <div className="flex items-center">
+                        {/* Content */}
+                        <div className="flex-1 min-w-0">
+                          <h2 className="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors line-clamp-2">
+                            {item.title}
+                          </h2>
+                          {item.description && (
+                            <p className="text-sm text-gray-600 italic mt-1 line-clamp-1 md:line-clamp-2">
+                              {item.description}
+                            </p>
+                          )}
+                        </div>
+
+                        {/* Meta info - Date and Views in same cell */}
+                        <div className="flex-shrink-0 text-right">
+                          <div className="flex items-center text-sm text-gray-500 mb-1">
                             <Calendar className="w-4 h-4 mr-1" />
-                            {formatDate(item.createdAt)}
+                            <span className="hidden md:inline">{formatDate(item.createdAt)}</span>
+                            <span className="md:hidden">{formatDate(item.createdAt).substring(0, 5)}</span>
                           </div>
-                          <div className="text-gray-400">
-                            {item.viewCount} lượt xem
+                          <div className="flex items-center text-sm text-gray-400 justify-end">
+                            <Eye className="w-4 h-4 mr-1" />
+                            <span>{item.viewCount}</span>
                           </div>
                         </div>
                       </div>
