@@ -14,7 +14,7 @@ export default function AboutUsPage() {
 
       {/* Main Content */}
       <main className="pt-20">
-        {/* Introduction Section - 3 Parts */}
+        {/* Introduction Section - 2 Parts */}
         <section className="py-16 bg-white">
           <div className="container mx-auto px-6 max-w-6xl">
             <h1 className="font-montserrat font-bold text-4xl md:text-5xl text-gray-800 mb-12 text-center">
@@ -22,17 +22,24 @@ export default function AboutUsPage() {
             </h1>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
-              {/* Part 1: First Text Section */}
-              <div className="bg-gray-50 p-6 rounded-lg">
-                <p className="text-lg text-gray-700 leading-relaxed font-montserrat">
+              {/* Part 1: Text Section (2/3 width) */}
+              <div className="md:col-span-2 bg-gray-50 p-8 rounded-lg">
+                <p className="text-lg text-gray-700 leading-relaxed font-montserrat mb-4">
                   Cổng thông tin là sáng kiến của VCCI-HCM, được hình thành với sứ mệnh cung cấp nguồn dữ liệu,
                   thông tin minh bạch, chính xác và đáng tin cậy.
                 </p>
+                <p className="text-lg text-gray-700 leading-relaxed font-montserrat mb-4">
+                  Đặt nền móng cho tương lai phát triển bền vững của Việt Nam thông qua việc kết nối các bên liên quan
+                  và cung cấp thông tin chất lượng cao.
+                </p>
+                <p className="text-lg text-gray-700 leading-relaxed font-montserrat">
+                  Đây là không gian tập hợp và chia sẻ các mô hình thực tiễn, chính sách và thông tin bền trách nhiệm và phát triển bền vững.
+                </p>
               </div>
 
-              {/* Part 2: Image Section */}
-              <div className="flex items-center justify-center">
-                <div className="relative w-full h-64">
+              {/* Part 2: Image Section (1/3 width) */}
+              <div className="md:col-span-1 flex items-center justify-center">
+                <div className="relative w-full h-80">
                   <Image
                     src="/Cong_thong_tin-removebg-preview.png"
                     alt="Cổng thông tin VCCI-HCM"
@@ -41,17 +48,6 @@ export default function AboutUsPage() {
                     priority
                   />
                 </div>
-              </div>
-
-              {/* Part 3: Second Text Section */}
-              <div className="bg-gray-50 p-6 rounded-lg">
-                <p className="text-lg text-gray-700 leading-relaxed font-montserrat mb-4">
-                  Đặt nền móng cho tương lai phát triển bền vững của Việt Nam thông qua việc kết nối các bên liên quan
-                  và cung cấp thông tin chất lượng cao.
-                </p>
-                <p className="text-lg text-gray-700 leading-relaxed font-montserrat">
-                  Đây là không gian tập hợp và chia sẻ các mô hình thực tiễn, chính sách và thông tin bền trách nhiệm và phát triển bền vững.
-                </p>
               </div>
             </div>
           </div>
