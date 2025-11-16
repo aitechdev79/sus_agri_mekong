@@ -4,14 +4,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a Next.js 15 application called "Good Practices Platform" (Nền Tảng Tư Liệu Hóa) - a Vietnamese language platform for sharing and learning good practices in shrimp and rice value chains. The app uses:
+This is a Next.js 15 application called "Good Practices Platform" (Nền Tảng Tư Liệu Hóa) - a bilingual platform for sharing and learning good practices in shrimp and rice value chains. The app uses:
 
 - **Next.js 15** with App Router and React 19
 - **TypeScript** with strict type checking
-- **Prisma ORM** with SQLite database (SQLite for dev, consider PostgreSQL for production)
+- **Prisma ORM** with PostgreSQL database (configured for production, can use SQLite for local dev)
 - **NextAuth.js v4** for authentication with JWT strategy
+- **next-intl** for internationalization (Vietnamese and English locales)
 - **Tailwind CSS v4** for styling
-- **next-intl** for internationalization (Vietnamese primary)
 
 ## Development Commands
 
@@ -37,13 +37,17 @@ npm run db:migrate
 # Seed database with sample data
 npm run db:seed
 
+# Admin user management
+npm run db:reset-admin     # Reset admin password
+npm run db:ensure-admin    # Ensure admin user exists
+
 # Combined pre-commit checks
 npm run lint && npx tsc --noEmit && npm run build
 ```
 
 ## Database Management
 
-The application uses Prisma with PostgreSQL (configured for deployment) and SQLite for development:
+The application uses Prisma with PostgreSQL (configured by default). You can switch to SQLite for local development by changing DATABASE_URL:
 
 ```bash
 # Generate Prisma client after schema changes
@@ -73,6 +77,9 @@ node scripts/seed.js
 - Role-based access control (USER, MODERATOR, ADMIN)
 - Phone number verification with OTP system
 - Auth provider wrapper in `src/providers/auth-provider.tsx`
+- Middleware-based route protection in `src/middleware.ts` with role-based guards
+- Public routes: `/`, `/auth/*`, `/about-us`, `/join-us`, `/members`, `/news`, `/stories`, `/library`, `/content/*`, `/guidance-policy`
+- Protected routes: `/admin/*` (ADMIN/MODERATOR only)
 
 ### Database Schema
 The Prisma schema defines a comprehensive content management system with:
@@ -87,12 +94,16 @@ The Prisma schema defines a comprehensive content management system with:
 
 ### File Structure
 - `/src/app/` - Next.js App Router pages and API routes
+  - `/[locale]/` - Internationalized routes for Vietnamese and English
+  - `/api/` - API endpoints for CRUD operations, auth, and file uploads
 - `/src/lib/` - Utility libraries (auth, database, file upload, OTP)
 - `/src/components/` - Reusable UI components
 - `/src/providers/` - React context providers
 - `/src/types/` - TypeScript type definitions
+- `/src/middleware.ts` - NextAuth middleware for route protection
 - `/prisma/` - Database schema and migrations
 - `/public/uploads/` - User uploaded files
+- `/scripts/` - Database seeding and admin management scripts
 
 ### API Routes
 Key API endpoints:
@@ -103,7 +114,7 @@ Key API endpoints:
 - `/api/analytics` - Event tracking
 
 ### Content Management
-The platform supports multiple content types (ARTICLE, VIDEO, INFOGRAPHIC, DOCUMENT, STORY, GUIDE, POLICY) with:
+The platform supports multiple content types (ARTICLE, VIDEO, INFOGRAPHIC, DOCUMENT, STORY, GUIDE, POLICY, NEWS) with:
 - Bilingual content (Vietnamese primary, English optional)
 - File attachments with type validation
 - Category-based organization
@@ -156,14 +167,19 @@ npm run build         # Ensure build passes
 ## Important Technical Details
 
 - **React/Next.js Version**: Uses React 19 with Next.js 15 and experimental SWC transforms
-- **Locale Configuration**: App is configured for Vietnamese locale (`lang="vi"`) with next-intl support
-- **Database**: Uses PostgreSQL for production deployment and SQLite for development (file:./dev.db)
+- **Internationalization**: Bilingual support (Vietnamese and English) using next-intl
+  - Routes structured as `/[locale]/*` for language-specific pages
+  - Default locale is Vietnamese
+- **Database**: Uses PostgreSQL by default (can use SQLite for local dev with DATABASE_URL="file:./dev.db")
 - **File Storage**: Uploads stored in `/public/uploads/` directory with multer integration
 - **Authentication**: NextAuth.js v4 with JWT strategy, custom sign-in page at `/auth/signin`, and OTP verification
-- **Image Handling**: Configured for Vietnamese media domains (vnmediacdn.com, vnexpress.net, tuoitre.vn, thanhnien.vn) plus common services
+- **Route Protection**: Next-auth middleware in `src/middleware.ts` handles authentication and role-based authorization
+- **Image Optimization**:
+  - Configured for Vietnamese media domains (vnmediacdn.com, vnexpress.net, tuoitre.vn, thanhnien.vn)
+  - Supports common image services (Unsplash, Google Drive, GitHub, CloudFlare)
+  - SVG support enabled with content security policy
 - **Webpack Config**: Includes fallbacks for Node.js modules (fs, net, tls disabled for browser compatibility)
 - **API Structure**: RESTful API with role-based access control and comprehensive error handling
-- **Internationalization**: Primary Vietnamese with optional English content support
 - **TypeScript Paths**: Uses `@/*` alias for `./src/*` imports
 - **ESLint**: Uses ESLint v9 with Next.js configuration
 - **Tailwind**: Uses Tailwind CSS v4 with PostCSS integration (no separate config file - uses @tailwindcss/postcss)

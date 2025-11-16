@@ -27,8 +27,20 @@ export default function ToolsGrid() {
   ];
 
   return (
-    <section className="py-16 bg-gray-50">
-      <div className="container mx-auto px-6 max-w-6xl">
+    <section className="py-16 bg-gray-50 relative overflow-hidden w-full">
+      {/* Background SVG - Full Width */}
+      <div className="absolute inset-0 w-full h-full opacity-10">
+        <Image
+          src="/vecteezy_topo_34242655.svg"
+          alt="Topographic background"
+          fill
+          className="object-cover w-full h-full"
+          priority={false}
+          sizes="100vw"
+        />
+      </div>
+
+      <div className="container mx-auto px-6 max-w-6xl relative z-10">
         <div className="mb-12">
           <h2 className="text-3xl font-bold text-gray-800 mb-4 md:text-4xl font-montserrat text-left">
             Công Cụ Hỗ Trợ
