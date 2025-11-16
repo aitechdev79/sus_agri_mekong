@@ -2,6 +2,7 @@
 
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
+import Image from 'next/image';
 
 export default function AboutUsPage() {
   return (
@@ -13,16 +14,43 @@ export default function AboutUsPage() {
 
       {/* Main Content */}
       <main className="pt-20">
-        {/* Header Section */}
+        {/* Introduction Section - 3 Parts */}
         <section className="py-16 bg-white">
           <div className="container mx-auto px-6 max-w-6xl">
-            <h1 className="font-montserrat font-bold text-4xl md:text-5xl text-gray-800 mb-6 text-center">
+            <h1 className="font-montserrat font-bold text-4xl md:text-5xl text-gray-800 mb-12 text-center">
               Về Cổng Thông Tin VCCI-HCM
             </h1>
-            <p className="text-lg text-gray-600 leading-relaxed font-montserrat text-center max-w-4xl mx-auto mb-8">
-              Cổng thông tin là sáng kiến của VCCI-HCM, được hình thành với sứ mệnh cung cấp nguồn dữ liệu,
-              thông tin minh bạch, chính xác và đáng tin cậy, đặt nền móng cho tương lai phát triển bền vững của Việt Nam.
-            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+              {/* Part 1: First Text Section */}
+              <div className="bg-gray-50 p-6 rounded-lg">
+                <p className="text-lg text-gray-700 leading-relaxed font-montserrat">
+                  Cổng thông tin là sáng kiến của VCCI-HCM, được hình thành với sứ mệnh cung cấp nguồn dữ liệu,
+                  thông tin minh bạch, chính xác và đáng tin cậy.
+                </p>
+              </div>
+
+              {/* Part 2: Image Section */}
+              <div className="flex items-center justify-center">
+                <div className="relative w-full h-64">
+                  <Image
+                    src="/Cong_thong_tin-removebg-preview.png"
+                    alt="Cổng thông tin VCCI-HCM"
+                    fill
+                    className="object-contain"
+                    priority
+                  />
+                </div>
+              </div>
+
+              {/* Part 3: Second Text Section */}
+              <div className="bg-gray-50 p-6 rounded-lg">
+                <p className="text-lg text-gray-700 leading-relaxed font-montserrat">
+                  Đặt nền móng cho tương lai phát triển bền vững của Việt Nam thông qua việc kết nối các bên liên quan
+                  và cung cấp thông tin chất lượng cao.
+                </p>
+              </div>
+            </div>
           </div>
         </section>
 
