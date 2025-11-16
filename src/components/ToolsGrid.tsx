@@ -47,7 +47,7 @@ export default function ToolsGrid() {
             <Link
               key={tool.id}
               href={tool.href}
-              className="group relative rounded-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 aspect-[4/3]"
+              className="group relative rounded-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 aspect-[2/3]"
               aria-label={`${tool.title} - ${tool.description}`}
             >
               {/* Background Image */}
