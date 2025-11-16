@@ -43,93 +43,76 @@ export default function AboutUsPage() {
                 </p>
               </div>
 
-              {/* Part 2: Image Section (1/3 width) */}
-              <div className="md:col-span-1 flex items-center justify-center">
-                <div className="relative w-full h-80">
-                  <Image
-                    src="/Cong_thong_tin-removebg-preview.png"
-                    alt="Cổng thông tin VCCI-HCM"
-                    fill
-                    className="object-contain"
-                    priority
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Mission & Vision Details */}
-        <section className="py-16 bg-white">
-          <div className="container mx-auto px-6 max-w-6xl">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
-              {/* Nhà nước */}
-              <div className="relative pt-16 p-6 bg-green-50 rounded-lg">
-                {/* Icon - Half in/Half out */}
-                <div className="absolute -top-12 left-1/2 transform -translate-x-1/2">
-                  <div className="relative w-24 h-24">
-                    <Image
-                      src="/nha nuoc.png"
-                      alt="Nhà nước"
-                      fill
-                      className="object-cover rounded-full border-4 border-white shadow-lg"
-                    />
+              {/* Part 2: 3 Cards Stacked Vertically (1/3 width) */}
+              <div className="md:col-span-1 flex flex-col gap-6 mt-16">
+                {/* Nhà nước */}
+                <div className="relative pt-16 p-6 bg-green-50 rounded-lg">
+                  {/* Icon - Half in/Half out */}
+                  <div className="absolute -top-12 left-1/2 transform -translate-x-1/2">
+                    <div className="relative w-24 h-24">
+                      <Image
+                        src="/nha nuoc.png"
+                        alt="Nhà nước"
+                        fill
+                        className="object-cover rounded-full border-4 border-white shadow-lg"
+                      />
+                    </div>
                   </div>
+
+                  <h3 className="font-montserrat font-bold text-xl text-green-700 mb-3">
+                    Nhà nước
+                  </h3>
+                  <p className="text-sm text-gray-700 font-montserrat leading-relaxed">
+                    Khung pháp lý, chính sách và chiến lược phát triển bền vững,
+                    tạo môi trường thuận lợi cho sự phát triển của doanh nghiệp và xã hội.
+                  </p>
                 </div>
 
-                <h3 className="font-montserrat font-bold text-2xl text-green-700 mb-4">
-                  Nhà nước
-                </h3>
-                <p className="text-gray-700 font-montserrat leading-relaxed">
-                  Khung pháp lý, chính sách và chiến lược phát triển bền vững,
-                  tạo môi trường thuận lợi cho sự phát triển của doanh nghiệp và xã hội.
-                </p>
-              </div>
-
-              {/* Doanh nghiệp */}
-              <div className="relative pt-16 p-6 bg-yellow-50 rounded-lg">
-                {/* Icon - Half in/Half out */}
-                <div className="absolute -top-12 left-1/2 transform -translate-x-1/2">
-                  <div className="relative w-24 h-24">
-                    <Image
-                      src="/doanh nghiep.png"
-                      alt="Doanh nghiệp"
-                      fill
-                      className="object-cover rounded-full border-4 border-white shadow-lg"
-                    />
+                {/* Doanh nghiệp */}
+                <div className="relative pt-16 p-6 bg-yellow-50 rounded-lg">
+                  {/* Icon - Half in/Half out */}
+                  <div className="absolute -top-12 left-1/2 transform -translate-x-1/2">
+                    <div className="relative w-24 h-24">
+                      <Image
+                        src="/doanh nghiep.png"
+                        alt="Doanh nghiệp"
+                        fill
+                        className="object-cover rounded-full border-4 border-white shadow-lg"
+                      />
+                    </div>
                   </div>
+
+                  <h3 className="font-montserrat font-bold text-xl text-yellow-700 mb-3">
+                    Doanh nghiệp
+                  </h3>
+                  <p className="text-sm text-gray-700 font-montserrat leading-relaxed">
+                    Đổi mới sáng tạo, quản trị bền vững và xây dựng chuỗi giá trị
+                    để thúc đẩy tăng trưởng kinh tế xanh và bền vững.
+                  </p>
                 </div>
 
-                <h3 className="font-montserrat font-bold text-2xl text-yellow-700 mb-4">
-                  Doanh nghiệp
-                </h3>
-                <p className="text-gray-700 font-montserrat leading-relaxed">
-                  Đổi mới sáng tạo, quản trị bền vững và xây dựng chuỗi giá trị
-                  để thúc đẩy tăng trưởng kinh tế xanh và bền vững.
-                </p>
-              </div>
-
-              {/* Xã hội dân sự */}
-              <div className="relative pt-16 p-6 bg-pink-50 rounded-lg">
-                {/* Icon - Half in/Half out */}
-                <div className="absolute -top-12 left-1/2 transform -translate-x-1/2">
-                  <div className="relative w-24 h-24">
-                    <Image
-                      src="/xa hoi.png"
-                      alt="Xã hội dân sự"
-                      fill
-                      className="object-cover rounded-full border-4 border-white shadow-lg"
-                    />
+                {/* Xã hội dân sự */}
+                <div className="relative pt-16 p-6 bg-pink-50 rounded-lg">
+                  {/* Icon - Half in/Half out */}
+                  <div className="absolute -top-12 left-1/2 transform -translate-x-1/2">
+                    <div className="relative w-24 h-24">
+                      <Image
+                        src="/xa hoi.png"
+                        alt="Xã hội dân sự"
+                        fill
+                        className="object-cover rounded-full border-4 border-white shadow-lg"
+                      />
+                    </div>
                   </div>
-                </div>
 
-                <h3 className="font-montserrat font-bold text-2xl text-pink-700 mb-4">
-                  Xã hội dân sự
-                </h3>
-                <p className="text-gray-700 font-montserrat leading-relaxed">
-                  Giám sát, đảm bảo minh bạch và lan tỏa giá trị bền vững
-                  đến cộng đồng, tạo sức ảnh hưởng tích cực cho xã hội.
-                </p>
+                  <h3 className="font-montserrat font-bold text-xl text-pink-700 mb-3">
+                    Xã hội dân sự
+                  </h3>
+                  <p className="text-sm text-gray-700 font-montserrat leading-relaxed">
+                    Giám sát, đảm bảo minh bạch và lan tỏa giá trị bền vững
+                    đến cộng đồng, tạo sức ảnh hưởng tích cực cho xã hội.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
