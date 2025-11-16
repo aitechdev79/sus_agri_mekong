@@ -29,7 +29,7 @@ export default function NavigationBar() {
                 href="/library"
                 className="font-montserrat font-normal text-base text-gray-800 uppercase tracking-wide hover:underline hover:text-green-500 transition-colors"
               >
-                Tài liệu
+                Thư viện
               </Link>
               <Link
                 href="/news"
@@ -75,7 +75,7 @@ export default function NavigationBar() {
                 className="font-montserrat font-normal text-base text-gray-800 uppercase tracking-wide hover:text-green-600 transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Tài liệu
+                Thư viện
               </Link>
               <Link
                 href="/news"
