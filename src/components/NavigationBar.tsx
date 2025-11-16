@@ -23,7 +23,8 @@ export default function NavigationBar() {
               alt="VCCI-HCM Logo"
               width={80}
               height={40}
-              className="h-8 md:h-10 w-auto"
+              className="h-8 md:h-10 w-auto scale-120"
+              style={{ transform: 'scale(1.2)' }}
               priority
             />
             <Image
