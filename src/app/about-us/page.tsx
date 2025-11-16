@@ -17,13 +17,12 @@ export default function AboutUsPage() {
         {/* Introduction Section - 2 Parts */}
         <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-6 max-w-6xl">
-            <h1 className="font-montserrat font-bold text-4xl md:text-5xl text-gray-800 mb-12 text-left">
-              Về Cổng Thông Tin VCCI-HCM
-            </h1>
-
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
               {/* Part 1: Text Section (2/3 width) */}
               <div className="md:col-span-2 p-8">
+                <h1 className="font-montserrat font-bold text-3xl md:text-4xl text-gray-800 mb-8 text-left">
+                  Về Cổng Thông Tin VCCI-HCM
+                </h1>
                 <p className="text-lg text-gray-700 leading-relaxed font-montserrat mb-4">
                   Cổng thông tin là sáng kiến của VCCI-HCM, được hình thành với sứ mệnh cung cấp nguồn dữ liệu,
                   thông tin minh bạch, chính xác và đáng tin cậy.
