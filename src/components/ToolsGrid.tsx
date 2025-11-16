@@ -42,7 +42,10 @@ export default function ToolsGrid() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-6xl mx-auto justify-items-center">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-6xl mx-auto">
+          {/* Empty space for first column on desktop */}
+          <div className="hidden md:block"></div>
+
           {tools.map((tool) => (
             <Link
               key={tool.id}
