@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Menu, X } from 'lucide-react';
 
 export default function NavigationBar() {
@@ -15,11 +16,32 @@ export default function NavigationBar() {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm shadow-sm">
       <div className="max-w-screen-xl mx-auto px-6">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link href="/" className="flex items-center">
-            <span className="text-2xl font-black font-montserrat text-white bg-green-600 px-3 py-1 rounded">
-              VO
-            </span>
+          {/* Logos */}
+          <Link href="/" className="flex items-center gap-3 md:gap-4">
+            <Image
+              src="/VCCI-HCM logo VN (blue).png"
+              alt="VCCI-HCM Logo"
+              width={80}
+              height={40}
+              className="h-8 md:h-10 w-auto"
+              priority
+            />
+            <Image
+              src="/OX_HL_C_RGB.png"
+              alt="Oxfam Logo"
+              width={80}
+              height={40}
+              className="h-8 md:h-10 w-auto"
+              priority
+            />
+            <Image
+              src="/CBD_logo_EN_CMYK.png"
+              alt="CBD Logo"
+              width={80}
+              height={40}
+              className="h-8 md:h-10 w-auto"
+              priority
+            />
           </Link>
 
           {/* Desktop Navigation */}
