@@ -15,7 +15,7 @@ export default function AboutUsPage() {
       {/* Main Content */}
       <main className="pt-20">
         {/* Introduction Section - 2 Parts */}
-        <section className="py-16 bg-white">
+        <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-6 max-w-6xl">
             <h1 className="font-montserrat font-bold text-4xl md:text-5xl text-gray-800 mb-12 text-left">
               Về Cổng Thông Tin VCCI-HCM
@@ -23,7 +23,7 @@ export default function AboutUsPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
               {/* Part 1: Text Section (2/3 width) */}
-              <div className="md:col-span-2 bg-gray-50 p-8 rounded-lg">
+              <div className="md:col-span-2 p-8">
                 <p className="text-lg text-gray-700 leading-relaxed font-montserrat mb-4">
                   Cổng thông tin là sáng kiến của VCCI-HCM, được hình thành với sứ mệnh cung cấp nguồn dữ liệu,
                   thông tin minh bạch, chính xác và đáng tin cậy.
@@ -56,9 +56,31 @@ export default function AboutUsPage() {
         {/* Mission & Vision Details */}
         <section className="py-16 bg-white">
           <div className="container mx-auto px-6 max-w-6xl">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* PPP Description */}
+            <div className="mb-12 text-center max-w-4xl mx-auto">
+              <p className="text-lg text-gray-700 leading-relaxed font-montserrat">
+                Thông qua cơ chế PPP, cổng thông tin không chỉ đơn thuần là kho dữ liệu mà còn là cầu nối tin cậy,
+                nơi ba bên cùng chia sẻ trách nhiệm, kết nối nguồn lực và đồng kiến tạo giá trị. Đây chính là nền tảng
+                để hình thành một hệ sinh thái phát triển bền vững toàn diện, trong đó mọi thành phần xã hội đều được
+                lắng nghe, tham gia và thụ hưởng lợi ích chung.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
               {/* Nhà nước */}
-              <div className="p-6 bg-green-50 rounded-lg">
+              <div className="relative pt-16 p-6 bg-green-50 rounded-lg">
+                {/* Icon - Half in/Half out */}
+                <div className="absolute -top-12 left-1/2 transform -translate-x-1/2">
+                  <div className="relative w-24 h-24">
+                    <Image
+                      src="/nha nuoc.jpg"
+                      alt="Nhà nước"
+                      fill
+                      className="object-cover rounded-full border-4 border-white shadow-lg"
+                    />
+                  </div>
+                </div>
+
                 <h3 className="font-montserrat font-bold text-2xl text-green-700 mb-4">
                   Nhà nước
                 </h3>
@@ -69,7 +91,19 @@ export default function AboutUsPage() {
               </div>
 
               {/* Doanh nghiệp */}
-              <div className="p-6 bg-yellow-50 rounded-lg">
+              <div className="relative pt-16 p-6 bg-yellow-50 rounded-lg">
+                {/* Icon - Half in/Half out */}
+                <div className="absolute -top-12 left-1/2 transform -translate-x-1/2">
+                  <div className="relative w-24 h-24">
+                    <Image
+                      src="/doanh nghiep.jpg"
+                      alt="Doanh nghiệp"
+                      fill
+                      className="object-cover rounded-full border-4 border-white shadow-lg"
+                    />
+                  </div>
+                </div>
+
                 <h3 className="font-montserrat font-bold text-2xl text-yellow-700 mb-4">
                   Doanh nghiệp
                 </h3>
@@ -80,7 +114,19 @@ export default function AboutUsPage() {
               </div>
 
               {/* Xã hội dân sự */}
-              <div className="p-6 bg-pink-50 rounded-lg">
+              <div className="relative pt-16 p-6 bg-pink-50 rounded-lg">
+                {/* Icon - Half in/Half out */}
+                <div className="absolute -top-12 left-1/2 transform -translate-x-1/2">
+                  <div className="relative w-24 h-24">
+                    <Image
+                      src="/xa hoi.jpg"
+                      alt="Xã hội dân sự"
+                      fill
+                      className="object-cover rounded-full border-4 border-white shadow-lg"
+                    />
+                  </div>
+                </div>
+
                 <h3 className="font-montserrat font-bold text-2xl text-pink-700 mb-4">
                   Xã hội dân sự
                 </h3>
