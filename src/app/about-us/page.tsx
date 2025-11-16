@@ -17,7 +17,7 @@ export default function AboutUsPage() {
         {/* Introduction Section - 2 Parts */}
         <section className="py-16 bg-white">
           <div className="container mx-auto px-6 max-w-6xl">
-            <h1 className="font-montserrat font-bold text-4xl md:text-5xl text-gray-800 mb-12 text-center">
+            <h1 className="font-montserrat font-bold text-4xl md:text-5xl text-gray-800 mb-12 text-left">
               Về Cổng Thông Tin VCCI-HCM
             </h1>
 
