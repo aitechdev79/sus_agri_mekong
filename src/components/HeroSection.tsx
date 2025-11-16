@@ -1,31 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useEffect, useRef } from 'react';
 import NavigationBar from './NavigationBar';
 
 export default function HeroSection() {
-  const [videoError, setVideoError] = useState<boolean>(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  // This useEffect is now MUCH simpler.
-  // Its only job is to listen for a loading error.
-  useEffect(() => {
-    const video = videoRef.current;
-
-    if (!video) return;
-
-    const handleVideoError = (e: Event) => {
-      console.error('Video failed to load:', e);
-      setVideoError(true);
-    };
-
-    video.addEventListener('error', handleVideoError);
-
-    return () => {
-      video.removeEventListener('error', handleVideoError);
-    };
-  }, []); // Empty dependency array is correct
 
   return (
     <section
@@ -38,7 +16,7 @@ export default function HeroSection() {
       {/* Navigation Bar */}
       <NavigationBar />
 
-      {/* Background Video */}
+      {/* Background Image */}
       <div
         className="absolute inset-0"
         style={{
@@ -51,34 +29,14 @@ export default function HeroSection() {
           bottom: 0
         }}
       >
-        {videoError ? (
-          // Fallback to image if video fails to load
-          <div
-            className="w-full h-full bg-cover bg-center"
-            style={{
-              backgroundImage: 'url(/hero-main.jpg)',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center center'
-            }}
-          />
-        ) : (
-          <video
-            ref={videoRef}
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="auto"
-            className="w-full h-full object-cover"
-            style={{
-              objectFit: 'cover',
-              objectPosition: 'center center',
-            }}
-          >
-            <source src="/videos/hero-background.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        )}
+        <div
+          className="w-full h-full bg-cover bg-center"
+          style={{
+            backgroundImage: 'url(/hero-main.jpg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center center'
+          }}
+        />
       </div>
 
       {/* Main Hero Content */}
