@@ -73,7 +73,7 @@ export default function AboutUsPage() {
                 <div className="absolute -top-12 left-1/2 transform -translate-x-1/2">
                   <div className="relative w-24 h-24">
                     <Image
-                      src="/nha nuoc.jpg"
+                      src="/nha nuoc.png"
                       alt="Nhà nước"
                       fill
                       className="object-cover rounded-full border-4 border-white shadow-lg"
@@ -96,7 +96,7 @@ export default function AboutUsPage() {
                 <div className="absolute -top-12 left-1/2 transform -translate-x-1/2">
                   <div className="relative w-24 h-24">
                     <Image
-                      src="/doanh nghiep.jpg"
+                      src="/doanh nghiep.png"
                       alt="Doanh nghiệp"
                       fill
                       className="object-cover rounded-full border-4 border-white shadow-lg"
@@ -119,7 +119,7 @@ export default function AboutUsPage() {
                 <div className="absolute -top-12 left-1/2 transform -translate-x-1/2">
                   <div className="relative w-24 h-24">
                     <Image
-                      src="/xa hoi.jpg"
+                      src="/xa hoi.png"
                       alt="Xã hội dân sự"
                       fill
                       className="object-cover rounded-full border-4 border-white shadow-lg"
