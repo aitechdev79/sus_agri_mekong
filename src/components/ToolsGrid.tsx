@@ -29,7 +29,7 @@ export default function ToolsGrid() {
   return (
     <section className="py-16 bg-gray-50 relative overflow-hidden w-full">
       {/* Background SVG - Full Width */}
-      <div className="absolute inset-0 w-full h-full opacity-10">
+      <div className="absolute inset-0 w-full h-full opacity-50">
         <Image
           src="/vecteezy_topo_34242655.svg"
           alt="Topographic background"
