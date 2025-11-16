@@ -48,13 +48,7 @@ export default function HeroSection() {
               <h1 className="font-montserrat font-bold text-white text-left" style={{ lineHeight: '1.1', letterSpacing: '0.5px' }}>
                 {/* 24px mobile, 32px tablet, 48px desktop */}
                 <div className="text-2xl md:text-3xl lg:text-5xl">
-                  Nông nghiệp bền vững
-                </div>
-                <div className="text-2xl md:text-3xl lg:text-5xl">
-                  cho đồng bằng
-                </div>
-                <div className="text-2xl md:text-3xl lg:text-5xl">
-                  sông Cửu Long
+                  Thông tin bền vững - Nền móng cho tương lai phát triển bền vững của Việt Nam.
                 </div>
               </h1>
             </div>

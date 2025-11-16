@@ -38,7 +38,7 @@ export default function HoatDongSection() {
       <div className="container mx-auto px-6 max-w-6xl relative z-10">
         <div className="mb-16">
           <h2 className="text-4xl font-black text-white mb-6 md:text-5xl font-montserrat text-left tracking-tight">
-            Hoạt Động
+            Hoạt động dự án
           </h2>
           <p className="text-xl text-teal-100 font-montserrat text-left max-w-3xl leading-relaxed">
             Khám phá các dự án phát triển bền vững do chúng tôi thực hiện tại đồng bằng sông Cửu Long.
