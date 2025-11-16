@@ -2,6 +2,17 @@
 
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
+import dynamic from 'next/dynamic';
+
+// Dynamically import PPPVisualization to ensure it only loads on client-side
+const PPPVisualization = dynamic(() => import('@/components/PPPVisualization'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-[600px] bg-gray-900 flex items-center justify-center">
+      <div className="text-white font-montserrat">Đang tải mô hình 3D...</div>
+    </div>
+  ),
+});
 
 export default function AboutUsPage() {
   return (
@@ -12,12 +23,73 @@ export default function AboutUsPage() {
       </div>
 
       {/* Main Content */}
-      <main className="pt-20 flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <h1 className="font-montserrat font-bold text-4xl md:text-6xl text-gray-800">
-            Cần thêm thông tin
-          </h1>
-        </div>
+      <main className="pt-20">
+        {/* Header Section */}
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-6 max-w-6xl">
+            <h1 className="font-montserrat font-bold text-4xl md:text-5xl text-gray-800 mb-6 text-center">
+              Về Cổng Thông Tin VCCI-HCM
+            </h1>
+            <p className="text-lg text-gray-600 leading-relaxed font-montserrat text-center max-w-4xl mx-auto mb-8">
+              Cổng thông tin là sáng kiến của VCCI-HCM, được hình thành với sứ mệnh cung cấp nguồn dữ liệu,
+              thông tin minh bạch, chính xác và đáng tin cậy, đặt nền móng cho tương lai phát triển bền vững của Việt Nam.
+            </p>
+          </div>
+        </section>
+
+        {/* PPP Visualization Section */}
+        <section className="py-16 bg-gray-50">
+          <div className="container mx-auto px-6 max-w-6xl">
+            <h2 className="font-montserrat font-bold text-3xl md:text-4xl text-gray-800 mb-4 text-center">
+              Mô Hình Hợp Tác Công-Tư-Dân (PPP)
+            </h2>
+            <p className="text-lg text-gray-600 leading-relaxed font-montserrat text-center max-w-4xl mx-auto mb-12">
+              Cổng thông tin VCCI-HCM là trung tâm kết nối ba trụ cột phát triển bền vững:
+              Nhà nước, Doanh nghiệp, và Xã hội dân sự.
+            </p>
+            <PPPVisualization />
+          </div>
+        </section>
+
+        {/* Mission & Vision Details */}
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-6 max-w-6xl">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* Nhà nước */}
+              <div className="p-6 bg-green-50 rounded-lg">
+                <h3 className="font-montserrat font-bold text-2xl text-green-700 mb-4">
+                  Nhà nước
+                </h3>
+                <p className="text-gray-700 font-montserrat leading-relaxed">
+                  Khung pháp lý, chính sách và chiến lược phát triển bền vững,
+                  tạo môi trường thuận lợi cho sự phát triển của doanh nghiệp và xã hội.
+                </p>
+              </div>
+
+              {/* Doanh nghiệp */}
+              <div className="p-6 bg-yellow-50 rounded-lg">
+                <h3 className="font-montserrat font-bold text-2xl text-yellow-700 mb-4">
+                  Doanh nghiệp
+                </h3>
+                <p className="text-gray-700 font-montserrat leading-relaxed">
+                  Đổi mới sáng tạo, quản trị bền vững và xây dựng chuỗi giá trị
+                  để thúc đẩy tăng trưởng kinh tế xanh và bền vững.
+                </p>
+              </div>
+
+              {/* Xã hội dân sự */}
+              <div className="p-6 bg-pink-50 rounded-lg">
+                <h3 className="font-montserrat font-bold text-2xl text-pink-700 mb-4">
+                  Xã hội dân sự
+                </h3>
+                <p className="text-gray-700 font-montserrat leading-relaxed">
+                  Giám sát, đảm bảo minh bạch và lan tỏa giá trị bền vững
+                  đến cộng đồng, tạo sức ảnh hưởng tích cực cho xã hội.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
 
       <Footer />
