@@ -45,9 +45,12 @@ export default function AboutUsPage() {
 
               {/* Part 3: Second Text Section */}
               <div className="bg-gray-50 p-6 rounded-lg">
-                <p className="text-lg text-gray-700 leading-relaxed font-montserrat">
+                <p className="text-lg text-gray-700 leading-relaxed font-montserrat mb-4">
                   Đặt nền móng cho tương lai phát triển bền vững của Việt Nam thông qua việc kết nối các bên liên quan
                   và cung cấp thông tin chất lượng cao.
+                </p>
+                <p className="text-lg text-gray-700 leading-relaxed font-montserrat">
+                  Đây là không gian tập hợp và chia sẻ các mô hình thực tiễn, chính sách và thông tin bền trách nhiệm và phát triển bền vững.
                 </p>
               </div>
             </div>
