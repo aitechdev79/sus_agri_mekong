@@ -42,7 +42,7 @@ export default function ToolsGrid() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-6xl mx-auto justify-items-center">
           {tools.map((tool) => (
             <Link
               key={tool.id}
@@ -65,11 +65,11 @@ export default function ToolsGrid() {
               </div>
 
               {/* Content - Left Aligned at Bottom */}
-              <div className="relative z-10 h-full flex flex-col justify-end p-8">
-                <h3 className="text-2xl md:text-3xl font-bold text-white mb-3 font-montserrat">
+              <div className="relative z-10 h-full flex flex-col justify-end p-6">
+                <h3 className="text-lg md:text-xl font-bold text-white mb-3 md:mb-0 md:group-hover:mb-3 transition-all duration-300 font-montserrat">
                   {tool.title}
                 </h3>
-                <p className="text-white/90 text-base md:text-lg font-montserrat">
+                <p className="text-white/90 text-sm md:text-base font-montserrat md:max-h-0 md:overflow-hidden md:opacity-0 md:group-hover:max-h-32 md:group-hover:opacity-100 transition-all duration-300">
                   {tool.description}
                 </p>
               </div>
