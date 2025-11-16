@@ -41,7 +41,7 @@ export default function NavigationBar() {
                 href="/about-us"
                 className="font-montserrat font-normal text-base text-gray-800 uppercase tracking-wide hover:underline hover:text-green-500 transition-colors"
               >
-                Về chúng tôi
+                Khám phá
               </Link>
             </div>
 
@@ -89,7 +89,7 @@ export default function NavigationBar() {
                 className="font-montserrat font-normal text-base text-gray-800 uppercase tracking-wide hover:text-green-600 transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Về chúng tôi
+                Khám phá
               </Link>
               <Link
                 href="/auth/signin"
