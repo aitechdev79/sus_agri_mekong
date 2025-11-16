@@ -43,74 +43,83 @@ export default function AboutUsPage() {
               </div>
 
               {/* Part 2: 3 Cards Stacked Vertically (1/3 width) */}
-              <div className="md:col-span-1 flex flex-col gap-6 mt-16">
+              <div className="md:col-span-1 flex flex-col gap-6">
                 {/* Nhà nước */}
-                <div className="relative pt-16 p-6 bg-green-50 rounded-lg">
-                  {/* Icon - Half in/Half out */}
-                  <div className="absolute -top-12 left-1/2 transform -translate-x-1/2">
-                    <div className="relative w-24 h-24">
+                <div className="flex items-start gap-4 p-4 bg-green-50 rounded-lg">
+                  {/* Icon on left */}
+                  <div className="flex-shrink-0">
+                    <div className="relative w-16 h-16">
                       <Image
                         src="/nha nuoc.png"
                         alt="Nhà nước"
                         fill
-                        className="object-cover rounded-full border-4 border-white shadow-lg"
+                        className="object-cover rounded-full"
                       />
                     </div>
                   </div>
 
-                  <h3 className="font-montserrat font-bold text-xl text-green-700 mb-3">
-                    Nhà nước
-                  </h3>
-                  <p className="text-sm text-gray-700 font-montserrat leading-relaxed">
-                    Khung pháp lý, chính sách và chiến lược phát triển bền vững,
-                    tạo môi trường thuận lợi cho sự phát triển của doanh nghiệp và xã hội.
-                  </p>
+                  {/* Text content */}
+                  <div className="flex-1">
+                    <h3 className="font-montserrat font-bold text-lg text-green-700 mb-2">
+                      Nhà nước
+                    </h3>
+                    <p className="text-xs text-gray-700 font-montserrat leading-relaxed">
+                      Khung pháp lý, chính sách và chiến lược phát triển bền vững,
+                      tạo môi trường thuận lợi cho sự phát triển của doanh nghiệp và xã hội.
+                    </p>
+                  </div>
                 </div>
 
                 {/* Doanh nghiệp */}
-                <div className="relative pt-16 p-6 bg-yellow-50 rounded-lg">
-                  {/* Icon - Half in/Half out */}
-                  <div className="absolute -top-12 left-1/2 transform -translate-x-1/2">
-                    <div className="relative w-24 h-24">
+                <div className="flex items-start gap-4 p-4 bg-yellow-50 rounded-lg">
+                  {/* Icon on left */}
+                  <div className="flex-shrink-0">
+                    <div className="relative w-16 h-16">
                       <Image
                         src="/doanh nghiep.png"
                         alt="Doanh nghiệp"
                         fill
-                        className="object-cover rounded-full border-4 border-white shadow-lg"
+                        className="object-cover rounded-full"
                       />
                     </div>
                   </div>
 
-                  <h3 className="font-montserrat font-bold text-xl text-yellow-700 mb-3">
-                    Doanh nghiệp
-                  </h3>
-                  <p className="text-sm text-gray-700 font-montserrat leading-relaxed">
-                    Đổi mới sáng tạo, quản trị bền vững và xây dựng chuỗi giá trị
-                    để thúc đẩy tăng trưởng kinh tế xanh và bền vững.
-                  </p>
+                  {/* Text content */}
+                  <div className="flex-1">
+                    <h3 className="font-montserrat font-bold text-lg text-yellow-700 mb-2">
+                      Doanh nghiệp
+                    </h3>
+                    <p className="text-xs text-gray-700 font-montserrat leading-relaxed">
+                      Đổi mới sáng tạo, quản trị bền vững và xây dựng chuỗi giá trị
+                      để thúc đẩy tăng trưởng kinh tế xanh và bền vững.
+                    </p>
+                  </div>
                 </div>
 
                 {/* Xã hội dân sự */}
-                <div className="relative pt-16 p-6 bg-pink-50 rounded-lg">
-                  {/* Icon - Half in/Half out */}
-                  <div className="absolute -top-12 left-1/2 transform -translate-x-1/2">
-                    <div className="relative w-24 h-24">
+                <div className="flex items-start gap-4 p-4 bg-pink-50 rounded-lg">
+                  {/* Icon on left */}
+                  <div className="flex-shrink-0">
+                    <div className="relative w-16 h-16">
                       <Image
                         src="/xa hoi.png"
                         alt="Xã hội dân sự"
                         fill
-                        className="object-cover rounded-full border-4 border-white shadow-lg"
+                        className="object-cover rounded-full"
                       />
                     </div>
                   </div>
 
-                  <h3 className="font-montserrat font-bold text-xl text-pink-700 mb-3">
-                    Xã hội dân sự
-                  </h3>
-                  <p className="text-sm text-gray-700 font-montserrat leading-relaxed">
-                    Giám sát, đảm bảo minh bạch và lan tỏa giá trị bền vững
-                    đến cộng đồng, tạo sức ảnh hưởng tích cực cho xã hội.
-                  </p>
+                  {/* Text content */}
+                  <div className="flex-1">
+                    <h3 className="font-montserrat font-bold text-lg text-pink-700 mb-2">
+                      Xã hội dân sự
+                    </h3>
+                    <p className="text-xs text-gray-700 font-montserrat leading-relaxed">
+                      Giám sát, đảm bảo minh bạch và lan tỏa giá trị bền vững
+                      đến cộng đồng, tạo sức ảnh hưởng tích cực cho xã hội.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
