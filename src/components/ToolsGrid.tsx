@@ -7,10 +7,10 @@ import { Search, FileText } from 'lucide-react';
 export default function ToolsGrid() {
   const tools = [
     {
-      id: 'search',
-      title: 'Tìm Kiếm Tài Liệu',
-      description: 'Tìm kiếm và khám phá thư viện tài liệu phong phú về thực hành tốt',
-      href: '/library?search=true',
+      id: 'library',
+      title: 'Thư Viện',
+      description: 'Khám phá thư viện tài liệu phong phú về thực hành tốt',
+      href: '/library',
       icon: Search,
       color: 'bg-blue-600',
       backgroundImage: '/tools/shrimp.png',
