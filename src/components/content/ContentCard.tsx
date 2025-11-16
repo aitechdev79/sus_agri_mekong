@@ -89,7 +89,7 @@ export function ContentCard({ content }: ContentCardProps) {
         {/* Media Content */}
         <div className="mb-4">
           <MediaContent
-            imageUrl={content.imageUrl}
+            imageUrl={content.thumbnailUrl || content.imageUrl}
             videoUrl={content.videoUrl}
             title={content.title}
           />

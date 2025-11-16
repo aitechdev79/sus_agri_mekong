@@ -29,7 +29,7 @@ export default function LibraryPage() {
       const params = new URLSearchParams({
         page: currentPage.toString(),
         limit: pagination.limit.toString(),
-        type: selectedType || 'STORY,ARTICLE,GUIDE,POLICY' // Default to library content types
+        type: selectedType || 'STORY,GUIDE,POLICY' // Default to library content types
       })
 
       if (searchTerm) params.append('search', searchTerm)
