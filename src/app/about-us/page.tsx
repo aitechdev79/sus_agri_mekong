@@ -21,7 +21,7 @@ export default function AboutUsPage() {
               {/* Part 1: Text Section (2/3 width) */}
               <div className="md:col-span-2 p-8">
                 <h1 className="font-montserrat font-bold text-3xl md:text-4xl text-gray-800 mb-8 text-left">
-                  Về Cổng Thông Tin VCCI-HCM
+                  Tầm nhìn sứ mệnh
                 </h1>
                 <p className="text-lg text-gray-700 leading-relaxed font-montserrat mb-4">
                   Cổng thông tin là sáng kiến của VCCI-HCM, được hình thành với sứ mệnh cung cấp nguồn dữ liệu,
