@@ -14,10 +14,10 @@ export default function HoatDongSection() {
     },
     {
       id: 'shrimp-aquaculture',
-      title: 'Chương trình Nuôi Tôm Sinh thái Bền vững',
-      description: 'Xây dựng chuỗi giá trị nuôi tôm bền vững từ giống đến sản phẩm cuối, ứng dụng công nghệ cao và thân thiện với môi trường.',
+      title: 'Công ty Tài Ký',
+      description: 'Khi một giờ nghỉ trở thành giá trị cho toàn bộ doanh nghiệp',
       href: '/activities/shrimp-aquaculture',
-      backgroundImage: '/tom_baclieu.jpg',
+      backgroundImage: '/Taiky thumb.jpg',
     },
   ];
 
