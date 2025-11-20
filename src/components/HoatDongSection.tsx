@@ -10,7 +10,7 @@ export default function HoatDongSection() {
       title: 'Công ty Minh Phú',
       description: 'Cải thiện công cụ làm việc cho nữ giám sát ở Tập đoàn Thủy sản Minh Phú',
       href: '/activities/rice-sustainability',
-      backgroundImage: '/duan_lua_benvung.jpg',
+      backgroundImage: '/Minhphu thumb.jpg',
     },
     {
       id: 'shrimp-aquaculture',
