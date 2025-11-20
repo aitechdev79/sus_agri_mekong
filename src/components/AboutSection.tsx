@@ -5,20 +5,27 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 interface Stats {
-  userCount: number;
-  contentCount: number;
-  viewCount: number;
+  publishedReports: number;
+  trackedPolicies: number;
+  members: number;
+  supportedInitiatives: number;
 }
 
 export default function AboutSection() {
-  const [stats, setStats] = useState<Stats>({ userCount: 0, contentCount: 0, viewCount: 0 });
+  const [stats, setStats] = useState<Stats>({
+    publishedReports: 0,
+    trackedPolicies: 0,
+    members: 0,
+    supportedInitiatives: 0
+  });
 
   useEffect(() => {
     // Fetch stats from API (placeholder for now)
     setStats({
-      userCount: 1000,
-      contentCount: 250,
-      viewCount: 50000
+      publishedReports: 10,
+      trackedPolicies: 20,
+      members: 5000,
+      supportedInitiatives: 15
     });
   }, []);
 
@@ -36,18 +43,22 @@ export default function AboutSection() {
             </p>
 
             {/* Stats */}
-            <div className="mb-8 grid grid-cols-3 gap-4">
+            <div className="mb-8 grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="text-center">
-                <div className="text-2xl font-bold text-green-600 font-montserrat">{stats.userCount}+</div>
-                <div className="text-sm text-gray-600 font-montserrat">Người dùng</div>
+                <div className="text-2xl font-bold text-green-600 font-montserrat">{stats.publishedReports}</div>
+                <div className="text-sm text-gray-600 font-montserrat">Số báo cáo được xuất bản</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-green-600 font-montserrat">{stats.contentCount}+</div>
-                <div className="text-sm text-gray-600 font-montserrat">Tài liệu</div>
+                <div className="text-2xl font-bold text-green-600 font-montserrat">{stats.trackedPolicies}</div>
+                <div className="text-sm text-gray-600 font-montserrat">Số chính sách đã theo dõi</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-green-600 font-montserrat">{stats.viewCount}+</div>
-                <div className="text-sm text-gray-600 font-montserrat">Lượt xem</div>
+                <div className="text-2xl font-bold text-green-600 font-montserrat">{stats.members}</div>
+                <div className="text-sm text-gray-600 font-montserrat">Số thành viên tham gia</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-green-600 font-montserrat">{stats.supportedInitiatives}</div>
+                <div className="text-sm text-gray-600 font-montserrat">Số sáng kiến được hỗ trợ</div>
               </div>
             </div>
 
