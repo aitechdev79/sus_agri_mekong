@@ -22,7 +22,7 @@ export default function Footer() {
           <div>
             <h3 className="font-montserrat font-semibold text-xl mb-4">Đăng ký thành viên</h3>
             <Link
-              href="/join-us"
+              href="/auth/signin"
               className="text-gray-300 hover:text-white transition-colors text-base"
             >
               Đăng ký ngay
