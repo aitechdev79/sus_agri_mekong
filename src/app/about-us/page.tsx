@@ -256,6 +256,84 @@ export default function AboutUsPage() {
             </div>
           </div>
         </section>
+
+        {/* ILO Section */}
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-6 max-w-6xl">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-start">
+              {/* Logo Column (1/3 width) - Left side */}
+              <div className="md:col-span-1 flex justify-center items-start">
+                <div className="relative w-full max-w-xs">
+                  <Image
+                    src="/ILOlogo.png"
+                    alt="ILO Logo"
+                    width={300}
+                    height={300}
+                    className="object-contain"
+                  />
+                </div>
+              </div>
+
+              {/* Content Column (2/3 width) - Right side */}
+              <div className="md:col-span-2">
+                <h2 className="font-montserrat font-bold text-3xl md:text-4xl text-gray-800 mb-6">
+                  Tổ chức ILO (Tổ chức lao động Quốc tế)
+                </h2>
+
+                <div className="space-y-6">
+                  {/* Project 1 - SCORE */}
+                  <div className="bg-gray-50 p-6 rounded-lg shadow-md border-l-4 border-purple-500">
+                    <h3 className="font-montserrat font-bold text-xl text-purple-700 mb-3">
+                      Dự án SCORE
+                    </h3>
+                    <p className="text-base text-gray-700 leading-relaxed font-montserrat mb-2">
+                      Dự án phát triển doanh nghiệp bền vững
+                    </p>
+                    <p className="text-sm text-gray-600 italic font-montserrat">
+                      → Hỗ trợ nâng cao năng lực cạnh tranh cho doanh nghiệp trong ngành chế biến gỗ, dệt may và công nghiệp hỗ trợ
+                    </p>
+                  </div>
+
+                  {/* Project 2 - PE4DW */}
+                  <div className="bg-gray-50 p-6 rounded-lg shadow-md border-l-4 border-indigo-500">
+                    <h3 className="font-montserrat font-bold text-xl text-indigo-700 mb-3">
+                      Dự án PE4DW
+                    </h3>
+                    <p className="text-base text-gray-700 leading-relaxed font-montserrat mb-2">
+                      Dự án Hệ sinh thái năng suất vì việc làm bền vững
+                    </p>
+                    <p className="text-sm text-gray-600 italic font-montserrat">
+                      → Hỗ trợ nâng cao năng suất và tiêu chuẩn bền vững cho doanh nghiệp ngành công nghiệp hỗ trợ
+                    </p>
+                  </div>
+
+                  {/* Project 3 - RSCA */}
+                  <div className="bg-gray-50 p-6 rounded-lg shadow-md border-l-4 border-cyan-500">
+                    <h3 className="font-montserrat font-bold text-xl text-cyan-700 mb-3">
+                      Dự án RSCA
+                    </h3>
+                    <p className="text-base text-gray-700 leading-relaxed font-montserrat mb-2">
+                      Dự án Trách nhiệm xã hội trong chuỗi cung ứng tại châu Á
+                    </p>
+                    <p className="text-sm text-gray-600 italic font-montserrat">
+                      → Hỗ trợ nâng cao năng lực cho Doanh nghiệp thủy sản về thực hành trách nhiệm xã hội và bền vững
+                    </p>
+                  </div>
+
+                  {/* Project 4 - Electronics Supply Chain */}
+                  <div className="bg-gray-50 p-6 rounded-lg shadow-md border-l-4 border-teal-500">
+                    <h3 className="font-montserrat font-bold text-xl text-teal-700 mb-3">
+                      Dự án Tăng cường kết nối chuỗi cung ứng ngành điện tử tại Việt Nam
+                    </h3>
+                    <p className="text-sm text-gray-600 italic font-montserrat">
+                      → Hỗ trợ phát triển và kết nối chuỗi cung ứng trong ngành công nghiệp điện tử
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
 
       <Footer />
