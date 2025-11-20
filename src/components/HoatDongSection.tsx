@@ -7,8 +7,8 @@ export default function HoatDongSection() {
   const activities = [
     {
       id: 'rice-sustainability',
-      title: 'Dự án Lúa Bền vững Đồng bằng Sông Cửu Long',
-      description: 'Phát triển mô hình canh tác lúa thân thiện môi trường, tiết kiệm nước và tăng năng suất tại các tỉnh đồng bằng sông Cửu Long.',
+      title: 'Công ty Minh Phú',
+      description: 'Cải thiện công cụ làm việc cho nữ giám sát ở Tập đoàn Thủy sản Minh Phú',
       href: '/activities/rice-sustainability',
       backgroundImage: '/duan_lua_benvung.jpg',
     },
