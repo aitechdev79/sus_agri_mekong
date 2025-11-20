@@ -186,8 +186,13 @@ export default function AboutUsPage() {
 
                 <div className="space-y-6">
                   {/* Project 1 - Graisea */}
-                  <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-green-500">
-                    <h3 className="font-montserrat font-bold text-xl text-green-700 mb-3">
+                  <a
+                    href="https://graisea.github.io/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block bg-white p-6 rounded-lg shadow-md border-l-4 border-green-500 hover:shadow-xl transition-shadow duration-300"
+                  >
+                    <h3 className="font-montserrat font-bold text-xl text-green-700 mb-3 hover:text-green-800">
                       Dự án Graisea
                     </h3>
                     <p className="text-base text-gray-700 leading-relaxed font-montserrat mb-2">
@@ -196,11 +201,16 @@ export default function AboutUsPage() {
                     <p className="text-sm text-gray-600 italic font-montserrat">
                       → Hỗ trợ nâng cao năng lực cho doanh nghiệp trong chuỗi chế biến tôm và lúa gạo
                     </p>
-                  </div>
+                  </a>
 
                   {/* Project 2 - Right To Food */}
-                  <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500">
-                    <h3 className="font-montserrat font-bold text-xl text-blue-700 mb-3">
+                  <a
+                    href="https://policy-practice.oxfam.org/resources/a-common-sense-approach-to-the-right-to-food-558742/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500 hover:shadow-xl transition-shadow duration-300"
+                  >
+                    <h3 className="font-montserrat font-bold text-xl text-blue-700 mb-3 hover:text-blue-800">
                       Dự án Right To Food
                     </h3>
                     <p className="text-base text-gray-700 leading-relaxed font-montserrat mb-2">
@@ -209,11 +219,16 @@ export default function AboutUsPage() {
                     <p className="text-sm text-gray-600 italic font-montserrat">
                       → Hỗ trợ doanh nghiệp trong chuỗi lúa gạo
                     </p>
-                  </div>
+                  </a>
 
                   {/* Project 3 - DGD */}
-                  <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-orange-500">
-                    <h3 className="font-montserrat font-bold text-xl text-orange-700 mb-3">
+                  <a
+                    href="https://vietnam.oxfam.org/kick-project-component-supporting-female-farmers-and-informal-workers"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block bg-white p-6 rounded-lg shadow-md border-l-4 border-orange-500 hover:shadow-xl transition-shadow duration-300"
+                  >
+                    <h3 className="font-montserrat font-bold text-xl text-orange-700 mb-3 hover:text-orange-800">
                       Dự án DGD
                     </h3>
                     <p className="text-base text-gray-700 leading-relaxed font-montserrat mb-2">
@@ -222,7 +237,7 @@ export default function AboutUsPage() {
                     <p className="text-sm text-gray-600 italic font-montserrat">
                       → Hỗ trợ doanh nghiệp trong chuỗi chế biến tôm và lúa gạo
                     </p>
-                  </div>
+                  </a>
                 </div>
               </div>
 
