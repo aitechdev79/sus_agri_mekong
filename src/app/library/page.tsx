@@ -4,9 +4,53 @@ import { useState, useEffect, useCallback } from 'react'
 import NavigationBar from '@/components/NavigationBar'
 import { ContentCard } from '@/components/content/ContentCard'
 import { SearchFilters } from '@/components/content/SearchFilters'
-import { Search, Filter } from 'lucide-react'
+import { Search, Filter, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { LibraryContent } from '@/types/content'
+
+// Resource sections data
+const resourceSections = [
+  {
+    title: 'An toàn vệ sinh lao động',
+    links: [
+      { title: 'ILO - Occupational Safety and Health', url: 'https://www.ilo.org/global/topics/safety-and-health-at-work/lang--en/index.htm' },
+      { title: 'WHO - Occupational Health', url: 'https://www.who.int/health-topics/occupational-health' },
+      { title: 'OSHA - Vietnam Safety Guidelines', url: 'https://www.osha.gov/international-cooperation' }
+    ]
+  },
+  {
+    title: 'ESG',
+    links: [
+      { title: 'UN Global Compact - ESG Reporting', url: 'https://www.unglobalcompact.org/what-is-gc/our-work/environment' },
+      { title: 'GRI Standards - Sustainability Reporting', url: 'https://www.globalreporting.org/standards/' },
+      { title: 'SASB Standards - ESG Disclosure', url: 'https://www.sasb.org/standards/' }
+    ]
+  },
+  {
+    title: 'Chính sách và quy định',
+    links: [
+      { title: 'Luật Lao động Việt Nam 2019', url: 'https://thuvienphapluat.vn/van-ban/Lao-dong-Tien-luong/Bo-luat-lao-dong-2019-333670.aspx' },
+      { title: 'Nghị định về An toàn lao động', url: 'https://thuvienphapluat.vn/tim-van-ban-phap-luat.html' },
+      { title: 'Quy chuẩn ESG tại Việt Nam', url: 'https://www.ssc.gov.vn/' }
+    ]
+  },
+  {
+    title: 'Thực hành tốt trên thế giới',
+    links: [
+      { title: 'ILO - Better Work Programme', url: 'https://betterwork.org/' },
+      { title: 'Sustainable Agriculture Practices - FAO', url: 'https://www.fao.org/sustainability/en/' },
+      { title: 'Global Good Agricultural Practices', url: 'https://www.globalgap.org/' }
+    ]
+  },
+  {
+    title: 'Thực hành tốt tại Việt Nam',
+    links: [
+      { title: 'VCCI - Doanh nghiệp bền vững', url: 'https://www.vcci.com.vn/' },
+      { title: 'VnSAT - Nông nghiệp bền vững', url: 'https://www.vnsat.org.vn/' },
+      { title: 'GRAISEA - Thực hành tốt Đông Nam Á', url: 'https://graisea.github.io/' }
+    ]
+  }
+]
 
 export default function LibraryPage() {
   const [contents, setContents] = useState<LibraryContent[]>([])
@@ -16,12 +60,20 @@ export default function LibraryPage() {
   const [selectedType, setSelectedType] = useState('')
   const [showFilters, setShowFilters] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
+  const [expandedSections, setExpandedSections] = useState<{ [key: number]: boolean }>({})
   const [pagination, setPagination] = useState({
     page: 1,
     limit: 12,
     total: 0,
     pages: 0
   })
+
+  const toggleSection = (index: number) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [index]: !prev[index]
+    }))
+  }
 
   const loadContents = useCallback(async () => {
     try {
@@ -69,10 +121,21 @@ export default function LibraryPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 relative">
+      {/* Background SVG Pattern */}
+      <div
+        className="fixed inset-0 opacity-5 pointer-events-none"
+        style={{
+          backgroundImage: 'url(/vecteezy_topo_34242655.svg)',
+          backgroundRepeat: 'repeat',
+          backgroundSize: '600px 600px',
+          zIndex: 0
+        }}
+      />
+
       <NavigationBar />
 
-      <div className="container mx-auto px-4 py-20">
+      <div className="container mx-auto px-4 py-20 relative z-10">
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
@@ -81,6 +144,47 @@ export default function LibraryPage() {
           <p className="text-lg text-gray-600 max-w-4xl mx-auto leading-relaxed">
             Thư viện Nghiên cứu & Báo cáo là nơi tập hợp những tài liệu chính sách, phân tích, khảo sát và nghiên cứu chuyên sâu về chủ đề phát triển bền vững, báo cáo bền vững ESG, chuyển đổi xanh tại Việt Nam. Các tài liệu được chọn lọc và phân loại khoa học, giúp doanh nghiệp, tổ chức và nhà nghiên cứu dễ dàng tra cứu, tiếp cận tri thức tin cậy và ứng dụng vào thực tiễn.
           </p>
+        </div>
+
+        {/* Resource Sections */}
+        <div className="mb-8 max-w-5xl mx-auto">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center">Tài nguyên tham khảo</h2>
+          <div className="space-y-3">
+            {resourceSections.map((section, index) => (
+              <div key={index} className="bg-white rounded-lg shadow-sm border overflow-hidden">
+                <button
+                  onClick={() => toggleSection(index)}
+                  className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
+                >
+                  <h3 className="text-lg font-semibold text-gray-800">{section.title}</h3>
+                  {expandedSections[index] ? (
+                    <ChevronUp className="w-5 h-5 text-gray-600" />
+                  ) : (
+                    <ChevronDown className="w-5 h-5 text-gray-600" />
+                  )}
+                </button>
+
+                {expandedSections[index] && (
+                  <div className="px-6 pb-4 pt-2 border-t bg-gray-50">
+                    <div className="space-y-2">
+                      {section.links.map((link, linkIndex) => (
+                        <a
+                          key={linkIndex}
+                          href={link.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 text-blue-600 hover:text-blue-800 hover:underline group"
+                        >
+                          <ExternalLink className="w-4 h-4 flex-shrink-0" />
+                          <span className="text-sm">{link.title}</span>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Search and Filters */}
