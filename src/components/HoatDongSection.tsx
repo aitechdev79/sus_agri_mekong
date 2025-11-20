@@ -76,10 +76,10 @@ export default function HoatDongSection() {
 
               {/* Content - Left Aligned at Bottom */}
               <div className="relative z-10 h-full flex flex-col justify-end p-6">
-                <h3 className="text-lg md:text-xl font-bold text-white mb-3 md:mb-0 md:group-hover:mb-3 transition-all duration-300 font-montserrat">
+                <h3 className="text-lg md:text-xl font-bold text-navy-900 mb-3 md:mb-0 md:group-hover:mb-3 transition-all duration-300 font-montserrat" style={{ color: '#001f3f' }}>
                   {activity.title}
                 </h3>
-                <p className="text-white/90 text-sm md:text-base font-montserrat md:max-h-0 md:overflow-hidden md:opacity-0 md:group-hover:max-h-32 md:group-hover:opacity-100 transition-all duration-300">
+                <p className="text-sm md:text-base font-bold text-navy-900 font-montserrat md:max-h-0 md:overflow-hidden md:opacity-0 md:group-hover:max-h-32 md:group-hover:opacity-100 transition-all duration-300" style={{ color: '#001f3f' }}>
                   {activity.description}
                 </p>
               </div>
