@@ -6,18 +6,25 @@ import Image from 'next/image';
 export default function HoatDongSection() {
   const activities = [
     {
-      id: 'rice-sustainability',
+      id: 'minh-phu',
       title: 'Công ty Minh Phú',
       description: 'Cải thiện công cụ làm việc cho nữ giám sát ở Tập đoàn Thủy sản Minh Phú',
-      href: '/activities/rice-sustainability',
+      href: '/activities/minh-phu',
       backgroundImage: '/Minhphu thumb.jpg',
     },
     {
-      id: 'shrimp-aquaculture',
+      id: 'tai-ky',
       title: 'Công ty Tài Ký',
       description: 'Khi một giờ nghỉ trở thành giá trị cho toàn bộ doanh nghiệp',
-      href: '/activities/shrimp-aquaculture',
+      href: '/activities/tai-ky',
       backgroundImage: '/Taiky thumb.jpg',
+    },
+    {
+      id: 'vinh-hien',
+      title: 'Công ty Vinh Hiển',
+      description: 'Nâng tầm hạt gạo Việt Nam - Hành trình của niềm tin và sự chuyển mình',
+      href: '/activities/vinh-hien',
+      backgroundImage: '/Vinhhien thumb.jpg',
     },
   ];
 
@@ -45,10 +52,7 @@ export default function HoatDongSection() {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-6xl mx-auto">
-          {/* Empty space for first column on desktop */}
-          <div className="hidden md:block"></div>
-
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {activities.map((activity) => (
             <Link
               key={activity.id}
