@@ -173,6 +173,74 @@ export default function AboutUsPage() {
             </div>
           </div>
         </section>
+
+        {/* Oxfam Section */}
+        <section className="py-16 bg-gray-50">
+          <div className="container mx-auto px-6 max-w-6xl">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-start">
+              {/* Content Column (2/3 width) - Left side */}
+              <div className="md:col-span-2">
+                <h2 className="font-montserrat font-bold text-3xl md:text-4xl text-gray-800 mb-6">
+                  Tổ chức Oxfam tại Việt Nam
+                </h2>
+
+                <div className="space-y-6">
+                  {/* Project 1 - Graisea */}
+                  <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-green-500">
+                    <h3 className="font-montserrat font-bold text-xl text-green-700 mb-3">
+                      Dự án Graisea
+                    </h3>
+                    <p className="text-base text-gray-700 leading-relaxed font-montserrat mb-2">
+                      Tăng cường bình đẳng giới và đầu tư kinh doanh nông nghiệp có trách nhiệm tại Đông Nam Á
+                    </p>
+                    <p className="text-sm text-gray-600 italic font-montserrat">
+                      → Hỗ trợ nâng cao năng lực cho doanh nghiệp trong chuỗi chế biến tôm và lúa gạo
+                    </p>
+                  </div>
+
+                  {/* Project 2 - Right To Food */}
+                  <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500">
+                    <h3 className="font-montserrat font-bold text-xl text-blue-700 mb-3">
+                      Dự án Right To Food
+                    </h3>
+                    <p className="text-base text-gray-700 leading-relaxed font-montserrat mb-2">
+                      Thúc đẩy hợp tác khu vực tư nhân nhằm phát triển mô hình kinh doanh toàn diện (IB) và đầu tư có trách nhiệm (RI) trong chuỗi giá trị lúa gạo tại Việt Nam
+                    </p>
+                    <p className="text-sm text-gray-600 italic font-montserrat">
+                      → Hỗ trợ doanh nghiệp trong chuỗi lúa gạo
+                    </p>
+                  </div>
+
+                  {/* Project 3 - DGD */}
+                  <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-orange-500">
+                    <h3 className="font-montserrat font-bold text-xl text-orange-700 mb-3">
+                      Dự án DGD
+                    </h3>
+                    <p className="text-base text-gray-700 leading-relaxed font-montserrat mb-2">
+                      Cải thiện khả năng tiếp cận thị trường quốc tế của Doanh nghiệp tôm và lúa thông qua nâng cao kỹ năng làm việc và an toàn vệ sinh lao động tại Doanh nghiệp
+                    </p>
+                    <p className="text-sm text-gray-600 italic font-montserrat">
+                      → Hỗ trợ doanh nghiệp trong chuỗi chế biến tôm và lúa gạo
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Logo Column (1/3 width) - Right side */}
+              <div className="md:col-span-1 flex justify-center items-start">
+                <div className="relative w-full max-w-xs">
+                  <Image
+                    src="/OX_HL_C_RGB.png"
+                    alt="Oxfam Logo"
+                    width={300}
+                    height={300}
+                    className="object-contain"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
 
       <Footer />
