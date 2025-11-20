@@ -132,10 +132,7 @@ The platform supports multiple content types (ARTICLE, VIDEO, INFOGRAPHIC, DOCUM
 
 ## Environment Setup
 
-Copy `.env.example` to `.env.local` and configure required environment variables:
-```bash
-cp .env.example .env.local
-```
+Create a `.env.local` file in the project root and configure required environment variables:
 
 Key variables for local development:
 ```
