@@ -4,10 +4,11 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut } from 'lucide-react';
 
 export default function CongtyVinhhien() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [zoom, setZoom] = useState(1);
 
   const images = [
     '/Vinhhien  (1).jpg',
@@ -16,10 +17,20 @@ export default function CongtyVinhhien() {
 
   const nextImage = () => {
     setCurrentIndex((prev) => (prev + 1) % images.length);
+    setZoom(1); // Reset zoom when changing images
   };
 
   const prevImage = () => {
     setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
+    setZoom(1); // Reset zoom when changing images
+  };
+
+  const zoomIn = () => {
+    setZoom((prev) => Math.min(prev + 0.25, 3)); // Max zoom 3x
+  };
+
+  const zoomOut = () => {
+    setZoom((prev) => Math.max(prev - 0.25, 1)); // Min zoom 1x
   };
 
   return (
@@ -34,14 +45,19 @@ export default function CongtyVinhhien() {
 
           <div className="relative w-full max-w-5xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
             {/* Image Display */}
-            <div className="relative w-full" style={{ aspectRatio: '16/9' }}>
-              <Image
-                src={images[currentIndex]}
-                alt={`Công ty Vinh Hiển - Brochure ${currentIndex + 1}`}
-                fill
-                className="object-contain"
-                priority
-              />
+            <div className="relative w-full overflow-auto" style={{ aspectRatio: '16/9' }}>
+              <div
+                className="relative w-full h-full transition-transform duration-300"
+                style={{ transform: `scale(${zoom})`, transformOrigin: 'center' }}
+              >
+                <Image
+                  src={images[currentIndex]}
+                  alt={`Công ty Vinh Hiển - Brochure ${currentIndex + 1}`}
+                  fill
+                  className="object-contain"
+                  priority
+                />
+              </div>
 
               {/* Navigation Arrows */}
               {images.length > 1 && (
@@ -62,12 +78,32 @@ export default function CongtyVinhhien() {
                   </button>
                 </>
               )}
+
+              {/* Zoom Controls */}
+              <div className="absolute top-4 right-4 flex flex-col gap-2 z-10">
+                <button
+                  onClick={zoomIn}
+                  disabled={zoom >= 3}
+                  className="bg-black/30 hover:bg-black/50 text-white p-2 rounded-full transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                  aria-label="Zoom in"
+                >
+                  <ZoomIn className="w-6 h-6" />
+                </button>
+                <button
+                  onClick={zoomOut}
+                  disabled={zoom <= 1}
+                  className="bg-black/30 hover:bg-black/50 text-white p-2 rounded-full transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                  aria-label="Zoom out"
+                >
+                  <ZoomOut className="w-6 h-6" />
+                </button>
+              </div>
             </div>
 
-            {/* Image Counter */}
+            {/* Image Counter and Zoom Level */}
             <div className="bg-gray-100 py-4 text-center">
               <span className="text-gray-600 font-medium font-montserrat">
-                {currentIndex + 1} / {images.length}
+                {currentIndex + 1} / {images.length} | Zoom: {Math.round(zoom * 100)}%
               </span>
             </div>
           </div>
