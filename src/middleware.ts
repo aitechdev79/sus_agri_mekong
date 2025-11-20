@@ -27,6 +27,9 @@ export default withAuth(
           '/library',
           '/content',
           '/guidance-policy',
+          '/congtyMinhphu',
+          '/congtyTaiky',
+          '/congtyVinhhien',
           '/vi', // Internationalized routes
           '/en'
         ];
