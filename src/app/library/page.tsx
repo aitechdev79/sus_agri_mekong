@@ -78,8 +78,8 @@ export default function LibraryPage() {
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
             Thư Viện Tài Liệu
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Khám phá kho tài liệu phong phú về các thực hành tốt trong chuỗi giá trị tôm và lúa
+          <p className="text-lg text-gray-600 max-w-4xl mx-auto leading-relaxed">
+            Thư viện Nghiên cứu & Báo cáo là nơi tập hợp những tài liệu chính sách, phân tích, khảo sát và nghiên cứu chuyên sâu về chủ đề phát triển bền vững, báo cáo bền vững ESG, chuyển đổi xanh tại Việt Nam. Các tài liệu được chọn lọc và phân loại khoa học, giúp doanh nghiệp, tổ chức và nhà nghiên cứu dễ dàng tra cứu, tiếp cận tri thức tin cậy và ứng dụng vào thực tiễn.
           </p>
         </div>
 
