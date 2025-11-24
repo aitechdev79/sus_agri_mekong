@@ -13,7 +13,19 @@ export default function PartnersPage() {
       </div>
 
       {/* Main Content */}
-      <main className="pt-20">
+      <main className="pt-16">
+        {/* Hero Section - Full Width Banner */}
+        <section className="relative w-full h-[400px] md:h-[500px]">
+          <Image
+            src="/hero_main.jpg"
+            alt="Partners Hero Banner"
+            fill
+            className="object-cover"
+            priority
+            sizes="100vw"
+          />
+        </section>
+
         {/* Oxfam Section */}
         <section className="py-16 bg-white">
           <div className="container mx-auto px-6 max-w-6xl">
