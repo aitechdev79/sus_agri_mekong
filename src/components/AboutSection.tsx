@@ -46,7 +46,7 @@ export default function AboutSection() {
       id: 'doi-tac',
       title: 'Đối tác chiến lược',
       description: 'Kết nối với các đối tác và tổ chức hợp tác để thúc đẩy phát triển bền vững',
-      href: '#',
+      href: '/partners',
     },
   ];
 
