@@ -35,9 +35,6 @@ export default function AboutSection() {
         <div className="grid grid-cols-1 md:grid-cols-2">
           {/* Text Content */}
           <div className="flex flex-col justify-center">
-            <h2 className="mb-6 text-3xl font-bold text-gray-800 md:text-4xl font-montserrat">
-              Tầm nhìn sứ mệnh
-            </h2>
             <p className="mb-6 text-lg text-gray-600 leading-relaxed font-montserrat">
               Cổng thông tin là sáng kiến của VCCI-HCM, được hình thành với sứ mệnh cung cấp nguồn dữ liệu, thông tin minh bạch, chính xác và đáng tin cậy, đặt nền móng cho tương lai phát triển bền vững của Việt Nam
             </p>
