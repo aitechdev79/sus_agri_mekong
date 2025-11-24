@@ -17,7 +17,7 @@ export default function PartnersPage() {
         {/* Hero Section - Full Width Banner */}
         <section className="relative w-full h-[400px] md:h-[500px]">
           <Image
-            src="/hero_main.jpg"
+            src="/hero-main.jpg"
             alt="Partners Hero Banner"
             fill
             className="object-cover"
