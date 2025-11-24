@@ -7,17 +7,17 @@ export default function ToolsGrid() {
   const tools = [
     {
       id: 'library',
-      title: 'Thư Viện',
-      description: 'Khám phá thư viện tài liệu phong phú về thực hành tốt',
+      title: 'Tìm kiếm thông tin',
+      description: 'Tra cứu và tìm kiếm thông tin về thực hành bền vững trong chuỗi giá trị',
       href: '/library',
       backgroundImage: '/thuvien_grok.jpg',
     },
     {
       id: 'policy',
-      title: 'Chính Sách & Hướng Dẫn',
-      description: 'Tìm hiểu các chính sách và hướng dẫn chính thức về nuôi tôm và trồng lúa',
+      title: 'ESG',
+      description: 'Tìm hiểu về Môi trường, Xã hội và Quản trị doanh nghiệp bền vững',
       href: '/guidance-policy',
-      backgroundImage: '/chinhsach_grok.jpg',
+      backgroundImage: '/esg_thumb.jpg',
     },
   ];
 
