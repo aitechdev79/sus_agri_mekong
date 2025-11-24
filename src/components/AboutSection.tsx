@@ -113,7 +113,7 @@ export default function AboutSection() {
             <Link
               key={card.id}
               href={card.href}
-              className="group relative rounded-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 aspect-[2/3] bg-white"
+              className="group relative rounded-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 aspect-[3/2] bg-white"
               aria-label={`${card.title} - ${card.description}`}
             >
               {/* Content - Left Aligned at Bottom */}
