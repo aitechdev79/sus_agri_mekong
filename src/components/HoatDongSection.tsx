@@ -1,30 +1,23 @@
 'use client';
 
-import Link from 'next/link';
 import Image from 'next/image';
 
 export default function HoatDongSection() {
   const activities = [
     {
-      id: 'minh-phu',
-      title: 'Công ty Minh Phú',
-      description: 'Cải thiện công cụ làm việc cho nữ giám sát ở Tập đoàn Thủy sản Minh Phú',
-      href: '/congtyMinhphu',
-      backgroundImage: '/Minhphu thumb.jpg',
+      id: 'hoat-dong-1',
+      title: 'Hoạt động 1',
+      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     },
     {
-      id: 'tai-ky',
-      title: 'Công ty Tài Ký',
-      description: 'Khi một giờ nghỉ trở thành giá trị cho toàn bộ doanh nghiệp',
-      href: '/congtyTaiky',
-      backgroundImage: '/Taiky thumb.jpg',
+      id: 'hoat-dong-2',
+      title: 'Hoạt động 2',
+      description: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
     },
     {
-      id: 'vinh-hien',
-      title: 'Công ty Vinh Hiển',
-      description: 'Nâng tầm hạt gạo Việt Nam - Hành trình của niềm tin và sự chuyển mình',
-      href: '/congtyVinhhien',
-      backgroundImage: '/Vinhhien thumb.jpg',
+      id: 'hoat-dong-3',
+      title: 'Hoạt động 3',
+      description: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
     },
   ];
 
@@ -54,36 +47,20 @@ export default function HoatDongSection() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {activities.map((activity) => (
-            <Link
+            <div
               key={activity.id}
-              href={activity.href}
-              className="group relative rounded-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 aspect-[2/3]"
-              aria-label={`${activity.title} - ${activity.description}`}
+              className="relative rounded-lg overflow-hidden shadow-xl transition-all duration-300 aspect-[2/3] bg-white"
             >
-              {/* Background Image */}
-              <div className="absolute inset-0">
-                <Image
-                  src={activity.backgroundImage}
-                  alt={`${activity.title} background`}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-300"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  priority
-                />
-                {/* Lighter gradient only at bottom for text readability */}
-                <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/50 to-transparent"></div>
-              </div>
-
               {/* Content - Left Aligned at Bottom */}
               <div className="relative z-10 h-full flex flex-col justify-end p-6">
-                <h3 className="text-lg md:text-xl font-bold text-white mb-3 md:mb-0 md:group-hover:mb-3 transition-all duration-300 font-montserrat">
+                <h3 className="text-lg md:text-xl font-bold text-gray-800 mb-3 transition-all duration-300 font-montserrat">
                   {activity.title}
                 </h3>
-                <p className="text-white/90 text-sm md:text-base font-montserrat md:max-h-0 md:overflow-hidden md:opacity-0 md:group-hover:max-h-32 md:group-hover:opacity-100 transition-all duration-300">
+                <p className="text-gray-600 text-sm md:text-base font-montserrat transition-all duration-300">
                   {activity.description}
                 </p>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       </div>
