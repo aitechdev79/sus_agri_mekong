@@ -40,7 +40,7 @@ export default function AboutSection() {
       id: 'vcci',
       title: 'Về VCCI',
       description: 'Tìm hiểu về Phòng Thương mại và Công nghiệp Việt Nam và vai trò trong phát triển doanh nghiệp',
-      href: '/about-us',
+      href: '/about-vcci',
     },
     {
       id: 'doi-tac',
