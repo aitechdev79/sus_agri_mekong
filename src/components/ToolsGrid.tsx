@@ -19,6 +19,20 @@ export default function ToolsGrid() {
       href: '/guidance-policy',
       backgroundImage: '/esg_thumb.jpg',
     },
+    {
+      id: 'regulations',
+      title: 'Chính sách và quy định',
+      description: 'Cập nhật các chính sách, quy định và văn bản pháp luật liên quan đến doanh nghiệp',
+      href: '/guidance-policy',
+      backgroundImage: '/chinhsachquydinh.jpg',
+    },
+    {
+      id: 'research',
+      title: 'Nghiên cứu và báo cáo',
+      description: 'Khám phá các nghiên cứu, báo cáo và phân tích chuyên sâu về phát triển bền vững',
+      href: '/library',
+      backgroundImage: '/nghiencuubaocao.jpg',
+    },
   ];
 
   return (
@@ -43,9 +57,6 @@ export default function ToolsGrid() {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-6xl mx-auto">
-          {/* Empty space for first column on desktop */}
-          <div className="hidden md:block"></div>
-
           {tools.map((tool) => (
             <Link
               key={tool.id}
