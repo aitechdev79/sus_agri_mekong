@@ -23,23 +23,56 @@ export default function VisionMissionPage() {
                 <h1 className="font-montserrat font-bold text-3xl md:text-4xl text-gray-800 mb-8 text-left">
                   Tầm nhìn sứ mệnh
                 </h1>
-                <p className="text-lg text-gray-700 leading-relaxed font-montserrat mb-4">
-                  Cổng thông tin là sáng kiến của VCCI-HCM, được hình thành với sứ mệnh cung cấp nguồn dữ liệu,
-                  thông tin minh bạch, chính xác và đáng tin cậy.
-                </p>
-                <p className="text-lg text-gray-700 leading-relaxed font-montserrat mb-4">
-                  Đặt nền móng cho tương lai phát triển bền vững của Việt Nam thông qua việc kết nối các bên liên quan
-                  và cung cấp thông tin chất lượng cao.
-                </p>
-                <p className="text-lg text-gray-700 leading-relaxed font-montserrat mb-4">
-                  Đây là không gian tập hợp và chia sẻ các mô hình thực tiễn, chính sách và thông tin bền trách nhiệm và phát triển bền vững.
-                </p>
-                <p className="text-lg text-gray-700 leading-relaxed font-montserrat">
-                  Thông qua cơ chế PPP, cổng thông tin không chỉ đơn thuần là kho dữ liệu mà còn là cầu nối tin cậy,
-                  nơi ba bên cùng chia sẻ trách nhiệm, kết nối nguồn lực và đồng kiến tạo giá trị. Đây chính là nền tảng
-                  để hình thành một hệ sinh thái phát triển bền vững toàn diện, trong đó mọi thành phần xã hội đều được
-                  lắng nghe, tham gia và thụ hưởng lợi ích chung.
-                </p>
+
+                {/* Vision */}
+                <div className="mb-6">
+                  <h2 className="font-montserrat font-bold text-2xl text-gray-800 mb-4">
+                    Tầm nhìn
+                  </h2>
+                  <p className="text-lg text-gray-700 leading-relaxed font-montserrat mb-4">
+                    Cổng thông tin là sáng kiến của VCCI-HCM, được hình thành với sứ mệnh cung cấp nguồn dữ liệu,
+                    thông tin minh bạch, chính xác và đáng tin cậy, đặt nền móng cho tương lai phát triển bền vững của Việt Nam.
+                  </p>
+                  <p className="text-lg text-gray-700 leading-relaxed font-montserrat">
+                    Chúng tôi kết nối hệ sinh thái doanh nghiệp Việt Nam bằng dữ liệu minh bạch, kinh nghiệm thực tiễn và thông tin chính sách cập nhật, nhằm thúc đẩy phát triển bền vững và hội nhập quốc tế.
+                  </p>
+                </div>
+
+                {/* Mission */}
+                <div className="mb-6">
+                  <h2 className="font-montserrat font-bold text-2xl text-gray-800 mb-4">
+                    Sứ mệnh
+                  </h2>
+                  <p className="text-lg text-gray-700 leading-relaxed font-montserrat mb-4">
+                    Sứ mệnh của chúng tôi là đồng hành cùng doanh nghiệp và cộng đồng để nâng cao năng lực cạnh tranh, cải thiện điều kiện lao động, thúc đẩy kinh doanh có trách nhiệm và tạo ra giá trị lâu dài cho xã hội.
+                  </p>
+                  <p className="text-lg text-gray-700 leading-relaxed font-montserrat">
+                    Với sự hợp tác đa bên, chúng tôi hướng tới một tương lai nơi doanh nghiệp Việt Nam phát triển bền vững, minh bạch và đáng tin cậy.
+                  </p>
+                </div>
+
+                {/* ESG Commitment */}
+                <div className="mb-6">
+                  <h2 className="font-montserrat font-bold text-2xl text-gray-800 mb-4">
+                    Định hướng ESG
+                  </h2>
+                  <p className="text-lg text-gray-700 leading-relaxed font-montserrat mb-4">
+                    Bên cạnh đó, chúng tôi xem ESG (Môi trường – Xã hội – Quản trị) là định hướng trọng tâm trong chiến lược phát triển. ESG không chỉ phản ánh trách nhiệm của doanh nghiệp với cộng đồng và môi trường, mà còn là nền tảng quản trị hiện đại giúp gia tăng năng lực cạnh tranh và nâng cao uy tín.
+                  </p>
+                  <p className="text-lg text-gray-700 leading-relaxed font-montserrat">
+                    Bằng việc thúc đẩy áp dụng các tiêu chuẩn ESG, chúng tôi khuyến khích doanh nghiệp Việt Nam tích hợp phát triển bền vững vào chiến lược dài hạn, từ đó vừa gia tăng năng lực cạnh tranh, vừa đóng góp tích cực cho mục tiêu phát triển chung của đất nước.
+                  </p>
+                </div>
+
+                {/* PPP Partnership Model */}
+                <div className="bg-blue-50 p-6 rounded-lg">
+                  <h2 className="font-montserrat font-bold text-xl text-blue-800 mb-3">
+                    Cơ chế PPP (Public-Private Partnership)
+                  </h2>
+                  <p className="text-base text-gray-700 leading-relaxed font-montserrat">
+                    Thông qua cơ chế PPP, cổng thông tin không chỉ đơn thuần là kho dữ liệu mà còn là cầu nối tin cậy, nơi ba bên cùng chia sẻ trách nhiệm, kết nối nguồn lực và đồng kiến tạo giá trị. Đây chính là nền tảng để hình thành một hệ sinh thái phát triển bền vững toàn diện, trong đó mọi thành phần xã hội đều được lắng nghe, tham gia và thụ hưởng lợi ích chung.
+                  </p>
+                </div>
               </div>
 
               {/* Part 2: 3 Cards Stacked Vertically (1/3 width) */}
