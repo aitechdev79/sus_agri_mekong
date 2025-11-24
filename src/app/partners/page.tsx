@@ -26,8 +26,120 @@ export default function PartnersPage() {
           />
         </section>
 
-        {/* Oxfam Section */}
+        {/* Strategic Partners Introduction */}
         <section className="py-16 bg-white">
+          <div className="container mx-auto px-6 max-w-6xl">
+            <h1 className="font-montserrat font-bold text-4xl md:text-5xl text-gray-800 mb-6">
+              Đối tác chiến lược
+            </h1>
+            <p className="text-lg text-gray-700 leading-relaxed font-montserrat mb-8">
+              Sự phát triển bền vững của cổng thông tin được xây dựng từ sự đồng hành của nhiều đối tác chiến lược trong và ngoài nước. Từ các tổ chức quốc tế, hiệp hội ngành hàng đến chính quyền địa phương, mỗi đối tác đều mang đến nguồn lực, kinh nghiệm và cam kết cùng chung tay nâng cao năng lực cạnh tranh, cải thiện điều kiện lao động và thúc đẩy kinh doanh có trách nhiệm cho doanh nghiệp Việt Nam.
+            </p>
+
+            {/* Partner Categories */}
+            <div className="space-y-8">
+              {/* Government Ministries */}
+              <div className="bg-blue-50 p-6 rounded-lg">
+                <h3 className="font-montserrat font-bold text-2xl text-blue-800 mb-4">
+                  Các bộ ngành
+                </h3>
+                <ul className="space-y-2 text-gray-700 font-montserrat">
+                  <li className="flex items-start">
+                    <span className="text-blue-600 mr-2">•</span>
+                    <span>Bộ Lao động (nay là Bộ Nội vụ)</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-blue-600 mr-2">•</span>
+                    <span>Tổng Liên đoàn</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-blue-600 mr-2">•</span>
+                    <span>Hội Nông dân Việt Nam</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* International NGO Partners */}
+              <div className="bg-green-50 p-6 rounded-lg">
+                <h3 className="font-montserrat font-bold text-2xl text-green-800 mb-4">
+                  Đối tác NGO quốc tế
+                </h3>
+                <ul className="space-y-2 text-gray-700 font-montserrat">
+                  <li className="flex items-start">
+                    <span className="text-green-600 mr-2">•</span>
+                    <span>Oxfam</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-green-600 mr-2">•</span>
+                    <span>ILO (Tổ chức Lao động Quốc tế)</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-green-600 mr-2">•</span>
+                    <span>DI (Development International)</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-green-600 mr-2">•</span>
+                    <span>NHO</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Industry Associations */}
+              <div className="bg-orange-50 p-6 rounded-lg">
+                <h3 className="font-montserrat font-bold text-2xl text-orange-800 mb-4">
+                  Hiệp hội ngành nghề trong nước
+                </h3>
+                <ul className="space-y-2 text-gray-700 font-montserrat">
+                  <li className="flex items-start">
+                    <span className="text-orange-600 mr-2">•</span>
+                    <span>VASEP - Hiệp hội Chế biến và Xuất khẩu Thủy sản Việt Nam</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-orange-600 mr-2">•</span>
+                    <span>VFA - Hiệp hội Thủy sản Việt Nam</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-orange-600 mr-2">•</span>
+                    <span>Hiệp hội Thủy sản Cần Thơ, An Giang, Cà Mau, Sóc Trăng</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-orange-600 mr-2">•</span>
+                    <span>HAWA - Hiệp hội Gỗ và Lâm sản Việt Nam</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-orange-600 mr-2">•</span>
+                    <span>BIFA - Hiệp hội Gỗ Bình Dương</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-orange-600 mr-2">•</span>
+                    <span>DOWA - Hiệp hội Gỗ Đồng Nai</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-orange-600 mr-2">•</span>
+                    <span>CSID - Trung tâm Phát triển Công nghiệp Hỗ trợ</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-orange-600 mr-2">•</span>
+                    <span>VITAS - Hiệp hội Dệt May Việt Nam</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Partner Organizations */}
+              <div className="bg-purple-50 p-6 rounded-lg">
+                <h3 className="font-montserrat font-bold text-2xl text-purple-800 mb-4">
+                  Các tổ chức đối tác
+                </h3>
+                <p className="text-gray-700 font-montserrat leading-relaxed">
+                  VCCI, Oxfam, DGD, Hội Nông dân Việt Nam, VASEP, VFA, và các hiệp hội địa phương tại An Giang, Cà Mau, Sóc Trăng.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Oxfam Section */}
+        <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-6 max-w-6xl">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-start">
               {/* Content Column (2/3 width) - Left side */}
@@ -110,7 +222,7 @@ export default function PartnersPage() {
         </section>
 
         {/* ILO Section */}
-        <section className="py-16 bg-gray-50">
+        <section className="py-16 bg-white">
           <div className="container mx-auto px-6 max-w-6xl">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-start">
               {/* Logo Column (1/3 width) - Left side */}
