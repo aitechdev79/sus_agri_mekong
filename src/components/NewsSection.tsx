@@ -110,7 +110,7 @@ export default function NewsSection() {
             </h2>
           </Link>
           <p className="text-lg text-gray-600 font-montserrat text-left max-w-3xl">
-            Cập nhật những tin tức và xu hướng mới nhất về nông nghiệp bền vững từ khắp nơi trên thế giới.
+            Cập nhật những tin tức và sự kiện mới nhất của chúng tôi.
           </p>
         </div>
 
