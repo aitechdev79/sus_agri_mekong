@@ -20,6 +20,7 @@ export default withAuth(
           '/auth/signin',
           '/auth/signup',
           '/about-us',
+          '/vision-mission',
           '/join-us',
           '/members',
           '/news',
