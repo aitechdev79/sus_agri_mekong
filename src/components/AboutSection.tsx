@@ -29,10 +29,31 @@ export default function AboutSection() {
     });
   }, []);
 
+  const infoCards = [
+    {
+      id: 'cam-ket',
+      title: 'Cam kết của chúng tôi',
+      description: 'Cam kết cung cấp thông tin minh bạch và đáng tin cậy để xây dựng tương lai bền vững',
+      href: '#',
+    },
+    {
+      id: 'vcci',
+      title: 'Về VCCI',
+      description: 'Tìm hiểu về Phòng Thương mại và Công nghiệp Việt Nam và vai trò trong phát triển doanh nghiệp',
+      href: '#',
+    },
+    {
+      id: 'doi-tac',
+      title: 'Đối tác chiến lược',
+      description: 'Kết nối với các đối tác và tổ chức hợp tác để thúc đẩy phát triển bền vững',
+      href: '#',
+    },
+  ];
+
   return (
     <section className="bg-gray-100 py-16">
       <div className="container mx-auto px-6 max-w-6xl">
-        <div className="grid grid-cols-1 md:grid-cols-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 mb-16">
           {/* Text Content */}
           <div className="flex flex-col justify-center">
             <p className="mb-6 text-lg text-gray-600 leading-relaxed font-montserrat">
@@ -84,6 +105,28 @@ export default function AboutSection() {
               />
             </div>
           </div>
+        </div>
+
+        {/* Info Cards Section */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+          {infoCards.map((card) => (
+            <Link
+              key={card.id}
+              href={card.href}
+              className="group relative rounded-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 aspect-[2/3] bg-white"
+              aria-label={`${card.title} - ${card.description}`}
+            >
+              {/* Content - Left Aligned at Bottom */}
+              <div className="relative z-10 h-full flex flex-col justify-end p-6">
+                <h3 className="text-lg md:text-xl font-bold text-gray-800 mb-3 transition-all duration-300 font-montserrat">
+                  {card.title}
+                </h3>
+                <p className="text-gray-600 text-sm md:text-base font-montserrat transition-all duration-300">
+                  {card.description}
+                </p>
+              </div>
+            </Link>
+          ))}
         </div>
       </div>
     </section>
