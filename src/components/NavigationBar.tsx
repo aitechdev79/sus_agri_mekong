@@ -68,7 +68,7 @@ export default function NavigationBar() {
                 Tin tức
               </Link>
               <Link
-                href="/about-us"
+                href="/vision-mission"
                 className="font-montserrat font-normal text-base text-gray-800 uppercase tracking-wide hover:underline hover:text-green-500 transition-colors"
               >
                 Khám phá
@@ -124,7 +124,7 @@ export default function NavigationBar() {
                 Tin tức
               </Link>
               <Link
-                href="/about-us"
+                href="/vision-mission"
                 className="font-montserrat font-normal text-base text-gray-800 uppercase tracking-wide hover:text-green-600 transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >

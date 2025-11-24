@@ -83,7 +83,7 @@ export default function AboutSection() {
             {/* CTA Button */}
             <div>
               <Link
-                href="/about-us"
+                href="/vision-mission"
                 className="inline-block font-montserrat font-bold text-sm text-white bg-green-600 hover:bg-green-700 transition-all duration-300 px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105"
                 aria-label="Khám phá về chúng tôi"
               >
