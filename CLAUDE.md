@@ -203,16 +203,6 @@ npm run db:seed
 npx prisma migrate reset && npm run db:seed
 ```
 
-### Running tests
-The project doesn't have a test suite configured yet. When implementing tests, consider:
-```bash
-# Install testing dependencies first
-npm install --save-dev jest @testing-library/react @testing-library/jest-dom
-
-# Run tests (after setup)
-npm test
-```
-
 ### Creating new API endpoints
 Follow the existing pattern in `/src/app/api/`:
 1. Create route file: `route.ts` in appropriate directory
