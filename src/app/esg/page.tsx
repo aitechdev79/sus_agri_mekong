@@ -112,7 +112,7 @@ export default function ESGPage() {
         </section>
 
         {/* Global Best Practices */}
-        <section className="py-16 bg-gradient-to-br from-blue-50 to-indigo-50">
+        <section id="global-practices" className="py-16 bg-gradient-to-br from-blue-50 to-indigo-50 scroll-mt-16">
           <div className="container mx-auto px-6 max-w-6xl">
             <h2 className="font-montserrat font-bold text-3xl md:text-4xl text-gray-800 mb-8">
               Thực hành tốt trên thế giới
@@ -234,7 +234,7 @@ export default function ESGPage() {
         </section>
 
         {/* Vietnam Best Practices */}
-        <section className="py-16 bg-white">
+        <section id="vietnam-practices" className="py-16 bg-white scroll-mt-16">
           <div className="container mx-auto px-6 max-w-6xl">
             <h2 className="font-montserrat font-bold text-3xl md:text-4xl text-gray-800 mb-8">
               Thực hành tốt tại Việt Nam
