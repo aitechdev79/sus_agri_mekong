@@ -23,7 +23,7 @@ export default function ToolsGrid() {
       id: 'research',
       title: 'Nghiên cứu và báo cáo',
       description: 'Khám phá các nghiên cứu, báo cáo và phân tích chuyên sâu về phát triển bền vững',
-      href: '/library',
+      href: '/reports',
       backgroundImage: '/nghiencuubaocao.jpg',
     },
     {
