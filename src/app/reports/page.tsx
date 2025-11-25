@@ -6,7 +6,7 @@ import Footer from '@/components/Footer';
 import Image from 'next/image';
 import { Download, FileText, Calendar, Tag } from 'lucide-react';
 
-type ReportCategory = 'all' | 'esg' | 'agriculture' | 'climate' | 'supply-chain' | 'policy';
+type ReportCategory = 'all' | 'esg' | 'agriculture' | 'climate' | 'supply-chain' | 'policy' | 'labor-safety' | 'responsible-business';
 type ReportType = 'all' | 'research' | 'policy-brief' | 'case-study' | 'survey' | 'whitepaper';
 
 interface Report {
@@ -33,11 +33,13 @@ export default function ReportsPage() {
 
   const categories = [
     { id: 'all' as ReportCategory, name: 'Tất cả', icon: '📚', color: 'bg-gray-100 text-gray-800' },
+    { id: 'labor-safety' as ReportCategory, name: 'An toàn vệ sinh lao động', icon: '🛡️', color: 'bg-red-100 text-red-800' },
     { id: 'esg' as ReportCategory, name: 'ESG & Bền vững', icon: '🌱', color: 'bg-green-100 text-green-800' },
+    { id: 'policy' as ReportCategory, name: 'Chính sách ngành', icon: '📋', color: 'bg-orange-100 text-orange-800' },
+    { id: 'responsible-business' as ReportCategory, name: 'Kinh doanh có trách nhiệm', icon: '🤝', color: 'bg-teal-100 text-teal-800' },
     { id: 'agriculture' as ReportCategory, name: 'Nông nghiệp', icon: '🌾', color: 'bg-yellow-100 text-yellow-800' },
     { id: 'climate' as ReportCategory, name: 'Biến đổi khí hậu', icon: '🌍', color: 'bg-blue-100 text-blue-800' },
     { id: 'supply-chain' as ReportCategory, name: 'Chuỗi cung ứng', icon: '🔗', color: 'bg-purple-100 text-purple-800' },
-    { id: 'policy' as ReportCategory, name: 'Chính sách', icon: '📋', color: 'bg-orange-100 text-orange-800' },
   ];
 
   const reportTypes = [
@@ -177,6 +179,54 @@ export default function ReportsPage() {
       fileSize: '5.6 MB',
       language: 'vi',
       thumbnail: '/reports/circular.jpg',
+    },
+    {
+      id: '9',
+      title: 'Khảo sát An toàn Vệ sinh Lao động trong Doanh nghiệp Việt Nam 2024',
+      description: 'Khảo sát toàn diện về thực trạng ATVSLĐ tại 800 doanh nghiệp, phân tích các rủi ro nghề nghiệp và đề xuất giải pháp cải thiện điều kiện làm việc an toàn.',
+      category: 'labor-safety',
+      type: 'survey',
+      author: 'Nhóm Nghiên cứu VNFU',
+      organization: 'Tổng Liên đoàn Lao động Việt Nam',
+      publishDate: '10/12/2024',
+      pages: 94,
+      downloads: 1523,
+      tags: ['ATVSLĐ', 'An toàn lao động', 'Khảo sát', 'Doanh nghiệp'],
+      fileSize: '7.2 MB',
+      language: 'vi',
+      thumbnail: '/reports/labor-safety.jpg',
+    },
+    {
+      id: '10',
+      title: 'Hướng dẫn Kinh doanh Có trách nhiệm theo Tiêu chuẩn Quốc tế',
+      description: 'Tài liệu hướng dẫn thực hành về kinh doanh có trách nhiệm, tuân thủ các nguyên tắc UN Global Compact và ISO 26000 về trách nhiệm xã hội.',
+      category: 'responsible-business',
+      type: 'whitepaper',
+      author: 'Nhóm Chuyên gia VCCI & ILO',
+      organization: 'Phòng Thương mại và Công nghiệp Việt Nam',
+      publishDate: '05/12/2024',
+      pages: 68,
+      downloads: 956,
+      tags: ['Kinh doanh có trách nhiệm', 'CSR', 'ISO 26000', 'UN Global Compact'],
+      fileSize: '5.8 MB',
+      language: 'both',
+      thumbnail: '/reports/responsible-business.jpg',
+    },
+    {
+      id: '11',
+      title: 'Chính sách Ngành Thủy sản: Định hướng Phát triển Bền vững đến 2030',
+      description: 'Tổng hợp các chính sách ngành thủy sản Việt Nam, phân tích định hướng phát triển bền vững, chứng nhận quốc tế và hội nhập thị trường toàn cầu.',
+      category: 'policy',
+      type: 'policy-brief',
+      author: 'Cục Khai thác và Bảo vệ Nguồn lợi Thủy sản',
+      organization: 'Bộ Nông nghiệp và Phát triển Nông thôn',
+      publishDate: '20/11/2024',
+      pages: 52,
+      downloads: 1134,
+      tags: ['Chính sách', 'Thủy sản', 'Phát triển bền vững', 'Chứng nhận'],
+      fileSize: '4.1 MB',
+      language: 'vi',
+      thumbnail: '/reports/fishery-policy.jpg',
     },
   ];
 
@@ -425,6 +475,68 @@ export default function ReportsPage() {
                 ))}
               </div>
             )}
+          </div>
+        </section>
+
+        {/* Information Providers Section */}
+        <section className="py-16 bg-white border-t">
+          <div className="container mx-auto px-6 max-w-6xl">
+            <h2 className="font-montserrat font-bold text-3xl text-gray-800 mb-4 text-center">
+              Nguồn cung cấp tài liệu
+            </h2>
+            <p className="text-gray-600 font-montserrat text-center mb-12 max-w-3xl mx-auto">
+              Thư viện được xây dựng từ sự đóng góp của các tổ chức uy tín và nhóm chuyên gia hàng đầu
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* Provider 1 */}
+              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-6 border-l-4 border-blue-600 hover:shadow-lg transition-shadow duration-300">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center">
+                    <span className="text-2xl">🏛️</span>
+                  </div>
+                  <h3 className="font-montserrat font-bold text-xl text-gray-800">
+                    VNFU
+                  </h3>
+                </div>
+                <p className="text-gray-700 font-montserrat text-sm leading-relaxed">
+                  Tổng Liên đoàn Lao động Việt Nam - Đơn vị cung cấp các nghiên cứu về an toàn vệ sinh lao động,
+                  quyền lợi người lao động và phát triển bền vững trong doanh nghiệp.
+                </p>
+              </div>
+
+              {/* Provider 2 */}
+              <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg p-6 border-l-4 border-green-600 hover:shadow-lg transition-shadow duration-300">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center">
+                    <span className="text-2xl">👥</span>
+                  </div>
+                  <h3 className="font-montserrat font-bold text-xl text-gray-800">
+                    Nhóm Chuyên gia
+                  </h3>
+                </div>
+                <p className="text-gray-700 font-montserrat text-sm leading-relaxed">
+                  Đội ngũ chuyên gia đầu ngành về ESG, phát triển bền vững, chính sách môi trường và trách nhiệm
+                  xã hội doanh nghiệp từ các viện nghiên cứu và trường đại học hàng đầu.
+                </p>
+              </div>
+
+              {/* Provider 3 */}
+              <div className="bg-gradient-to-br from-purple-50 to-violet-50 rounded-lg p-6 border-l-4 border-purple-600 hover:shadow-lg transition-shadow duration-300">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-14 h-14 bg-purple-100 rounded-full flex items-center justify-center">
+                    <span className="text-2xl">🎯</span>
+                  </div>
+                  <h3 className="font-montserrat font-bold text-xl text-gray-800">
+                    Tổ chức Tư vấn
+                  </h3>
+                </div>
+                <p className="text-gray-700 font-montserrat text-sm leading-relaxed">
+                  Các tổ chức tư vấn chính sách quốc tế và trong nước như UNDP, ILO, VCCI cung cấp báo cáo
+                  phân tích chuyên sâu và hướng dẫn thực hành tốt nhất.
+                </p>
+              </div>
+            </div>
           </div>
         </section>
 
