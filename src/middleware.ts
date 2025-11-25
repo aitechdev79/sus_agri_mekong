@@ -29,6 +29,7 @@ export default withAuth(
           '/content',
           '/guidance-policy',
           '/esg',
+          '/policy',
           '/partners',
           '/congtyMinhphu',
           '/congtyTaiky',
