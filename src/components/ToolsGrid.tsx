@@ -16,7 +16,7 @@ export default function ToolsGrid() {
       id: 'regulations',
       title: 'Chính sách và quy định',
       description: 'Cập nhật các chính sách, quy định và văn bản pháp luật liên quan đến doanh nghiệp',
-      href: '/guidance-policy',
+      href: '/policy',
       backgroundImage: '/chinhsachquydinh.jpg',
     },
     {
