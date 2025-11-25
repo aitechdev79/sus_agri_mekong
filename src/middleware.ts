@@ -28,6 +28,7 @@ export default withAuth(
           '/library',
           '/content',
           '/guidance-policy',
+          '/esg',
           '/partners',
           '/congtyMinhphu',
           '/congtyTaiky',
