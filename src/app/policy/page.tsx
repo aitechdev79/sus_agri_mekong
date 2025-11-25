@@ -319,7 +319,7 @@ export default function PolicyPage() {
                     </svg>
                   </div>
                   <p className="text-gray-700 font-montserrat italic text-lg leading-relaxed mb-6">
-                    "{item.quote}"
+                    &ldquo;{item.quote}&rdquo;
                   </p>
                   <div className="border-t border-gray-200 pt-4">
                     <p className="font-montserrat font-bold text-gray-800">{item.author}</p>

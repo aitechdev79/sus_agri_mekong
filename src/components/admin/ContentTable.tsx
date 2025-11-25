@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Edit, Trash2, Eye, Star, Users } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { AdminContent, ContentTableProps } from '@/types/content'
+import type { ContentTableProps } from '@/types/content'
 
 export function ContentTable({ contents, onEdit, onDelete, onBulkAction, userRole }: ContentTableProps) {
   const [selectedIds, setSelectedIds] = useState<string[]>([])

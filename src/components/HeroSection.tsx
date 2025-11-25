@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import NavigationBar from './NavigationBar';
 
 export default function HeroSection() {
