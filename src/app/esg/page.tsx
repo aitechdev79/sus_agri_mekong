@@ -330,12 +330,54 @@ export default function ESGPage() {
         {/* ESG Assessment Tools */}
         <section className="py-16 bg-gradient-to-br from-gray-50 to-slate-50">
           <div className="container mx-auto px-6 max-w-6xl">
-            <h2 className="font-montserrat font-bold text-3xl md:text-4xl text-gray-800 mb-4">
-              Công cụ đánh giá ESG
-            </h2>
-            <p className="text-gray-600 font-montserrat text-lg mb-8">
-              Các công cụ và khung đánh giá ESG giúp doanh nghiệp đo lường và cải thiện hiệu quả bền vững
-            </p>
+            <div className="text-center mb-12">
+              <h2 className="font-montserrat font-bold text-3xl md:text-4xl text-gray-800 mb-4">
+                Công cụ đánh giá ESG
+              </h2>
+              <p className="text-indigo-600 font-montserrat text-xl md:text-2xl font-semibold mb-6 italic">
+                &ldquo;Biết mình đang ở đâu để bắt đầu cải thiện ngay hôm nay.&rdquo;
+              </p>
+            </div>
+
+            {/* Introduction Section */}
+            <div className="bg-white rounded-lg p-8 shadow-md mb-12">
+              <div className="prose max-w-none">
+                <p className="text-gray-700 font-montserrat leading-relaxed mb-4">
+                  Phát triển bền vững không còn là lựa chọn mà đã trở thành một định hướng chiến lược để vừa
+                  tối ưu hiệu quả hoạt động, vừa bảo tồn tài nguyên và nâng cao khả năng thích ứng trước những
+                  biến động toàn cầu. Để duy trì giá trị dài hạn, tổ chức và doanh nghiệp cần một phương pháp
+                  đánh giá khoa học, minh bạch và phản ánh đúng thực tiễn vận hành. Bộ công cụ đánh giá bền vững
+                  ra đời với mục tiêu đó: chuẩn hóa cách đo lường, nhận diện điểm mạnh – khoảng trống và mở ra
+                  lộ trình hướng tới xây dựng mô hình phát triển toàn diện, có trách nhiệm.
+                </p>
+
+                <h3 className="font-montserrat font-bold text-2xl text-gray-800 mt-8 mb-4">
+                  Tại sao cần đánh giá tính bền vững?
+                </h3>
+                <p className="text-gray-700 font-montserrat leading-relaxed mb-6">
+                  Đánh giá là động lực thúc đẩy cải tiến liên tục. Không chỉ giúp doanh nghiệp, tổ chức hay
+                  cộng đồng theo dõi tiến trình bền vững của chính mình, công cụ còn góp phần tăng cường minh bạch,
+                  củng cố niềm tin đối tác và khẳng định cam kết trách nhiệm xã hội. Từ quản trị hiệu quả, giảm
+                  thiểu tác động môi trường, đến xây dựng văn hóa doanh nghiệp và quản lý chuỗi cung ứng, việc đo
+                  lường bền vững trở thành nền tảng gắn kết giữa mục tiêu phát triển và giá trị xã hội.
+                </p>
+
+                <h3 className="font-montserrat font-bold text-2xl text-gray-800 mt-8 mb-4">
+                  Cơ chế hoạt động
+                </h3>
+                <p className="text-gray-700 font-montserrat leading-relaxed mb-6">
+                  Người dùng khởi tạo hồ sơ và được hướng dẫn trả lời bộ câu hỏi theo các nhóm chủ đề: quản trị,
+                  môi trường, xã hội, chuỗi giá trị. Tùy theo từng lĩnh vực, có thể bổ sung minh chứng để đảm bảo
+                  tính xác thực. Hệ thống sau đó tổng hợp dữ liệu, phân tích và xuất báo cáo, giúp người dùng so
+                  sánh theo thời gian, giữa các đơn vị hoặc khu vực.
+                </p>
+              </div>
+            </div>
+
+            {/* Key Assessment Tools Grid */}
+            <h3 className="font-montserrat font-bold text-2xl text-gray-800 mb-6">
+              Các khung đánh giá quốc tế
+            </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {/* Tool 1 */}
@@ -453,18 +495,76 @@ export default function ESGPage() {
               </div>
             </div>
 
-            {/* CTA for Assessment */}
-            <div className="mt-12 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg p-8 text-white text-center">
-              <h3 className="font-montserrat font-bold text-2xl mb-4">
-                Cần hỗ trợ đánh giá ESG cho doanh nghiệp?
+            {/* Join Us Section */}
+            <div className="mt-12 bg-gradient-to-r from-green-600 to-emerald-600 rounded-lg p-8 shadow-lg">
+              <h3 className="font-montserrat font-bold text-2xl md:text-3xl text-white mb-6">
+                Tham gia (Join us)
               </h3>
-              <p className="font-montserrat text-lg mb-6 text-indigo-100">
-                Chúng tôi cung cấp dịch vụ tư vấn và đánh giá ESG chuyên nghiệp, giúp doanh nghiệp
-                xây dựng lộ trình phát triển bền vững phù hợp.
+              <p className="text-white font-montserrat leading-relaxed mb-6 text-lg">
+                Bạn có thể bắt đầu hành trình chỉ với vài bước:
               </p>
-              <button className="px-8 py-3 bg-white text-indigo-600 font-montserrat font-bold rounded-lg hover:bg-indigo-50 transition-colors duration-200 shadow-lg">
-                Liên hệ tư vấn
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div className="flex items-start gap-3 bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                  <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center flex-shrink-0">
+                    <span className="text-green-600 font-bold">1</span>
+                  </div>
+                  <div>
+                    <p className="text-white font-montserrat font-semibold">Đăng ký tài khoản</p>
+                    <p className="text-green-100 font-montserrat text-sm">Tạo tài khoản miễn phí để bắt đầu</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                  <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center flex-shrink-0">
+                    <span className="text-green-600 font-bold">2</span>
+                  </div>
+                  <div>
+                    <p className="text-white font-montserrat font-semibold">Hoàn thiện hồ sơ</p>
+                    <p className="text-green-100 font-montserrat text-sm">Cung cấp thông tin tổ chức/doanh nghiệp</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                  <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center flex-shrink-0">
+                    <span className="text-green-600 font-bold">3</span>
+                  </div>
+                  <div>
+                    <p className="text-white font-montserrat font-semibold">Thực hiện đánh giá</p>
+                    <p className="text-green-100 font-montserrat text-sm">Trả lời bộ câu hỏi theo hướng dẫn</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                  <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center flex-shrink-0">
+                    <span className="text-green-600 font-bold">4</span>
+                  </div>
+                  <div>
+                    <p className="text-white font-montserrat font-semibold">Nhận báo cáo & gợi ý</p>
+                    <p className="text-green-100 font-montserrat text-sm">Xem kết quả và lộ trình cải tiến</p>
+                  </div>
+                </div>
+              </div>
+              <p className="text-green-100 font-montserrat mb-6">
+                Đội ngũ hỗ trợ sẽ đồng hành, giải đáp thắc mắc và hướng dẫn xác minh khi cần.
+              </p>
+              <button className="px-8 py-3 bg-white text-green-600 font-montserrat font-bold rounded-lg hover:bg-green-50 transition-colors duration-200 shadow-lg">
+                Bắt đầu đánh giá ngay
               </button>
+            </div>
+
+            {/* Privacy Commitment */}
+            <div className="mt-8 bg-blue-50 border-l-4 border-blue-600 rounded-lg p-6">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                  <span className="text-2xl">🔒</span>
+                </div>
+                <div>
+                  <h4 className="font-montserrat font-bold text-xl text-gray-800 mb-3">
+                    Cam kết bảo mật
+                  </h4>
+                  <p className="text-gray-700 font-montserrat leading-relaxed">
+                    Mọi dữ liệu đều được bảo mật tuyệt đối và chỉ sử dụng cho mục đích tự đánh giá.
+                    Thông tin sẽ không được chia sẻ với bên thứ ba nếu không có sự đồng thuận của người dùng.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </section>
