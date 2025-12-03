@@ -28,14 +28,6 @@ export default function NavigationBar() {
               priority
             />
             <Image
-              src="/OX_HL_C_RGB.png"
-              alt="Oxfam Logo"
-              width={80}
-              height={40}
-              className="h-8 md:h-10 w-auto"
-              priority
-            />
-            <Image
               src="/CBD_logo_EN_CMYK.png"
               alt="CBD Logo"
               width={80}
