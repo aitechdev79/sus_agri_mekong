@@ -42,7 +42,7 @@ export default function ToolsGrid() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-2 gap-6 max-w-4xl mx-auto">
+        <div className="grid grid-cols-2 gap-6 mx-auto" style={{ maxWidth: '37.33rem' }}>
           {tools.map((tool) => (
             <Link
               key={tool.id}
