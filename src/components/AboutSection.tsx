@@ -51,7 +51,7 @@ export default function AboutSection() {
   ];
 
   return (
-    <section className="bg-gray-100 py-16">
+    <section className="py-16" style={{ backgroundColor: '#FAF9F6' }}>
       <div className="container mx-auto px-6 max-w-6xl">
         <div className="grid grid-cols-1 md:grid-cols-2 mb-16">
           {/* Text Content */}

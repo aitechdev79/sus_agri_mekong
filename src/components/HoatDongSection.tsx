@@ -22,7 +22,7 @@ export default function HoatDongSection() {
   ];
 
   return (
-    <section className="py-20 bg-teal-800 relative overflow-hidden w-full" style={{ backgroundColor: '#1F4E4E' }}>
+    <section className="py-20 relative overflow-hidden w-full" style={{ backgroundColor: '#047857' }}>
       {/* Background SVG - Full Width */}
       <div className="absolute inset-0 w-full h-full opacity-50">
         <Image

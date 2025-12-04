@@ -6,7 +6,7 @@ import ToolsGrid from './ToolsGrid';
 
 export default function LibraryAndToolsWrapper() {
   return (
-    <div className="relative overflow-hidden w-full bg-gray-50">
+    <div className="relative overflow-hidden w-full bg-white">
       {/* Shared Background SVG - Full Width */}
       <div className="absolute inset-0 w-full h-full opacity-40">
         <Image

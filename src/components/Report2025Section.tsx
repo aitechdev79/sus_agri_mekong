@@ -85,7 +85,7 @@ export default function Report2025Section() {
     : displayedItems;
 
   return (
-    <section className="py-16 bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 relative overflow-hidden">
+    <section className="py-16 relative overflow-hidden" style={{ backgroundColor: '#EFF6FF' }}>
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-20">
         <Image
@@ -101,7 +101,7 @@ export default function Report2025Section() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
           {/* Left Side - Báo cáo 2025 Design */}
           <div className="relative">
-            <div className="relative aspect-square bg-gradient-to-br from-yellow-400 via-amber-500 to-orange-500 rounded-2xl shadow-2xl overflow-hidden group hover:scale-105 transition-transform duration-500">
+            <div className="relative aspect-square bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600 rounded-2xl shadow-2xl overflow-hidden group hover:scale-105 transition-transform duration-500">
               {/* Decorative Elements */}
               <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
               <div className="absolute bottom-0 left-0 w-40 h-40 bg-white/10 rounded-full translate-y-20 -translate-x-20"></div>
@@ -133,7 +133,7 @@ export default function Report2025Section() {
                 {/* CTA Button */}
                 <Link
                   href="/reports"
-                  className="px-8 py-4 bg-white text-amber-600 font-montserrat font-bold rounded-full hover:bg-amber-50 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                  className="px-8 py-4 bg-white text-blue-600 font-montserrat font-bold rounded-full hover:bg-blue-50 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
                   Xem báo cáo →
                 </Link>
@@ -145,7 +145,7 @@ export default function Report2025Section() {
               </div>
 
               {/* Animated Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-yellow-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             </div>
           </div>
 
@@ -179,14 +179,14 @@ export default function Report2025Section() {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
 
                     {/* Category Badge */}
-                    <div className="absolute top-2 left-2 bg-amber-500 text-white text-xs font-montserrat font-bold px-2 py-1 rounded">
+                    <div className="absolute top-2 left-2 bg-blue-500 text-white text-xs font-montserrat font-bold px-2 py-1 rounded">
                       {item.category}
                     </div>
                   </div>
 
                   {/* Content */}
                   <div className="p-4">
-                    <h4 className="font-montserrat font-bold text-sm text-gray-800 mb-2 line-clamp-2 group-hover:text-amber-600 transition-colors">
+                    <h4 className="font-montserrat font-bold text-sm text-gray-800 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
                       {item.title}
                     </h4>
                     <p className="text-xs text-gray-600 font-montserrat line-clamp-2 mb-3">
@@ -194,7 +194,7 @@ export default function Report2025Section() {
                     </p>
                     <div className="flex items-center justify-between">
                       <span className="text-xs text-gray-500 font-montserrat">{item.date}</span>
-                      <span className="text-amber-600 text-xs font-montserrat font-semibold">
+                      <span className="text-blue-600 text-xs font-montserrat font-semibold">
                         Đọc thêm →
                       </span>
                     </div>
@@ -211,8 +211,8 @@ export default function Report2025Section() {
                   onClick={() => setCurrentIndex(index * 4)}
                   className={`h-2 rounded-full transition-all duration-300 ${
                     Math.floor(currentIndex / 4) === index
-                      ? 'bg-amber-500 w-8'
-                      : 'bg-gray-300 w-2 hover:bg-amber-300'
+                      ? 'bg-blue-500 w-8'
+                      : 'bg-gray-300 w-2 hover:bg-blue-300'
                   }`}
                   aria-label={`Go to slide ${index + 1}`}
                 />
