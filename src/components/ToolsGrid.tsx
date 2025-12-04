@@ -8,16 +8,14 @@ export default function ToolsGrid() {
     {
       id: 'library',
       title: 'Tìm kiếm thông tin',
-      description: 'Tra cứu và tìm kiếm thông tin về thực hành bền vững trong chuỗi giá trị',
       href: '/library',
-      backgroundImage: '/search.jpg',
+      thumbnailImage: '/search.jpg',
     },
     {
       id: 'policy',
       title: 'ESG',
-      description: 'Tìm hiểu về Môi trường, Xã hội và Quản trị doanh nghiệp bền vững',
       href: '/esg',
-      backgroundImage: '/ESG_rice.jpg',
+      thumbnailImage: '/ESG_rice.jpg',
     },
   ];
 
@@ -35,44 +33,35 @@ export default function ToolsGrid() {
         />
       </div>
 
-      <div className="container mx-auto px-6 max-w-6xl relative z-10">
+      <div className="container mx-auto px-6 max-w-4xl relative z-10">
         <div className="mb-12">
           <h2 className="text-3xl font-bold text-gray-800 mb-4 md:text-4xl font-montserrat text-left">
             Công Cụ Hỗ Trợ
           </h2>
         </div>
 
-        <div className="grid grid-cols-2 gap-6 mx-auto" style={{ maxWidth: '37.33rem' }}>
+        <div className="flex flex-col md:flex-row gap-6 justify-center">
           {tools.map((tool) => (
             <Link
               key={tool.id}
               href={tool.href}
-              className="group relative rounded-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 aspect-square"
-              aria-label={`${tool.title} - ${tool.description}`}
+              className="flex items-center gap-4 bg-white border-2 border-gray-300 rounded-lg px-6 py-4 hover:border-green-600 hover:shadow-lg transition-all duration-300 group w-full md:w-auto"
             >
-              {/* Background Image */}
-              <div className="absolute inset-0">
+              {/* Thumbnail Image */}
+              <div className="relative w-16 h-16 flex-shrink-0">
                 <Image
-                  src={tool.backgroundImage}
-                  alt={`${tool.title} background`}
+                  src={tool.thumbnailImage}
+                  alt={`${tool.title} icon`}
                   fill
-                  className="object-contain w-full h-full group-hover:scale-105 transition-transform duration-300"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  priority
+                  className="object-contain"
+                  sizes="64px"
                 />
-                {/* Semi-transparent overlay for better text readability */}
-                <div className="absolute inset-0 bg-gradient-to-t from-green-900/80 via-green-800/60 to-transparent"></div>
               </div>
 
-              {/* Content - Left Aligned at Bottom */}
-              <div className="relative z-10 h-full flex flex-col justify-end p-6">
-                <h3 className="text-lg md:text-xl font-bold text-yellow-300 mb-3 md:mb-0 md:group-hover:mb-3 transition-all duration-300 font-montserrat drop-shadow-lg">
-                  {tool.title}
-                </h3>
-                <p className="text-white text-sm md:text-base font-montserrat md:max-h-0 md:overflow-hidden md:opacity-0 md:group-hover:max-h-32 md:group-hover:opacity-100 transition-all duration-300 drop-shadow-md">
-                  {tool.description}
-                </p>
-              </div>
+              {/* Button Text */}
+              <span className="text-lg md:text-xl font-bold text-gray-800 group-hover:text-green-600 transition-colors font-montserrat">
+                {tool.title}
+              </span>
             </Link>
           ))}
         </div>
