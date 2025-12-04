@@ -33,7 +33,7 @@ export default function ToolsGrid() {
             <Link
               key={tool.id}
               href={tool.href}
-              className="flex items-center gap-4 bg-white border-2 border-gray-300 rounded-lg px-6 py-4 hover:border-green-600 hover:shadow-lg transition-all duration-300 group md:flex-1"
+              className="flex items-center gap-4 bg-white border-4 border-gray-300 rounded-lg px-6 py-4 hover:border-green-600 hover:shadow-lg transition-all duration-300 group md:flex-1"
             >
               {/* Thumbnail Image */}
               <div className="relative w-16 h-16 flex-shrink-0">
