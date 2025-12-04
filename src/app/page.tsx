@@ -1,13 +1,12 @@
 import Footer from '@/components/Footer';
 import HeroSection from '@/components/HeroSection';
 import AboutSection from '@/components/AboutSection';
-import ToolsGrid from '@/components/ToolsGrid';
 import SignUpSection from '@/components/SignUpSection';
 import HoatDongSection from '@/components/HoatDongSection';
 import NewsSection from '@/components/NewsSection';
 import DienHinhSection from '@/components/DienHinhSection';
-import ContentLibrarySection from '@/components/ContentLibrarySection';
 import Report2025Section from '@/components/Report2025Section';
+import LibraryAndToolsWrapper from '@/components/LibraryAndToolsWrapper';
 
 export default function Home() {
   return (
@@ -17,8 +16,7 @@ export default function Home() {
         <AboutSection />
         <DienHinhSection />
         <Report2025Section />
-        <ContentLibrarySection />
-        <ToolsGrid />
+        <LibraryAndToolsWrapper />
         <NewsSection />
         <HoatDongSection />
         <SignUpSection />

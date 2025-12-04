@@ -38,19 +38,7 @@ export default function ContentLibrarySection() {
   ];
 
   return (
-    <section className="py-16 bg-white relative overflow-hidden w-full">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 w-full h-full opacity-30">
-        <Image
-          src="/vecteezy_topo_34242655.svg"
-          alt="Topographic background"
-          fill
-          className="object-cover w-full h-full"
-          priority={false}
-          sizes="100vw"
-        />
-      </div>
-
+    <section className="py-16 w-full">
       <div className="container mx-auto px-6 max-w-6xl relative z-10">
         <div className="mb-12 text-center">
           <h2 className="text-3xl font-bold text-gray-800 mb-4 md:text-4xl font-montserrat">
