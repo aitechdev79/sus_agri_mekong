@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function ContentLibrarySection() {
   const contentCards = [
@@ -57,21 +58,13 @@ export default function ContentLibrarySection() {
               {/* Icon */}
               <div className="mb-4 text-5xl">
                 {card.id === 'vietnam-practices' ? (
-                  <svg
-                    width="80"
-                    height="80"
-                    viewBox="0 0 100 150"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
+                  <Image
+                    src="/VN map icon.png"
+                    alt="Vietnam map"
+                    width={80}
+                    height={80}
                     className="group-hover:scale-110 transition-transform duration-300"
-                  >
-                    <path
-                      d="M50 10 L60 15 L65 25 L70 35 L75 50 L78 65 L75 80 L70 95 L65 110 L60 125 L55 135 L50 140 L45 135 L40 125 L35 110 L30 95 L25 80 L22 65 L25 50 L30 35 L35 25 L40 15 Z"
-                      fill="#10B981"
-                      stroke="#047857"
-                      strokeWidth="2"
-                    />
-                  </svg>
+                  />
                 ) : (
                   card.icon
                 )}
