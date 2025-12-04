@@ -10,14 +10,14 @@ export default function ToolsGrid() {
       title: 'Tìm kiếm thông tin',
       description: 'Tra cứu và tìm kiếm thông tin về thực hành bền vững trong chuỗi giá trị',
       href: '/library',
-      backgroundImage: '/thuvien_grok.jpg',
+      backgroundImage: '/ESG_rice.jpg',
     },
     {
       id: 'policy',
       title: 'ESG',
       description: 'Tìm hiểu về Môi trường, Xã hội và Quản trị doanh nghiệp bền vững',
       href: '/esg',
-      backgroundImage: '/esg_thumb.jpg',
+      backgroundImage: '/ESG_rice.jpg',
     },
   ];
 
@@ -47,7 +47,7 @@ export default function ToolsGrid() {
             <Link
               key={tool.id}
               href={tool.href}
-              className="group relative rounded-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 aspect-[2/3]"
+              className="group relative rounded-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 aspect-square"
               aria-label={`${tool.title} - ${tool.description}`}
             >
               {/* Background Image */}
@@ -60,16 +60,16 @@ export default function ToolsGrid() {
                   sizes="(max-width: 768px) 100vw, 50vw"
                   priority
                 />
-                {/* Lighter gradient only at bottom for text readability */}
-                <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/50 to-transparent"></div>
+                {/* Semi-transparent overlay for better text readability */}
+                <div className="absolute inset-0 bg-gradient-to-t from-green-900/80 via-green-800/60 to-transparent"></div>
               </div>
 
               {/* Content - Left Aligned at Bottom */}
               <div className="relative z-10 h-full flex flex-col justify-end p-6">
-                <h3 className="text-lg md:text-xl font-bold text-white mb-3 md:mb-0 md:group-hover:mb-3 transition-all duration-300 font-montserrat">
+                <h3 className="text-lg md:text-xl font-bold text-yellow-300 mb-3 md:mb-0 md:group-hover:mb-3 transition-all duration-300 font-montserrat drop-shadow-lg">
                   {tool.title}
                 </h3>
-                <p className="text-white/90 text-sm md:text-base font-montserrat md:max-h-0 md:overflow-hidden md:opacity-0 md:group-hover:max-h-32 md:group-hover:opacity-100 transition-all duration-300">
+                <p className="text-white text-sm md:text-base font-montserrat md:max-h-0 md:overflow-hidden md:opacity-0 md:group-hover:max-h-32 md:group-hover:opacity-100 transition-all duration-300 drop-shadow-md">
                   {tool.description}
                 </p>
               </div>
