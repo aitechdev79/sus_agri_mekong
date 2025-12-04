@@ -103,16 +103,16 @@ export default function NewsSection() {
         {/* Split Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Column - Featured Events (70%) */}
-          <div className="lg:col-span-2 space-y-4">
+          <div className="lg:col-span-2 space-y-3">
             {featuredEvents.map((item) => (
               <Link
                 key={item.id}
                 href={`/content/${item.id}`}
                 className="block group"
               >
-                <article className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow flex flex-col md:flex-row">
+                <article className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow flex flex-col md:flex-row h-full">
                   {/* Image */}
-                  <div className="relative h-48 md:h-auto md:w-48 flex-shrink-0">
+                  <div className="relative h-32 md:h-auto md:w-32 flex-shrink-0">
                     {(() => {
                       let imageUrl = null;
                       if (item.thumbnailUrl) {
@@ -141,17 +141,17 @@ export default function NewsSection() {
                         )
                       ) : (
                         <div className="w-full h-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
-                          <Calendar className="w-12 h-12 text-blue-400" />
+                          <Calendar className="w-8 h-8 text-blue-400" />
                         </div>
                       );
                     })()}
                   </div>
 
                   {/* Content */}
-                  <div className="p-6 flex-1">
+                  <div className="p-4 flex-1">
                     {/* Date */}
-                    <div className="flex items-center text-sm text-gray-500 mb-2">
-                      <Calendar className="w-4 h-4 mr-2" />
+                    <div className="flex items-center text-xs text-gray-500 mb-1">
+                      <Calendar className="w-3 h-3 mr-1" />
                       <span className="font-montserrat">
                         {(() => {
                           const date = new Date(item.createdAt);
@@ -164,13 +164,13 @@ export default function NewsSection() {
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-xl font-bold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors font-montserrat line-clamp-2">
+                    <h3 className="text-base font-bold text-gray-800 mb-1 group-hover:text-blue-600 transition-colors font-montserrat line-clamp-2">
                       {item.title}
                     </h3>
 
                     {/* Description */}
                     {item.description && (
-                      <p className="text-gray-600 line-clamp-2 font-montserrat">
+                      <p className="text-sm text-gray-600 line-clamp-1 font-montserrat">
                         {item.description}
                       </p>
                     )}
