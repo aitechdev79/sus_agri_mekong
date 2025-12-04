@@ -13,20 +13,6 @@ export default function ToolsGrid() {
       backgroundImage: '/thuvien_grok.jpg',
     },
     {
-      id: 'regulations',
-      title: 'Chính sách và quy định',
-      description: 'Cập nhật các chính sách, quy định và văn bản pháp luật liên quan đến doanh nghiệp',
-      href: '/policy',
-      backgroundImage: '/chinhsachquydinh.jpg',
-    },
-    {
-      id: 'research',
-      title: 'Nghiên cứu và báo cáo',
-      description: 'Khám phá các nghiên cứu, báo cáo và phân tích chuyên sâu về phát triển bền vững',
-      href: '/reports',
-      backgroundImage: '/nghiencuubaocao.jpg',
-    },
-    {
       id: 'policy',
       title: 'ESG',
       description: 'Tìm hiểu về Môi trường, Xã hội và Quản trị doanh nghiệp bền vững',
@@ -56,7 +42,7 @@ export default function ToolsGrid() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-2 gap-6 max-w-4xl mx-auto">
           {tools.map((tool) => (
             <Link
               key={tool.id}
