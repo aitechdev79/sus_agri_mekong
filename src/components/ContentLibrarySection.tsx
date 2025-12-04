@@ -56,13 +56,13 @@ export default function ContentLibrarySection() {
               aria-label={`${card.title} - ${card.description}`}
             >
               {/* Icon */}
-              <div className="mb-4 text-5xl">
+              <div className="mb-4 text-5xl h-[80px] flex items-center justify-center">
                 {card.id === 'vietnam-practices' ? (
                   <Image
                     src="/VN map icon.png"
                     alt="Vietnam map"
-                    width={80}
-                    height={80}
+                    width={60}
+                    height={60}
                     className="group-hover:scale-110 transition-transform duration-300"
                   />
                 ) : (
