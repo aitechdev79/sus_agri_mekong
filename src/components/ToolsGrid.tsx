@@ -13,7 +13,7 @@ export default function ToolsGrid() {
     },
     {
       id: 'policy',
-      title: 'ESG',
+      title: 'Tìm hiểu ESG',
       href: '/esg',
       thumbnailImage: '/ESG_rice.jpg',
     },
@@ -40,12 +40,12 @@ export default function ToolsGrid() {
           </h2>
         </div>
 
-        <div className="flex flex-col md:flex-row gap-6 justify-center">
+        <div className="flex flex-col md:flex-row gap-6 justify-center max-w-3xl mx-auto">
           {tools.map((tool) => (
             <Link
               key={tool.id}
               href={tool.href}
-              className="flex items-center gap-4 bg-white border-2 border-gray-300 rounded-lg px-6 py-4 hover:border-green-600 hover:shadow-lg transition-all duration-300 group w-full md:w-auto"
+              className="flex items-center gap-4 bg-white border-2 border-gray-300 rounded-lg px-6 py-4 hover:border-green-600 hover:shadow-lg transition-all duration-300 group md:flex-1"
             >
               {/* Thumbnail Image */}
               <div className="relative w-16 h-16 flex-shrink-0">
