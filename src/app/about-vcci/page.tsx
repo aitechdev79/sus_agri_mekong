@@ -59,15 +59,6 @@ export default function AboutVCCIPage() {
                       VCCI đóng vai trò là cầu nối giữa nhà nước – doanh nghiệp để gắn kết cộng đồng doanh nghiệp và nâng cao năng lực cạnh tranh của doanh nghiệp, phát triển bền vững để tham gia vào chuỗi giá trị toàn cầu.
                     </p>
                   </div>
-
-                  <div className="bg-blue-50 p-6 rounded-lg mt-6">
-                    <h3 className="font-montserrat font-bold text-xl text-blue-800 mb-3">
-                      Dự án liên quan
-                    </h3>
-                    <p className="text-base text-gray-700 leading-relaxed font-montserrat">
-                      Dự án Oxfam hỗ trợ VCCI trong việc tác động tích cực lên chuỗi giá trị tôm và lúa, nhằm nâng cao tính bền vững và trách nhiệm xã hội trong ngành nông nghiệp Việt Nam. Dự án này đặt nền móng cho sự phát triển của nền tảng thông tin này.
-                    </p>
-                  </div>
                 </div>
               </div>
             </div>
