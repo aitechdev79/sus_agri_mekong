@@ -10,7 +10,7 @@ export default function ToolsGrid() {
       title: 'Tìm kiếm thông tin',
       description: 'Tra cứu và tìm kiếm thông tin về thực hành bền vững trong chuỗi giá trị',
       href: '/library',
-      backgroundImage: '/ESG_rice.jpg',
+      backgroundImage: '/search.jpg',
     },
     {
       id: 'policy',
