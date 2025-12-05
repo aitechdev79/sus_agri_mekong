@@ -60,16 +60,51 @@ export default function ToolsGrid() {
           <div className="md:flex-1">
             <Link
               href="/reports"
-              className="block h-full rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 group"
+              className="block h-full rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 group"
             >
-              <div className="relative w-full h-full min-h-[300px] md:min-h-full">
-                <Image
-                  src="/baocao 2025.png"
-                  alt="Báo cáo 2025"
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-300"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
+              <div className="relative w-full h-full min-h-[300px] md:min-h-full bg-gradient-to-br from-green-500 via-green-600 to-green-700 p-8 flex flex-col items-center justify-center text-center">
+                {/* Decorative Background Elements */}
+                <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
+                <div className="absolute bottom-0 left-0 w-40 h-40 bg-white/10 rounded-full translate-y-20 -translate-x-20"></div>
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-white/5 rounded-full"></div>
+
+                {/* Content */}
+                <div className="relative z-10">
+                  {/* Icon */}
+                  <div className="mb-6">
+                    <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-4">
+                      <span className="text-4xl">📊</span>
+                    </div>
+                  </div>
+
+                  {/* Main Title */}
+                  <h3 className="font-montserrat font-black text-4xl md:text-5xl text-white mb-3 drop-shadow-lg">
+                    BÁO CÁO
+                  </h3>
+                  <div className="w-24 h-1 bg-white/50 mx-auto mb-3"></div>
+                  <h4 className="font-montserrat font-black text-5xl md:text-6xl text-white drop-shadow-lg mb-4">
+                    2025
+                  </h4>
+
+                  {/* Subtitle */}
+                  <p className="font-montserrat text-base md:text-lg text-white/90 font-semibold mb-6 max-w-sm mx-auto">
+                    Phát triển Bền vững
+                  </p>
+
+                  {/* CTA Badge */}
+                  <div className="inline-flex items-center gap-2 bg-white text-green-700 font-montserrat font-bold px-6 py-3 rounded-full group-hover:bg-green-50 transition-colors">
+                    <span>Xem báo cáo</span>
+                    <span className="text-xl group-hover:translate-x-1 transition-transform">→</span>
+                  </div>
+
+                  {/* Corner Badge */}
+                  <div className="absolute top-0 right-0 bg-white/20 backdrop-blur-sm rounded-lg px-3 py-1">
+                    <p className="text-white font-montserrat font-bold text-xs">MỚI</p>
+                  </div>
+                </div>
+
+                {/* Animated Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-green-700/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               </div>
             </Link>
           </div>
