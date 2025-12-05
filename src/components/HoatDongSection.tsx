@@ -41,20 +41,8 @@ export default function HoatDongSection() {
   ];
 
   return (
-    <section className="py-20 relative overflow-hidden w-full" style={{ backgroundColor: '#047857' }}>
-      {/* Background SVG - Full Width */}
-      <div className="absolute inset-0 w-full h-full opacity-50">
-        <Image
-          src="/waving-blue-color-gradient-6543611.svg"
-          alt="Waving gradient background"
-          fill
-          className="object-cover w-full h-full"
-          priority={false}
-          sizes="100vw"
-        />
-      </div>
-
-      <div className="container mx-auto px-6 max-w-6xl relative z-10">
+    <section className="py-20 w-full">
+      <div className="container mx-auto px-6 max-w-6xl">
         <div className="mb-16">
           <h2 className="text-4xl font-black text-white mb-6 md:text-5xl font-montserrat text-left tracking-tight">
             Hoạt động dự án

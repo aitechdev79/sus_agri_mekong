@@ -56,19 +56,8 @@ export default function NewsSection() {
 
   if (loading) {
     return (
-      <section className="py-16 relative overflow-hidden w-full" style={{ backgroundColor: '#047857' }}>
-        {/* Background SVG - Full Width */}
-        <div className="absolute inset-0 w-full h-full opacity-50">
-          <Image
-            src="/waving-blue-color-gradient-6543611.svg"
-            alt="Waving gradient background"
-            fill
-            className="object-cover w-full h-full"
-            priority={false}
-            sizes="100vw"
-          />
-        </div>
-        <div className="container mx-auto px-6 max-w-6xl relative z-10">
+      <section className="py-16 w-full">
+        <div className="container mx-auto px-6 max-w-6xl">
           <div className="animate-pulse">
             <div className="h-8 bg-white/20 rounded w-1/3 mb-8"></div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -90,19 +79,8 @@ export default function NewsSection() {
   }
 
   return (
-    <section className="py-16 relative overflow-hidden w-full" style={{ backgroundColor: '#047857' }}>
-      {/* Background SVG - Full Width */}
-      <div className="absolute inset-0 w-full h-full opacity-50">
-        <Image
-          src="/waving-blue-color-gradient-6543611.svg"
-          alt="Waving gradient background"
-          fill
-          className="object-cover w-full h-full"
-          priority={false}
-          sizes="100vw"
-        />
-      </div>
-      <div className="container mx-auto px-6 max-w-6xl relative z-10">
+    <section className="py-16 w-full">
+      <div className="container mx-auto px-6 max-w-6xl">
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <div>
