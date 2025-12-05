@@ -69,7 +69,7 @@ export default function ToolsGrid() {
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-white/5 rounded-full"></div>
 
                 {/* Content */}
-                <div className="relative z-10">
+                <div className="relative z-10 w-full h-full flex flex-col items-center justify-center">
                   {/* Icon */}
                   <div className="mb-6">
                     <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-4">
@@ -87,19 +87,14 @@ export default function ToolsGrid() {
                   </h4>
 
                   {/* Subtitle */}
-                  <p className="font-montserrat text-base md:text-lg text-white/90 font-semibold mb-6 max-w-sm mx-auto">
+                  <p className="font-montserrat text-base md:text-lg text-white/90 font-semibold max-w-sm mx-auto">
                     Phát triển Bền vững
                   </p>
 
-                  {/* CTA Badge */}
-                  <div className="inline-flex items-center gap-2 bg-white text-green-700 font-montserrat font-bold px-6 py-3 rounded-full group-hover:bg-green-50 transition-colors">
+                  {/* CTA Button - Bottom Right */}
+                  <div className="absolute bottom-6 right-6 inline-flex items-center gap-2 bg-white text-green-700 font-montserrat font-bold px-6 py-3 rounded-full group-hover:bg-green-50 transition-colors">
                     <span>Xem báo cáo</span>
                     <span className="text-xl group-hover:translate-x-1 transition-transform">→</span>
-                  </div>
-
-                  {/* Corner Badge */}
-                  <div className="absolute top-0 right-0 bg-white/20 backdrop-blur-sm rounded-lg px-3 py-1">
-                    <p className="text-white font-montserrat font-bold text-xs">MỚI</p>
                   </div>
                 </div>
 
