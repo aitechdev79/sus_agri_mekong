@@ -32,14 +32,14 @@ export default function SignUpSection() {
             <div className="flex gap-4 justify-center">
               <Link
                 href="/join-us"
-                className="inline-block bg-white text-blue-600 px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transition-colors shadow-lg font-montserrat"
+                className="inline-block bg-white text-black px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transition-colors shadow-lg font-montserrat"
                 aria-label="Tham gia"
               >
                 Tham gia
               </Link>
               <Link
                 href="/members"
-                className="inline-block bg-white text-blue-600 px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transition-colors shadow-lg font-montserrat"
+                className="inline-block bg-white text-black px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transition-colors shadow-lg font-montserrat"
                 aria-label="Thành viên"
               >
                 Thành viên
