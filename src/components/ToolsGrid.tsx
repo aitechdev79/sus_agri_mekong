@@ -60,46 +60,43 @@ export default function ToolsGrid() {
           <div className="md:flex-1">
             <Link
               href="/reports"
-              className="block h-full rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 group"
+              className="block h-full rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group hover:scale-[1.02] cursor-pointer"
             >
-              <div className="relative w-full h-full min-h-[300px] md:min-h-full bg-gradient-to-br from-green-500 via-green-600 to-green-700 p-8 flex flex-col items-center justify-center text-center">
+              <div className="relative w-full h-full min-h-[300px] md:min-h-full bg-gradient-to-br from-green-500 via-green-600 to-green-700 p-8 flex flex-col items-center justify-center text-center group-hover:from-green-600 group-hover:via-green-700 group-hover:to-green-800 transition-all duration-300">
                 {/* Decorative Background Elements */}
-                <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
-                <div className="absolute bottom-0 left-0 w-40 h-40 bg-white/10 rounded-full translate-y-20 -translate-x-20"></div>
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-white/5 rounded-full"></div>
+                <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16 group-hover:bg-white/20 transition-colors duration-300"></div>
+                <div className="absolute bottom-0 left-0 w-40 h-40 bg-white/10 rounded-full translate-y-20 -translate-x-20 group-hover:bg-white/20 transition-colors duration-300"></div>
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-white/5 rounded-full group-hover:bg-white/10 transition-colors duration-300"></div>
 
                 {/* Content */}
-                <div className="relative z-10 w-full h-full flex flex-col items-center justify-center">
+                <div className="relative z-10 w-full h-full flex flex-col items-center justify-center transform group-hover:scale-105 transition-transform duration-300">
                   {/* Icon */}
                   <div className="mb-6">
-                    <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-4">
+                    <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-white/30 transition-colors duration-300">
                       <span className="text-4xl">📊</span>
                     </div>
                   </div>
 
                   {/* Main Title */}
-                  <h3 className="font-montserrat font-black text-4xl md:text-5xl text-white mb-3 drop-shadow-lg">
+                  <h3 className="font-montserrat font-black text-4xl md:text-5xl text-white mb-3 drop-shadow-lg group-hover:drop-shadow-2xl transition-all duration-300">
                     BÁO CÁO
                   </h3>
-                  <div className="w-24 h-1 bg-white/50 mx-auto mb-3"></div>
-                  <h4 className="font-montserrat font-black text-5xl md:text-6xl text-white drop-shadow-lg mb-4">
+                  <div className="w-24 h-1 bg-white/50 mx-auto mb-3 group-hover:w-32 group-hover:bg-white/70 transition-all duration-300"></div>
+                  <h4 className="font-montserrat font-black text-5xl md:text-6xl text-white drop-shadow-lg group-hover:drop-shadow-2xl transition-all duration-300">
                     2025
                   </h4>
 
                   {/* Subtitle */}
-                  <p className="font-montserrat text-base md:text-lg text-white/90 font-semibold max-w-sm mx-auto">
+                  <p className="font-montserrat text-base md:text-lg text-white/90 font-semibold max-w-sm mx-auto group-hover:text-white transition-colors duration-300">
                     Phát triển Bền vững
                   </p>
-
-                  {/* CTA Button - Bottom Right */}
-                  <div className="absolute bottom-6 right-6 inline-flex items-center gap-2 bg-white text-green-700 font-montserrat font-bold px-6 py-3 rounded-full group-hover:bg-green-50 transition-colors">
-                    <span>Xem báo cáo</span>
-                    <span className="text-xl group-hover:translate-x-1 transition-transform">→</span>
-                  </div>
                 </div>
 
                 {/* Animated Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-green-700/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+                {/* Border Glow Effect */}
+                <div className="absolute inset-0 border-4 border-white/0 group-hover:border-white/20 rounded-lg transition-all duration-300"></div>
               </div>
             </Link>
           </div>
