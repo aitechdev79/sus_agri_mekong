@@ -5,7 +5,6 @@ import SignUpSection from '@/components/SignUpSection';
 import HoatDongSection from '@/components/HoatDongSection';
 import NewsSection from '@/components/NewsSection';
 import DienHinhSection from '@/components/DienHinhSection';
-import Report2025Section from '@/components/Report2025Section';
 import LibraryAndToolsWrapper from '@/components/LibraryAndToolsWrapper';
 
 export default function Home() {
@@ -15,7 +14,6 @@ export default function Home() {
         <HeroSection />
         <AboutSection />
         <DienHinhSection />
-        <Report2025Section />
         <LibraryAndToolsWrapper />
         <NewsSection />
         <HoatDongSection />
