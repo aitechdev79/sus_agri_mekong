@@ -168,9 +168,16 @@ npm run build         # Ensure build passes
   - Routes structured as `/[locale]/*` for language-specific pages
   - Default locale is Vietnamese
 - **Database**: Uses PostgreSQL by default (can use SQLite for local dev with DATABASE_URL="file:./dev.db")
-- **File Storage**: Uploads stored in `/public/uploads/` directory with multer integration
+- **File Storage**:
+  - Uploads stored in `/public/uploads/` directory with multer integration
+  - Image processing with Sharp (automatic optimization and thumbnail generation)
+  - Max file size: 10MB
+  - Supported formats: Images (JPEG, PNG, WebP), Videos (MP4, MPEG, MOV), Documents (PDF, DOCX, XLSX, PPTX)
+  - **Note**: Vercel has read-only filesystem - for production, configure external storage (Vercel Blob, S3, Cloudinary)
 - **Authentication**: NextAuth.js v4 with JWT strategy, custom sign-in page at `/auth/signin`, and OTP verification
 - **Route Protection**: Next-auth middleware in `src/middleware.ts` handles authentication and role-based authorization
+  - Middleware excludes static assets (images, uploads, _next)
+  - API routes bypass middleware (handle auth internally)
 - **Image Optimization**:
   - Configured for Vietnamese media domains (vnmediacdn.com, vnexpress.net, tuoitre.vn, thanhnien.vn)
   - Supports common image services (Unsplash, Google Drive, GitHub, CloudFlare)
@@ -216,3 +223,39 @@ To add a new content type:
 2. Run `npx prisma migrate dev` to update database
 3. Update TypeScript types in `/src/types/`
 4. Add corresponding UI components and API handlers
+
+## Deployment
+
+The application is configured for deployment on Vercel:
+
+### Vercel Configuration
+- Build command: `prisma generate && next build` (defined in package.json)
+- Function timeout: 30s for API routes, 60s for upload routes (configured in vercel.json)
+- Region: `iad1` (US East)
+- Caching: Hero section images cached for 24 hours
+
+### Critical Environment Variables
+Required for production deployment:
+```
+DATABASE_URL=postgresql://...          # PostgreSQL connection string (required)
+NEXTAUTH_URL=https://your-app.vercel.app  # Your production URL
+NEXTAUTH_SECRET=minimum-32-chars-secret   # Generate with: openssl rand -base64 32
+```
+
+### Post-Deployment Setup
+After first deployment:
+```bash
+# Set DATABASE_URL to production database
+export DATABASE_URL="your-production-url"
+
+# Run migrations
+npx prisma migrate deploy
+
+# Create admin user
+npm run db:ensure-admin
+
+# Seed sample content (optional)
+npm run db:seed
+```
+
+See DEPLOYMENT.md for detailed deployment instructions and database setup options.
