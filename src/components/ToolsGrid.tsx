@@ -62,7 +62,7 @@ export default function ToolsGrid() {
               href="/reports"
               className="block h-full rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group hover:scale-[1.02] cursor-pointer"
             >
-              <div className="relative w-full h-full min-h-[300px] md:min-h-full bg-gradient-to-br from-green-500 via-green-600 to-green-700 p-8 flex flex-col items-center justify-center text-center group-hover:from-green-600 group-hover:via-green-700 group-hover:to-green-800 transition-all duration-300">
+              <div className="relative w-full h-full bg-gradient-to-br from-green-500 via-green-600 to-green-700 p-8 flex flex-col items-center justify-center text-center group-hover:from-green-600 group-hover:via-green-700 group-hover:to-green-800 transition-all duration-300">
                 {/* Decorative Background Elements */}
                 <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16 group-hover:bg-white/20 transition-colors duration-300"></div>
                 <div className="absolute bottom-0 left-0 w-40 h-40 bg-white/10 rounded-full translate-y-20 -translate-x-20 group-hover:bg-white/20 transition-colors duration-300"></div>
