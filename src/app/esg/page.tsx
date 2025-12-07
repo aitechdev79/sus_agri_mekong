@@ -224,7 +224,7 @@ export default function ESGPage() {
                   <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center p-2">
                     <div className="relative w-12 h-12">
                       <Image
-                        src="/SASB_logo.png"
+                        src="/SASB_Logo.jpg"
                         alt="SASB Standards"
                         fill
                         className="object-contain"
