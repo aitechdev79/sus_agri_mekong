@@ -185,8 +185,14 @@ export default function ESGPage() {
                   <h3 className="font-montserrat font-bold text-xl text-indigo-600">
                     GRI Standards
                   </h3>
-                  <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center">
-                    <span className="text-2xl">📊</span>
+                  <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center p-2">
+                    <Image
+                      src="/GRI_logo.png"
+                      alt="GRI Standards"
+                      width={48}
+                      height={48}
+                      className="object-contain"
+                    />
                   </div>
                 </div>
                 <p className="text-gray-700 font-montserrat text-sm mb-4 leading-relaxed">
@@ -204,8 +210,14 @@ export default function ESGPage() {
                   <h3 className="font-montserrat font-bold text-xl text-green-600">
                     SASB Standards
                   </h3>
-                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                    <span className="text-2xl">📈</span>
+                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center p-2">
+                    <Image
+                      src="/SASB_logo.png"
+                      alt="SASB Standards"
+                      width={48}
+                      height={48}
+                      className="object-contain"
+                    />
                   </div>
                 </div>
                 <p className="text-gray-700 font-montserrat text-sm mb-4 leading-relaxed">
@@ -223,8 +235,14 @@ export default function ESGPage() {
                   <h3 className="font-montserrat font-bold text-xl text-blue-600">
                     CDP Platform
                   </h3>
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                    <span className="text-2xl">🌍</span>
+                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center p-2">
+                    <Image
+                      src="/CDP_logo.png"
+                      alt="CDP Platform"
+                      width={48}
+                      height={48}
+                      className="object-contain"
+                    />
                   </div>
                 </div>
                 <p className="text-gray-700 font-montserrat text-sm mb-4 leading-relaxed">
@@ -242,8 +260,14 @@ export default function ESGPage() {
                   <h3 className="font-montserrat font-bold text-xl text-purple-600">
                     TCFD Framework
                   </h3>
-                  <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                    <span className="text-2xl">🔍</span>
+                  <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center p-2">
+                    <Image
+                      src="/TCFD_logo.png"
+                      alt="TCFD Framework"
+                      width={48}
+                      height={48}
+                      className="object-contain"
+                    />
                   </div>
                 </div>
                 <p className="text-gray-700 font-montserrat text-sm mb-4 leading-relaxed">
@@ -261,8 +285,14 @@ export default function ESGPage() {
                   <h3 className="font-montserrat font-bold text-xl text-orange-600">
                     UN SDGs
                   </h3>
-                  <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
-                    <span className="text-2xl">🎯</span>
+                  <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center p-2">
+                    <Image
+                      src="/UN SDG_logo.png"
+                      alt="UN SDGs"
+                      width={48}
+                      height={48}
+                      className="object-contain"
+                    />
                   </div>
                 </div>
                 <p className="text-gray-700 font-montserrat text-sm mb-4 leading-relaxed">
