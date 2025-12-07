@@ -49,7 +49,7 @@ export default function ESGPage() {
                 <div className="bg-green-50 p-6 rounded-lg border-l-4 border-green-600 hover:shadow-lg transition-shadow duration-300">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-3xl">🌱</span>
+                      <span className="text-3xl">🌍</span>
                     </div>
                     <h3 className="font-montserrat font-bold text-2xl text-green-800">
                       Môi trường (E)
@@ -65,7 +65,7 @@ export default function ESGPage() {
                 <div className="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-600 hover:shadow-lg transition-shadow duration-300">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-3xl">🤝</span>
+                      <span className="text-3xl">👥</span>
                     </div>
                     <h3 className="font-montserrat font-bold text-2xl text-blue-800">
                       Xã hội (S)
@@ -81,7 +81,7 @@ export default function ESGPage() {
                 <div className="bg-purple-50 p-6 rounded-lg border-l-4 border-purple-600 hover:shadow-lg transition-shadow duration-300">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-14 h-14 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-3xl">⚖️</span>
+                      <span className="text-3xl">🏛️</span>
                     </div>
                     <h3 className="font-montserrat font-bold text-2xl text-purple-800">
                       Quản trị (G)
