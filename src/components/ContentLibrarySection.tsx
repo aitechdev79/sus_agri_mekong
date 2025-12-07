@@ -66,7 +66,9 @@ export default function ContentLibrarySection() {
                     className="group-hover:scale-110 transition-transform duration-300"
                   />
                 ) : (
-                  card.icon
+                  <span className="group-hover:scale-110 transition-transform duration-300 inline-block">
+                    {card.icon}
+                  </span>
                 )}
               </div>
 
