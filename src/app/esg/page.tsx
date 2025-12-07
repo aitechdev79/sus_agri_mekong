@@ -195,15 +195,13 @@ export default function ESGPage() {
                   <h3 className="font-montserrat font-bold text-xl text-indigo-600">
                     GRI Standards
                   </h3>
-                  <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center p-2">
-                    <div className="relative w-12 h-12">
-                      <Image
-                        src="/GRI_logo.png"
-                        alt="GRI Standards"
-                        fill
-                        className="object-contain"
-                      />
-                    </div>
+                  <div className="relative w-16 h-16">
+                    <Image
+                      src="/GRI_logo.png"
+                      alt="GRI Standards"
+                      fill
+                      className="object-contain"
+                    />
                   </div>
                 </div>
                 <p className="text-gray-700 font-montserrat text-sm mb-4 leading-relaxed">
@@ -221,15 +219,13 @@ export default function ESGPage() {
                   <h3 className="font-montserrat font-bold text-xl text-green-600">
                     SASB Standards
                   </h3>
-                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center p-2">
-                    <div className="relative w-12 h-12">
-                      <Image
-                        src="/SASB_Logo.jpg"
-                        alt="SASB Standards"
-                        fill
-                        className="object-contain"
-                      />
-                    </div>
+                  <div className="relative w-16 h-16">
+                    <Image
+                      src="/SASB_Logo.jpg"
+                      alt="SASB Standards"
+                      fill
+                      className="object-contain"
+                    />
                   </div>
                 </div>
                 <p className="text-gray-700 font-montserrat text-sm mb-4 leading-relaxed">
@@ -247,15 +243,13 @@ export default function ESGPage() {
                   <h3 className="font-montserrat font-bold text-xl text-blue-600">
                     CDP Platform
                   </h3>
-                  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center p-2">
-                    <div className="relative w-12 h-12">
-                      <Image
-                        src="/CDP_logo.png"
-                        alt="CDP Platform"
-                        fill
-                        className="object-contain"
-                      />
-                    </div>
+                  <div className="relative w-16 h-16">
+                    <Image
+                      src="/CDP_logo.png"
+                      alt="CDP Platform"
+                      fill
+                      className="object-contain"
+                    />
                   </div>
                 </div>
                 <p className="text-gray-700 font-montserrat text-sm mb-4 leading-relaxed">
@@ -273,15 +267,13 @@ export default function ESGPage() {
                   <h3 className="font-montserrat font-bold text-xl text-purple-600">
                     TCFD Framework
                   </h3>
-                  <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center p-2">
-                    <div className="relative w-12 h-12">
-                      <Image
-                        src="/TCFD_logo.png"
-                        alt="TCFD Framework"
-                        fill
-                        className="object-contain"
-                      />
-                    </div>
+                  <div className="relative w-16 h-16">
+                    <Image
+                      src="/TCFD_logo.jpeg"
+                      alt="TCFD Framework"
+                      fill
+                      className="object-contain"
+                    />
                   </div>
                 </div>
                 <p className="text-gray-700 font-montserrat text-sm mb-4 leading-relaxed">
@@ -299,15 +291,13 @@ export default function ESGPage() {
                   <h3 className="font-montserrat font-bold text-xl text-orange-600">
                     UN SDGs
                   </h3>
-                  <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center p-2">
-                    <div className="relative w-12 h-12">
-                      <Image
-                        src="/UN SDG_logo.png"
-                        alt="UN SDGs"
-                        fill
-                        className="object-contain"
-                      />
-                    </div>
+                  <div className="relative w-16 h-16">
+                    <Image
+                      src="/UN SDG_logo.png"
+                      alt="UN SDGs"
+                      fill
+                      className="object-contain"
+                    />
                   </div>
                 </div>
                 <p className="text-gray-700 font-montserrat text-sm mb-4 leading-relaxed">
@@ -325,7 +315,7 @@ export default function ESGPage() {
                   <h3 className="font-montserrat font-bold text-xl text-teal-600">
                     ESG Rating
                   </h3>
-                  <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center">
+                  <div className="w-16 h-16 flex items-center justify-center">
                     <span className="text-3xl">⭐</span>
                   </div>
                 </div>
