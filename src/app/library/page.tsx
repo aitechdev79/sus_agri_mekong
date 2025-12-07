@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import Image from 'next/image'
 import NavigationBar from '@/components/NavigationBar'
 import { ContentCard } from '@/components/content/ContentCard'
 import { SearchFilters } from '@/components/content/SearchFilters'
@@ -12,6 +13,8 @@ import { LibraryContent } from '@/types/content'
 const resourceSections = [
   {
     title: 'An toàn vệ sinh lao động',
+    icon: '🦺',
+    iconType: 'emoji' as const,
     links: [
       { title: 'ILO - Occupational Safety and Health', url: 'https://www.ilo.org/global/topics/safety-and-health-at-work/lang--en/index.htm' },
       { title: 'WHO - Occupational Health', url: 'https://www.who.int/health-topics/occupational-health' },
@@ -20,6 +23,8 @@ const resourceSections = [
   },
   {
     title: 'ESG',
+    icon: '/ESG_rice.jpg',
+    iconType: 'image' as const,
     links: [
       { title: 'UN Global Compact - ESG Reporting', url: 'https://www.unglobalcompact.org/what-is-gc/our-work/environment' },
       { title: 'GRI Standards - Sustainability Reporting', url: 'https://www.globalreporting.org/standards/' },
@@ -28,6 +33,8 @@ const resourceSections = [
   },
   {
     title: 'Chính sách và quy định',
+    icon: '📋',
+    iconType: 'emoji' as const,
     links: [
       { title: 'Luật Lao động Việt Nam 2019', url: 'https://thuvienphapluat.vn/van-ban/Lao-dong-Tien-luong/Bo-luat-lao-dong-2019-333670.aspx' },
       { title: 'Nghị định về An toàn lao động', url: 'https://thuvienphapluat.vn/tim-van-ban-phap-luat.html' },
@@ -36,6 +43,8 @@ const resourceSections = [
   },
   {
     title: 'Thực hành tốt trên thế giới',
+    icon: '🌍',
+    iconType: 'emoji' as const,
     links: [
       { title: 'ILO - Better Work Programme', url: 'https://betterwork.org/' },
       { title: 'Sustainable Agriculture Practices - FAO', url: 'https://www.fao.org/sustainability/en/' },
@@ -44,6 +53,8 @@ const resourceSections = [
   },
   {
     title: 'Thực hành tốt tại Việt Nam',
+    icon: '/VN map icon.png',
+    iconType: 'image' as const,
     links: [
       { title: 'VCCI - Doanh nghiệp bền vững', url: 'https://www.vcci.com.vn/' },
       { title: 'VnSAT - Nông nghiệp bền vững', url: 'https://www.vnsat.org.vn/' },
@@ -156,7 +167,25 @@ export default function LibraryPage() {
                   onClick={() => toggleSection(index)}
                   className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
                 >
-                  <h3 className="text-lg font-semibold text-gray-800">{section.title}</h3>
+                  <div className="flex items-center gap-3">
+                    {/* Thumbnail */}
+                    {section.iconType === 'image' ? (
+                      <div className="relative w-12 h-12 flex-shrink-0">
+                        <Image
+                          src={section.icon}
+                          alt={section.title}
+                          fill
+                          className="object-contain rounded"
+                          sizes="48px"
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-12 h-12 flex items-center justify-center text-2xl flex-shrink-0">
+                        {section.icon}
+                      </div>
+                    )}
+                    <h3 className="text-lg font-semibold text-gray-800">{section.title}</h3>
+                  </div>
                   {expandedSections[index] ? (
                     <ChevronUp className="w-5 h-5 text-gray-600" />
                   ) : (
