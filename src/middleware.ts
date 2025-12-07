@@ -33,6 +33,7 @@ export default withAuth(
           '/reports',
           '/partners',
           '/global_best_practice',
+          '/VN_best_practice',
           '/congtyMinhphu',
           '/congtyTaiky',
           '/congtyVinhhien',

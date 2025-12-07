@@ -30,7 +30,7 @@ export default function ContentLibrarySection() {
       id: 'vietnam-practices',
       title: 'Thực hành tốt tại Việt Nam',
       description: 'Khám phá các điển hình ESG xuất sắc trong doanh nghiệp và cộng đồng Việt Nam',
-      href: '/esg#vietnam-practices',
+      href: '/VN_best_practice',
       icon: '🇻🇳',
     },
   ];
