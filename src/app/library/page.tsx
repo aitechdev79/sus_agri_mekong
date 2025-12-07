@@ -148,19 +148,19 @@ export default function LibraryPage() {
 
       <div className="container mx-auto px-4 py-20 relative z-10">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+        <div className="text-center mb-12">
+          <h1 className="text-5xl font-bold text-gray-900 mb-6 font-montserrat">
             Thư Viện Tài Liệu
           </h1>
-          <p className="text-lg text-gray-600 max-w-4xl mx-auto leading-relaxed">
+          <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed font-montserrat">
             Thư viện Nghiên cứu & Báo cáo là nơi tập hợp những tài liệu chính sách, phân tích, khảo sát và nghiên cứu chuyên sâu về chủ đề phát triển bền vững, báo cáo bền vững ESG, chuyển đổi xanh tại Việt Nam. Các tài liệu được chọn lọc và phân loại khoa học, giúp doanh nghiệp, tổ chức và nhà nghiên cứu dễ dàng tra cứu, tiếp cận tri thức tin cậy và ứng dụng vào thực tiễn.
           </p>
         </div>
 
-        {/* Resource Sections */}
-        <div className="mb-8 max-w-5xl mx-auto">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center">Tài nguyên tham khảo</h2>
-          <div className="space-y-3">
+        {/* Resource Sections - More Prominent */}
+        <div className="mb-16 bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-8 md:p-12 shadow-lg border-2 border-green-200">
+          <h2 className="text-4xl font-bold text-gray-900 mb-8 text-center font-montserrat">Tài nguyên tham khảo</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-6xl mx-auto">
             {resourceSections.map((section, index) => (
               <div key={index} className="bg-white rounded-lg shadow-sm border overflow-hidden">
                 <button
@@ -216,18 +216,27 @@ export default function LibraryPage() {
           </div>
         </div>
 
-        {/* Search and Filters */}
-        <div className="bg-white rounded-lg shadow-sm border p-6 mb-8">
+        {/* Visual Separator */}
+        <div className="mb-12 text-center">
+          <div className="inline-block">
+            <div className="h-1 w-32 bg-gradient-to-r from-transparent via-gray-300 to-transparent mb-4"></div>
+            <p className="text-gray-500 text-sm font-montserrat">Tìm kiếm tài liệu</p>
+            <div className="h-1 w-32 bg-gradient-to-r from-transparent via-gray-300 to-transparent mt-4"></div>
+          </div>
+        </div>
+
+        {/* Search and Filters - Less Prominent */}
+        <div className="bg-gray-50 rounded-lg border border-gray-200 p-4 mb-6 max-w-4xl mx-auto">
           <div className="flex flex-col md:flex-row gap-4">
             {/* Search Bar */}
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+              <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
               <input
                 type="text"
                 placeholder="Tìm kiếm tài liệu, câu chuyện..."
                 value={searchTerm}
                 onChange={(e) => handleSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-green-500 bg-white"
               />
             </div>
 
@@ -235,16 +244,16 @@ export default function LibraryPage() {
             <Button
               variant="ghost"
               onClick={() => setShowFilters(!showFilters)}
-              className="md:w-auto"
+              className="md:w-auto text-sm"
             >
-              <Filter className="w-4 h-4 mr-2" />
+              <Filter className="w-3 h-3 mr-2" />
               Bộ lọc
             </Button>
           </div>
 
           {/* Filters */}
           {showFilters && (
-            <div className="mt-4 pt-4 border-t">
+            <div className="mt-4 pt-4 border-t border-gray-200">
               <SearchFilters
                 selectedCategory={selectedCategory}
                 selectedType={selectedType}
@@ -256,12 +265,12 @@ export default function LibraryPage() {
 
         {/* Results Count */}
         {!loading && (
-          <div className="flex justify-between items-center mb-6">
-            <p className="text-gray-600">
+          <div className="flex justify-between items-center mb-6 max-w-4xl mx-auto">
+            <p className="text-sm text-gray-500">
               Tìm thấy {pagination.total} tài liệu
               {searchTerm && ` cho "${searchTerm}"`}
             </p>
-            <div className="text-sm text-gray-500">
+            <div className="text-xs text-gray-400">
               Trang {pagination.page} / {pagination.pages}
             </div>
           </div>
@@ -269,7 +278,7 @@ export default function LibraryPage() {
 
         {/* Content Grid */}
         {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {[...Array(6)].map((_, i) => (
               <div key={i} className="bg-white rounded-lg shadow-sm border p-6 animate-pulse">
                 <div className="h-4 bg-gray-200 rounded mb-4"></div>
@@ -284,7 +293,7 @@ export default function LibraryPage() {
           </div>
         ) : contents.length > 0 ? (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8 max-w-6xl mx-auto">
               {contents.map((content) => (
                 <ContentCard key={content.id} content={content} />
               ))}
