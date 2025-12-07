@@ -3,18 +3,29 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Calendar, Eye, User, ArrowLeft } from 'lucide-react';
 import { NewsContent } from '@/types/content';
+import { prisma } from '@/lib/prisma';
 
 async function getNewsContent(id: string): Promise<NewsContent | null> {
   try {
-    const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/content/${id}`, {
-      cache: 'force-cache', // Static generation - cache the page
+    const content = await prisma.content.findUnique({
+      where: { id },
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            organization: true,
+          },
+        },
+      },
     });
 
-    if (!response.ok) {
+    if (!content) {
       return null;
     }
 
-    return response.json();
+    return content as unknown as NewsContent;
   } catch (error) {
     console.error('Error fetching news content:', error);
     return null;
@@ -24,20 +35,21 @@ async function getNewsContent(id: string): Promise<NewsContent | null> {
 // Generate static params for all news items at build time
 export async function generateStaticParams() {
   try {
-    const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/content/news`, {
-      cache: 'force-cache',
+    const news = await prisma.content.findMany({
+      where: {
+        type: 'NEWS',
+        status: 'PUBLISHED',
+      },
+      select: {
+        id: true,
+      },
     });
 
-    if (!response.ok) {
-      return [];
-    }
-
-    const news = await response.json();
     const locales = ['vi', 'en']; // Your supported locales
 
     // Generate params for each locale
     return locales.flatMap((locale) =>
-      news.map((item: NewsContent) => ({
+      news.map((item) => ({
         locale,
         id: item.id,
       }))
