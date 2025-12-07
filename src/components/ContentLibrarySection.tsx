@@ -23,7 +23,7 @@ export default function ContentLibrarySection() {
       id: 'global-practices',
       title: 'Thực hành tốt trên thế giới',
       description: 'Học hỏi từ các mô hình phát triển bền vững thành công của doanh nghiệp toàn cầu',
-      href: '/esg#global-practices',
+      href: '/global_best_practice',
       icon: '🌍',
     },
     {
