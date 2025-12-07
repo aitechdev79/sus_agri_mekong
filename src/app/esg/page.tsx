@@ -192,7 +192,7 @@ export default function ESGPage() {
               {/* Tool 1 */}
               <div className="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-montserrat font-bold text-xl text-indigo-600">
+                  <h3 className="font-montserrat font-bold text-xl text-gray-900">
                     GRI Standards
                   </h3>
                   <div className="relative w-16 h-16">
@@ -208,7 +208,7 @@ export default function ESGPage() {
                   Tiêu chuẩn báo cáo bền vững toàn cầu được sử dụng rộng rãi nhất, giúp doanh nghiệp
                   công bố thông tin về tác động kinh tế, môi trường và xã hội một cách minh bạch.
                 </p>
-                <div className="flex items-center gap-2 text-sm text-indigo-600 font-montserrat font-semibold">
+                <div className="flex items-center gap-2 text-sm text-gray-900 font-montserrat font-semibold">
                   <span>Tìm hiểu thêm →</span>
                 </div>
               </div>
@@ -216,7 +216,7 @@ export default function ESGPage() {
               {/* Tool 2 */}
               <div className="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-montserrat font-bold text-xl text-green-600">
+                  <h3 className="font-montserrat font-bold text-xl text-gray-900">
                     SASB Standards
                   </h3>
                   <div className="relative w-16 h-16">
@@ -232,7 +232,7 @@ export default function ESGPage() {
                   Tiêu chuẩn đánh giá ESG tập trung vào các vấn đề tài chính trọng yếu theo từng ngành,
                   giúp nhà đầu tư đưa ra quyết định dựa trên thông tin bền vững đáng tin cậy.
                 </p>
-                <div className="flex items-center gap-2 text-sm text-green-600 font-montserrat font-semibold">
+                <div className="flex items-center gap-2 text-sm text-gray-900 font-montserrat font-semibold">
                   <span>Tìm hiểu thêm →</span>
                 </div>
               </div>
@@ -240,7 +240,7 @@ export default function ESGPage() {
               {/* Tool 3 */}
               <div className="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-montserrat font-bold text-xl text-blue-600">
+                  <h3 className="font-montserrat font-bold text-xl text-gray-900">
                     CDP Platform
                   </h3>
                   <div className="relative w-16 h-16">
@@ -256,7 +256,7 @@ export default function ESGPage() {
                   Nền tảng công bố thông tin về khí hậu, nước và rừng toàn cầu. Hơn 9,600 công ty sử dụng
                   CDP để quản lý tác động môi trường và giao tiếp với nhà đầu tư.
                 </p>
-                <div className="flex items-center gap-2 text-sm text-blue-600 font-montserrat font-semibold">
+                <div className="flex items-center gap-2 text-sm text-gray-900 font-montserrat font-semibold">
                   <span>Tìm hiểu thêm →</span>
                 </div>
               </div>
@@ -264,7 +264,7 @@ export default function ESGPage() {
               {/* Tool 4 */}
               <div className="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-montserrat font-bold text-xl text-purple-600">
+                  <h3 className="font-montserrat font-bold text-xl text-gray-900">
                     TCFD Framework
                   </h3>
                   <div className="relative w-16 h-16">
@@ -280,7 +280,7 @@ export default function ESGPage() {
                   Khung công bố thông tin tài chính liên quan đến khí hậu, giúp doanh nghiệp đánh giá
                   và báo cáo rủi ro và cơ hội từ biến đổi khí hậu một cách có cấu trúc.
                 </p>
-                <div className="flex items-center gap-2 text-sm text-purple-600 font-montserrat font-semibold">
+                <div className="flex items-center gap-2 text-sm text-gray-900 font-montserrat font-semibold">
                   <span>Tìm hiểu thêm →</span>
                 </div>
               </div>
@@ -288,7 +288,7 @@ export default function ESGPage() {
               {/* Tool 5 */}
               <div className="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-montserrat font-bold text-xl text-orange-600">
+                  <h3 className="font-montserrat font-bold text-xl text-gray-900">
                     UN SDGs
                   </h3>
                   <div className="relative w-16 h-16">
@@ -304,7 +304,7 @@ export default function ESGPage() {
                   17 Mục tiêu Phát triển Bền vững của Liên Hợp Quốc cung cấp khung tổng thể để doanh nghiệp
                   đóng góp vào các mục tiêu toàn cầu về xã hội và môi trường.
                 </p>
-                <div className="flex items-center gap-2 text-sm text-orange-600 font-montserrat font-semibold">
+                <div className="flex items-center gap-2 text-sm text-gray-900 font-montserrat font-semibold">
                   <span>Tìm hiểu thêm →</span>
                 </div>
               </div>
@@ -312,7 +312,7 @@ export default function ESGPage() {
               {/* Tool 6 */}
               <div className="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-montserrat font-bold text-xl text-teal-600">
+                  <h3 className="font-montserrat font-bold text-xl text-gray-900">
                     ESG Rating
                   </h3>
                   <div className="w-16 h-16 flex items-center justify-center">
@@ -323,7 +323,7 @@ export default function ESGPage() {
                   Các hệ thống xếp hạng ESG từ MSCI, S&P, Sustainalytics giúp nhà đầu tư và đối tác
                   đánh giá hiệu quả ESG của doanh nghiệp một cách khách quan và có thể so sánh.
                 </p>
-                <div className="flex items-center gap-2 text-sm text-teal-600 font-montserrat font-semibold">
+                <div className="flex items-center gap-2 text-sm text-gray-900 font-montserrat font-semibold">
                   <span>Tìm hiểu thêm →</span>
                 </div>
               </div>
