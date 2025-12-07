@@ -216,15 +216,6 @@ export default function LibraryPage() {
           </div>
         </div>
 
-        {/* Visual Separator */}
-        <div className="mb-12 text-center">
-          <div className="inline-block">
-            <div className="h-1 w-32 bg-gradient-to-r from-transparent via-gray-300 to-transparent mb-4"></div>
-            <p className="text-gray-500 text-sm font-montserrat">Tìm kiếm tài liệu</p>
-            <div className="h-1 w-32 bg-gradient-to-r from-transparent via-gray-300 to-transparent mt-4"></div>
-          </div>
-        </div>
-
         {/* Search and Filters - Less Prominent */}
         <div className="bg-gray-50 rounded-lg border border-gray-200 p-4 mb-6 max-w-4xl mx-auto">
           <div className="flex flex-col md:flex-row gap-4">
