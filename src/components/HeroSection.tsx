@@ -44,7 +44,7 @@ export default function HeroSection() {
           <div className="max-w-2xl">
             {/* Main Headline - Left aligned */}
             <div className="mb-6">
-              <h1 className="font-montserrat font-bold text-yellow-400 text-left" style={{ lineHeight: '1.1', letterSpacing: '0.5px' }}>
+              <h1 className="font-montserrat font-bold text-white text-left" style={{ lineHeight: '1.1', letterSpacing: '0.5px' }}>
                 {/* 24px mobile, 32px tablet, 48px desktop */}
                 <div className="text-2xl md:text-3xl lg:text-5xl">
                   Thông tin bền vững - Nền móng cho tương lai phát triển bền vững của Việt Nam.
