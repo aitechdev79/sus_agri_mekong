@@ -72,7 +72,7 @@ export default function MiniEventCalendar({ events }: MiniEventCalendarProps) {
   const today = new Date();
 
   return (
-    <div className="bg-white rounded-lg p-4 shadow-md">
+    <div className="bg-white rounded-lg p-4 shadow-md h-full flex flex-col">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-bold text-gray-800 font-montserrat">Lịch sự kiện</h3>
       </div>
@@ -101,7 +101,7 @@ export default function MiniEventCalendar({ events }: MiniEventCalendarProps) {
       </div>
 
       {/* Calendar Grid */}
-      <div className="grid grid-cols-7 gap-1 mb-3">
+      <div className="grid grid-cols-7 gap-1 mb-3 flex-1 content-start">
         {/* Day headers */}
         {dayNames.map(day => (
           <div key={day} className="text-center text-xs font-semibold text-gray-600 py-1">
