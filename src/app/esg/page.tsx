@@ -150,9 +150,14 @@ export default function ESGPage() {
                   lộ trình hướng tới xây dựng mô hình phát triển toàn diện, có trách nhiệm.
                 </p>
 
-                <h3 className="font-montserrat font-bold text-2xl text-gray-800 mt-8 mb-4">
-                  Tại sao cần đánh giá tính bền vững?
-                </h3>
+                <div className="flex items-center gap-3 mt-8 mb-4">
+                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <span className="text-2xl">💡</span>
+                  </div>
+                  <h3 className="font-montserrat font-bold text-2xl text-gray-800">
+                    Tại sao cần đánh giá tính bền vững?
+                  </h3>
+                </div>
                 <p className="text-gray-700 font-montserrat leading-relaxed mb-6">
                   Đánh giá là động lực thúc đẩy cải tiến liên tục. Không chỉ giúp doanh nghiệp, tổ chức hay
                   cộng đồng theo dõi tiến trình bền vững của chính mình, công cụ còn góp phần tăng cường minh bạch,
@@ -161,9 +166,14 @@ export default function ESGPage() {
                   lường bền vững trở thành nền tảng gắn kết giữa mục tiêu phát triển và giá trị xã hội.
                 </p>
 
-                <h3 className="font-montserrat font-bold text-2xl text-gray-800 mt-8 mb-4">
-                  Cơ chế hoạt động
-                </h3>
+                <div className="flex items-center gap-3 mt-8 mb-4">
+                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <span className="text-2xl">⚙️</span>
+                  </div>
+                  <h3 className="font-montserrat font-bold text-2xl text-gray-800">
+                    Cơ chế hoạt động
+                  </h3>
+                </div>
                 <p className="text-gray-700 font-montserrat leading-relaxed mb-6">
                   Người dùng khởi tạo hồ sơ và được hướng dẫn trả lời bộ câu hỏi theo các nhóm chủ đề: quản trị,
                   môi trường, xã hội, chuỗi giá trị. Tùy theo từng lĩnh vực, có thể bổ sung minh chứng để đảm bảo
