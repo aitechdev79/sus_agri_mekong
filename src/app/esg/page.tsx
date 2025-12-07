@@ -183,6 +183,24 @@ export default function ESGPage() {
               </div>
             </div>
 
+            {/* Privacy Commitment Section */}
+            <div className="my-12 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-8 border-2 border-blue-200 shadow-md">
+              <div className="flex items-start gap-4">
+                <div className="w-14 h-14 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg">
+                  <span className="text-3xl">🔒</span>
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-montserrat font-bold text-2xl text-blue-900 mb-3">
+                    Cam kết bảo mật
+                  </h3>
+                  <p className="text-gray-700 font-montserrat leading-relaxed text-lg">
+                    Mọi dữ liệu đều được bảo mật tuyệt đối và chỉ sử dụng cho mục đích tự đánh giá.
+                    Thông tin sẽ không được chia sẻ với bên thứ ba nếu không có sự đồng thuận của người dùng.
+                  </p>
+                </div>
+              </div>
+            </div>
+
             {/* Key Assessment Tools Grid */}
             <h3 className="font-montserrat font-bold text-2xl text-gray-800 mb-6">
               Các khung đánh giá quốc tế
