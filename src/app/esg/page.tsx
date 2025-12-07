@@ -46,10 +46,15 @@ export default function ESGPage() {
               {/* Three Pillars */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* Environment */}
-                <div className="bg-green-50 p-6 rounded-lg">
-                  <h3 className="font-montserrat font-bold text-2xl text-green-800 mb-4">
-                    Môi trường (E)
-                  </h3>
+                <div className="bg-green-50 p-6 rounded-lg border-l-4 border-green-600 hover:shadow-lg transition-shadow duration-300">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                      <span className="text-3xl">🌱</span>
+                    </div>
+                    <h3 className="font-montserrat font-bold text-2xl text-green-800">
+                      Môi trường (E)
+                    </h3>
+                  </div>
                   <p className="text-gray-700 font-montserrat leading-relaxed">
                     Đánh giá tác động của doanh nghiệp đến môi trường, bao gồm quản lý khí thải,
                     sử dụng năng lượng tái tạo, bảo vệ đa dạng sinh học và quản lý chất thải.
@@ -57,10 +62,15 @@ export default function ESGPage() {
                 </div>
 
                 {/* Social */}
-                <div className="bg-blue-50 p-6 rounded-lg">
-                  <h3 className="font-montserrat font-bold text-2xl text-blue-800 mb-4">
-                    Xã hội (S)
-                  </h3>
+                <div className="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-600 hover:shadow-lg transition-shadow duration-300">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                      <span className="text-3xl">🤝</span>
+                    </div>
+                    <h3 className="font-montserrat font-bold text-2xl text-blue-800">
+                      Xã hội (S)
+                    </h3>
+                  </div>
                   <p className="text-gray-700 font-montserrat leading-relaxed">
                     Tập trung vào trách nhiệm xã hội của doanh nghiệp, bao gồm điều kiện lao động,
                     quyền lợi người lao động, an toàn sức khỏe và phát triển cộng đồng.
@@ -68,10 +78,15 @@ export default function ESGPage() {
                 </div>
 
                 {/* Governance */}
-                <div className="bg-purple-50 p-6 rounded-lg">
-                  <h3 className="font-montserrat font-bold text-2xl text-purple-800 mb-4">
-                    Quản trị (G)
-                  </h3>
+                <div className="bg-purple-50 p-6 rounded-lg border-l-4 border-purple-600 hover:shadow-lg transition-shadow duration-300">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-14 h-14 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
+                      <span className="text-3xl">⚖️</span>
+                    </div>
+                    <h3 className="font-montserrat font-bold text-2xl text-purple-800">
+                      Quản trị (G)
+                    </h3>
+                  </div>
                   <p className="text-gray-700 font-montserrat leading-relaxed">
                     Đánh giá cấu trúc quản trị doanh nghiệp, tính minh bạch, tuân thủ pháp luật,
                     đạo đức kinh doanh và trách nhiệm giải trình.
