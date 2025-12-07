@@ -4,42 +4,36 @@ import { Calendar, Eye, User } from 'lucide-react';
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
 import { NewsContent } from '@/types/content';
+import { prisma } from '@/lib/prisma';
+
+// Use dynamic rendering for Vercel deployment
+export const dynamic = 'force-dynamic';
+export const revalidate = 3600; // Revalidate every hour
 
 async function getNewsContent(id: string): Promise<NewsContent | null> {
   try {
-    const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/content/${id}`, {
-      cache: 'force-cache', // Static generation - cache the page
+    const content = await prisma.content.findUnique({
+      where: { id },
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            organization: true,
+          },
+        },
+      },
     });
 
-    if (!response.ok) {
+    if (!content) {
       return null;
     }
 
-    return response.json();
+    return content as unknown as NewsContent;
   } catch (error) {
     console.error('Error fetching news content:', error);
     return null;
-  }
-}
-
-// Generate static params for all news items at build time
-export async function generateStaticParams() {
-  try {
-    const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/content/news`, {
-      cache: 'force-cache',
-    });
-
-    if (!response.ok) {
-      return [];
-    }
-
-    const news = await response.json();
-    return news.map((item: NewsContent) => ({
-      id: item.id,
-    }));
-  } catch (error) {
-    console.error('Error generating static params:', error);
-    return [];
   }
 }
 
