@@ -5,6 +5,10 @@ import { Calendar, Eye, User, ArrowLeft } from 'lucide-react';
 import { NewsContent } from '@/types/content';
 import { prisma } from '@/lib/prisma';
 
+// Use dynamic rendering for Vercel deployment
+export const dynamic = 'force-dynamic';
+export const revalidate = 3600; // Revalidate every hour
+
 async function getNewsContent(id: string): Promise<NewsContent | null> {
   try {
     const content = await prisma.content.findUnique({
@@ -29,34 +33,6 @@ async function getNewsContent(id: string): Promise<NewsContent | null> {
   } catch (error) {
     console.error('Error fetching news content:', error);
     return null;
-  }
-}
-
-// Generate static params for all news items at build time
-export async function generateStaticParams() {
-  try {
-    const news = await prisma.content.findMany({
-      where: {
-        type: 'NEWS',
-        status: 'PUBLISHED',
-      },
-      select: {
-        id: true,
-      },
-    });
-
-    const locales = ['vi', 'en']; // Your supported locales
-
-    // Generate params for each locale
-    return locales.flatMap((locale) =>
-      news.map((item) => ({
-        locale,
-        id: item.id,
-      }))
-    );
-  } catch (error) {
-    console.error('Error generating static params:', error);
-    return [];
   }
 }
 
