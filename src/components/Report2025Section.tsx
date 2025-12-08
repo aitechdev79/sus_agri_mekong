@@ -85,14 +85,14 @@ export default function Report2025Section() {
     : displayedItems;
 
   return (
-    <section className="py-16 relative overflow-hidden" style={{ backgroundColor: '#EFF6FF' }}>
+    <section className="py-16 relative overflow-hidden bg-vn-green">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-20">
         <Image
           src="/vecteezy_topo_34242655.svg"
           alt="Background pattern"
           fill
-          className="object-cover"
+          className="object-cover brightness-0 invert"
           priority={false}
         />
       </div>
@@ -117,16 +117,24 @@ export default function Report2025Section() {
                 </div>
 
                 {/* Main Title */}
-                <h2 className="font-montserrat font-black text-5xl md:text-6xl text-white mb-4 drop-shadow-lg">
+                <h2 className="font-montserrat font-black text-5xl md:text-6xl text-vn-gold mb-4 drop-shadow-lg">
                   BÁO CÁO
                 </h2>
-                <div className="w-32 h-1 bg-white/50 mb-4"></div>
-                <h3 className="font-montserrat font-black text-6xl md:text-7xl text-white drop-shadow-lg mb-6">
+                <div className="w-32 h-1 bg-vn-gold mb-4"></div>
+                <h3
+                  className="font-montserrat font-black text-6xl md:text-7xl text-white drop-shadow-lg mb-6"
+                  style={{
+                    textShadow: '2px 2px 0 #FFB81C, -2px -2px 0 #FFB81C, 2px -2px 0 #FFB81C, -2px 2px 0 #FFB81C'
+                  }}
+                >
                   2025
                 </h3>
 
                 {/* Subtitle */}
-                <p className="font-montserrat text-lg md:text-xl text-white/90 font-semibold mb-8 max-w-sm">
+                <p
+                  className="font-montserrat text-lg md:text-xl text-white font-semibold mb-8 max-w-sm"
+                  style={{ opacity: 0.9 }}
+                >
                   Tổng quan Phát triển Bền vững & ESG tại Việt Nam
                 </p>
 
