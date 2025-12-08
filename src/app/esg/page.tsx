@@ -183,24 +183,6 @@ export default function ESGPage() {
               </div>
             </div>
 
-            {/* Privacy Commitment Section */}
-            <div className="my-12 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-8 border-2 border-blue-200 shadow-md">
-              <div className="flex items-start gap-4">
-                <div className="w-14 h-14 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg">
-                  <span className="text-3xl">🔒</span>
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-montserrat font-bold text-2xl text-blue-900 mb-3">
-                    Cam kết bảo mật
-                  </h3>
-                  <p className="text-gray-700 font-montserrat leading-relaxed text-lg">
-                    Mọi dữ liệu đều được bảo mật tuyệt đối và chỉ sử dụng cho mục đích tự đánh giá.
-                    Thông tin sẽ không được chia sẻ với bên thứ ba nếu không có sự đồng thuận của người dùng.
-                  </p>
-                </div>
-              </div>
-            </div>
-
             {/* Key Assessment Tools Grid */}
             <h3 className="font-montserrat font-bold text-2xl text-gray-800 mb-6">
               Các khung đánh giá quốc tế
@@ -396,6 +378,25 @@ export default function ESGPage() {
               <p className="text-green-100 font-montserrat mb-6">
                 Đội ngũ hỗ trợ sẽ đồng hành, giải đáp thắc mắc và hướng dẫn xác minh khi cần.
               </p>
+
+              {/* Privacy Commitment */}
+              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 mb-6 border-2 border-white/20">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center flex-shrink-0">
+                    <span className="text-2xl">🔒</span>
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-montserrat font-bold text-xl text-white mb-2">
+                      Cam kết bảo mật
+                    </h4>
+                    <p className="text-green-100 font-montserrat leading-relaxed">
+                      Mọi dữ liệu đều được bảo mật tuyệt đối và chỉ sử dụng cho mục đích tự đánh giá.
+                      Thông tin sẽ không được chia sẻ với bên thứ ba nếu không có sự đồng thuận của người dùng.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
               <button className="px-8 py-3 bg-white text-green-600 font-montserrat font-bold rounded-lg hover:bg-green-50 transition-colors duration-200 shadow-lg">
                 Bắt đầu đánh giá ngay
               </button>
