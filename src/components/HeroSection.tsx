@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import NavigationBar from './NavigationBar';
 
 export default function HeroSection() {
@@ -61,7 +62,7 @@ export default function HeroSection() {
 
             {/* CTA Button */}
             <div>
-              <a
+              <Link
                 href="/vision-mission"
                 className="inline-block font-montserrat font-semibold text-base md:text-lg text-white bg-vn-red px-8 py-4 rounded-lg transition-all duration-300 hover:shadow-lg"
                 style={{
@@ -77,7 +78,7 @@ export default function HeroSection() {
                 }}
               >
                 Khám phá
-              </a>
+              </Link>
             </div>
           </div>
         </div>
