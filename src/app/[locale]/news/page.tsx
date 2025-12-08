@@ -1,6 +1,9 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
-import { Calendar, Eye, ArrowLeft } from 'lucide-react';
+import { Calendar, Eye, ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import EventCalendar from '@/components/EventCalendar';
 
 interface NewsItem {
@@ -15,33 +18,76 @@ interface NewsItem {
   category?: string;
 }
 
-async function getNewsItems(): Promise<NewsItem[]> {
-  try {
-    const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/content/news`, {
-      next: { revalidate: 300 }, // Cache for 5 minutes
-    });
+export default function NewsPage({ params }: { params: Promise<{ locale: string }> }) {
+  const [locale, setLocale] = useState('vi');
+  const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [currentSlide, setCurrentSlide] = useState(0);
 
-    if (!response.ok) {
-      return [];
+  useEffect(() => {
+    params.then(p => setLocale(p.locale));
+  }, [params]);
+
+  useEffect(() => {
+    fetchNews();
+  }, []);
+
+  const fetchNews = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('/api/content/news');
+      if (response.ok) {
+        const data = await response.json();
+        setNewsItems(data);
+      }
+    } catch (error) {
+      console.error('Error fetching news:', error);
+    } finally {
+      setLoading(false);
     }
+  };
 
-    return response.json();
-  } catch (error) {
-    console.error('Error fetching news:', error);
-    return [];
-  }
-}
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('vi-VN', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
+  };
 
-export default async function NewsPage({ params }: { params: Promise<{ locale: string }> }) {
-  const { locale } = await params;
-  const newsItems = await getNewsItems();
-
-  // Sort events by date (newest first) and separate featured from list
+  // Sort events by date and prepare carousel items
   const sortedEvents = [...newsItems].sort((a, b) =>
     new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
-  const featuredEvent = sortedEvents[0];
-  const upcomingEvents = sortedEvents.slice(1, 5);
+
+  // Create at least 3 items for carousel by duplicating if needed
+  let carouselItems = sortedEvents.slice(0, 3);
+  if (carouselItems.length < 3 && carouselItems.length > 0) {
+    // Duplicate items to reach 3
+    while (carouselItems.length < 3) {
+      carouselItems = [...carouselItems, ...sortedEvents];
+    }
+    carouselItems = carouselItems.slice(0, 3);
+  }
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % carouselItems.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + carouselItems.length) % carouselItems.length);
+  };
+
+  // Auto-rotate carousel every 5 seconds
+  useEffect(() => {
+    if (carouselItems.length > 1) {
+      const interval = setInterval(() => {
+        nextSlide();
+      }, 5000);
+      return () => clearInterval(interval);
+    }
+  }, [carouselItems.length, currentSlide]);
 
   // Prepare events for calendar
   const calendarEvents = newsItems.map(item => ({
@@ -79,74 +125,107 @@ export default async function NewsPage({ params }: { params: Promise<{ locale: s
               </button>
             </div>
 
-            {newsItems.length > 0 ? (
-              <div className="space-y-6">
-                {/* Featured Event */}
-                {featuredEvent && (
-                  <Link href={`/${locale}/news/${featuredEvent.id}`} className="block group">
-                    <div className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
-                      <div className="relative h-64 md:h-80">
-                        {featuredEvent.thumbnailUrl ? (
-                          <Image
-                            src={featuredEvent.thumbnailUrl}
-                            alt={featuredEvent.title}
-                            fill
-                            className="object-cover group-hover:scale-105 transition-transform duration-300"
-                          />
-                        ) : (
-                          <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                            <span className="text-gray-500">Không có hình ảnh</span>
+            {loading ? (
+              <div className="space-y-4">
+                {[...Array(3)].map((_, i) => (
+                  <div key={i} className="h-96 bg-white/20 animate-pulse rounded-lg"></div>
+                ))}
+              </div>
+            ) : carouselItems.length > 0 ? (
+              <div className="relative">
+                {/* Carousel Container */}
+                <div className="overflow-hidden rounded-lg">
+                  <div
+                    className="flex transition-transform duration-500 ease-in-out"
+                    style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+                  >
+                    {carouselItems.map((item, index) => (
+                      <div key={`${item.id}-${index}`} className="w-full flex-shrink-0">
+                        <Link href={`/${locale}/news/${item.id}`} className="block group">
+                          <div className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow mx-2">
+                            <div className="relative h-64 md:h-96">
+                              {item.thumbnailUrl ? (
+                                <Image
+                                  src={item.thumbnailUrl}
+                                  alt={item.title}
+                                  fill
+                                  className="object-cover group-hover:scale-105 transition-transform duration-300"
+                                />
+                              ) : (
+                                <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                                  <span className="text-gray-500">Không có hình ảnh</span>
+                                </div>
+                              )}
+                              {/* Date Badge */}
+                              <div className="absolute top-4 left-4 bg-yellow-400 text-blue-900 px-4 py-2 rounded-lg font-bold shadow-lg">
+                                <div className="flex items-center gap-2">
+                                  <Calendar className="w-4 h-4" />
+                                  <span>{formatDate(item.createdAt)}</span>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="p-6">
+                              <h2 className="text-xl md:text-2xl font-bold text-blue-800 mb-3 font-montserrat group-hover:text-blue-600 transition-colors line-clamp-2">
+                                {item.title}
+                              </h2>
+                              {item.description && (
+                                <p className="text-gray-700 leading-relaxed line-clamp-3 mb-4">
+                                  {item.description}
+                                </p>
+                              )}
+                              <div className="flex items-center gap-4 text-sm text-gray-600">
+                                <div className="flex items-center gap-1">
+                                  <Eye className="w-4 h-4" />
+                                  <span>{item.viewCount} lượt xem</span>
+                                </div>
+                                {item.category && (
+                                  <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold">
+                                    {item.category}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
                           </div>
-                        )}
+                        </Link>
                       </div>
-                      <div className="p-6">
-                        <h2 className="text-xl md:text-2xl font-bold text-blue-800 mb-3 font-montserrat group-hover:text-blue-600 transition-colors">
-                          {featuredEvent.title}
-                        </h2>
-                        {featuredEvent.description && (
-                          <p className="text-gray-700 leading-relaxed">
-                            {featuredEvent.description}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  </Link>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Navigation Buttons */}
+                {carouselItems.length > 1 && (
+                  <>
+                    <button
+                      onClick={prevSlide}
+                      className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 bg-yellow-400 hover:bg-yellow-500 text-blue-900 p-3 rounded-full shadow-lg transition-all duration-300 z-10 group"
+                      aria-label="Previous slide"
+                    >
+                      <ChevronLeft className="w-6 h-6 group-hover:scale-110 transition-transform" />
+                    </button>
+                    <button
+                      onClick={nextSlide}
+                      className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 bg-yellow-400 hover:bg-yellow-500 text-blue-900 p-3 rounded-full shadow-lg transition-all duration-300 z-10 group"
+                      aria-label="Next slide"
+                    >
+                      <ChevronRight className="w-6 h-6 group-hover:scale-110 transition-transform" />
+                    </button>
+                  </>
                 )}
 
-                {/* Event List */}
-                {upcomingEvents.length > 0 && (
-                  <div className="bg-white rounded-lg p-6 shadow-lg space-y-4">
-                    {upcomingEvents.map((item) => (
-                      <Link
-                        key={item.id}
-                        href={`/${locale}/news/${item.id}`}
-                        className="flex gap-4 group hover:bg-gray-50 p-3 rounded-lg transition-colors"
-                      >
-                        <div className="relative w-24 h-24 flex-shrink-0 rounded overflow-hidden">
-                          {item.thumbnailUrl ? (
-                            <Image
-                              src={item.thumbnailUrl}
-                              alt={item.title}
-                              fill
-                              className="object-cover"
-                            />
-                          ) : (
-                            <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                              <span className="text-xs text-gray-400">No image</span>
-                            </div>
-                          )}
-                        </div>
-                        <div className="flex-1">
-                          <h3 className="font-bold text-gray-800 line-clamp-2 group-hover:text-blue-600 transition-colors">
-                            {item.title}
-                          </h3>
-                          {item.description && (
-                            <p className="text-sm text-gray-600 line-clamp-2 mt-1">
-                              {item.description}
-                            </p>
-                          )}
-                        </div>
-                      </Link>
+                {/* Carousel Indicators */}
+                {carouselItems.length > 1 && (
+                  <div className="flex justify-center gap-2 mt-6">
+                    {carouselItems.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setCurrentSlide(index)}
+                        className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                          index === currentSlide
+                            ? 'bg-yellow-400 w-8'
+                            : 'bg-white/50 hover:bg-white/75'
+                        }`}
+                        aria-label={`Go to slide ${index + 1}`}
+                      />
                     ))}
                   </div>
                 )}
