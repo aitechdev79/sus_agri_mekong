@@ -34,7 +34,7 @@ export default function AboutSection() {
       id: 'cam-ket',
       title: 'Cam kết của chúng tôi',
       description: 'Cam kết cung cấp thông tin minh bạch và đáng tin cậy để xây dựng tương lai bền vững',
-      href: '#',
+      href: '/commitment',
       image: '/camket.jpeg',
     },
     {

@@ -27,14 +27,6 @@ export default function NavigationBar() {
               style={{ transform: 'scale(1.2)' }}
               priority
             />
-            <Image
-              src="/CBD_logo_EN_CMYK.png"
-              alt="CBD Logo"
-              width={80}
-              height={40}
-              className="h-8 md:h-10 w-auto"
-              priority
-            />
           </Link>
 
           {/* Desktop Navigation */}

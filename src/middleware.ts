@@ -32,6 +32,7 @@ export default withAuth(
           '/policy',
           '/reports',
           '/partners',
+          '/commitment',
           '/global_best_practice',
           '/VN_best_practice',
           '/congtyMinhphu',
