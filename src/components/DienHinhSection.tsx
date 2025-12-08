@@ -29,13 +29,13 @@ export default function DienHinhSection() {
   ];
 
   return (
-    <section className="py-16" style={{ backgroundColor: '#F0F9F4' }}>
+    <section className="py-16 bg-vn-rice-white">
       <div className="container mx-auto px-6 max-w-6xl">
         <div className="mb-12">
-          <h2 className="text-3xl font-bold text-gray-800 mb-4 md:text-4xl font-montserrat text-left">
+          <h2 className="text-3xl font-bold text-vn-green mb-4 md:text-4xl font-montserrat text-left">
             Thực hành điển hình - Lan toả giá trị
           </h2>
-          <p className="text-lg text-gray-600 font-montserrat text-left max-w-3xl">
+          <p className="text-lg text-vn-dark font-montserrat text-left max-w-3xl">
             Khám phá những câu chuyện thành công và mô hình hay sáng kiến điển hình trong phát triển bền vững tại Việt Nam
           </p>
         </div>
@@ -45,7 +45,7 @@ export default function DienHinhSection() {
             <Link
               key={activity.id}
               href={activity.href}
-              className="group relative rounded-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 aspect-[2/3]"
+              className="group relative rounded-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 aspect-[2/3] border-2 border-transparent hover:border-vn-gold"
               aria-label={`${activity.title} - ${activity.description}`}
             >
               {/* Background Image */}
@@ -58,8 +58,13 @@ export default function DienHinhSection() {
                   sizes="(max-width: 768px) 100vw, 50vw"
                   priority
                 />
-                {/* Lighter gradient only at bottom for text readability */}
-                <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/50 to-transparent"></div>
+                {/* Vietnamese green gradient overlay from transparent to rgba(10, 112, 41, 0.8) */}
+                <div
+                  className="absolute inset-x-0 bottom-0 h-1/2"
+                  style={{
+                    background: 'linear-gradient(to top, rgba(10, 112, 41, 0.8), transparent)'
+                  }}
+                ></div>
               </div>
 
               {/* Content - Left Aligned at Bottom */}
