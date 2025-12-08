@@ -44,12 +44,40 @@ export default function HeroSection() {
           <div className="max-w-2xl">
             {/* Main Headline - Left aligned */}
             <div className="mb-6">
-              <h1 className="font-montserrat font-bold text-white text-left" style={{ lineHeight: '1.1', letterSpacing: '0.5px' }}>
+              <h1 className="font-montserrat font-bold text-vn-green text-left" style={{ lineHeight: '1.1', letterSpacing: '0.5px' }}>
                 {/* 24px mobile, 32px tablet, 48px desktop */}
                 <div className="text-2xl md:text-3xl lg:text-5xl">
                   Thông tin bền vững - Nền móng cho tương lai phát triển bền vững của Việt Nam.
                 </div>
               </h1>
+            </div>
+
+            {/* Subheadline */}
+            <div className="mb-8">
+              <p className="font-montserrat text-lg md:text-xl text-vn-dark leading-relaxed">
+                Cung cấp thông tin minh bạch, chính xác và đáng tin cậy cho sự phát triển bền vững
+              </p>
+            </div>
+
+            {/* CTA Button */}
+            <div>
+              <a
+                href="/vision-mission"
+                className="inline-block font-montserrat font-semibold text-base md:text-lg text-white bg-vn-red px-8 py-4 rounded-lg transition-all duration-300 hover:shadow-lg"
+                style={{
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#c32418'; // Darken 10%
+                  e.currentTarget.style.boxShadow = '0 6px 12px rgba(218, 41, 28, 0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#DA291C';
+                  e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+                }}
+              >
+                Khám phá
+              </a>
             </div>
           </div>
         </div>

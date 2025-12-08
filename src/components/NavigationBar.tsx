@@ -34,26 +34,26 @@ export default function NavigationBar() {
             <div className="flex items-center space-x-8">
               <Link
                 href="/"
-                className="font-montserrat font-normal text-base text-gray-800 hover:text-green-500 transition-colors"
+                className="font-montserrat font-normal text-base text-vn-dark hover:text-vn-green transition-colors"
                 aria-label="Trang chủ"
               >
                 <Home className="w-5 h-5" />
               </Link>
               <Link
                 href="/library"
-                className="font-montserrat font-normal text-base text-gray-800 uppercase tracking-wide hover:underline hover:text-green-500 transition-colors"
+                className="font-montserrat font-normal text-base text-vn-dark uppercase tracking-wide hover:underline hover:text-vn-green transition-colors"
               >
                 Thư viện
               </Link>
               <Link
                 href="/news"
-                className="font-montserrat font-normal text-base text-gray-800 uppercase tracking-wide hover:underline hover:text-green-500 transition-colors"
+                className="font-montserrat font-normal text-base text-vn-dark uppercase tracking-wide hover:underline hover:text-vn-green transition-colors"
               >
                 Tin tức
               </Link>
               <Link
                 href="/vision-mission"
-                className="font-montserrat font-normal text-base text-gray-800 uppercase tracking-wide hover:underline hover:text-green-500 transition-colors"
+                className="font-montserrat font-normal text-base text-vn-dark uppercase tracking-wide hover:underline hover:text-vn-green transition-colors"
               >
                 Khám phá
               </Link>
@@ -63,7 +63,7 @@ export default function NavigationBar() {
             <div className="flex items-center">
               <Link
                 href="/auth/signin"
-                className="font-montserrat font-normal text-base text-gray-800 hover:text-green-500 transition-colors"
+                className="font-montserrat font-normal text-base text-vn-green border-2 border-vn-green px-4 py-2 rounded-lg hover:bg-vn-green hover:text-white transition-all duration-300"
               >
                 ĐĂNG NHẬP
               </Link>
@@ -73,7 +73,7 @@ export default function NavigationBar() {
           {/* Mobile Menu Button */}
           <button
             onClick={toggleMenu}
-            className="md:hidden p-2 text-white hover:text-green-500 transition-colors"
+            className="md:hidden p-2 text-vn-dark hover:text-vn-green transition-colors"
             aria-label="Toggle menu"
           >
             {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -86,7 +86,7 @@ export default function NavigationBar() {
             <div className="flex flex-col space-y-4 px-6 py-6">
               <Link
                 href="/"
-                className="font-montserrat font-normal text-base text-gray-800 hover:text-green-600 transition-colors flex items-center gap-2"
+                className="font-montserrat font-normal text-base text-vn-dark hover:text-vn-green transition-colors flex items-center gap-2"
                 onClick={() => setIsMenuOpen(false)}
                 aria-label="Trang chủ"
               >
@@ -95,28 +95,28 @@ export default function NavigationBar() {
               </Link>
               <Link
                 href="/library"
-                className="font-montserrat font-normal text-base text-gray-800 uppercase tracking-wide hover:text-green-600 transition-colors"
+                className="font-montserrat font-normal text-base text-vn-dark uppercase tracking-wide hover:text-vn-green transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Thư viện
               </Link>
               <Link
                 href="/news"
-                className="font-montserrat font-normal text-base text-gray-800 uppercase tracking-wide hover:text-green-600 transition-colors"
+                className="font-montserrat font-normal text-base text-vn-dark uppercase tracking-wide hover:text-vn-green transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Tin tức
               </Link>
               <Link
                 href="/vision-mission"
-                className="font-montserrat font-normal text-base text-gray-800 uppercase tracking-wide hover:text-green-600 transition-colors"
+                className="font-montserrat font-normal text-base text-vn-dark uppercase tracking-wide hover:text-vn-green transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Khám phá
               </Link>
               <Link
                 href="/auth/signin"
-                className="font-montserrat font-normal text-base text-gray-800 hover:text-green-600 transition-colors"
+                className="font-montserrat font-normal text-base text-vn-green border-2 border-vn-green px-4 py-2 rounded-lg hover:bg-vn-green hover:text-white transition-all duration-300 text-center"
                 onClick={() => setIsMenuOpen(false)}
               >
                 ĐĂNG NHẬP
