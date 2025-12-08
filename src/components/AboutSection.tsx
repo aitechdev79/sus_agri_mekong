@@ -35,18 +35,21 @@ export default function AboutSection() {
       title: 'Cam kết của chúng tôi',
       description: 'Cam kết cung cấp thông tin minh bạch và đáng tin cậy để xây dựng tương lai bền vững',
       href: '#',
+      image: '/camket.jpeg',
     },
     {
       id: 'vcci',
       title: 'Về VCCI',
       description: 'Tìm hiểu về Phòng Thương mại và Công nghiệp Việt Nam và vai trò trong phát triển doanh nghiệp',
       href: '/about-vcci',
+      image: '/VCCI_blue.jpeg',
     },
     {
       id: 'doi-tac',
       title: 'Đối tác chiến lược',
       description: 'Kết nối với các đối tác và tổ chức hợp tác để thúc đẩy phát triển bền vững',
       href: '/partners',
+      image: '/doitac_chienluoc.jpeg',
     },
   ];
 
@@ -113,15 +116,27 @@ export default function AboutSection() {
             <Link
               key={card.id}
               href={card.href}
-              className="group relative rounded-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 aspect-[3/2] bg-white"
+              className="group relative rounded-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 aspect-[3/2]"
               aria-label={`${card.title} - ${card.description}`}
             >
+              {/* Background Image */}
+              <Image
+                src={card.image}
+                alt={card.title}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 33vw"
+              />
+
+              {/* Dark Overlay for better text contrast */}
+              <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-all duration-300 z-[1]" />
+
               {/* Content - Left Aligned at Bottom */}
               <div className="relative z-10 h-full flex flex-col justify-end p-6">
-                <h3 className="text-lg md:text-xl font-bold text-gray-800 mb-3 md:mb-0 md:group-hover:mb-3 transition-all duration-300 font-montserrat">
+                <h3 className="text-lg md:text-xl font-bold text-white mb-3 md:mb-0 md:group-hover:mb-3 transition-all duration-300 font-montserrat">
                   {card.title}
                 </h3>
-                <p className="text-gray-600 text-sm md:text-base font-montserrat md:max-h-0 md:overflow-hidden md:opacity-0 md:group-hover:max-h-32 md:group-hover:opacity-100 transition-all duration-300">
+                <p className="text-white text-sm md:text-base font-montserrat md:max-h-0 md:overflow-hidden md:opacity-0 md:group-hover:max-h-32 md:group-hover:opacity-100 transition-all duration-300">
                   {card.description}
                 </p>
               </div>
