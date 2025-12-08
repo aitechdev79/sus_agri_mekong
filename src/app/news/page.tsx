@@ -310,8 +310,99 @@ export default function NewsPage() {
 
           {/* Right Column - Calendar */}
           <div className="lg:col-span-1">
+            <div className="mb-6 invisible">
+              <h2 className="text-2xl md:text-3xl font-bold">Placeholder</h2>
+            </div>
             <EventCalendar events={calendarEvents} />
           </div>
+        </div>
+
+        {/* Tin Sự Kiện Section */}
+        <div className="mt-16">
+          <div className="mb-8">
+            <h2 className="text-3xl font-bold text-yellow-400 mb-2 md:text-4xl font-montserrat">
+              Tin Sự Kiện
+            </h2>
+            <p className="text-lg text-white/90 font-montserrat max-w-3xl">
+              Danh sách các tin tức và sự kiện nổi bật
+            </p>
+          </div>
+
+          {loading ? (
+            <div className="space-y-4">
+              {[...Array(5)].map((_, i) => (
+                <div key={i} className="h-32 bg-white/20 animate-pulse rounded-lg"></div>
+              ))}
+            </div>
+          ) : newsItems.length > 0 ? (
+            <div className="space-y-4">
+              {newsItems.slice(0, 5).map((item) => (
+                <Link
+                  key={item.id}
+                  href={`/content/${item.id}`}
+                  className="block group"
+                >
+                  <article className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow flex flex-col md:flex-row">
+                    {/* Image */}
+                    <div className="relative h-32 md:h-32 md:w-48 flex-shrink-0">
+                      {item.thumbnailUrl || item.imageUrl ? (
+                        <Image
+                          src={item.thumbnailUrl || item.imageUrl || ''}
+                          alt={item.title}
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
+                          <Calendar className="w-8 h-8 text-blue-400" />
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Content */}
+                    <div className="p-4 flex-1">
+                      {/* Date */}
+                      <div className="flex items-center text-xs text-gray-500 mb-2">
+                        <Calendar className="w-3 h-3 mr-1" />
+                        <span className="font-montserrat">
+                          {formatDate(item.createdAt)}
+                        </span>
+                      </div>
+
+                      {/* Title */}
+                      <h3 className="text-lg font-bold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors font-montserrat line-clamp-2">
+                        {item.title}
+                      </h3>
+
+                      {/* Description */}
+                      {item.description && (
+                        <p className="text-sm text-gray-600 line-clamp-2 font-montserrat">
+                          {item.description}
+                        </p>
+                      )}
+
+                      {/* View Count and Category */}
+                      <div className="flex items-center gap-4 mt-2 text-sm text-gray-600">
+                        <div className="flex items-center gap-1">
+                          <Eye className="w-4 h-4" />
+                          <span>{item.viewCount} lượt xem</span>
+                        </div>
+                        {item.category && (
+                          <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold">
+                            {item.category}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </article>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="bg-white rounded-lg p-12 text-center">
+              <p className="text-gray-500 text-lg">Chưa có tin tức nào được đăng</p>
+            </div>
+          )}
         </div>
       </main>
     </div>
