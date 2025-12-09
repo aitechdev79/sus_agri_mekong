@@ -65,11 +65,11 @@ export default function ContentLibrarySection() {
             // Determine icon based on card ID
             let iconContent;
             if (card.id === 'policy') {
-              iconContent = <span className="text-4xl text-vn-dark">📋</span>; // Notepad
+              iconContent = <span className="text-4xl">📋</span>; // Notepad
             } else if (card.id === 'reports') {
-              iconContent = <span className="text-4xl text-vn-dark">📊</span>; // Chart
+              iconContent = <span className="text-4xl">📊</span>; // Chart
             } else if (card.id === 'global-practices') {
-              iconContent = <span className="text-4xl text-vn-dark">🌍</span>; // Globe
+              iconContent = <span className="text-4xl">🌍</span>; // Globe
             } else if (card.id === 'vietnam-practices') {
               iconContent = (
                 <Image
@@ -81,38 +81,37 @@ export default function ContentLibrarySection() {
               );
             }
 
-            // All cards share the same gold theme design
             return (
               <Link
                 key={card.id}
                 href={card.href}
-                className="content-card relative flex flex-col items-center text-center rounded-lg p-6 transition-all duration-300 group border-t-4 border-vn-gold overflow-hidden"
+                className="group block overflow-hidden bg-white transition-all duration-500"
                 style={{
-                  backgroundColor: '#FFF8E1',
-                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)'
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-8px)';
-                  e.currentTarget.style.boxShadow = '0 12px 32px rgba(0, 0, 0, 0.15)';
+                  e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.12)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.1)';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.08)';
                 }}
                 aria-label={`${card.title} - ${card.description}`}
               >
-                {/* Icon Container */}
-                <div className="mb-4 w-16 h-16 bg-vn-gold rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  {iconContent}
+                {/* Content Container - Zooms on hover */}
+                <div className="flex flex-col items-center text-center p-6 transition-transform duration-500 group-hover:scale-105">
+                  {/* Icon Container - Zooms with content */}
+                  <div className="mb-4 w-16 h-16 bg-gray-100 flex items-center justify-center transition-transform duration-500">
+                    {iconContent}
+                  </div>
+                  {/* Title */}
+                  <h3 className="text-lg md:text-xl font-bold mb-3 font-montserrat" style={{ color: '#3C3C3B' }}>
+                    {card.title}
+                  </h3>
+                  {/* Description */}
+                  <p className="text-sm md:text-base font-montserrat leading-relaxed" style={{ color: '#6B7280' }}>
+                    {card.description}
+                  </p>
                 </div>
-                {/* Title */}
-                <h3 className="text-lg md:text-xl font-bold text-vn-gold mb-3 font-montserrat">
-                  {card.title}
-                </h3>
-                {/* Description */}
-                <p className="text-vn-dark text-sm md:text-base font-montserrat leading-relaxed">
-                  {card.description}
-                </p>
               </Link>
             );
           })}
