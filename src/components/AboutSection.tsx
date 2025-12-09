@@ -44,7 +44,7 @@ export default function AboutSection() {
       description: 'Tìm hiểu về Phòng Thương mại và Công nghiệp Việt Nam và vai trò trong phát triển doanh nghiệp',
       href: '/about-vcci',
       image: '/VCCI_blue.jpeg',
-      accentColor: 'vn-gold',
+      accentColor: 'vn-green',
     },
     {
       id: 'doi-tac',
@@ -52,7 +52,7 @@ export default function AboutSection() {
       description: 'Kết nối với các đối tác và tổ chức hợp tác để thúc đẩy phát triển bền vững',
       href: '/partners',
       image: '/doitac_chienluoc.jpeg',
-      accentColor: 'vn-red',
+      accentColor: 'vn-green',
     },
   ];
 
