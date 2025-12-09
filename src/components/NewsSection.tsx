@@ -46,29 +46,6 @@ export default function NewsSection() {
   );
   const featuredEvents = sortedEvents.slice(0, 2);
 
-  // Carousel state for additional news
-  const [carouselIndex, setCarouselIndex] = useState(0);
-  const carouselNews = [
-    {
-      id: 'carousel-1',
-      title: 'Phát triển Nông nghiệp Bền vững tại Đồng bằng Sông Cửu Long',
-      description: 'Khám phá các giải pháp canh tác thông minh và thân thiện với môi trường',
-      createdAt: new Date().toISOString(),
-    },
-    {
-      id: 'carousel-2',
-      title: 'Chương trình Hỗ trợ Nông dân Chuyển đổi Sản xuất Xanh',
-      description: 'Áp dụng công nghệ mới giúp tăng năng suất và giảm phát thải',
-      createdAt: new Date().toISOString(),
-    },
-    {
-      id: 'carousel-3',
-      title: 'Bảo vệ Đa dạng Sinh học tại Vùng Đồng bằng Sông Cửu Long',
-      description: 'Các sáng kiến bảo tồn hệ sinh thái và phát triển bền vững',
-      createdAt: new Date().toISOString(),
-    },
-  ];
-
   // Prepare events for calendar - only 'event' type with green color
   const calendarEvents = newsItems.map(item => ({
     id: item.id,
@@ -248,50 +225,6 @@ export default function NewsSection() {
                 </article>
               </Link>
             ))}
-
-            {/* Carousel Section */}
-            <div className="bg-white rounded-2xl overflow-hidden transition-all duration-300" style={{ boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)' }}>
-              <div className="p-6">
-                {/* Carousel Content */}
-                <div className="mb-4">
-                  <div className="flex items-center text-sm mb-3" style={{ color: '#9CA3AF' }}>
-                    <Calendar className="w-4 h-4 mr-2" />
-                    <span className="font-montserrat font-medium">
-                      {(() => {
-                        const date = new Date(carouselNews[carouselIndex].createdAt);
-                        const day = date.getDate().toString().padStart(2, '0');
-                        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-                        const year = date.getFullYear();
-                        return `${day}/${month}/${year}`;
-                      })()}
-                    </span>
-                  </div>
-                  <h3 className="text-lg font-bold mb-2 font-montserrat" style={{ color: '#3C3C3B' }}>
-                    {carouselNews[carouselIndex].title}
-                  </h3>
-                  <p className="text-sm font-montserrat" style={{ color: '#6B7280' }}>
-                    {carouselNews[carouselIndex].description}
-                  </p>
-                </div>
-
-                {/* Carousel Dots */}
-                <div className="flex items-center justify-center gap-2">
-                  {carouselNews.map((_, dotIndex) => (
-                    <button
-                      key={dotIndex}
-                      onClick={() => setCarouselIndex(dotIndex)}
-                      className="transition-all duration-300 rounded-full"
-                      style={{
-                        width: carouselIndex === dotIndex ? '24px' : '8px',
-                        height: '8px',
-                        backgroundColor: carouselIndex === dotIndex ? '#FFC107' : '#D1D5DB',
-                      }}
-                      aria-label={`Go to slide ${dotIndex + 1}`}
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
           </div>
 
           {/* Right Column - Mini Calendar (30%) - Floating widget */}

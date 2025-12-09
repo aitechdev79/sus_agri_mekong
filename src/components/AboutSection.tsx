@@ -118,42 +118,31 @@ export default function AboutSection() {
         </div>
 
         {/* Info Cards Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {infoCards.map((card) => (
             <Link
               key={card.id}
               href={card.href}
-              className="group relative rounded-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 aspect-[3/2] border-2 border-transparent hover:border-vn-green"
+              className="group block transition-all duration-300 hover:-translate-y-1"
               aria-label={`${card.title} - ${card.description}`}
             >
-              {/* Background Image */}
-              <Image
-                src={card.image}
-                alt={card.title}
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 33vw"
-              />
+              {/* Image Container - No rounded corners, no overlay */}
+              <div className="relative aspect-[4/3] overflow-hidden mb-4">
+                <Image
+                  src={card.image}
+                  alt={card.title}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                />
+              </div>
 
-              {/* Dark Overlay for better text contrast */}
-              <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-all duration-300 z-[1]" />
-
-              {/* Accent Color Bar */}
-              <div
-                className={`absolute top-0 left-0 w-full h-2 z-[2] bg-${card.accentColor}`}
-                style={{
-                  backgroundColor: card.accentColor === 'vn-green' ? '#0A7029' :
-                                   card.accentColor === 'vn-gold' ? '#FFB81C' :
-                                   card.accentColor === 'vn-red' ? '#DA291C' : 'transparent'
-                }}
-              />
-
-              {/* Content - Left Aligned at Bottom */}
-              <div className="relative z-10 h-full flex flex-col justify-end p-6">
-                <h3 className="text-lg md:text-xl font-bold text-vn-gold group-hover:text-vn-gold mb-3 md:mb-0 md:group-hover:mb-3 transition-all duration-300 font-montserrat">
+              {/* Text Content Below - Black text with light yellow border-bottom */}
+              <div className="pb-4 border-b-2 transition-all duration-300" style={{ borderBottomColor: '#FFF8E1' }}>
+                <h3 className="text-lg md:text-xl font-bold mb-2 font-montserrat transition-colors duration-300" style={{ color: '#3C3C3B' }}>
                   {card.title}
                 </h3>
-                <p className="text-white text-sm md:text-base font-montserrat md:max-h-0 md:overflow-hidden md:opacity-0 md:group-hover:max-h-32 md:group-hover:opacity-100 transition-all duration-300">
+                <p className="text-sm md:text-base font-montserrat" style={{ color: '#6B7280' }}>
                   {card.description}
                 </p>
               </div>
