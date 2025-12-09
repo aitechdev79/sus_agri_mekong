@@ -71,16 +71,16 @@ export default function HeroSection() {
             <div>
               <Link
                 href="/vision-mission"
-                className="inline-block font-montserrat font-semibold text-base md:text-lg text-white bg-vn-red px-8 py-4 rounded-lg transition-all duration-300 hover:shadow-lg"
+                className="inline-block font-montserrat font-semibold text-base md:text-lg text-vn-dark bg-vn-gold px-8 py-4 rounded-lg transition-all duration-300 hover:shadow-lg"
                 style={{
                   boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#c32418'; // Darken 10%
-                  e.currentTarget.style.boxShadow = '0 6px 12px rgba(218, 41, 28, 0.3)';
+                  e.currentTarget.style.backgroundColor = '#FFD84D'; // Lighten gold
+                  e.currentTarget.style.boxShadow = '0 6px 12px rgba(255, 184, 28, 0.3)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = '#DA291C';
+                  e.currentTarget.style.backgroundColor = '#FFB81C';
                   e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
                 }}
               >
