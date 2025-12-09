@@ -46,13 +46,13 @@ export default function ToolsGrid() {
                   e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
                 }}
               >
-                {/* Icon Container with vn-green background */}
-                <div className="relative w-16 h-16 flex-shrink-0 bg-vn-green rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                {/* Icon Container with actual thumbnail */}
+                <div className="relative w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden group-hover:scale-110 transition-transform duration-300">
                   <Image
                     src={tool.thumbnailImage}
                     alt={`${tool.title} icon`}
                     fill
-                    className="object-contain p-2 brightness-0 invert"
+                    className="object-cover"
                     sizes="64px"
                   />
                 </div>
