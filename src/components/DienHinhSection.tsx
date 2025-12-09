@@ -49,12 +49,12 @@ export default function DienHinhSection() {
               aria-label={`${activity.title} - ${activity.description}`}
             >
               {/* Image Container - No rounded corners, no overlay */}
-              <div className="relative overflow-hidden mb-4 bg-gray-100" style={{ aspectRatio: '16/9' }}>
+              <div className="relative overflow-hidden mb-4" style={{ aspectRatio: '16/9' }}>
                 <Image
                   src={activity.backgroundImage}
                   alt={activity.title}
                   fill
-                  className="object-contain group-hover:scale-105 transition-transform duration-500"
+                  className="object-cover group-hover:scale-110 transition-transform duration-500"
                   sizes="(max-width: 768px) 100vw, 33vw"
                 />
               </div>
