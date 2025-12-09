@@ -118,12 +118,12 @@ export default function AboutSection() {
         </div>
 
         {/* Info Cards Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-end">
           {infoCards.map((card) => (
             <Link
               key={card.id}
               href={card.href}
-              className="group block"
+              className="group block flex flex-col"
               aria-label={`${card.title} - ${card.description}`}
             >
               {/* Image Container - No rounded corners, no overlay */}
@@ -137,8 +137,8 @@ export default function AboutSection() {
                 />
               </div>
 
-              {/* Text Content Below - Black text with animated border-bottom */}
-              <div className="pb-4 relative">
+              {/* Text Content Below - Black text with animated border-bottom - Fixed height */}
+              <div className="pb-4 relative flex-1 flex flex-col" style={{ minHeight: '120px' }}>
                 {/* Base light-green border */}
                 <div className="absolute bottom-0 left-0 w-full h-0.5" style={{ backgroundColor: '#E8F5E9' }}></div>
 
@@ -151,7 +151,7 @@ export default function AboutSection() {
                 <h3 className="text-lg md:text-xl font-bold mb-2 font-montserrat" style={{ color: '#3C3C3B' }}>
                   {card.title}
                 </h3>
-                <p className="text-sm md:text-base font-montserrat" style={{ color: '#6B7280' }}>
+                <p className="text-sm md:text-base font-montserrat flex-1" style={{ color: '#6B7280' }}>
                   {card.description}
                 </p>
               </div>
