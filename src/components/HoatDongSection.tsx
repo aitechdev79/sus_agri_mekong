@@ -46,57 +46,63 @@ export default function HoatDongSection() {
     <section className="py-20 w-full bg-vn-rice-white">
       <div className="container mx-auto px-6 max-w-6xl">
         <div className="mb-16">
-          <h2 className="text-4xl font-black text-vn-green mb-6 md:text-5xl font-montserrat text-left tracking-tight">
+          <h2 className="text-4xl font-black mb-6 md:text-5xl font-montserrat text-left tracking-tight" style={{ color: '#3C3C3B' }}>
             Hoạt động dự án
           </h2>
-          <p className="text-xl text-vn-dark font-montserrat text-left max-w-3xl leading-relaxed">
+          <p className="text-xl font-montserrat text-left max-w-3xl leading-relaxed" style={{ color: '#6B7280' }}>
             Tìm hiểu thêm về các dự án đã và đang thực hiện của chúng tôi với các đối tác quốc tế.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {activities.map((activity) => (
             <Link
               key={activity.id}
               href={activity.link}
               target="_blank"
               rel="noopener noreferrer"
-              className={`group relative rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 bg-white border-l-[6px] ${activity.borderColor} hover:-translate-y-1`}
+              className="group block overflow-hidden bg-white transition-all duration-500"
+              style={{
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.12)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.08)';
+              }}
             >
-              {/* Content */}
-              <div className="relative z-10 h-full flex flex-col p-6">
-                {/* Icon Container */}
-                <div className={`w-16 h-16 ${activity.iconBgColor} rounded-lg flex items-center justify-center mb-4`}>
-                  <span className={`text-3xl ${activity.iconColor}`}>{activity.icon}</span>
+              {/* Content Container - Zooms on hover */}
+              <div className="flex flex-col items-center text-center p-6 transition-transform duration-500 group-hover:scale-105">
+                {/* Icon Container - Zooms with content */}
+                <div className="mb-4 w-16 h-16 bg-gray-100 flex items-center justify-center transition-transform duration-500">
+                  <span className="text-3xl">{activity.icon}</span>
                 </div>
 
                 {/* Project Short Title */}
                 <div className="mb-3">
-                  <span className="font-montserrat font-black text-vn-dark text-xl md:text-2xl">
+                  <span className="font-montserrat font-black text-xl md:text-2xl" style={{ color: '#3C3C3B' }}>
                     {activity.shortTitle}
                   </span>
                 </div>
 
                 {/* Title */}
-                <h3 className="text-lg md:text-xl font-bold text-vn-dark mb-3 font-montserrat">
+                <h3 className="text-lg md:text-xl font-bold mb-3 font-montserrat" style={{ color: '#3C3C3B' }}>
                   {activity.title}
                 </h3>
 
                 {/* Description */}
-                <p className="text-gray-600 text-sm leading-relaxed font-montserrat mb-3 line-clamp-3">
+                <p className="text-sm leading-relaxed font-montserrat mb-3 line-clamp-3" style={{ color: '#6B7280' }}>
                   {activity.description}
                 </p>
 
-                {/* Subtitle with Icon */}
-                <div className="flex items-start gap-2 mt-2 mb-4">
-                  <span className="text-gray-400 text-xs mt-1">→</span>
-                  <p className="text-gray-500 text-xs italic font-montserrat leading-relaxed">
-                    {activity.subtitle}
-                  </p>
-                </div>
+                {/* Subtitle */}
+                <p className="text-xs italic font-montserrat leading-relaxed mb-4" style={{ color: '#9CA3AF' }}>
+                  {activity.subtitle}
+                </p>
 
                 {/* Learn More Link */}
-                <div className="mt-auto flex items-center gap-2 text-sm font-montserrat font-semibold text-vn-green group-hover:text-vn-red transition-colors duration-300">
+                <div className="flex items-center gap-2 text-sm font-montserrat font-semibold transition-colors duration-300" style={{ color: '#0A7029' }}>
                   <span>Tìm hiểu thêm</span>
                   <span className="transform group-hover:translate-x-1 transition-transform duration-300">→</span>
                 </div>
