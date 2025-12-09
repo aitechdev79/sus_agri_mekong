@@ -22,7 +22,7 @@ export default function ToolsGrid() {
   return (
     <section className="py-16 w-full">
       <div className="container mx-auto px-6 max-w-6xl relative z-10">
-        <div className="mb-12 text-center">
+        <div className="mb-12 text-left">
           <h2 className="text-3xl font-bold text-vn-green mb-4 md:text-4xl font-montserrat">
             Công Cụ Hỗ Trợ
           </h2>
