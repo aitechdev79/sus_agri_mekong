@@ -150,7 +150,7 @@ export default function AboutSection() {
 
               {/* Content - Left Aligned at Bottom */}
               <div className="relative z-10 h-full flex flex-col justify-end p-6">
-                <h3 className="text-lg md:text-xl font-bold text-vn-green group-hover:text-vn-red mb-3 md:mb-0 md:group-hover:mb-3 transition-all duration-300 font-montserrat">
+                <h3 className="text-lg md:text-xl font-bold text-vn-gold group-hover:text-vn-gold mb-3 md:mb-0 md:group-hover:mb-3 transition-all duration-300 font-montserrat">
                   {card.title}
                 </h3>
                 <p className="text-white text-sm md:text-base font-montserrat md:max-h-0 md:overflow-hidden md:opacity-0 md:group-hover:max-h-32 md:group-hover:opacity-100 transition-all duration-300">
