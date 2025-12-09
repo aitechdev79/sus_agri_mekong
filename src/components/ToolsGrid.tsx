@@ -57,6 +57,8 @@ export default function ToolsGrid() {
                       className="object-cover"
                       sizes="64px"
                     />
+                    {/* Green overlay - 20% opaque */}
+                    <div className="absolute inset-0" style={{ backgroundColor: 'rgba(10, 112, 41, 0.2)' }}></div>
                   </div>
 
                   {/* Content Section */}
