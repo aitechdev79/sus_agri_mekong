@@ -137,8 +137,8 @@ export default function AboutSection() {
                 />
               </div>
 
-              {/* Text Content Below - Black text with light yellow border-bottom */}
-              <div className="pb-4 border-b-2 transition-all duration-300" style={{ borderBottomColor: '#FFF8E1' }}>
+              {/* Text Content Below - Black text with light green border-bottom */}
+              <div className="pb-4 border-b-2 transition-all duration-300" style={{ borderBottomColor: '#E8F5E9' }}>
                 <h3 className="text-lg md:text-xl font-bold mb-2 font-montserrat transition-colors duration-300" style={{ color: '#3C3C3B' }}>
                   {card.title}
                 </h3>
