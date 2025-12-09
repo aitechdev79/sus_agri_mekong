@@ -35,10 +35,10 @@ export default function ToolsGrid() {
               <Link
                 key={tool.id}
                 href={tool.href}
-                className="relative flex-1 flex flex-col bg-white rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 group hover:scale-[1.02] border-t-4 border-vn-green"
+                className="relative flex-1 flex flex-row bg-white rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 group hover:scale-[1.02] border-t-4 border-vn-green"
                 style={{
                   boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                  minHeight: '200px',
+                  minHeight: '100px',
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.boxShadow = '0 8px 16px rgba(255, 184, 28, 0.4)';
@@ -47,21 +47,21 @@ export default function ToolsGrid() {
                   e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
                 }}
               >
-                {/* Thumbnail Background */}
-                <div className="relative w-full h-32 overflow-hidden">
+                {/* Thumbnail on Left - Full Height */}
+                <div className="relative w-32 flex-shrink-0 overflow-hidden">
                   <div className="absolute inset-0 bg-vn-green/10 group-hover:bg-vn-green/20 transition-colors duration-300 z-10"></div>
                   <Image
                     src={tool.thumbnailImage}
-                    alt={`${tool.title} background`}
+                    alt={`${tool.title} thumbnail`}
                     fill
                     className="object-cover group-hover:scale-110 transition-transform duration-500"
-                    sizes="(max-width: 768px) 100vw, 50vw"
+                    sizes="128px"
                   />
                 </div>
 
                 {/* Content Section */}
-                <div className="flex-1 flex flex-col justify-center px-6 py-6 bg-gradient-to-b from-white to-gray-50">
-                  <h3 className="text-xl md:text-2xl font-bold text-vn-dark group-hover:text-vn-green transition-colors font-montserrat mb-2">
+                <div className="flex-1 flex flex-col justify-center px-6 py-4 bg-gradient-to-b from-white to-gray-50">
+                  <h3 className="text-lg md:text-xl font-bold text-vn-dark group-hover:text-vn-green transition-colors font-montserrat mb-1">
                     {tool.title}
                   </h3>
                   <div className="flex items-center gap-2 text-vn-green group-hover:text-vn-gold transition-colors duration-300">
