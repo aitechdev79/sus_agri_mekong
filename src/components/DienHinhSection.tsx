@@ -32,10 +32,10 @@ export default function DienHinhSection() {
     <section className="py-16 bg-vn-rice-white">
       <div className="container mx-auto px-6 max-w-6xl">
         <div className="mb-12">
-          <h2 className="text-3xl font-bold text-vn-green mb-4 md:text-4xl font-montserrat text-left">
+          <h2 className="text-3xl font-bold mb-4 md:text-4xl font-montserrat text-left" style={{ color: '#3C3C3B' }}>
             Thực hành điển hình - Lan toả giá trị
           </h2>
-          <p className="text-lg text-vn-dark font-montserrat text-left max-w-3xl">
+          <p className="text-lg font-montserrat text-left max-w-3xl" style={{ color: '#6B7280' }}>
             Khám phá những câu chuyện thành công và mô hình hay sáng kiến điển hình trong phát triển bền vững tại Việt Nam
           </p>
         </div>

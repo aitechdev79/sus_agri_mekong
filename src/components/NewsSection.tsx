@@ -130,22 +130,21 @@ export default function NewsSection() {
               <Link
                 key={item.id}
                 href={`/content/${item.id}`}
-                className="block group"
+                className="group block overflow-hidden bg-white transition-all duration-500"
+                style={{
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.12)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.08)';
+                }}
               >
-                <article className="bg-white rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2 flex flex-col md:flex-row h-full"
-                  style={{
-                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.boxShadow = '0 12px 32px rgba(0, 0, 0, 0.12)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.08)';
-                  }}
-                >
-                  {/* Image */}
-                  <div className="relative h-48 md:h-auto md:w-48 flex-shrink-0 overflow-hidden">
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300 z-10" style={{ backgroundColor: '#FFC107' }}></div>
+                {/* Content Container - Zooms on hover */}
+                <div className="flex flex-row items-center px-6 py-4 transition-transform duration-500 group-hover:scale-105" style={{ minHeight: '120px' }}>
+                  {/* Thumbnail on Left */}
+                  <div className="relative w-24 h-24 md:w-32 md:h-32 flex-shrink-0 mr-6 bg-gray-100 overflow-hidden">
                     {(() => {
                       let imageUrl = null;
                       if (item.thumbnailUrl) {
@@ -162,30 +161,30 @@ export default function NewsSection() {
                           <img
                             src={imageUrl}
                             alt={item.title}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            className="w-full h-full object-cover"
                           />
                         ) : (
                           <Image
                             src={imageUrl}
                             alt={item.title}
                             fill
-                            className="object-cover group-hover:scale-105 transition-transform duration-500"
+                            className="object-cover"
                           />
                         )
                       ) : (
                         <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                          <Calendar className="w-12 h-12 text-gray-400" />
+                          <Calendar className="w-8 h-8 text-gray-400" />
                         </div>
                       );
                     })()}
                   </div>
 
-                  {/* Content */}
-                  <div className="p-6 flex-1 flex flex-col">
+                  {/* Content Section */}
+                  <div className="flex-1 flex flex-col justify-center">
                     {/* Date and Tag */}
-                    <div className="flex items-center justify-between text-sm mb-3">
+                    <div className="flex items-center gap-3 text-sm mb-2">
                       <div className="flex items-center" style={{ color: '#9CA3AF' }}>
-                        <Calendar className="w-4 h-4 mr-2" />
+                        <Calendar className="w-4 h-4 mr-1" />
                         <span className="font-montserrat font-medium">
                           {(() => {
                             const date = new Date(item.createdAt);
@@ -204,25 +203,18 @@ export default function NewsSection() {
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-xl font-bold mb-3 font-montserrat line-clamp-2 transition-colors duration-300" style={{ color: '#3C3C3B' }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.color = '#FFC107';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.color = '#3C3C3B';
-                      }}
-                    >
+                    <h3 className="text-lg md:text-xl font-bold mb-2 font-montserrat line-clamp-2" style={{ color: '#3C3C3B' }}>
                       {item.title}
                     </h3>
 
                     {/* Description */}
                     {item.description && (
-                      <p className="text-base line-clamp-2 font-montserrat" style={{ color: '#6B7280' }}>
+                      <p className="text-sm md:text-base line-clamp-2 font-montserrat" style={{ color: '#6B7280' }}>
                         {item.description}
                       </p>
                     )}
                   </div>
-                </article>
+                </div>
               </Link>
             ))}
           </div>
