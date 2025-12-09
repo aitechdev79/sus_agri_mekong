@@ -45,7 +45,7 @@ export default function DienHinhSection() {
             <Link
               key={activity.id}
               href={activity.href}
-              className="group relative rounded-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 aspect-[2/3] border-2 border-transparent hover:border-vn-gold"
+              className="group relative rounded-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 aspect-[2/3] border-2 border-transparent hover:border-vn-green"
               aria-label={`${activity.title} - ${activity.description}`}
             >
               {/* Background Image */}
@@ -67,9 +67,12 @@ export default function DienHinhSection() {
                 ></div>
               </div>
 
+              {/* Green Accent Bar */}
+              <div className="absolute top-0 left-0 w-full h-2 bg-vn-green z-[2]"></div>
+
               {/* Content - Left Aligned at Bottom */}
               <div className="relative z-10 h-full flex flex-col justify-end p-6">
-                <h3 className="text-lg md:text-xl font-bold text-white mb-3 md:mb-0 md:group-hover:mb-3 transition-all duration-300 font-montserrat">
+                <h3 className="text-lg md:text-xl font-bold text-vn-gold group-hover:text-vn-gold mb-3 md:mb-0 md:group-hover:mb-3 transition-all duration-300 font-montserrat">
                   {activity.title}
                 </h3>
                 <p className="text-white/90 text-sm md:text-base font-montserrat md:max-h-0 md:overflow-hidden md:opacity-0 md:group-hover:max-h-32 md:group-hover:opacity-100 transition-all duration-300">
