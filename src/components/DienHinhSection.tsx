@@ -40,42 +40,40 @@ export default function DienHinhSection() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-end">
           {activities.map((activity) => (
             <Link
               key={activity.id}
               href={activity.href}
-              className="group relative rounded-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 aspect-[2/3] border-2 border-transparent hover:border-vn-green"
+              className="group block flex flex-col"
               aria-label={`${activity.title} - ${activity.description}`}
             >
-              {/* Background Image */}
-              <div className="absolute inset-0">
+              {/* Image Container - No rounded corners, no overlay - 80% height */}
+              <div className="relative overflow-hidden mb-4" style={{ aspectRatio: '4/2.4' }}>
                 <Image
                   src={activity.backgroundImage}
-                  alt={`${activity.title} background`}
+                  alt={activity.title}
                   fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-300"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  priority
+                  className="object-cover group-hover:scale-110 transition-transform duration-500"
+                  sizes="(max-width: 768px) 100vw, 33vw"
                 />
-                {/* Vietnamese green gradient overlay from transparent to rgba(10, 112, 41, 0.8) */}
-                <div
-                  className="absolute inset-x-0 bottom-0 h-1/2"
-                  style={{
-                    background: 'linear-gradient(to top, rgba(10, 112, 41, 0.8), transparent)'
-                  }}
-                ></div>
               </div>
 
-              {/* Green Accent Bar */}
-              <div className="absolute top-0 left-0 w-full h-2 bg-vn-green z-[2]"></div>
+              {/* Text Content Below - Black text with animated border-bottom - Fixed height */}
+              <div className="pb-4 relative flex-1 flex flex-col" style={{ minHeight: '120px' }}>
+                {/* Base light-green border */}
+                <div className="absolute bottom-0 left-0 w-full h-0.5" style={{ backgroundColor: '#E8F5E9' }}></div>
 
-              {/* Content - Left Aligned at Bottom */}
-              <div className="relative z-10 h-full flex flex-col justify-end p-6">
-                <h3 className="text-lg md:text-xl font-bold text-vn-gold group-hover:text-vn-gold mb-3 md:mb-0 md:group-hover:mb-3 transition-all duration-300 font-montserrat">
+                {/* Animated dark-green border that sweeps left to right */}
+                <div
+                  className="absolute bottom-0 left-0 h-0.5 w-0 group-hover:w-full transition-all duration-500 ease-out"
+                  style={{ backgroundColor: '#0A7029' }}
+                ></div>
+
+                <h3 className="text-lg md:text-xl font-bold mb-2 font-montserrat" style={{ color: '#3C3C3B' }}>
                   {activity.title}
                 </h3>
-                <p className="text-white/90 text-sm md:text-base font-montserrat md:max-h-0 md:overflow-hidden md:opacity-0 md:group-hover:max-h-32 md:group-hover:opacity-100 transition-all duration-300">
+                <p className="text-sm md:text-base font-montserrat flex-1" style={{ color: '#6B7280' }}>
                   {activity.description}
                 </p>
               </div>
