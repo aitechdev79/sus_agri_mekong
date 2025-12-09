@@ -79,29 +79,42 @@ export default function NewsSection() {
   }
 
   return (
-    <section className="py-16 w-full">
-      <div className="container mx-auto px-6 max-w-6xl">
+    <section className="py-16 w-full bg-white relative">
+      {/* Subtle topographic pattern overlay */}
+      <div className="absolute inset-0 opacity-5">
+        <Image
+          src="/vecteezy_topo_34242655.svg"
+          alt="Background pattern"
+          fill
+          className="object-cover"
+          priority={false}
+        />
+      </div>
+
+      <div className="container mx-auto px-6 max-w-6xl relative z-10">
         {/* Header */}
-        <div className="mb-8 flex items-center justify-between">
+        <div className="mb-12 flex items-center justify-between">
           <div>
-            <h2 className="text-3xl font-bold text-vn-gold mb-2 md:text-4xl font-montserrat text-left">
+            <h2 className="text-3xl font-bold mb-2 md:text-4xl font-montserrat text-left" style={{ color: '#3C3C3B' }}>
               Tin Tức & Sự Kiện
             </h2>
-            <p className="text-lg text-white font-montserrat text-left max-w-3xl" style={{ opacity: 0.9 }}>
+            <p className="text-lg font-montserrat text-left max-w-3xl" style={{ color: '#6B7280' }}>
               Cập nhật những tin tức và sự kiện mới nhất của chúng tôi.
             </p>
           </div>
           <Link
             href="/news"
-            className="hidden md:inline-flex items-center gap-2 bg-vn-gold text-vn-dark font-bold px-6 py-3 rounded-lg transition-all duration-300 hover:scale-105"
+            className="hidden md:inline-flex items-center gap-2 font-bold px-6 py-3 rounded-xl transition-all duration-300 hover:scale-105 hover:-translate-y-1"
             style={{
-              boxShadow: '0 4px 12px rgba(255, 184, 28, 0.3)'
+              backgroundColor: '#FFC107',
+              color: '#3C3C3B',
+              boxShadow: '0 4px 12px rgba(255, 193, 7, 0.3)'
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#FFD84D'; // Lighten gold by 10%
+              e.currentTarget.style.boxShadow = '0 8px 24px rgba(255, 193, 7, 0.4)';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#FFB81C'; // Original vn-gold
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(255, 193, 7, 0.3)';
             }}
           >
             Xem tất cả
@@ -110,19 +123,29 @@ export default function NewsSection() {
         </div>
 
         {/* Split Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
           {/* Left Column - Featured Events (70%) */}
-          <div className="lg:col-span-2 space-y-3">
+          <div className="lg:col-span-2 space-y-6">
             {featuredEvents.map((item) => (
               <Link
                 key={item.id}
                 href={`/content/${item.id}`}
                 className="block group"
               >
-                <article className="bg-white rounded-lg overflow-hidden border-2 border-transparent hover:border-vn-gold transition-all duration-300 hover:-translate-y-1 flex flex-col md:flex-row h-full hover:shadow-[0_8px_24px_rgba(10,112,41,0.15)]">
+                <article className="bg-white rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2 flex flex-col md:flex-row h-full"
+                  style={{
+                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.boxShadow = '0 12px 32px rgba(0, 0, 0, 0.12)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.08)';
+                  }}
+                >
                   {/* Image */}
-                  <div className="relative h-32 md:h-auto md:w-32 flex-shrink-0 overflow-hidden">
-                    <div className="absolute inset-0 bg-vn-green opacity-0 group-hover:opacity-10 transition-opacity duration-300 z-10"></div>
+                  <div className="relative h-48 md:h-auto md:w-48 flex-shrink-0 overflow-hidden">
+                    <div className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300 z-10" style={{ backgroundColor: '#FFC107' }}></div>
                     {(() => {
                       let imageUrl = null;
                       if (item.thumbnailUrl) {
@@ -139,30 +162,30 @@ export default function NewsSection() {
                           <img
                             src={imageUrl}
                             alt={item.title}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           />
                         ) : (
                           <Image
                             src={imageUrl}
                             alt={item.title}
                             fill
-                            className="object-cover"
+                            className="object-cover group-hover:scale-105 transition-transform duration-500"
                           />
                         )
                       ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
-                          <Calendar className="w-8 h-8 text-blue-400" />
+                        <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                          <Calendar className="w-12 h-12 text-gray-400" />
                         </div>
                       );
                     })()}
                   </div>
 
                   {/* Content */}
-                  <div className="p-4 flex-1">
+                  <div className="p-6 flex-1 flex flex-col">
                     {/* Date */}
-                    <div className="flex items-center text-xs mb-1" style={{ color: 'rgba(60, 60, 59, 0.6)' }}>
-                      <Calendar className="w-3 h-3 mr-1" />
-                      <span className="font-montserrat">
+                    <div className="flex items-center text-sm mb-3" style={{ color: '#9CA3AF' }}>
+                      <Calendar className="w-4 h-4 mr-2" />
+                      <span className="font-montserrat font-medium">
                         {(() => {
                           const date = new Date(item.createdAt);
                           const day = date.getDate().toString().padStart(2, '0');
@@ -174,13 +197,20 @@ export default function NewsSection() {
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-base font-bold text-vn-dark mb-1 group-hover:text-vn-green transition-colors duration-300 font-montserrat line-clamp-2">
+                    <h3 className="text-xl font-bold mb-3 font-montserrat line-clamp-2 transition-colors duration-300" style={{ color: '#3C3C3B' }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.color = '#FFC107';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color = '#3C3C3B';
+                      }}
+                    >
                       {item.title}
                     </h3>
 
                     {/* Description */}
                     {item.description && (
-                      <p className="text-sm line-clamp-1 font-montserrat" style={{ color: 'rgba(60, 60, 59, 0.7)' }}>
+                      <p className="text-base line-clamp-2 font-montserrat" style={{ color: '#6B7280' }}>
                         {item.description}
                       </p>
                     )}
@@ -190,27 +220,23 @@ export default function NewsSection() {
             ))}
           </div>
 
-          {/* Right Column - Mini Calendar (30%) */}
-          <div className="lg:col-span-1 flex flex-col">
-            <div className="flex-1">
+          {/* Right Column - Mini Calendar (30%) - Floating widget */}
+          <div className="lg:col-span-1 lg:sticky lg:top-6">
+            <div className="rounded-2xl overflow-hidden bg-white" style={{ boxShadow: '0 4px 16px rgba(0, 0, 0, 0.08)' }}>
               <MiniEventCalendar events={calendarEvents} />
             </div>
           </div>
         </div>
 
         {/* Mobile View All Button */}
-        <div className="mt-6 md:hidden text-center">
+        <div className="mt-8 md:hidden text-center">
           <Link
             href="/news"
-            className="inline-flex items-center gap-2 bg-vn-gold text-vn-dark font-bold px-6 py-3 rounded-lg transition-all duration-300 hover:scale-105"
+            className="inline-flex items-center gap-2 font-bold px-6 py-3 rounded-xl transition-all duration-300 hover:scale-105"
             style={{
-              boxShadow: '0 4px 12px rgba(255, 184, 28, 0.3)'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#FFD84D'; // Lighten gold by 10%
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#FFB81C'; // Original vn-gold
+              backgroundColor: '#FFC107',
+              color: '#3C3C3B',
+              boxShadow: '0 4px 12px rgba(255, 193, 7, 0.3)'
             }}
           >
             Xem tất cả sự kiện
