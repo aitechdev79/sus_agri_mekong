@@ -30,11 +30,18 @@ export default function HeroSection() {
         }}
       >
         <div
-          className="w-full h-full bg-cover bg-center"
+          className="w-full h-full bg-cover"
           style={{
             backgroundImage: 'url(/hero-main.jpg)',
-            backgroundSize: 'cover',
+            backgroundSize: '120%',
             backgroundPosition: 'center center'
+          }}
+        />
+        {/* Dark Overlay */}
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundColor: 'rgba(0, 0, 0, 0.4)'
           }}
         />
       </div>
