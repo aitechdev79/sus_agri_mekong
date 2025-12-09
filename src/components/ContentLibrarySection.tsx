@@ -52,7 +52,7 @@ export default function ContentLibrarySection() {
     <section className="py-16 w-full">
       <div className="container mx-auto px-6 max-w-6xl relative z-10">
         <div className="mb-12 text-center">
-          <h2 className="text-3xl font-bold text-vn-green mb-4 md:text-4xl font-montserrat">
+          <h2 className="text-3xl font-bold text-vn-red mb-4 md:text-4xl font-montserrat">
             Thư viện Nội dung
           </h2>
           <p className="text-vn-dark font-montserrat text-lg max-w-3xl mx-auto">
@@ -84,7 +84,7 @@ export default function ContentLibrarySection() {
                 href={card.href}
                 className="relative flex flex-col items-center text-center rounded-lg p-6 hover:shadow-2xl transition-all duration-300 group border-2 border-transparent hover:border-vn-green hover:-translate-y-2 overflow-hidden"
                 style={{
-                  backgroundColor: 'transparent',
+                  backgroundColor: 'rgba(218, 41, 28, 0.5)',
                 }}
                 aria-label={`${card.title} - ${card.description}`}
               >
