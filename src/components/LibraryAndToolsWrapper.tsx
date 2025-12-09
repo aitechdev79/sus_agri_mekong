@@ -19,6 +19,9 @@ export default function LibraryAndToolsWrapper() {
         />
       </div>
 
+      {/* Light yellow transparent overlay */}
+      <div className="absolute inset-0 w-full" style={{ height: '200%', backgroundColor: 'rgba(255, 248, 225, 0.3)' }}></div>
+
       {/* Content - Both sections stacked */}
       <div className="relative z-10">
         <ContentLibrarySection />
