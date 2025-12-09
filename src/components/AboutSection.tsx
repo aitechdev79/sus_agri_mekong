@@ -123,7 +123,7 @@ export default function AboutSection() {
             <Link
               key={card.id}
               href={card.href}
-              className="group block transition-all duration-300 hover:-translate-y-1"
+              className="group block"
               aria-label={`${card.title} - ${card.description}`}
             >
               {/* Image Container - No rounded corners, no overlay */}
@@ -132,14 +132,23 @@ export default function AboutSection() {
                   src={card.image}
                   alt={card.title}
                   fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="object-cover group-hover:scale-110 transition-transform duration-500"
                   sizes="(max-width: 768px) 100vw, 33vw"
                 />
               </div>
 
-              {/* Text Content Below - Black text with light green border-bottom */}
-              <div className="pb-4 border-b-2 transition-all duration-300" style={{ borderBottomColor: '#E8F5E9' }}>
-                <h3 className="text-lg md:text-xl font-bold mb-2 font-montserrat transition-colors duration-300" style={{ color: '#3C3C3B' }}>
+              {/* Text Content Below - Black text with animated border-bottom */}
+              <div className="pb-4 relative">
+                {/* Base light-green border */}
+                <div className="absolute bottom-0 left-0 w-full h-0.5" style={{ backgroundColor: '#E8F5E9' }}></div>
+
+                {/* Animated dark-green border that sweeps left to right */}
+                <div
+                  className="absolute bottom-0 left-0 h-0.5 w-0 group-hover:w-full transition-all duration-500 ease-out"
+                  style={{ backgroundColor: '#0A7029' }}
+                ></div>
+
+                <h3 className="text-lg md:text-xl font-bold mb-2 font-montserrat" style={{ color: '#3C3C3B' }}>
                   {card.title}
                 </h3>
                 <p className="text-sm md:text-base font-montserrat" style={{ color: '#6B7280' }}>
