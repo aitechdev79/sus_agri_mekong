@@ -82,21 +82,15 @@ export default function ContentLibrarySection() {
               <Link
                 key={card.id}
                 href={card.href}
-                className={`flex flex-col items-center text-center rounded-lg p-6 hover:shadow-lg transition-all duration-300 group ${
-                  card.specialBorder ? 'border-[3px]' : ''
-                }`}
+                className="relative flex flex-col items-center text-center rounded-lg p-6 hover:shadow-2xl transition-all duration-300 group border-2 border-transparent hover:border-vn-green hover:-translate-y-2 overflow-hidden"
                 style={{
-                  backgroundColor: bgColorMap[card.bgColor],
-                  borderColor: card.specialBorder ? '#FFB81C' : 'transparent',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = hoverBgMap[card.hoverBg];
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = bgColorMap[card.bgColor];
+                  backgroundColor: 'transparent',
                 }}
                 aria-label={`${card.title} - ${card.description}`}
               >
+                {/* Green Accent Bar */}
+                <div className="absolute top-0 left-0 w-full h-2 bg-vn-green"></div>
+
                 {/* Icon */}
                 <div
                   className="mb-4 text-5xl h-[80px] flex items-center justify-center transition-colors duration-300"
@@ -108,7 +102,7 @@ export default function ContentLibrarySection() {
                       alt="Vietnam map"
                       width={60}
                       height={60}
-                      className="group-hover:scale-110 transition-transform duration-300 group-hover:brightness-0 group-hover:invert"
+                      className="group-hover:scale-110 transition-transform duration-300"
                     />
                   ) : (
                     <span className="group-hover:scale-110 transition-transform duration-300 inline-block">
@@ -118,12 +112,12 @@ export default function ContentLibrarySection() {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-lg md:text-xl font-bold text-vn-dark mb-3 font-montserrat group-hover:text-white transition-colors">
+                <h3 className="text-lg md:text-xl font-bold text-vn-gold group-hover:text-vn-gold mb-3 font-montserrat transition-colors duration-300">
                   {card.title}
                 </h3>
 
                 {/* Description */}
-                <p className="text-vn-dark text-sm md:text-base font-montserrat leading-relaxed group-hover:text-white transition-colors">
+                <p className="text-vn-dark text-sm md:text-base font-montserrat leading-relaxed group-hover:text-vn-dark transition-colors duration-300">
                   {card.description}
                 </p>
               </Link>
