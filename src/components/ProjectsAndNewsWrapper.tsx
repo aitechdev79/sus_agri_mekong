@@ -6,9 +6,9 @@ import HoatDongSection from '@/components/HoatDongSection';
 
 export default function ProjectsAndNewsWrapper() {
   return (
-    <section className="relative overflow-hidden w-full" style={{ backgroundColor: '#047857' }}>
+    <section className="relative overflow-hidden w-full bg-vn-green">
       {/* Background SVG - Full Width - Continuous across both sections */}
-      <div className="absolute inset-0 w-full h-full opacity-50">
+      <div className="absolute inset-0 w-full h-full opacity-30">
         <Image
           src="/waving-blue-color-gradient-6543611.svg"
           alt="Waving gradient background"
