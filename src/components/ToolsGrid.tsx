@@ -73,8 +73,9 @@ export default function ToolsGrid() {
           {/* Right Side - Baocao 2025 Card */}
           <div className="md:flex-1">
             <div
-              className="group block overflow-hidden bg-white transition-all duration-500 h-full"
+              className="group block overflow-hidden transition-all duration-500 h-full"
               style={{
+                backgroundColor: '#0A7029',
                 boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
               }}
               onMouseEnter={(e) => {
@@ -87,20 +88,20 @@ export default function ToolsGrid() {
               {/* Content Container - Zooms on hover */}
               <div className="flex flex-col items-center justify-center text-center p-6 h-full transition-transform duration-500 group-hover:scale-105" style={{ minHeight: '100px' }}>
                 {/* Icon Container */}
-                <div className="mb-3 w-12 h-12 bg-gray-100 flex items-center justify-center">
+                <div className="mb-3 w-12 h-12 bg-white/20 flex items-center justify-center">
                   <span className="text-3xl">📊</span>
                 </div>
 
                 {/* Title */}
-                <h3 className="font-montserrat font-black text-2xl mb-1" style={{ color: '#3C3C3B' }}>
+                <h3 className="font-montserrat font-black text-2xl mb-1 text-white">
                   BÁO CÁO
                 </h3>
-                <h4 className="font-montserrat font-black text-3xl mb-2" style={{ color: '#3C3C3B' }}>
+                <h4 className="font-montserrat font-black text-3xl mb-2 text-white">
                   2025
                 </h4>
 
                 {/* Subtitle */}
-                <p className="font-montserrat text-sm font-semibold" style={{ color: '#6B7280' }}>
+                <p className="font-montserrat text-sm font-semibold text-white/90">
                   Phát triển Bền vững
                 </p>
               </div>
