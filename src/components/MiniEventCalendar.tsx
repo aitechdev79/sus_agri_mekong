@@ -117,8 +117,6 @@ export default function MiniEventCalendar({ events }: MiniEventCalendarProps) {
 
           const dateEvents = getEventsForDate(date);
           const hasEvents = dateEvents.length > 0;
-          const hasEventType = dateEvents.some(e => e.type === 'event');
-          const hasTrainingType = dateEvents.some(e => e.type === 'training');
           const isToday =
             date.getDate() === today.getDate() &&
             date.getMonth() === today.getMonth() &&
@@ -132,12 +130,12 @@ export default function MiniEventCalendar({ events }: MiniEventCalendarProps) {
               <div
                 className={`
                   w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold
-                  ${isToday ? 'bg-blue-600 text-white' : 'text-gray-800'}
-                  ${hasEvents && !isToday ? 'ring-2' : ''}
-                  ${hasEventType && hasTrainingType ? 'ring-2 ring-blue-600' : ''}
-                  ${hasEventType && !hasTrainingType ? 'bg-blue-600 text-white' : ''}
-                  ${hasTrainingType && !hasEventType ? 'bg-yellow-500 text-white' : ''}
+                  ${isToday ? 'text-white' : 'text-gray-800'}
+                  ${hasEvents ? 'text-white' : ''}
                 `}
+                style={{
+                  backgroundColor: hasEvents || isToday ? '#0A7029' : 'transparent'
+                }}
               >
                 {date.getDate()}
               </div>
@@ -149,12 +147,8 @@ export default function MiniEventCalendar({ events }: MiniEventCalendarProps) {
       {/* Legend */}
       <div className="flex items-center justify-center gap-4 pt-3 border-t text-xs">
         <div className="flex items-center gap-1">
-          <div className="w-3 h-3 rounded-full bg-blue-600"></div>
+          <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#0A7029' }}></div>
           <span className="text-gray-600">Sự kiện</span>
-        </div>
-        <div className="flex items-center gap-1">
-          <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-          <span className="text-gray-600">Đào tạo</span>
         </div>
       </div>
     </div>
