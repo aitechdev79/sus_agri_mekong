@@ -6,9 +6,9 @@ import ToolsGrid from './ToolsGrid';
 
 export default function LibraryAndToolsWrapper() {
   return (
-    <div className="relative overflow-hidden w-full bg-white">
-      {/* Shared Background SVG - Full Width */}
-      <div className="absolute inset-0 w-full h-full opacity-40">
+    <div className="relative overflow-visible w-full bg-white">
+      {/* Shared Background SVG - Extended to cover sections below */}
+      <div className="absolute inset-0 w-full opacity-40" style={{ height: '200%' }}>
         <Image
           src="/vecteezy_topo_34242655.svg"
           alt="Topographic background"
