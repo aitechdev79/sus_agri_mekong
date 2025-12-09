@@ -85,22 +85,22 @@ export default function ToolsGrid() {
               }}
             >
               {/* Content Container - Zooms on hover */}
-              <div className="flex flex-col items-center justify-center text-center p-8 h-full transition-transform duration-500 group-hover:scale-105" style={{ minHeight: '220px' }}>
+              <div className="flex flex-col items-center justify-center text-center p-6 h-full transition-transform duration-500 group-hover:scale-105" style={{ minHeight: '100px' }}>
                 {/* Icon Container */}
-                <div className="mb-4 w-16 h-16 bg-gray-100 flex items-center justify-center">
-                  <span className="text-4xl">📊</span>
+                <div className="mb-3 w-12 h-12 bg-gray-100 flex items-center justify-center">
+                  <span className="text-3xl">📊</span>
                 </div>
 
                 {/* Title */}
-                <h3 className="font-montserrat font-black text-3xl md:text-4xl mb-2" style={{ color: '#3C3C3B' }}>
+                <h3 className="font-montserrat font-black text-2xl mb-1" style={{ color: '#3C3C3B' }}>
                   BÁO CÁO
                 </h3>
-                <h4 className="font-montserrat font-black text-4xl md:text-5xl mb-3" style={{ color: '#3C3C3B' }}>
+                <h4 className="font-montserrat font-black text-3xl mb-2" style={{ color: '#3C3C3B' }}>
                   2025
                 </h4>
 
                 {/* Subtitle */}
-                <p className="font-montserrat text-base md:text-lg font-semibold" style={{ color: '#6B7280' }}>
+                <p className="font-montserrat text-sm font-semibold" style={{ color: '#6B7280' }}>
                   Phát triển Bền vững
                 </p>
               </div>
