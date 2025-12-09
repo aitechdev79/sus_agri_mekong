@@ -6,15 +6,15 @@ import Image from 'next/image';
 export default function SignUpSection() {
   const partnerLogos = [
     // Row 1
-    { id: 'iff', name: 'IFF', logo: '/partners/iff.png' },
-    { id: 'interbev', name: 'Interbev', logo: '/partners/interbev.png' },
-    { id: 'interfood', name: 'Interfood', logo: '/partners/interfood.png' },
-    { id: 'innovation-center', name: 'Innovation Center for U.S. Dairy', logo: '/partners/innovation-center.png' },
+    { id: 'vinamilk', name: 'Vinamilk', logo: '/Logo_Vinamilk_(2023).png' },
+    { id: 'john-deere', name: 'John Deere', logo: '/John_Deere_logo.svg.png' },
+    { id: 'loctroi', name: 'Lộc Trời', logo: '/06-loctroi.png' },
+    { id: 'binhdien', name: 'Bình Điền', logo: '/03-binhdien.jpg' },
     // Row 2
-    { id: 'importaco', name: 'Importaco', logo: '/partners/importaco.png' },
-    { id: 'inalca', name: 'Inalca', logo: '/partners/inalca.png' },
-    { id: 'intersnack', name: 'Intersnack', logo: '/partners/intersnack.png' },
-    { id: 'ingredion', name: 'Ingredion', logo: '/partners/ingredion.png' },
+    { id: 'cp', name: 'CP', logo: '/02-CP.jpg' },
+    { id: 'vietfood', name: 'Vietfood', logo: '/vietfood.png' },
+    { id: 'agribank', name: 'Agribank', logo: '/Agribank.png' },
+    { id: 'phan-bon-ca-mau', name: 'Phân bón Cà Mau', logo: '/phan bon ca mau.png' },
   ];
 
   return (
@@ -26,12 +26,12 @@ export default function SignUpSection() {
             {/* Left Side - Headlines */}
             <div style={{ maxWidth: '60%' }}>
               {/* Section Identifier */}
-              <p className="text-xs uppercase font-montserrat font-semibold tracking-wider mb-4" style={{ color: 'rgba(60, 60, 59, 0.6)' }}>
+              <p className="uppercase font-montserrat font-semibold tracking-wider mb-4" style={{ fontSize: '18px', color: 'rgba(60, 60, 59, 0.6)' }}>
                 Trở thành đối tác
               </p>
 
               {/* Main Headline */}
-              <h2 className="text-vn-dark font-montserrat font-bold leading-tight" style={{ fontSize: '48px', fontWeight: 700 }}>
+              <h2 className="text-vn-dark font-montserrat font-bold leading-tight" style={{ fontSize: '38.4px', fontWeight: 700 }}>
                 Đối tác doanh nghiệp được cập nhật các chương trình và nội dung mới nhất. Được kết nối với cộng đồng doanh nghiệp, chuyên gia và nông dân.
               </h2>
             </div>
@@ -39,7 +39,7 @@ export default function SignUpSection() {
             {/* Right Side - CTA Button */}
             <Link
               href="/join-us"
-              className="flex-shrink-0 inline-flex items-center gap-2 font-montserrat font-bold uppercase transition-all duration-300 hover:scale-105"
+              className="flex-shrink-0 inline-flex items-center gap-2 font-montserrat font-bold transition-all duration-300 hover:scale-105"
               style={{
                 border: '2px solid #0A7029',
                 color: '#0A7029',
@@ -55,9 +55,9 @@ export default function SignUpSection() {
                 e.currentTarget.style.backgroundColor = 'transparent';
                 e.currentTarget.style.color = '#0A7029';
               }}
-              aria-label="Join Us"
+              aria-label="Trở thành đối tác"
             >
-              JOIN US
+              Trở thành đối tác
               <span className="text-xl">→</span>
             </Link>
           </div>
@@ -85,16 +85,12 @@ export default function SignUpSection() {
                 }}
               >
                 <div className="relative w-full h-20 flex items-center justify-center">
-                  <span className="text-vn-dark font-montserrat font-bold text-lg text-center">
-                    {partner.name}
-                  </span>
-                  {/* Placeholder for actual logo image */}
-                  {/* <Image
+                  <Image
                     src={partner.logo}
                     alt={partner.name}
                     fill
                     className="object-contain"
-                  /> */}
+                  />
                 </div>
               </div>
             ))}
@@ -123,16 +119,12 @@ export default function SignUpSection() {
                 }}
               >
                 <div className="relative w-full h-20 flex items-center justify-center">
-                  <span className="text-vn-dark font-montserrat font-bold text-lg text-center">
-                    {partner.name}
-                  </span>
-                  {/* Placeholder for actual logo image */}
-                  {/* <Image
+                  <Image
                     src={partner.logo}
                     alt={partner.name}
                     fill
                     className="object-contain"
-                  /> */}
+                  />
                 </div>
               </div>
             ))}
