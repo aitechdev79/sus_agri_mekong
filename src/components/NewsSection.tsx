@@ -80,7 +80,15 @@ export default function NewsSection() {
 
   return (
     <section className="py-16 w-full">
-      <div className="container mx-auto px-6 max-w-6xl">
+      <div className="container mx-auto px-6 max-w-6xl relative">
+        {/* Teal background with 75% transparency - fits content */}
+        <div
+          className="absolute inset-0 rounded-2xl -mx-6 -my-8"
+          style={{
+            backgroundColor: 'rgba(4, 120, 87, 0.25)',
+            zIndex: -1
+          }}
+        ></div>
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <div>
