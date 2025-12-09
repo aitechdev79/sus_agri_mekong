@@ -52,7 +52,7 @@ export default function ContentLibrarySection() {
     <section className="py-16 w-full">
       <div className="container mx-auto px-6 max-w-6xl relative z-10">
         <div className="mb-12 text-center">
-          <h2 className="text-3xl font-bold text-vn-red mb-4 md:text-4xl font-montserrat">
+          <h2 className="font-bold text-vn-green mb-4 font-montserrat" style={{ fontSize: '40px', fontWeight: 700 }}>
             Thư viện Nội dung
           </h2>
           <p className="text-vn-dark font-montserrat text-lg max-w-3xl mx-auto">
@@ -62,66 +62,167 @@ export default function ContentLibrarySection() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {contentCards.map((card) => {
-            const bgColorMap: Record<string, string> = {
-              'vn-green-light': '#E8F5E9',
-              'vn-gold-light': '#FFF8E1',
-              'vn-red-light': 'rgba(218, 41, 28, 0.1)',
-            };
-            const iconColorMap: Record<string, string> = {
-              'vn-green': '#0A7029',
-              'vn-gold': '#FFB81C',
-              'vn-red': '#DA291C',
-            };
-            const hoverBgMap: Record<string, string> = {
-              'vn-green': '#0A7029',
-              'vn-gold': '#FFB81C',
-              'vn-red': '#DA291C',
-            };
-
-            return (
-              <Link
-                key={card.id}
-                href={card.href}
-                className="relative flex flex-col items-center text-center rounded-lg p-6 hover:shadow-2xl transition-all duration-300 group border-2 border-transparent hover:border-vn-green hover:-translate-y-2 overflow-hidden"
-                style={{
-                  backgroundColor: 'rgba(218, 41, 28, 0.5)',
-                }}
-                aria-label={`${card.title} - ${card.description}`}
-              >
-                {/* Green Accent Bar */}
-                <div className="absolute top-0 left-0 w-full h-2 bg-vn-green"></div>
-
-                {/* Icon */}
-                <div
-                  className="mb-4 text-5xl h-[80px] flex items-center justify-center transition-colors duration-300"
-                  style={{ color: iconColorMap[card.iconColor] }}
+            // Box 1: Policy - Green theme
+            if (card.id === 'policy') {
+              return (
+                <Link
+                  key={card.id}
+                  href={card.href}
+                  className="content-card card-policy relative flex flex-col items-center text-center rounded-lg p-6 transition-all duration-300 group border-t-4 border-vn-green overflow-hidden"
+                  style={{
+                    backgroundColor: '#E8F5E9',
+                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-8px)';
+                    e.currentTarget.style.boxShadow = '0 12px 32px rgba(10, 112, 41, 0.2)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.1)';
+                  }}
+                  aria-label={`${card.title} - ${card.description}`}
                 >
-                  {card.id === 'vietnam-practices' ? (
+                  {/* Icon Container */}
+                  <div className="mb-4 w-16 h-16 bg-vn-green rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <span className="text-4xl brightness-0 invert">{card.icon}</span>
+                  </div>
+                  {/* Title */}
+                  <h3 className="text-lg md:text-xl font-bold text-vn-green mb-3 font-montserrat">
+                    {card.title}
+                  </h3>
+                  {/* Description */}
+                  <p className="text-vn-dark text-sm md:text-base font-montserrat leading-relaxed">
+                    {card.description}
+                  </p>
+                </Link>
+              );
+            }
+
+            // Box 2: Reports - Gold theme
+            if (card.id === 'reports') {
+              return (
+                <Link
+                  key={card.id}
+                  href={card.href}
+                  className="content-card relative flex flex-col items-center text-center rounded-lg p-6 transition-all duration-300 group border-t-4 border-vn-gold overflow-hidden"
+                  style={{
+                    backgroundColor: '#FFF8E1',
+                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-8px)';
+                    e.currentTarget.style.boxShadow = '0 12px 32px rgba(0, 0, 0, 0.15)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.1)';
+                  }}
+                  aria-label={`${card.title} - ${card.description}`}
+                >
+                  {/* Icon Container */}
+                  <div className="mb-4 w-16 h-16 bg-vn-gold rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <span className="text-4xl text-vn-dark">{card.icon}</span>
+                  </div>
+                  {/* Title */}
+                  <h3 className="text-lg md:text-xl font-bold text-vn-gold mb-3 font-montserrat">
+                    {card.title}
+                  </h3>
+                  {/* Description */}
+                  <p className="text-vn-dark text-sm md:text-base font-montserrat leading-relaxed">
+                    {card.description}
+                  </p>
+                </Link>
+              );
+            }
+
+            // Box 3: Global Practices - Red theme
+            if (card.id === 'global-practices') {
+              return (
+                <Link
+                  key={card.id}
+                  href={card.href}
+                  className="content-card relative flex flex-col items-center text-center rounded-lg p-6 transition-all duration-300 group border-t-4 border-vn-red overflow-hidden"
+                  style={{
+                    backgroundColor: 'rgba(218, 41, 28, 0.08)',
+                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-8px)';
+                    e.currentTarget.style.boxShadow = '0 12px 32px rgba(0, 0, 0, 0.15)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.1)';
+                  }}
+                  aria-label={`${card.title} - ${card.description}`}
+                >
+                  {/* Icon Container */}
+                  <div className="mb-4 w-16 h-16 bg-vn-red rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <span className="text-4xl brightness-0 invert">{card.icon}</span>
+                  </div>
+                  {/* Title */}
+                  <h3 className="text-lg md:text-xl font-bold text-vn-red mb-3 font-montserrat">
+                    {card.title}
+                  </h3>
+                  {/* Description */}
+                  <p className="text-vn-dark text-sm md:text-base font-montserrat leading-relaxed">
+                    {card.description}
+                  </p>
+                </Link>
+              );
+            }
+
+            // Box 4: Vietnam Practices - Special styling
+            if (card.id === 'vietnam-practices') {
+              return (
+                <Link
+                  key={card.id}
+                  href={card.href}
+                  className="card-vietnam relative flex flex-col items-center text-center rounded-lg p-6 transition-all duration-300 group border-3 border-t-4 overflow-hidden"
+                  style={{
+                    backgroundColor: 'white',
+                    border: '3px solid #FFB81C',
+                    borderTop: '4px solid #0A7029',
+                    boxShadow: '0 4px 16px rgba(10, 112, 41, 0.1)'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-12px) scale(1.02)';
+                    e.currentTarget.style.borderColor = '#DA291C';
+                    e.currentTarget.style.borderTop = '4px solid #0A7029';
+                    e.currentTarget.style.boxShadow = '0 12px 32px rgba(0, 0, 0, 0.15)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                    e.currentTarget.style.borderColor = '#FFB81C';
+                    e.currentTarget.style.borderTop = '4px solid #0A7029';
+                    e.currentTarget.style.boxShadow = '0 4px 16px rgba(10, 112, 41, 0.1)';
+                  }}
+                  aria-label={`${card.title} - ${card.description}`}
+                >
+                  {/* Icon Container */}
+                  <div className="mb-4 w-16 h-16 bg-vn-green rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                     <Image
                       src="/VN map icon.png"
                       alt="Vietnam map"
-                      width={60}
-                      height={60}
-                      className="group-hover:scale-110 transition-transform duration-300"
+                      width={48}
+                      height={48}
+                      className="brightness-0 invert"
                     />
-                  ) : (
-                    <span className="group-hover:scale-110 transition-transform duration-300 inline-block">
-                      {card.icon}
-                    </span>
-                  )}
-                </div>
+                  </div>
+                  {/* Title */}
+                  <h3 className="text-lg md:text-xl font-bold text-vn-green mb-3 font-montserrat">
+                    {card.title}
+                  </h3>
+                  {/* Description */}
+                  <p className="text-vn-dark text-sm md:text-base font-montserrat leading-relaxed">
+                    {card.description}
+                  </p>
+                </Link>
+              );
+            }
 
-                {/* Title */}
-                <h3 className="text-lg md:text-xl font-bold text-vn-gold group-hover:text-vn-gold mb-3 font-montserrat transition-colors duration-300">
-                  {card.title}
-                </h3>
-
-                {/* Description */}
-                <p className="text-vn-dark text-sm md:text-base font-montserrat leading-relaxed group-hover:text-vn-dark transition-colors duration-300">
-                  {card.description}
-                </p>
-              </Link>
-            );
+            return null;
           })}
         </div>
       </div>
