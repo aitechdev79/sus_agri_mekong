@@ -3,11 +3,34 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Vietnamese Heritage Color Palette */
+  --vn-green: #0A7029;
+  --vn-green-light: #E8F5E9;
+  --vn-green-dark: #065018;
+  --vn-red: #DA291C;
+  --vn-red-light: rgba(218, 41, 28, 0.1);
+  --vn-gold: #FFB81C;
+  --vn-gold-light: #FFF8E1;
+  --vn-dark: #3C3C3B;
+  --vn-rice-white: #FAF9F6;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
+  /* Vietnamese Heritage Colors */
+  --color-vn-green: var(--vn-green);
+  --color-vn-green-light: var(--vn-green-light);
+  --color-vn-green-dark: var(--vn-green-dark);
+  --color-vn-red: var(--vn-red);
+  --color-vn-red-light: var(--vn-red-light);
+  --color-vn-gold: var(--vn-gold);
+  --color-vn-gold-light: var(--vn-gold-light);
+  --color-vn-dark: var(--vn-dark);
+  --color-vn-rice-white: var(--vn-rice-white);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-montserrat: var(--font-montserrat);

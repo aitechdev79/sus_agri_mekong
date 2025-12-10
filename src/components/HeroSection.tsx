@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import NavigationBar from './NavigationBar';
 
 export default function HeroSection() {
@@ -29,11 +30,18 @@ export default function HeroSection() {
         }}
       >
         <div
-          className="w-full h-full bg-cover bg-center"
+          className="w-full h-full bg-cover"
           style={{
             backgroundImage: 'url(/hero-main.jpg)',
-            backgroundSize: 'cover',
+            backgroundSize: '120%',
             backgroundPosition: 'center center'
+          }}
+        />
+        {/* Dark Overlay */}
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundColor: 'rgba(0, 0, 0, 0.4)'
           }}
         />
       </div>
@@ -50,6 +58,34 @@ export default function HeroSection() {
                   Thông tin bền vững - Nền móng cho tương lai phát triển bền vững của Việt Nam.
                 </div>
               </h1>
+            </div>
+
+            {/* Subheadline */}
+            <div className="mb-8">
+              <p className="font-montserrat font-bold text-lg md:text-xl text-white leading-relaxed">
+                Cung cấp thông tin minh bạch, chính xác và đáng tin cậy cho sự phát triển bền vững
+              </p>
+            </div>
+
+            {/* CTA Button */}
+            <div>
+              <Link
+                href="/vision-mission"
+                className="inline-block font-montserrat font-semibold text-base md:text-lg text-vn-dark bg-vn-gold px-8 py-4 rounded-lg transition-all duration-300 hover:shadow-lg"
+                style={{
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#FFD84D'; // Lighten gold
+                  e.currentTarget.style.boxShadow = '0 6px 12px rgba(255, 184, 28, 0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#FFB81C';
+                  e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+                }}
+              >
+                Khám phá →
+              </Link>
             </div>
           </div>
         </div>

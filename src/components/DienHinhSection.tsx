@@ -29,45 +29,51 @@ export default function DienHinhSection() {
   ];
 
   return (
-    <section className="py-16" style={{ backgroundColor: '#F0F9F4' }}>
+    <section className="py-16 bg-vn-rice-white">
       <div className="container mx-auto px-6 max-w-6xl">
         <div className="mb-12">
-          <h2 className="text-3xl font-bold text-gray-800 mb-4 md:text-4xl font-montserrat text-left">
+          <h2 className="text-3xl font-bold mb-4 md:text-4xl font-montserrat text-left" style={{ color: '#3C3C3B' }}>
             Thực hành điển hình - Lan toả giá trị
           </h2>
-          <p className="text-lg text-gray-600 font-montserrat text-left max-w-3xl">
+          <p className="text-lg font-montserrat text-left max-w-3xl" style={{ color: '#6B7280' }}>
             Khám phá những câu chuyện thành công và mô hình hay sáng kiến điển hình trong phát triển bền vững tại Việt Nam
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-end">
           {activities.map((activity) => (
             <Link
               key={activity.id}
               href={activity.href}
-              className="group relative rounded-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 aspect-[2/3]"
+              className="group block flex flex-col"
               aria-label={`${activity.title} - ${activity.description}`}
             >
-              {/* Background Image */}
-              <div className="absolute inset-0">
+              {/* Image Container - No rounded corners, no overlay */}
+              <div className="relative overflow-hidden mb-4" style={{ aspectRatio: '16/9' }}>
                 <Image
                   src={activity.backgroundImage}
-                  alt={`${activity.title} background`}
+                  alt={activity.title}
                   fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-300"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  priority
+                  className="object-cover group-hover:scale-110 transition-transform duration-500"
+                  sizes="(max-width: 768px) 100vw, 33vw"
                 />
-                {/* Lighter gradient only at bottom for text readability */}
-                <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/50 to-transparent"></div>
               </div>
 
-              {/* Content - Left Aligned at Bottom */}
-              <div className="relative z-10 h-full flex flex-col justify-end p-6">
-                <h3 className="text-lg md:text-xl font-bold text-white mb-3 md:mb-0 md:group-hover:mb-3 transition-all duration-300 font-montserrat">
+              {/* Text Content Below - Black text with animated border-bottom - Fixed height */}
+              <div className="pb-4 relative flex-1 flex flex-col" style={{ minHeight: '120px' }}>
+                {/* Base light-green border */}
+                <div className="absolute bottom-0 left-0 w-full h-0.5" style={{ backgroundColor: '#E8F5E9' }}></div>
+
+                {/* Animated dark-green border that sweeps left to right */}
+                <div
+                  className="absolute bottom-0 left-0 h-0.5 w-0 group-hover:w-full transition-all duration-500 ease-out"
+                  style={{ backgroundColor: '#0A7029' }}
+                ></div>
+
+                <h3 className="text-lg md:text-xl font-bold mb-2 font-montserrat" style={{ color: '#3C3C3B' }}>
                   {activity.title}
                 </h3>
-                <p className="text-white/90 text-sm md:text-base font-montserrat md:max-h-0 md:overflow-hidden md:opacity-0 md:group-hover:max-h-32 md:group-hover:opacity-100 transition-all duration-300">
+                <p className="text-sm md:text-base font-montserrat flex-1" style={{ color: '#6B7280' }}>
                   {activity.description}
                 </p>
               </div>

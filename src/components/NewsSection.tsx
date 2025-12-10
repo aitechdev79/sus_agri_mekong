@@ -44,14 +44,14 @@ export default function NewsSection() {
   const sortedEvents = [...newsItems].sort((a, b) =>
     new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
-  const featuredEvents = sortedEvents.slice(0, 3);
+  const featuredEvents = sortedEvents.slice(0, 2);
 
-  // Prepare events for calendar
+  // Prepare events for calendar - only 'event' type with green color
   const calendarEvents = newsItems.map(item => ({
     id: item.id,
     title: item.title,
     date: new Date(item.createdAt),
-    type: (item.category?.toLowerCase().includes('đào tạo') || item.category?.toLowerCase().includes('training')) ? 'training' as const : 'event' as const,
+    type: 'event' as const,
   }));
 
   if (loading) {
@@ -79,21 +79,43 @@ export default function NewsSection() {
   }
 
   return (
-    <section className="py-16 w-full">
-      <div className="container mx-auto px-6 max-w-6xl">
+    <section className="py-16 w-full bg-white relative">
+      {/* Subtle topographic pattern overlay */}
+      <div className="absolute inset-0 opacity-5">
+        <Image
+          src="/vecteezy_topo_34242655.svg"
+          alt="Background pattern"
+          fill
+          className="object-cover"
+          priority={false}
+        />
+      </div>
+
+      <div className="container mx-auto px-6 max-w-6xl relative z-10">
         {/* Header */}
-        <div className="mb-8 flex items-center justify-between">
+        <div className="mb-12 flex items-center justify-between">
           <div>
-            <h2 className="text-3xl font-bold text-yellow-400 mb-2 md:text-4xl font-montserrat text-left">
+            <h2 className="text-3xl font-bold mb-2 md:text-4xl font-montserrat text-left" style={{ color: '#3C3C3B' }}>
               Tin Tức & Sự Kiện
             </h2>
-            <p className="text-lg text-white/90 font-montserrat text-left max-w-3xl">
+            <p className="text-lg font-montserrat text-left max-w-3xl" style={{ color: '#6B7280' }}>
               Cập nhật những tin tức và sự kiện mới nhất của chúng tôi.
             </p>
           </div>
           <Link
             href="/news"
-            className="hidden md:inline-flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-blue-900 font-bold px-6 py-3 rounded-lg transition-colors"
+            className="hidden md:inline-flex items-center gap-2 font-bold px-6 py-3 rounded-xl transition-all duration-300 hover:scale-105 hover:-translate-y-1"
+            style={{
+              backgroundColor: '#FFC107',
+              color: '#3C3C3B',
+              boxShadow: '0 4px 12px rgba(255, 193, 7, 0.3)'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow = '0 8px 24px rgba(255, 193, 7, 0.4)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(255, 193, 7, 0.3)';
+            }}
           >
             Xem tất cả
             <span className="text-xl">→</span>
@@ -101,18 +123,28 @@ export default function NewsSection() {
         </div>
 
         {/* Split Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
           {/* Left Column - Featured Events (70%) */}
-          <div className="lg:col-span-2 space-y-3">
-            {featuredEvents.map((item) => (
+          <div className="lg:col-span-2 space-y-6">
+            {featuredEvents.map((item, index) => (
               <Link
                 key={item.id}
                 href={`/content/${item.id}`}
-                className="block group"
+                className="group block overflow-hidden bg-white transition-all duration-500"
+                style={{
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.12)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.08)';
+                }}
               >
-                <article className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow flex flex-col md:flex-row h-full">
-                  {/* Image */}
-                  <div className="relative h-32 md:h-auto md:w-32 flex-shrink-0">
+                {/* Content Container - Zooms on hover */}
+                <div className="flex flex-row items-center px-6 py-4 transition-transform duration-500 group-hover:scale-105" style={{ minHeight: '120px' }}>
+                  {/* Thumbnail on Left */}
+                  <div className="relative w-24 h-24 md:w-32 md:h-32 flex-shrink-0 mr-6 bg-gray-100 overflow-hidden">
                     {(() => {
                       let imageUrl = null;
                       if (item.thumbnailUrl) {
@@ -140,57 +172,71 @@ export default function NewsSection() {
                           />
                         )
                       ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
-                          <Calendar className="w-8 h-8 text-blue-400" />
+                        <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                          <Calendar className="w-8 h-8 text-gray-400" />
                         </div>
                       );
                     })()}
                   </div>
 
-                  {/* Content */}
-                  <div className="p-4 flex-1">
-                    {/* Date */}
-                    <div className="flex items-center text-xs text-gray-500 mb-1">
-                      <Calendar className="w-3 h-3 mr-1" />
-                      <span className="font-montserrat">
-                        {(() => {
-                          const date = new Date(item.createdAt);
-                          const day = date.getDate().toString().padStart(2, '0');
-                          const month = (date.getMonth() + 1).toString().padStart(2, '0');
-                          const year = date.getFullYear();
-                          return `${day}/${month}/${year}`;
-                        })()}
-                      </span>
+                  {/* Content Section */}
+                  <div className="flex-1 flex flex-col justify-center">
+                    {/* Date and Tag */}
+                    <div className="flex items-center gap-3 text-sm mb-2">
+                      <div className="flex items-center" style={{ color: '#9CA3AF' }}>
+                        <Calendar className="w-4 h-4 mr-1" />
+                        <span className="font-montserrat font-medium">
+                          {(() => {
+                            const date = new Date(item.createdAt);
+                            const day = date.getDate().toString().padStart(2, '0');
+                            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                            const year = date.getFullYear();
+                            return `${day}/${month}/${year}`;
+                          })()}
+                        </span>
+                      </div>
+                      {index === 0 && (
+                        <span className="px-3 py-1 rounded-full text-xs font-bold font-montserrat" style={{ backgroundColor: '#0A7029', color: 'white' }}>
+                          Sắp diễn ra
+                        </span>
+                      )}
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-base font-bold text-gray-800 mb-1 group-hover:text-blue-600 transition-colors font-montserrat line-clamp-2">
+                    <h3 className="text-lg md:text-xl font-bold mb-2 font-montserrat line-clamp-2" style={{ color: '#3C3C3B' }}>
                       {item.title}
                     </h3>
 
                     {/* Description */}
                     {item.description && (
-                      <p className="text-sm text-gray-600 line-clamp-1 font-montserrat">
+                      <p className="text-sm md:text-base line-clamp-2 font-montserrat" style={{ color: '#6B7280' }}>
                         {item.description}
                       </p>
                     )}
                   </div>
-                </article>
+                </div>
               </Link>
             ))}
           </div>
 
-          {/* Right Column - Mini Calendar (30%) */}
-          <div className="lg:col-span-1">
-            <MiniEventCalendar events={calendarEvents} />
+          {/* Right Column - Mini Calendar (30%) - Floating widget */}
+          <div className="lg:col-span-1 lg:sticky lg:top-6">
+            <div className="rounded-2xl overflow-hidden bg-white" style={{ boxShadow: '0 4px 16px rgba(0, 0, 0, 0.08)' }}>
+              <MiniEventCalendar events={calendarEvents} />
+            </div>
           </div>
         </div>
 
         {/* Mobile View All Button */}
-        <div className="mt-6 md:hidden text-center">
+        <div className="mt-8 md:hidden text-center">
           <Link
             href="/news"
-            className="inline-flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-blue-900 font-bold px-6 py-3 rounded-lg transition-colors"
+            className="inline-flex items-center gap-2 font-bold px-6 py-3 rounded-xl transition-all duration-300 hover:scale-105"
+            style={{
+              backgroundColor: '#FFC107',
+              color: '#3C3C3B',
+              boxShadow: '0 4px 12px rgba(255, 193, 7, 0.3)'
+            }}
           >
             Xem tất cả sự kiện
             <span className="text-xl">→</span>

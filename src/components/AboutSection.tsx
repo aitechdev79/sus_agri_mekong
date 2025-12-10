@@ -34,49 +34,59 @@ export default function AboutSection() {
       id: 'cam-ket',
       title: 'Cam kết của chúng tôi',
       description: 'Cam kết cung cấp thông tin minh bạch và đáng tin cậy để xây dựng tương lai bền vững',
-      href: '#',
+      href: '/commitment',
+      image: '/camket.jpeg',
+      accentColor: 'vn-green',
     },
     {
       id: 'vcci',
       title: 'Về VCCI',
       description: 'Tìm hiểu về Phòng Thương mại và Công nghiệp Việt Nam và vai trò trong phát triển doanh nghiệp',
       href: '/about-vcci',
+      image: '/VCCI_blue.jpeg',
+      accentColor: 'vn-green',
     },
     {
       id: 'doi-tac',
       title: 'Đối tác chiến lược',
       description: 'Kết nối với các đối tác và tổ chức hợp tác để thúc đẩy phát triển bền vững',
       href: '/partners',
+      image: '/doitac_chienluoc.jpeg',
+      accentColor: 'vn-green',
     },
   ];
 
   return (
-    <section className="py-16" style={{ backgroundColor: '#FAF9F6' }}>
+    <section className="py-16 bg-vn-gold-light">
       <div className="container mx-auto px-6 max-w-6xl">
         <div className="grid grid-cols-1 md:grid-cols-2 mb-16">
           {/* Text Content */}
           <div className="flex flex-col justify-center">
-            <p className="mb-6 text-lg text-gray-600 leading-relaxed font-montserrat">
+            <p className="mb-6 text-lg text-vn-dark leading-relaxed font-montserrat">
               Cổng thông tin là sáng kiến của VCCI-HCM, được hình thành với sứ mệnh cung cấp nguồn dữ liệu, thông tin minh bạch, chính xác và đáng tin cậy, đặt nền móng cho tương lai phát triển bền vững của Việt Nam
             </p>
 
             {/* Stats */}
             <div className="mb-8 grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-green-600 font-montserrat">{stats.publishedReports}</div>
-                <div className="text-sm text-gray-600 font-montserrat">Số báo cáo được xuất bản</div>
+              <div className="bg-white rounded-lg shadow-md p-4 text-center relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1 bg-vn-green"></div>
+                <div className="text-3xl font-bold text-vn-gold font-montserrat mb-2">{stats.publishedReports}</div>
+                <div className="text-xs text-vn-dark font-montserrat">Số báo cáo được xuất bản</div>
               </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-green-600 font-montserrat">{stats.trackedPolicies}</div>
-                <div className="text-sm text-gray-600 font-montserrat">Số chính sách đã theo dõi</div>
+              <div className="bg-white rounded-lg shadow-md p-4 text-center relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1 bg-vn-green"></div>
+                <div className="text-3xl font-bold text-vn-gold font-montserrat mb-2">{stats.trackedPolicies}</div>
+                <div className="text-xs text-vn-dark font-montserrat">Số chính sách đã theo dõi</div>
               </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-green-600 font-montserrat">{stats.members}</div>
-                <div className="text-sm text-gray-600 font-montserrat">Số thành viên tham gia</div>
+              <div className="bg-white rounded-lg shadow-md p-4 text-center relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1 bg-vn-green"></div>
+                <div className="text-3xl font-bold text-vn-gold font-montserrat mb-2">{stats.members}</div>
+                <div className="text-xs text-vn-dark font-montserrat">Số thành viên tham gia</div>
               </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-green-600 font-montserrat">{stats.supportedInitiatives}</div>
-                <div className="text-sm text-gray-600 font-montserrat">Số sáng kiến được hỗ trợ</div>
+              <div className="bg-white rounded-lg shadow-md p-4 text-center relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1 bg-vn-green"></div>
+                <div className="text-3xl font-bold text-vn-gold font-montserrat mb-2">{stats.supportedInitiatives}</div>
+                <div className="text-xs text-vn-dark font-montserrat">Số sáng kiến được hỗ trợ</div>
               </div>
             </div>
 
@@ -84,10 +94,10 @@ export default function AboutSection() {
             <div>
               <Link
                 href="/vision-mission"
-                className="inline-block font-montserrat font-bold text-sm text-white bg-green-600 hover:bg-green-700 transition-all duration-300 px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105"
+                className="inline-block font-montserrat font-bold text-sm text-white bg-vn-green hover:bg-vn-green-dark transition-all duration-300 px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105"
                 aria-label="Khám phá về chúng tôi"
               >
-                Khám phá
+                Khám phá →
               </Link>
             </div>
 
@@ -108,20 +118,40 @@ export default function AboutSection() {
         </div>
 
         {/* Info Cards Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-end">
           {infoCards.map((card) => (
             <Link
               key={card.id}
               href={card.href}
-              className="group relative rounded-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 aspect-[3/2] bg-white"
+              className="group block flex flex-col"
               aria-label={`${card.title} - ${card.description}`}
             >
-              {/* Content - Left Aligned at Bottom */}
-              <div className="relative z-10 h-full flex flex-col justify-end p-6">
-                <h3 className="text-lg md:text-xl font-bold text-gray-800 mb-3 md:mb-0 md:group-hover:mb-3 transition-all duration-300 font-montserrat">
+              {/* Image Container - No rounded corners, no overlay */}
+              <div className="relative aspect-[4/3] overflow-hidden mb-4">
+                <Image
+                  src={card.image}
+                  alt={card.title}
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-500"
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                />
+              </div>
+
+              {/* Text Content Below - Black text with animated border-bottom - Fixed height */}
+              <div className="pb-4 relative flex-1 flex flex-col" style={{ minHeight: '120px' }}>
+                {/* Base light-green border */}
+                <div className="absolute bottom-0 left-0 w-full h-0.5" style={{ backgroundColor: '#E8F5E9' }}></div>
+
+                {/* Animated dark-green border that sweeps left to right */}
+                <div
+                  className="absolute bottom-0 left-0 h-0.5 w-0 group-hover:w-full transition-all duration-500 ease-out"
+                  style={{ backgroundColor: '#0A7029' }}
+                ></div>
+
+                <h3 className="text-lg md:text-xl font-bold mb-2 font-montserrat" style={{ color: '#3C3C3B' }}>
                   {card.title}
                 </h3>
-                <p className="text-gray-600 text-sm md:text-base font-montserrat md:max-h-0 md:overflow-hidden md:opacity-0 md:group-hover:max-h-32 md:group-hover:opacity-100 transition-all duration-300">
+                <p className="text-sm md:text-base font-montserrat flex-1" style={{ color: '#6B7280' }}>
                   {card.description}
                 </p>
               </div>
