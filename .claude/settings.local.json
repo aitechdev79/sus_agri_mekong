@@ -32,7 +32,8 @@
       "WebFetch(domain:neon.com)",
       "Bash(chmod:*)",
       "Bash(npm run:*)",
-      "Bash(git ls-tree:*)"
+      "Bash(git ls-tree:*)",
+      "Bash(git merge redesign-vnese-style -m \"$(cat <<''EOF''\nMerge redesign-vnese-style: News page redesign and button arrow additions\n\n- Redesigned news page with clean white theme and CARD_DESIGN_SPEC\n- Added arrows to Khám phá buttons in hero and about sections\n- Applied green color theme throughout news page\n- Implemented animated borders and zoom hover effects\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n)\")"
     ],
     "deny": [],
     "ask": []
