@@ -1,7 +1,7 @@
 ﻿'use client';
 
 import Link from 'next/link';
-import { Sprout, ExternalLink, ArrowRight } from 'lucide-react';
+import { ShieldPlus, ExternalLink, ArrowRight } from 'lucide-react';
 
 export default function HoatDongSection() {
   const activities = [
@@ -64,7 +64,7 @@ export default function HoatDongSection() {
                   href={activity.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group block h-full overflow-hidden bg-white border border-[#E7E2D9] transition-all duration-500"
+                  className="group block h-full overflow-hidden bg-white border border-[#E7E2D9] transition-all duration-300"
                   style={{
                     boxShadow: '0 6px 18px rgba(0, 0, 0, 0.08)'
                   }}
@@ -75,27 +75,27 @@ export default function HoatDongSection() {
                     e.currentTarget.style.boxShadow = '0 6px 18px rgba(0, 0, 0, 0.08)';
                   }}
                 >
-                  <div className="relative flex h-full flex-col p-6">
+                  <div className="relative flex h-full flex-col p-8">
                     {/* Icon Circle */}
-                    <div className="relative mb-5 w-16 h-16 rounded-full bg-gradient-to-br from-[#0A7029] to-[#0E8A38] flex items-center justify-center shadow-md">
-                      <Sprout size={32} strokeWidth={2.5} color="white" />
+                    <div className="relative mb-6 w-16 h-16 rounded-full bg-[#0A7029] flex items-center justify-center text-white shadow-md">
+                      <ShieldPlus size={32} strokeWidth={2} />
                     </div>
 
                     {/* Headline */}
-                    <h3 className="text-xl font-bold mb-3 font-montserrat" style={{ color: '#3C3C3B' }}>
+                    <h3 className="text-2xl font-bold mb-4 font-montserrat" style={{ color: '#3C3C3B' }}>
                       {activity.title}
                     </h3>
 
                     {/* Description */}
-                    <p className="text-sm leading-relaxed font-montserrat mb-4" style={{ color: '#6B7280' }}>
+                    <p className="text-[15px] leading-relaxed font-montserrat mb-10" style={{ color: '#3C3C3B', opacity: 0.7 }}>
                       {activity.description}
                     </p>
 
                     {/* CTA Area */}
                     <div className="mt-auto pt-4 flex items-center justify-between">
-                      <span className="inline-flex items-center gap-2 text-sm font-montserrat font-semibold" style={{ color: '#0A7029' }}>
+                      <span className="inline-flex items-center gap-2 text-[15px] font-montserrat font-semibold transition-all duration-300 group-hover:gap-3" style={{ color: '#0A7029' }}>
                         Tìm hiểu thêm
-                        <ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-1" />
+                        <ArrowRight size={18} />
                       </span>
                       <span className="w-9 h-9 rounded-full bg-[#0A7029]/10 flex items-center justify-center text-[#0A7029] transition-colors duration-300 group-hover:bg-[#0A7029] group-hover:text-white">
                         <ExternalLink size={16} />
