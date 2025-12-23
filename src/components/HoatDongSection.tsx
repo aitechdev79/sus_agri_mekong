@@ -64,7 +64,7 @@ export default function HoatDongSection() {
                   href={activity.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group block h-full overflow-hidden rounded-2xl bg-white border border-[#E7E2D9] transition-all duration-500"
+                  className="group block h-full overflow-hidden bg-white border border-[#E7E2D9] transition-all duration-500"
                   style={{
                     boxShadow: '0 6px 18px rgba(0, 0, 0, 0.08)'
                   }}
