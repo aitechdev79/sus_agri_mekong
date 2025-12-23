@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { FolderSearch } from 'lucide-react';
+import { FolderSearch, Leaf } from 'lucide-react';
 
 export default function ToolsGrid() {
   const tools = [
@@ -53,6 +53,10 @@ export default function ToolsGrid() {
                   {tool.id === 'library' ? (
                     <div className="relative w-16 h-16 flex-shrink-0 mr-4 rounded-full bg-[#0A7029] flex items-center justify-center text-white shadow-md">
                       <FolderSearch size={32} strokeWidth={2} />
+                    </div>
+                  ) : tool.id === 'policy' ? (
+                    <div className="relative w-16 h-16 flex-shrink-0 mr-4 rounded-full bg-[#0A7029] flex items-center justify-center text-white shadow-md">
+                      <Leaf size={32} strokeWidth={2} />
                     </div>
                   ) : (
                     <div className="relative w-16 h-16 flex-shrink-0 mr-4 bg-gray-100 overflow-hidden">
