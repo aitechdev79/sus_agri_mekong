@@ -1,7 +1,7 @@
 ﻿'use client';
 
 import Link from 'next/link';
-import { Sprout, Target, ExternalLink, ArrowRight } from 'lucide-react';
+import { Sprout, ExternalLink, ArrowRight } from 'lucide-react';
 
 export default function HoatDongSection() {
   const activities = [
@@ -79,16 +79,6 @@ export default function HoatDongSection() {
                     {/* Icon Circle */}
                     <div className="relative mb-5 w-16 h-16 rounded-full bg-gradient-to-br from-[#0A7029] to-[#0E8A38] flex items-center justify-center shadow-md">
                       <Sprout size={32} strokeWidth={2.5} color="white" />
-                      <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-white flex items-center justify-center text-sm shadow-sm">
-                        🦐
-                      </div>
-                    </div>
-
-                    {/* Project Tag */}
-                    <div className="mb-3">
-                      <span className="inline-flex items-center rounded-full bg-[#F6E7BF] px-3 py-1 text-xs font-bold tracking-wide text-[#7A5A00]">
-                        {activity.shortTitle}
-                      </span>
                     </div>
 
                     {/* Headline */}
@@ -100,14 +90,6 @@ export default function HoatDongSection() {
                     <p className="text-sm leading-relaxed font-montserrat mb-4" style={{ color: '#6B7280' }}>
                       {activity.description}
                     </p>
-
-                    {/* Focus Area Box */}
-                    <div className="rounded-xl border border-[#E3EFE6] bg-[#F3F9F4] p-3 flex items-start gap-2">
-                      <Target size={18} className="mt-0.5 text-[#0A7029]" />
-                      <div className="text-xs font-montserrat" style={{ color: '#3C3C3B' }}>
-                        {activity.subtitle}
-                      </div>
-                    </div>
 
                     {/* CTA Area */}
                     <div className="mt-auto pt-4 flex items-center justify-between">
