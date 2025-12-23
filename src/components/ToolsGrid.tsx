@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { FolderSearch } from 'lucide-react';
 
 export default function ToolsGrid() {
   const tools = [
@@ -48,18 +49,24 @@ export default function ToolsGrid() {
               >
                 {/* Content Container - Zooms on hover */}
                 <div className="flex flex-row items-center px-6 py-4 transition-transform duration-500 group-hover:scale-105" style={{ minHeight: '100px' }}>
-                  {/* Thumbnail on Left */}
-                  <div className="relative w-16 h-16 flex-shrink-0 mr-4 bg-gray-100 overflow-hidden">
-                    <Image
-                      src={tool.thumbnailImage}
-                      alt={`${tool.title} thumbnail`}
-                      fill
-                      className="object-cover"
-                      sizes="64px"
-                    />
-                    {/* Green overlay - 20% opaque */}
-                    <div className="absolute inset-0" style={{ backgroundColor: 'rgba(10, 112, 41, 0.2)' }}></div>
-                  </div>
+                  {/* Thumbnail / Icon on Left */}
+                  {tool.id === 'library' ? (
+                    <div className="relative w-16 h-16 flex-shrink-0 mr-4 rounded-full bg-[#0A7029] flex items-center justify-center text-white shadow-md">
+                      <FolderSearch size={32} strokeWidth={2} />
+                    </div>
+                  ) : (
+                    <div className="relative w-16 h-16 flex-shrink-0 mr-4 bg-gray-100 overflow-hidden">
+                      <Image
+                        src={tool.thumbnailImage}
+                        alt={`${tool.title} thumbnail`}
+                        fill
+                        className="object-cover"
+                        sizes="64px"
+                      />
+                      {/* Green overlay - 20% opaque */}
+                      <div className="absolute inset-0" style={{ backgroundColor: 'rgba(10, 112, 41, 0.2)' }}></div>
+                    </div>
+                  )}
 
                   {/* Content Section */}
                   <div className="flex-1 flex flex-col justify-center">
