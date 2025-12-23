@@ -105,7 +105,7 @@ export default function HoatDongSection() {
                     <div className="rounded-xl border border-[#E3EFE6] bg-[#F3F9F4] p-3 flex items-start gap-2">
                       <Target size={18} className="mt-0.5 text-[#0A7029]" />
                       <div className="text-xs font-montserrat" style={{ color: '#3C3C3B' }}>
-                        <span className="font-bold">Hỗ trợ:</span> {activity.subtitle}
+                        {activity.subtitle}
                       </div>
                     </div>
 
