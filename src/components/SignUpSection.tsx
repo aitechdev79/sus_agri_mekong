@@ -75,13 +75,6 @@ export default function SignUpSection() {
                   border: '1px solid rgba(0, 0, 0, 0.1)',
                   padding: '24px',
                   maxHeight: '120px',
-                  filter: 'grayscale(100%) opacity(0.7)',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.filter = 'grayscale(0%) opacity(1)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.filter = 'grayscale(100%) opacity(0.7)';
                 }}
               >
                 <div className="relative w-full h-20 flex items-center justify-center">
@@ -109,13 +102,6 @@ export default function SignUpSection() {
                   border: '1px solid rgba(0, 0, 0, 0.1)',
                   padding: '24px',
                   maxHeight: '120px',
-                  filter: 'grayscale(100%) opacity(0.7)',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.filter = 'grayscale(0%) opacity(1)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.filter = 'grayscale(100%) opacity(0.7)';
                 }}
               >
                 <div className="relative w-full h-20 flex items-center justify-center">
