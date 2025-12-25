@@ -10,7 +10,7 @@ export default function HoatDongSection() {
       title: 'Dự án Graisea',
       shortTitle: 'GRAISEA',
       description:
-        'GRAISEA là một chương trình cấp Đông Nam Á, được tài trợ bởi Chính phủ Thụy Điển. Nhằm thúc đẩy các mô hình ba bên cùng có lợi (win-win-win), mang lại lợi ích cho cộng đồng, những nhà sản xuất quy mô nhỏ và các doanh nghiệp lớn.',
+        'GRAISEA thúc đẩy các mô hình ba bên cùng có lợi (win-win-win), mang lại lợi ích cho cộng đồng, những nhà sản xuất quy mô nhỏ và các doanh nghiệp lớn.',
       subtitle: 'Hỗ trợ nâng cao năng lực cho doanh nghiệp trong chuỗi chế biến tôm và lúa gạo',
       link: 'https://graisea.github.io/',
       borderColor: 'border-vn-green',
