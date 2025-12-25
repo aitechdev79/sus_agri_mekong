@@ -76,7 +76,7 @@ export default function HoatDongSection() {
               >
                 <div className="relative overflow-hidden mb-4 flex items-center justify-center" style={{ aspectRatio: '16/9', backgroundColor: '#F7F3EA' }}>
                   {isGraisea ? (
-                    <div className="flex flex-col items-center gap-3 text-center">
+                    <div className="flex flex-col items-start gap-3 text-left">
                       <div className="flex items-center gap-4">
                         <div className="w-24 h-24 rounded-full bg-[#0A7029] flex items-center justify-center text-white shadow-md">
                           {icon}
@@ -86,7 +86,7 @@ export default function HoatDongSection() {
                         </span>
                       </div>
                       <p className="text-xs md:text-sm font-montserrat max-w-xs" style={{ color: '#6B7280' }}>
-                        Tăng cường bình đẳng giới và đầu tư kinh doanh nông nghiệp có trách nhiệm tại Đông Nam Á
+                        Bình đẳng giới và đầu tư kinh doanh nông nghiệp có trách nhiệm
                       </p>
                     </div>
                   ) : (
