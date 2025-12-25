@@ -21,7 +21,7 @@ export default function CommitmentPage() {
               {/* Part 1: Text Section (2/3 width) */}
               <div className="md:col-span-2 p-8">
                 <h1 className="font-montserrat font-bold text-3xl md:text-4xl text-gray-800 mb-8 text-left">
-                  Tầm nhìn sứ mệnh
+                  Tầm nhìn, sứ mệnh, mục tiêu
                 </h1>
 
                 {/* Vision */}
