@@ -4,7 +4,32 @@ import { useState } from 'react';
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
 import Image from 'next/image';
-import { Download, FileText, Calendar, Tag } from 'lucide-react';
+import {
+  BarChart3,
+  Bookmark,
+  BookOpen,
+  Building2,
+  Calendar,
+  Download,
+  FileSignature,
+  Files,
+  FileText,
+  Globe2,
+  Handshake,
+  Inbox,
+  Leaf,
+  Library,
+  LineChart,
+  Link2,
+  Landmark,
+  Microscope,
+  Search,
+  ShieldCheck,
+  Tag,
+  Target,
+  Users,
+  Wheat,
+} from 'lucide-react';
 
 type ReportCategory = 'all' | 'esg' | 'agriculture' | 'climate' | 'supply-chain' | 'policy' | 'labor-safety' | 'responsible-business';
 type ReportType = 'all' | 'research' | 'policy-brief' | 'case-study' | 'survey' | 'whitepaper';
@@ -32,23 +57,23 @@ export default function ReportsPage() {
   const [searchQuery, setSearchQuery] = useState('');
 
   const categories = [
-    { id: 'all' as ReportCategory, name: 'Tất cả', icon: '📚', color: 'bg-gray-100 text-gray-800' },
-    { id: 'labor-safety' as ReportCategory, name: 'An toàn vệ sinh lao động', icon: '🛡️', color: 'bg-red-100 text-red-800' },
-    { id: 'esg' as ReportCategory, name: 'ESG & Bền vững', icon: '🌱', color: 'bg-green-100 text-green-800' },
-    { id: 'policy' as ReportCategory, name: 'Chính sách ngành', icon: '📋', color: 'bg-orange-100 text-orange-800' },
-    { id: 'responsible-business' as ReportCategory, name: 'Kinh doanh có trách nhiệm', icon: '🤝', color: 'bg-teal-100 text-teal-800' },
-    { id: 'agriculture' as ReportCategory, name: 'Nông nghiệp', icon: '🌾', color: 'bg-yellow-100 text-yellow-800' },
-    { id: 'climate' as ReportCategory, name: 'Biến đổi khí hậu', icon: '🌍', color: 'bg-blue-100 text-blue-800' },
-    { id: 'supply-chain' as ReportCategory, name: 'Chuỗi cung ứng', icon: '🔗', color: 'bg-purple-100 text-purple-800' },
+    { id: 'all' as ReportCategory, name: 'Tất cả', icon: <Library className="w-4 h-4" /> },
+    { id: 'labor-safety' as ReportCategory, name: 'An toàn vệ sinh lao động', icon: <ShieldCheck className="w-4 h-4" /> },
+    { id: 'esg' as ReportCategory, name: 'ESG & Bền vững', icon: <Leaf className="w-4 h-4" /> },
+    { id: 'policy' as ReportCategory, name: 'Chính sách ngành', icon: <FileText className="w-4 h-4" /> },
+    { id: 'responsible-business' as ReportCategory, name: 'Kinh doanh có trách nhiệm', icon: <Handshake className="w-4 h-4" /> },
+    { id: 'agriculture' as ReportCategory, name: 'Nông nghiệp', icon: <Wheat className="w-4 h-4" /> },
+    { id: 'climate' as ReportCategory, name: 'Biến đổi khí hậu', icon: <Globe2 className="w-4 h-4" /> },
+    { id: 'supply-chain' as ReportCategory, name: 'Chuỗi cung ứng', icon: <Link2 className="w-4 h-4" /> },
   ];
 
   const reportTypes = [
-    { id: 'all' as ReportType, name: 'Tất cả loại', icon: '📄' },
-    { id: 'research' as ReportType, name: 'Nghiên cứu', icon: '🔬' },
-    { id: 'policy-brief' as ReportType, name: 'Tóm tắt chính sách', icon: '📝' },
-    { id: 'case-study' as ReportType, name: 'Nghiên cứu điển hình', icon: '📊' },
-    { id: 'survey' as ReportType, name: 'Khảo sát', icon: '📈' },
-    { id: 'whitepaper' as ReportType, name: 'Báo cáo chuyên đề', icon: '📑' },
+    { id: 'all' as ReportType, name: 'Tất cả loại', icon: <Files className="w-4 h-4" /> },
+    { id: 'research' as ReportType, name: 'Nghiên cứu', icon: <Microscope className="w-4 h-4" /> },
+    { id: 'policy-brief' as ReportType, name: 'Tóm tắt chính sách', icon: <FileSignature className="w-4 h-4" /> },
+    { id: 'case-study' as ReportType, name: 'Nghiên cứu điển hình', icon: <BarChart3 className="w-4 h-4" /> },
+    { id: 'survey' as ReportType, name: 'Khảo sát', icon: <LineChart className="w-4 h-4" /> },
+    { id: 'whitepaper' as ReportType, name: 'Báo cáo chuyên đề', icon: <BookOpen className="w-4 h-4" /> },
   ];
 
   const reports: Report[] = [
@@ -231,10 +256,10 @@ export default function ReportsPage() {
   ];
 
   const stats = [
-    { label: 'Tài liệu', value: '150+', icon: '📚' },
-    { label: 'Lượt tải xuống', value: '25,000+', icon: '⬇️' },
-    { label: 'Tổ chức đóng góp', value: '40+', icon: '🏢' },
-    { label: 'Chủ đề nghiên cứu', value: '15+', icon: '🔖' },
+    { label: 'Tài liệu', value: '150+', icon: <BookOpen className="w-8 h-8 text-indigo-600" /> },
+    { label: 'Lượt tải xuống', value: '25,000+', icon: <Download className="w-8 h-8 text-indigo-600" /> },
+    { label: 'Tổ chức đóng góp', value: '40+', icon: <Building2 className="w-8 h-8 text-indigo-600" /> },
+    { label: 'Chủ đề nghiên cứu', value: '15+', icon: <Bookmark className="w-8 h-8 text-indigo-600" /> },
   ];
 
   const filteredReports = reports.filter((report) => {
@@ -271,7 +296,7 @@ export default function ReportsPage() {
       {/* Main Content */}
       <main className="pt-16">
         {/* Hero Section */}
-        <section className="relative w-full bg-gradient-to-br from-indigo-900 via-purple-900 to-indigo-900 text-white py-20">
+        <section className="relative w-full bg-gradient-to-br from-indigo-900 via-indigo-800 to-purple-900 text-white py-20">
           <div className="absolute inset-0 opacity-10">
             <Image
               src="/vecteezy_topo_34242655.svg"
@@ -284,7 +309,7 @@ export default function ReportsPage() {
           <div className="container mx-auto px-6 max-w-6xl relative z-10">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-sm">
-                <span className="text-4xl">📚</span>
+                <Library className="w-8 h-8 text-white" />
               </div>
               <div>
                 <h1 className="font-montserrat font-bold text-4xl md:text-5xl">
@@ -307,7 +332,7 @@ export default function ReportsPage() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {stats.map((stat, index) => (
                 <div key={index} className="text-center">
-                  <div className="text-4xl mb-2">{stat.icon}</div>
+                  <div className="flex justify-center mb-2">{stat.icon}</div>
                   <div className="text-3xl font-bold text-indigo-600 font-montserrat mb-1">
                     {stat.value}
                   </div>
@@ -332,9 +357,7 @@ export default function ReportsPage() {
                 className="w-full px-6 py-4 pr-12 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none font-montserrat text-lg"
               />
               <div className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
+                <Search className="w-6 h-6" />
               </div>
             </div>
           </div>
@@ -354,7 +377,7 @@ export default function ReportsPage() {
                     className={`px-4 py-2 rounded-lg font-montserrat font-semibold transition-all duration-200 flex items-center gap-2 ${
                       selectedCategory === category.id
                         ? 'bg-indigo-600 text-white shadow-md scale-105'
-                        : `${category.color} hover:shadow-md border border-gray-200`
+                        : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
                     }`}
                   >
                     <span>{category.icon}</span>
@@ -375,7 +398,7 @@ export default function ReportsPage() {
                     className={`px-4 py-2 rounded-lg font-montserrat font-semibold transition-all duration-200 flex items-center gap-2 ${
                       selectedType === type.id
                         ? 'bg-purple-600 text-white shadow-md scale-105'
-                        : 'bg-white text-gray-700 hover:bg-purple-50 border border-gray-200'
+                        : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
                     }`}
                   >
                     <span>{type.icon}</span>
@@ -398,7 +421,9 @@ export default function ReportsPage() {
 
             {filteredReports.length === 0 ? (
               <div className="text-center py-16">
-                <div className="text-6xl mb-4">📭</div>
+                <div className="flex justify-center mb-4">
+                  <Inbox className="w-14 h-14 text-gray-400" />
+                </div>
                 <h3 className="font-montserrat font-bold text-xl text-gray-600 mb-2">
                   Không tìm thấy tài liệu
                 </h3>
@@ -493,7 +518,7 @@ export default function ReportsPage() {
               <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-6 border-l-4 border-blue-600 hover:shadow-lg transition-shadow duration-300">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center">
-                    <span className="text-2xl">🏛️</span>
+                    <Landmark className="w-7 h-7 text-blue-600" />
                   </div>
                   <h3 className="font-montserrat font-bold text-xl text-gray-800">
                     VNFU
@@ -509,7 +534,7 @@ export default function ReportsPage() {
               <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg p-6 border-l-4 border-green-600 hover:shadow-lg transition-shadow duration-300">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center">
-                    <span className="text-2xl">👥</span>
+                    <Users className="w-7 h-7 text-green-600" />
                   </div>
                   <h3 className="font-montserrat font-bold text-xl text-gray-800">
                     Nhóm Chuyên gia
@@ -525,7 +550,7 @@ export default function ReportsPage() {
               <div className="bg-gradient-to-br from-purple-50 to-violet-50 rounded-lg p-6 border-l-4 border-purple-600 hover:shadow-lg transition-shadow duration-300">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-14 h-14 bg-purple-100 rounded-full flex items-center justify-center">
-                    <span className="text-2xl">🎯</span>
+                    <Target className="w-7 h-7 text-purple-600" />
                   </div>
                   <h3 className="font-montserrat font-bold text-xl text-gray-800">
                     Tổ chức Tư vấn
