@@ -68,10 +68,6 @@ export default function TomCaMauPage() {
                 <div>ASC (bao gồm mô hình chứng nhận nhóm/ASC Group ở một số khu vực)</div>
               </div>
 
-              <p className="text-sm text-gray-600 font-montserrat">
-                Tài liệu tóm lược theo hướng học thuật - thực tiễn. Các số liệu nên được đối chiếu theo đúng phạm vi,
-                năm báo cáo và phương pháp đo lường của đơn vị công bố.
-              </p>
             </header>
 
             <section className="space-y-6 text-gray-700 font-montserrat leading-relaxed">
@@ -230,10 +226,6 @@ export default function TomCaMauPage() {
                     SNV (2014). <em>Organic Shrimp Certification and Carbon Financing</em> - tổng quan về tôm rừng, chứng nhận và bối cảnh thể chế tại Cà Mau.
                   </li>
                 </ol>
-                <p className="text-sm text-gray-600 mt-3">
-                  Nguồn tham khảo trên là các tài liệu công khai liên quan trực tiếp đến ASC/tôm rừng và nghiên cứu định lượng ở Cà Mau.
-                  Nếu bạn muốn, mình có thể chuẩn hóa lại mục tài liệu tham khảo theo APA/Harvard (kèm link/DOI/ngày truy cập) cho đúng chuẩn xuất bản.
-                </p>
               </div>
             </section>
 
