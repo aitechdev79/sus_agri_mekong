@@ -64,9 +64,9 @@ export default function HoatDongSection() {
               activity.id === 'graisea' ? (
                 <Sprout size={72} strokeWidth={2} />
               ) : activity.id === 'right-to-food' ? (
-                <Wheat size={32} strokeWidth={2} />
+                <Wheat size={48} strokeWidth={2} />
               ) : (
-                <ShieldPlus size={32} strokeWidth={2} />
+                <ShieldPlus size={48} strokeWidth={2} />
               );
 
             return (
@@ -84,7 +84,7 @@ export default function HoatDongSection() {
                       <div className="flex items-center gap-4">
                         <div
                           className={`rounded-full bg-[#0A7029] flex items-center justify-center text-white shadow-md ${
-                            isGraisea ? 'w-24 h-24' : 'w-16 h-16'
+                            isGraisea || isRightToFood || isDgd ? 'w-24 h-24' : 'w-16 h-16'
                           }`}
                         >
                           {icon}
