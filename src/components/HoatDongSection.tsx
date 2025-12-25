@@ -10,7 +10,7 @@ export default function HoatDongSection() {
       title: 'Dự án Graisea',
       shortTitle: 'GRAISEA',
       description:
-        'Chương trình Đầu tư Nông nghiệp có Trách nhiệm và Mang tính Chuyển đổi về Giới tại Đông Nam Á (GRAISEA) là một chương trình cấp khu vực, được tài trợ bởi Chính phủ Thụy Điển. GRAISEA thúc đẩy các mô hình ba bên cùng có lợi (winwinwin), mang lại lợi ích cho cộng đồng, những nhà sản xuất quy mô nhỏ và các doanh nghiệp lớn.',
+        'GRAISEA là một chương trình cấp Đông Nam Á, được tài trợ bởi Chính phủ Thụy Điển. Nhằm thúc đẩy các mô hình ba bên cùng có lợi (win-win-win), mang lại lợi ích cho cộng đồng, những nhà sản xuất quy mô nhỏ và các doanh nghiệp lớn.',
       subtitle: 'Hỗ trợ nâng cao năng lực cho doanh nghiệp trong chuỗi chế biến tôm và lúa gạo',
       link: 'https://graisea.github.io/',
       borderColor: 'border-vn-green',
@@ -58,7 +58,7 @@ export default function HoatDongSection() {
             const isGraisea = activity.id === 'graisea';
             const icon =
               activity.id === 'graisea' ? (
-                <Sprout size={48} strokeWidth={2} />
+                <Sprout size={72} strokeWidth={2} />
               ) : activity.id === 'right-to-food' ? (
                 <Wheat size={32} strokeWidth={2} />
               ) : (
@@ -76,13 +76,18 @@ export default function HoatDongSection() {
               >
                 <div className="relative overflow-hidden mb-4 flex items-center justify-center" style={{ aspectRatio: '16/9', backgroundColor: '#F7F3EA' }}>
                   {isGraisea ? (
-                    <div className="flex items-center gap-4">
-                      <div className="w-16 h-16 rounded-full bg-[#0A7029] flex items-center justify-center text-white shadow-md">
-                        {icon}
+                    <div className="flex flex-col items-center gap-3 text-center">
+                      <div className="flex items-center gap-4">
+                        <div className="w-24 h-24 rounded-full bg-[#0A7029] flex items-center justify-center text-white shadow-md">
+                          {icon}
+                        </div>
+                        <span className="font-montserrat font-black text-2xl md:text-3xl" style={{ color: '#3C3C3B' }}>
+                          Graisea
+                        </span>
                       </div>
-                      <span className="font-montserrat font-black text-2xl md:text-3xl" style={{ color: '#3C3C3B' }}>
-                        Graisea
-                      </span>
+                      <p className="text-xs md:text-sm font-montserrat max-w-xs" style={{ color: '#6B7280' }}>
+                        Tăng cường bình đẳng giới và đầu tư kinh doanh nông nghiệp có trách nhiệm tại Đông Nam Á
+                      </p>
                     </div>
                   ) : (
                     <div className="w-16 h-16 rounded-full bg-[#0A7029] flex items-center justify-center text-white shadow-md">
