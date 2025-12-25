@@ -101,7 +101,10 @@ export default function ContentLibrarySection() {
                 {/* Content Container - Zooms on hover */}
                 <div className="flex flex-col items-center text-center p-6 transition-transform duration-500 group-hover:scale-105">
                   {/* Icon Container - Zooms with content */}
-                  <div className="mb-4 w-16 h-16 bg-gray-100 flex items-center justify-center transition-transform duration-500">
+                  <div
+                    className="mb-4 w-16 h-16 flex items-center justify-center transition-transform duration-500"
+                    style={{ backgroundColor: '#ffb81c' }}
+                  >
                     {iconContent}
                   </div>
                   {/* Title */}
