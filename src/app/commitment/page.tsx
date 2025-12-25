@@ -54,7 +54,7 @@ export default function CommitmentPage() {
                 {/* ESG Commitment */}
                 <div className="mb-6">
                   <h2 className="font-montserrat font-bold text-2xl text-gray-800 mb-4">
-                    Định hướng ESG
+                    Mục tiêu: Định hướng ESG
                   </h2>
                   <p className="text-lg text-gray-700 leading-relaxed font-montserrat mb-4">
                     Bên cạnh đó, chúng tôi xem ESG (Môi trường – Xã hội – Quản trị) là định hướng trọng tâm trong chiến lược phát triển. ESG không chỉ phản ánh trách nhiệm của doanh nghiệp với cộng đồng và môi trường, mà còn là nền tảng quản trị hiện đại giúp gia tăng năng lực cạnh tranh và nâng cao uy tín.
