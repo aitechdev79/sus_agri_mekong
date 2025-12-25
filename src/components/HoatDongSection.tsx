@@ -9,13 +9,13 @@ export default function HoatDongSection() {
       id: 'graisea',
       title: 'Dự án Graisea',
       shortTitle: 'GRAISEA',
-      description: 'Tăng cường bình đẳng giới và đầu tư kinh doanh nông nghiệp có trách nhiệm tại Đông Nam Á',
+      description:
+        'Chương trình Đầu tư Nông nghiệp có Trách nhiệm và Mang tính Chuyển đổi về Giới tại Đông Nam Á (GRAISEA) là một chương trình cấp khu vực, được tài trợ bởi Chính phủ Thụy Điển. GRAISEA thúc đẩy các mô hình ba bên cùng có lợi (winwinwin), mang lại lợi ích cho cộng đồng, những nhà sản xuất quy mô nhỏ và các doanh nghiệp lớn.',
       subtitle: 'Hỗ trợ nâng cao năng lực cho doanh nghiệp trong chuỗi chế biến tôm và lúa gạo',
       link: 'https://graisea.github.io/',
       borderColor: 'border-vn-green',
       iconBgColor: 'bg-vn-green-light',
       iconColor: 'text-vn-green',
-      icon: '🌾',
     },
     {
       id: 'right-to-food',
@@ -27,7 +27,6 @@ export default function HoatDongSection() {
       borderColor: 'border-vn-green',
       iconBgColor: 'bg-vn-green-light',
       iconColor: 'text-vn-green',
-      icon: '🍚',
     },
     {
       id: 'dgd',
@@ -39,7 +38,6 @@ export default function HoatDongSection() {
       borderColor: 'border-vn-green',
       iconBgColor: 'bg-vn-green-light',
       iconColor: 'text-vn-green',
-      icon: '🦐',
     },
   ];
 
@@ -55,124 +53,17 @@ export default function HoatDongSection() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-end">
           {activities.map((activity) => {
-            if (activity.id === 'dgd') {
-              return (
-                <Link
-                  key={activity.id}
-                  href={activity.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group block h-full overflow-hidden bg-white border border-[#E7E2D9] transition-all duration-300"
-                  style={{
-                    boxShadow: '0 6px 18px rgba(0, 0, 0, 0.08)'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.boxShadow = '0 14px 30px rgba(0, 0, 0, 0.14)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.boxShadow = '0 6px 18px rgba(0, 0, 0, 0.08)';
-                  }}
-                >
-                  <div className="relative flex h-full flex-col p-8">
-                    {/* Icon Circle */}
-                    <div className="relative mb-6 w-16 h-16 rounded-full bg-[#0A7029] flex items-center justify-center text-white shadow-md">
-                      <ShieldPlus size={32} strokeWidth={2} />
-                    </div>
-
-                    {/* Headline */}
-                    <h3 className="text-2xl font-bold mb-4 font-montserrat" style={{ color: '#3C3C3B' }}>
-                      {activity.title}
-                    </h3>
-
-                    {/* Description */}
-                    <p className="text-[15px] leading-relaxed font-montserrat mb-10" style={{ color: '#3C3C3B', opacity: 0.7 }}>
-                      {activity.description}
-                    </p>
-
-                  </div>
-                </Link>
+            const isGraisea = activity.id === 'graisea';
+            const icon =
+              activity.id === 'graisea' ? (
+                <Sprout size={48} strokeWidth={2} />
+              ) : activity.id === 'right-to-food' ? (
+                <Wheat size={32} strokeWidth={2} />
+              ) : (
+                <ShieldPlus size={32} strokeWidth={2} />
               );
-            }
-
-            if (activity.id === 'graisea') {
-              return (
-                <Link
-                  key={activity.id}
-                  href={activity.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group block h-full overflow-hidden bg-white border border-[#E7E2D9] transition-all duration-300"
-                  style={{
-                    boxShadow: '0 6px 18px rgba(0, 0, 0, 0.08)'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.boxShadow = '0 14px 30px rgba(0, 0, 0, 0.14)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.boxShadow = '0 6px 18px rgba(0, 0, 0, 0.08)';
-                  }}
-                >
-                  <div className="relative flex h-full flex-col p-8">
-                    {/* Icon Circle */}
-                    <div className="relative mb-6 w-16 h-16 rounded-full bg-[#0A7029] flex items-center justify-center text-white shadow-md">
-                      <Sprout size={32} strokeWidth={2} />
-                    </div>
-
-                    {/* Headline */}
-                    <h3 className="text-2xl font-bold mb-4 font-montserrat" style={{ color: '#3C3C3B' }}>
-                      {activity.title}
-                    </h3>
-
-                    {/* Description */}
-                    <p className="text-[15px] leading-relaxed font-montserrat mb-10" style={{ color: '#3C3C3B', opacity: 0.7 }}>
-                      {activity.description}
-                    </p>
-
-                  </div>
-                </Link>
-              );
-            }
-
-            if (activity.id === 'right-to-food') {
-              return (
-                <Link
-                  key={activity.id}
-                  href={activity.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group block h-full overflow-hidden bg-white border border-[#E7E2D9] transition-all duration-300"
-                  style={{
-                    boxShadow: '0 6px 18px rgba(0, 0, 0, 0.08)'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.boxShadow = '0 14px 30px rgba(0, 0, 0, 0.14)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.boxShadow = '0 6px 18px rgba(0, 0, 0, 0.08)';
-                  }}
-                >
-                  <div className="relative flex h-full flex-col p-8">
-                    {/* Icon Circle */}
-                    <div className="relative mb-6 w-16 h-16 rounded-full bg-[#0A7029] flex items-center justify-center text-white shadow-md">
-                      <Wheat size={32} strokeWidth={2} />
-                    </div>
-
-                    {/* Headline */}
-                    <h3 className="text-2xl font-bold mb-4 font-montserrat" style={{ color: '#3C3C3B' }}>
-                      {activity.title}
-                    </h3>
-
-                    {/* Description */}
-                    <p className="text-[15px] leading-relaxed font-montserrat mb-10" style={{ color: '#3C3C3B', opacity: 0.7 }}>
-                      {activity.description}
-                    </p>
-
-                  </div>
-                </Link>
-              );
-            }
 
             return (
               <Link
@@ -180,51 +71,40 @@ export default function HoatDongSection() {
                 href={activity.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group block overflow-hidden bg-white transition-all duration-500"
-                style={{
-                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.12)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.08)';
-                }}
+                className="group block flex flex-col"
+                aria-label={`${activity.title} - ${activity.description}`}
               >
-                {/* Content Container - Zooms on hover */}
-                <div className="flex flex-col items-center text-center p-6 transition-transform duration-500 group-hover:scale-105">
-                  {/* Icon Container - Zooms with content */}
-                  <div className="mb-4 w-16 h-16 bg-gray-100 flex items-center justify-center transition-transform duration-500">
-                    <span className="text-3xl">{activity.icon}</span>
-                  </div>
-              
-                  {/* Project Short Title */}
-                  <div className="mb-3">
-                    <span className="font-montserrat font-black text-xl md:text-2xl" style={{ color: '#3C3C3B' }}>
-                      {activity.shortTitle}
-                    </span>
-                  </div>
-              
-                  {/* Title */}
-                  <h3 className="text-lg md:text-xl font-bold mb-3 font-montserrat" style={{ color: '#3C3C3B' }}>
-                    {activity.title}
-                  </h3>
-              
-                  {/* Description */}
-                  <p className="text-sm leading-relaxed font-montserrat mb-3 line-clamp-3" style={{ color: '#6B7280' }}>
+                <div className="relative overflow-hidden mb-4 flex items-center justify-center" style={{ aspectRatio: '16/9', backgroundColor: '#F7F3EA' }}>
+                  {isGraisea ? (
+                    <div className="flex items-center gap-4">
+                      <div className="w-16 h-16 rounded-full bg-[#0A7029] flex items-center justify-center text-white shadow-md">
+                        {icon}
+                      </div>
+                      <span className="font-montserrat font-black text-2xl md:text-3xl" style={{ color: '#3C3C3B' }}>
+                        Graisea
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="w-16 h-16 rounded-full bg-[#0A7029] flex items-center justify-center text-white shadow-md">
+                      {icon}
+                    </div>
+                  )}
+                </div>
+
+                <div className="pb-4 relative flex-1 flex flex-col" style={{ minHeight: '120px' }}>
+                  <div className="absolute bottom-0 left-0 w-full h-0.5" style={{ backgroundColor: '#E8F5E9' }}></div>
+                  <div
+                    className="absolute bottom-0 left-0 h-0.5 w-0 group-hover:w-full transition-all duration-500 ease-out"
+                    style={{ backgroundColor: '#0A7029' }}
+                  ></div>
+                  {!isGraisea && (
+                    <h3 className="text-lg md:text-xl font-bold mb-2 font-montserrat" style={{ color: '#3C3C3B' }}>
+                      {activity.title}
+                    </h3>
+                  )}
+                  <p className="text-sm md:text-base font-montserrat flex-1" style={{ color: '#6B7280' }}>
                     {activity.description}
                   </p>
-              
-                  {/* Subtitle */}
-                  <p className="text-xs italic font-montserrat leading-relaxed mb-4" style={{ color: '#9CA3AF' }}>
-                    {activity.subtitle}
-                  </p>
-              
-                  {/* Learn More Link */}
-                  <div className="flex items-center gap-2 text-sm font-montserrat font-semibold transition-colors duration-300" style={{ color: '#0A7029' }}>
-                    <span>Tìm hiểu thêm</span>
-                    <span className="transform group-hover:translate-x-1 transition-transform duration-300">→</span>
-                  </div>
                 </div>
               </Link>
             );
