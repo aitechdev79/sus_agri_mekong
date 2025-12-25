@@ -83,9 +83,10 @@ export default function HoatDongSection() {
                     <div className="flex flex-col items-start gap-3 text-left">
                       <div className="flex items-center gap-4">
                         <div
-                          className={`rounded-full bg-[#0A7029] flex items-center justify-center text-white shadow-md ${
+                          className={`rounded-full flex items-center justify-center text-white shadow-md ${
                             isGraisea || isRightToFood || isDgd ? 'w-24 h-24' : 'w-16 h-16'
                           }`}
+                          style={{ backgroundColor: isGraisea ? '#5e42a6' : isDgd ? '#edd907' : '#0A7029' }}
                         >
                           {icon}
                         </div>
