@@ -40,10 +40,6 @@ export default function UnileverPage() {
                   Trách nhiệm xã hội
                 </span>
               </div>
-              <p className="text-sm text-gray-600 font-montserrat">
-                Tài liệu tóm lược theo hướng học thuật - thực tiễn, phục vụ mục đích tham khảo, giảng dạy và xây dựng
-                nội dung ESG.
-              </p>
             </header>
 
             <section className="space-y-6 text-gray-700 font-montserrat leading-relaxed">
