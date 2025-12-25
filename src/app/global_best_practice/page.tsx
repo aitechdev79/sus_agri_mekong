@@ -3,6 +3,7 @@
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
 import Image from 'next/image';
+import { Building2, Factory, Shirt, Zap } from 'lucide-react';
 
 export default function GlobalBestPracticePage() {
   return (
@@ -36,8 +37,8 @@ export default function GlobalBestPracticePage() {
               {/* Example 1 */}
               <div className="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                    <span className="text-2xl">🏭</span>
+                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-700">
+                    <Factory className="w-6 h-6" />
                   </div>
                   <h3 className="font-montserrat font-bold text-xl text-gray-800">
                     Unilever - Kế hoạch Sống Bền vững
@@ -64,8 +65,8 @@ export default function GlobalBestPracticePage() {
               {/* Example 2 */}
               <div className="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                    <span className="text-2xl">🚗</span>
+                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-700">
+                    <Zap className="w-6 h-6" />
                   </div>
                   <h3 className="font-montserrat font-bold text-xl text-gray-800">
                     Tesla - Năng lượng Tái tạo
@@ -92,8 +93,8 @@ export default function GlobalBestPracticePage() {
               {/* Example 3 */}
               <div className="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                    <span className="text-2xl">👕</span>
+                  <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center text-purple-700">
+                    <Shirt className="w-6 h-6" />
                   </div>
                   <h3 className="font-montserrat font-bold text-xl text-gray-800">
                     Patagonia - Kinh tế Tuần hoàn
@@ -120,8 +121,8 @@ export default function GlobalBestPracticePage() {
               {/* Example 4 */}
               <div className="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
-                    <span className="text-2xl">🏢</span>
+                  <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center text-yellow-700">
+                    <Building2 className="w-6 h-6" />
                   </div>
                   <h3 className="font-montserrat font-bold text-xl text-gray-800">
                     Microsoft - Phát thải Carbon Âm
