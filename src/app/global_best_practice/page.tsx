@@ -3,6 +3,7 @@
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Building2, Factory, Shirt, Zap } from 'lucide-react';
 
 export default function GlobalBestPracticePage() {
@@ -35,7 +36,11 @@ export default function GlobalBestPracticePage() {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Example 1 */}
-              <div className="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+              <Link
+                href="/unilever"
+                className="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-shadow duration-300 block"
+                aria-label="Unilever - Kế hoạch Sống Bền vững"
+              >
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-700">
                     <Factory className="w-6 h-6" />
@@ -60,7 +65,7 @@ export default function GlobalBestPracticePage() {
                     Trách nhiệm xã hội
                   </span>
                 </div>
-              </div>
+              </Link>
 
               {/* Example 2 */}
               <div className="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
