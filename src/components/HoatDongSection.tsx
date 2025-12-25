@@ -46,13 +46,33 @@ export default function HoatDongSection() {
   return (
     <section className="py-20 w-full bg-vn-rice-white">
       <div className="container mx-auto px-6 max-w-6xl">
-        <div className="mb-16">
-          <h2 className="text-4xl font-black mb-6 md:text-5xl font-montserrat text-left tracking-tight" style={{ color: '#3C3C3B' }}>
-            Hoạt động dự án
-          </h2>
-          <p className="text-xl font-montserrat text-left max-w-3xl leading-relaxed" style={{ color: '#6B7280' }}>
-            Tìm hiểu thêm về các dự án đã và đang thực hiện của chúng tôi với các đối tác quốc tế.
-          </p>
+        <div className="mb-16 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div>
+            <h2 className="text-4xl font-black mb-6 md:text-5xl font-montserrat text-left tracking-tight" style={{ color: '#3C3C3B' }}>
+              Hoạt động dự án
+            </h2>
+            <p className="text-xl font-montserrat text-left max-w-3xl leading-relaxed" style={{ color: '#6B7280' }}>
+              Tìm hiểu thêm về các dự án đã và đang thực hiện của chúng tôi với các đối tác quốc tế.
+            </p>
+          </div>
+          <Link
+            href="/hoat-dong-du-an"
+            className="inline-flex items-center gap-2 font-bold px-6 py-3 rounded-xl transition-all duration-300 hover:scale-105 hover:-translate-y-1"
+            style={{
+              backgroundColor: '#FFC107',
+              color: '#3C3C3B',
+              boxShadow: '0 4px 12px rgba(255, 193, 7, 0.3)'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow = '0 8px 24px rgba(255, 193, 7, 0.4)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(255, 193, 7, 0.3)';
+            }}
+          >
+            Xem tất cả
+            <span className="text-xl">→</span>
+          </Link>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-end">
