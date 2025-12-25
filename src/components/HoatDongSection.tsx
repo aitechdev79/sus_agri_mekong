@@ -78,7 +78,10 @@ export default function HoatDongSection() {
                 className="group block flex flex-col"
                 aria-label={`${activity.title} - ${activity.description}`}
               >
-                <div className="relative overflow-hidden mb-4 flex items-center justify-center" style={{ aspectRatio: '16/9', backgroundColor: '#F7F3EA' }}>
+                <div
+                  className="relative overflow-hidden mb-4 flex items-center justify-center group-hover:scale-110 transition-transform duration-500"
+                  style={{ aspectRatio: '16/9', backgroundColor: '#F7F3EA' }}
+                >
                   {isGraisea || isRightToFood || isDgd ? (
                     <div className="flex flex-col items-start gap-3 text-left">
                       <div className="flex items-center gap-4">
