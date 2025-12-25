@@ -75,7 +75,7 @@ export default function HoatDongSection() {
                 href={activity.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group block flex flex-col"
+                className="group block flex flex-col w-full max-w-md mx-auto md:max-w-none md:mx-0"
                 aria-label={`${activity.title} - ${activity.description}`}
               >
                 <div
