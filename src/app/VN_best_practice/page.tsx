@@ -3,6 +3,7 @@
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Factory, Fish, MapPin, Sprout, Tag, Zap } from 'lucide-react';
 
 export default function VNBestPracticePage() {
@@ -17,6 +18,7 @@ export default function VNBestPracticePage() {
       metaIcon: MapPin,
       icon: Fish,
       accent: 'emerald',
+      href: '/tomcamau',
     },
     {
       id: 'an-giang',
@@ -111,11 +113,8 @@ export default function VNBestPracticePage() {
                   violet: 'text-violet-700 bg-violet-100 border-violet-200',
                   amber: 'text-amber-700 bg-amber-100 border-amber-200',
                 };
-                return (
-                  <div
-                    key={practice.id}
-                    className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm hover:shadow-lg transition-all duration-300"
-                  >
+                const content = (
+                  <>
                     <div className="flex items-start justify-between gap-4 mb-4">
                       <div className={`w-12 h-12 rounded-xl flex items-center justify-center border ${accentClasses[practice.accent]}`}>
                         <Icon className="w-6 h-6" />
@@ -135,6 +134,28 @@ export default function VNBestPracticePage() {
                       <span className="font-semibold">{practice.metaLabel}:</span>
                       <span>{practice.metaValue}</span>
                     </div>
+                  </>
+                );
+
+                if (practice.href) {
+                  return (
+                    <Link
+                      key={practice.id}
+                      href={practice.href}
+                      className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm hover:shadow-lg transition-all duration-300 block"
+                      aria-label={practice.title}
+                    >
+                      {content}
+                    </Link>
+                  );
+                }
+
+                return (
+                  <div
+                    key={practice.id}
+                    className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm hover:shadow-lg transition-all duration-300"
+                  >
+                    {content}
                   </div>
                 );
               })}

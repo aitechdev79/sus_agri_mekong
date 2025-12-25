@@ -36,6 +36,7 @@ export default withAuth(
           '/global_best_practice',
           '/VN_best_practice',
           '/unilever',
+          '/tomcamau',
           '/congtyMinhphu',
           '/congtyTaiky',
           '/congtyVinhhien',
