@@ -21,7 +21,8 @@ export default function HoatDongSection() {
       id: 'right-to-food',
       title: 'Dự án Right To Food',
       shortTitle: 'RIGHT TO FOOD',
-      description: 'Thúc đẩy hợp tác khu vực tư nhân nhằm phát triển mô hình kinh doanh toàn diện và đầu tư có trách nhiệm',
+      description:
+        'Các nghiên cứu nhằm phân tích cách người dân diễn giải và xác định trách nhiệm liên quan đến việc bảo đảm quyền được có lương thực.',
       subtitle: 'Hỗ trợ doanh nghiệp trong chuỗi lúa gạo',
       link: 'https://policy-practice.oxfam.org/resources/a-common-sense-approach-to-the-right-to-food-558742/',
       borderColor: 'border-vn-green',
@@ -56,6 +57,7 @@ export default function HoatDongSection() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-end">
           {activities.map((activity) => {
             const isGraisea = activity.id === 'graisea';
+            const isRightToFood = activity.id === 'right-to-food';
             const icon =
               activity.id === 'graisea' ? (
                 <Sprout size={72} strokeWidth={2} />
@@ -75,18 +77,30 @@ export default function HoatDongSection() {
                 aria-label={`${activity.title} - ${activity.description}`}
               >
                 <div className="relative overflow-hidden mb-4 flex items-center justify-center" style={{ aspectRatio: '16/9', backgroundColor: '#F7F3EA' }}>
-                  {isGraisea ? (
+                  {isGraisea || isRightToFood ? (
                     <div className="flex flex-col items-start gap-3 text-left">
                       <div className="flex items-center gap-4">
-                        <div className="w-24 h-24 rounded-full bg-[#0A7029] flex items-center justify-center text-white shadow-md">
+                        <div
+                          className={`rounded-full bg-[#0A7029] flex items-center justify-center text-white shadow-md ${
+                            isGraisea ? 'w-24 h-24' : 'w-16 h-16'
+                          }`}
+                        >
                           {icon}
                         </div>
-                        <span className="font-montserrat font-black text-2xl md:text-3xl" style={{ color: '#3C3C3B' }}>
-                          Graisea
-                        </span>
+                        {isGraisea ? (
+                          <span className="font-montserrat font-black text-2xl md:text-3xl" style={{ color: '#3C3C3B' }}>
+                            Graisea
+                          </span>
+                        ) : (
+                          <span className="font-montserrat font-black text-xl md:text-2xl" style={{ color: '#3C3C3B' }}>
+                            Right To Food
+                          </span>
+                        )}
                       </div>
                       <p className="text-xs md:text-sm font-montserrat max-w-xs" style={{ color: '#6B7280' }}>
-                        Bình đẳng giới và đầu tư kinh doanh nông nghiệp có trách nhiệm
+                        {isGraisea
+                          ? 'Bình đẳng giới và đầu tư kinh doanh nông nghiệp có trách nhiệm'
+                          : 'Quyền được có lương thực'}
                       </p>
                     </div>
                   ) : (
@@ -102,7 +116,7 @@ export default function HoatDongSection() {
                     className="absolute bottom-0 left-0 h-0.5 w-0 group-hover:w-full transition-all duration-500 ease-out"
                     style={{ backgroundColor: '#0A7029' }}
                   ></div>
-                  {!isGraisea && (
+                  {!isGraisea && !isRightToFood && (
                     <h3 className="text-lg md:text-xl font-bold mb-2 font-montserrat" style={{ color: '#3C3C3B' }}>
                       {activity.title}
                     </h3>
