@@ -1,7 +1,7 @@
 ﻿'use client';
 
 import Link from 'next/link';
-import { Sprout, ShieldPlus, Wheat, ExternalLink, ArrowRight } from 'lucide-react';
+import { Sprout, ShieldPlus, Wheat } from 'lucide-react';
 
 export default function HoatDongSection() {
   const activities = [
@@ -91,16 +91,6 @@ export default function HoatDongSection() {
                       {activity.description}
                     </p>
 
-                    {/* CTA Area */}
-                    <div className="mt-auto pt-4 flex items-center justify-between">
-                      <span className="inline-flex items-center gap-2 text-[15px] font-montserrat font-semibold transition-all duration-300 group-hover:gap-3" style={{ color: '#0A7029' }}>
-                        Tìm hiểu thêm
-                        <ArrowRight size={18} />
-                      </span>
-                      <span className="w-9 h-9 rounded-full bg-[#0A7029]/10 flex items-center justify-center text-[#0A7029] transition-colors duration-300 group-hover:bg-[#0A7029] group-hover:text-white">
-                        <ExternalLink size={16} />
-                      </span>
-                    </div>
                   </div>
                 </Link>
               );
@@ -140,16 +130,6 @@ export default function HoatDongSection() {
                       {activity.description}
                     </p>
 
-                    {/* CTA Area */}
-                    <div className="mt-auto pt-4 flex items-center justify-between">
-                      <span className="inline-flex items-center gap-2 text-[15px] font-montserrat font-semibold transition-all duration-300 group-hover:gap-3" style={{ color: '#0A7029' }}>
-                        Tìm hiểu thêm
-                        <ArrowRight size={18} />
-                      </span>
-                      <span className="w-9 h-9 rounded-full bg-[#0A7029]/10 flex items-center justify-center text-[#0A7029] transition-colors duration-300 group-hover:bg-[#0A7029] group-hover:text-white">
-                        <ExternalLink size={16} />
-                      </span>
-                    </div>
                   </div>
                 </Link>
               );
@@ -189,16 +169,6 @@ export default function HoatDongSection() {
                       {activity.description}
                     </p>
 
-                    {/* CTA Area */}
-                    <div className="mt-auto pt-4 flex items-center justify-between">
-                      <span className="inline-flex items-center gap-2 text-[15px] font-montserrat font-semibold transition-all duration-300 group-hover:gap-3" style={{ color: '#0A7029' }}>
-                        Tìm hiểu thêm
-                        <ArrowRight size={18} />
-                      </span>
-                      <span className="w-9 h-9 rounded-full bg-[#0A7029]/10 flex items-center justify-center text-[#0A7029] transition-colors duration-300 group-hover:bg-[#0A7029] group-hover:text-white">
-                        <ExternalLink size={16} />
-                      </span>
-                    </div>
                   </div>
                 </Link>
               );
