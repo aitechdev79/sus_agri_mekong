@@ -200,9 +200,6 @@ export default function UnileverPage() {
                   <li>Bansal, P., &amp; DesJardine, M. R. (2014). Business sustainability: It is about time. <em>Strategic Organization</em>, 12(1), 70-78.</li>
                   <li>United Nations. (2015). <em>Transforming our world: the 2030 Agenda for Sustainable Development</em>.</li>
                 </ol>
-                <p className="text-sm text-gray-600 mt-3">
-                  Gợi ý: Nếu bạn cần chuẩn APA/Harvard hoàn chỉnh (kèm URL/DOI và ngày truy cập), mình có thể chuẩn hóa lại danh mục theo đúng style bạn dùng.
-                </p>
               </div>
             </section>
           </div>
