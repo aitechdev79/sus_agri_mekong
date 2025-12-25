@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { Calendar } from 'lucide-react';
+import { Calendar, Presentation } from 'lucide-react';
 import { getBestImageUrl } from '@/lib/image-utils';
 import MiniEventCalendar from '@/components/MiniEventCalendar';
 
@@ -44,10 +44,19 @@ export default function NewsSection() {
   const sortedEvents = [...newsItems].sort((a, b) =>
     new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
-  const featuredEvents = sortedEvents.slice(0, 2);
+  const upcomingEvent: NewsItem = {
+    id: 'daotaokiemkeKNK',
+    title: 'Khóa đào tạo quản lý năng lượng & kiểm kê khí nhà kính',
+    description:
+      'Đào tạo chuyên sâu về quản lý năng lượng, kiểm kê khí nhà kính và lập kế hoạch giảm phát thải cho doanh nghiệp.',
+    createdAt: '2026-02-01T00:00:00.000Z',
+    viewCount: 0,
+    category: 'Đào tạo',
+  };
+  const featuredEvents = [upcomingEvent, ...sortedEvents.filter(item => item.id !== upcomingEvent.id)].slice(0, 2);
 
   // Prepare events for calendar - only 'event' type with green color
-  const calendarEvents = newsItems.map(item => ({
+  const calendarEvents = [upcomingEvent, ...newsItems.filter(item => item.id !== upcomingEvent.id)].map(item => ({
     id: item.id,
     title: item.title,
     date: new Date(item.createdAt),
@@ -126,10 +135,13 @@ export default function NewsSection() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
           {/* Left Column - Featured Events (70%) */}
           <div className="lg:col-span-2 space-y-6">
-            {featuredEvents.map((item, index) => (
+            {featuredEvents.map((item, index) => {
+              const isUpcoming = item.id === upcomingEvent.id;
+              const linkHref = isUpcoming ? '/daotaokiemkeKNK' : `/content/${item.id}`;
+              return (
               <Link
                 key={item.id}
-                href={`/content/${item.id}`}
+                href={linkHref}
                 className="group block overflow-hidden bg-white transition-all duration-500"
                 style={{
                   boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)'
@@ -146,6 +158,13 @@ export default function NewsSection() {
                   {/* Thumbnail on Left */}
                   <div className="relative w-24 h-24 md:w-32 md:h-32 flex-shrink-0 mr-6 bg-gray-100 overflow-hidden">
                     {(() => {
+                      if (isUpcoming) {
+                        return (
+                          <div className="w-full h-full bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center">
+                            <Presentation className="w-10 h-10 text-blue-500" />
+                          </div>
+                        );
+                      }
                       let imageUrl = null;
                       if (item.thumbnailUrl) {
                         if (item.thumbnailUrl.includes('/uploads/')) {
@@ -216,7 +235,8 @@ export default function NewsSection() {
                   </div>
                 </div>
               </Link>
-            ))}
+            );
+            })}
           </div>
 
           {/* Right Column - Mini Calendar (30%) - Floating widget */}
