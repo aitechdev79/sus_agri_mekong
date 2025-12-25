@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { BarChart3, FileText, Globe2 } from 'lucide-react';
 
 export default function ContentLibrarySection() {
   const contentCards = [
@@ -65,11 +66,11 @@ export default function ContentLibrarySection() {
             // Determine icon based on card ID
             let iconContent;
             if (card.id === 'policy') {
-              iconContent = <span className="text-4xl">📋</span>; // Notepad
+              iconContent = <FileText className="w-10 h-10" />;
             } else if (card.id === 'reports') {
-              iconContent = <span className="text-4xl">📊</span>; // Chart
+              iconContent = <BarChart3 className="w-10 h-10" />;
             } else if (card.id === 'global-practices') {
-              iconContent = <span className="text-4xl">🌍</span>; // Globe
+              iconContent = <Globe2 className="w-10 h-10" />;
             } else if (card.id === 'vietnam-practices') {
               iconContent = (
                 <Image
