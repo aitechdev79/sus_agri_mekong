@@ -256,10 +256,10 @@ export default function ReportsPage() {
   ];
 
   const stats = [
-    { label: 'Tài liệu', value: '150+', icon: <BookOpen className="w-8 h-8 text-indigo-600" /> },
-    { label: 'Lượt tải xuống', value: '25,000+', icon: <Download className="w-8 h-8 text-indigo-600" /> },
-    { label: 'Tổ chức đóng góp', value: '40+', icon: <Building2 className="w-8 h-8 text-indigo-600" /> },
-    { label: 'Chủ đề nghiên cứu', value: '15+', icon: <Bookmark className="w-8 h-8 text-indigo-600" /> },
+    { label: 'Tài liệu', value: '150+', icon: <BookOpen className="w-6 h-6 text-white" /> },
+    { label: 'Lượt tải xuống', value: '25,000+', icon: <Download className="w-6 h-6 text-white" /> },
+    { label: 'Tổ chức đóng góp', value: '40+', icon: <Building2 className="w-6 h-6 text-white" /> },
+    { label: 'Chủ đề nghiên cứu', value: '15+', icon: <Bookmark className="w-6 h-6 text-white" /> },
   ];
 
   const filteredReports = reports.filter((report) => {
@@ -323,21 +323,19 @@ export default function ReportsPage() {
               Việt Nam. Các tài liệu được chọn lọc và phân loại khoa học, giúp doanh nghiệp, tổ chức và nhà
               nghiên cứu dễ dàng tra cứu, tiếp cận tri thức tin cậy và ứng dụng vào thực tiễn.
             </p>
-          </div>
-        </section>
-
-        {/* Statistics Section */}
-        <section className="py-12 bg-white border-b">
-          <div className="container mx-auto px-6 max-w-6xl">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="mt-10 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl">
               {stats.map((stat, index) => (
-                <div key={index} className="text-center">
-                  <div className="flex justify-center mb-2">{stat.icon}</div>
-                  <div className="text-3xl font-bold text-indigo-600 font-montserrat mb-1">
-                    {stat.value}
+                <div key={index} className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+                    {stat.icon}
                   </div>
-                  <div className="text-gray-600 font-montserrat text-sm">
-                    {stat.label}
+                  <div>
+                    <div className="text-2xl font-bold text-white font-montserrat">
+                      {stat.value}
+                    </div>
+                    <div className="text-sm text-indigo-100 font-montserrat">
+                      {stat.label}
+                    </div>
                   </div>
                 </div>
               ))}
