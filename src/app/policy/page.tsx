@@ -4,6 +4,7 @@ import { useState } from 'react';
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
 import Image from 'next/image';
+import { BarChart3, FileText, Globe2, Leaf, ScrollText, Users, Wheat } from 'lucide-react';
 
 type PolicyCategory = 'all' | 'esg' | 'agriculture' | 'labor' | 'environment' | 'trade';
 
@@ -21,12 +22,12 @@ export default function PolicyPage() {
   const [selectedCategory, setSelectedCategory] = useState<PolicyCategory>('all');
 
   const categories = [
-    { id: 'all' as PolicyCategory, name: 'Tất cả', icon: '📋' },
-    { id: 'esg' as PolicyCategory, name: 'ESG & Bền vững', icon: '🌱' },
-    { id: 'agriculture' as PolicyCategory, name: 'Nông nghiệp', icon: '🌾' },
-    { id: 'labor' as PolicyCategory, name: 'Lao động', icon: '👥' },
-    { id: 'environment' as PolicyCategory, name: 'Môi trường', icon: '🌍' },
-    { id: 'trade' as PolicyCategory, name: 'Thương mại', icon: '📊' },
+    { id: 'all' as PolicyCategory, name: 'Tất cả', icon: <FileText className="w-4 h-4" /> },
+    { id: 'esg' as PolicyCategory, name: 'ESG & Bền vững', icon: <Leaf className="w-4 h-4" /> },
+    { id: 'agriculture' as PolicyCategory, name: 'Nông nghiệp', icon: <Wheat className="w-4 h-4" /> },
+    { id: 'labor' as PolicyCategory, name: 'Lao động', icon: <Users className="w-4 h-4" /> },
+    { id: 'environment' as PolicyCategory, name: 'Môi trường', icon: <Globe2 className="w-4 h-4" /> },
+    { id: 'trade' as PolicyCategory, name: 'Thương mại', icon: <BarChart3 className="w-4 h-4" /> },
   ];
 
   const policies: Policy[] = [
@@ -271,8 +272,8 @@ export default function PolicyPage() {
                     <h3 className="font-montserrat font-bold text-2xl text-blue-600">
                       {standard.code}
                     </h3>
-                    <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                      <span className="text-2xl">📜</span>
+                    <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
+                      <ScrollText className="w-6 h-6" />
                     </div>
                   </div>
                   <h4 className="font-montserrat font-semibold text-lg text-gray-800 mb-2">
