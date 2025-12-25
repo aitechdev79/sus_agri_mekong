@@ -38,6 +38,7 @@ export default withAuth(
           '/unilever',
           '/tomcamau',
           '/daotaokiemkeKNK',
+          '/hoat-dong-du-an',
           '/congtyMinhphu',
           '/congtyTaiky',
           '/congtyVinhhien',
