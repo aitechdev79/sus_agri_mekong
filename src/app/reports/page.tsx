@@ -81,11 +81,11 @@ export default function ReportsPage() {
   const reports: Report[] = [
     {
       id: 'age-care-report',
-      title: 'Thi truong cac san pham, dich vu cham soc nguoi cao tuoi tai Viet Nam',
-      description: 'Bao cao nghien cuu ve gia hoa dan so, nhu cau cham soc va co hoi phat trien thi truong dich vu cho nguoi cao tuoi.',
+      title: 'Th? tr??ng c?c s?n ph?m, d?ch v? ch?m s?c ng??i cao tu?i t?i Vi?t Nam',
+      description: 'B?o c?o nghi?n c?u v? gi? h?a d?n s?, nhu c?u ch?m s?c v? c? h?i ph?t tri?n th? tr??ng d?ch v? cho ng??i cao tu?i. T?c gi?: VCCI-HCM UNFPA.',
       category: 'policy',
       type: 'research',
-      author: 'VCCI-HCM & UNFPA',
+      author: '',
       organization: 'VCCI-HCM',
       publishDate: '2021',
       pages: 0,
@@ -473,13 +473,29 @@ export default function ReportsPage() {
                       <p className="text-gray-600 font-montserrat text-sm mb-4 line-clamp-3 leading-relaxed">
                         {report.description}
                       </p>
-
-                      {/* Meta Info */}
-                      <div className="space-y-2 mb-4">
-                        <div className="flex items-center text-sm text-gray-600 font-montserrat">
-                          <span className="font-semibold mr-2">TA?c gi???:</span>
-                          <span className="line-clamp-1">{report.author}</span>
+                      {!report.link && (
+                      {!report.link && (
+                        <div className="space-y-2 mb-4">
+                          {/* Meta Info */}
+                          <div className="flex items-center text-sm text-gray-600 font-montserrat">
+                            <span className="font-semibold mr-2">TA?c gi???:</span>
+                            <span className="line-clamp-1">{report.author}</span>
+                          </div>
+                          <div className="flex items-center text-sm text-gray-600 font-montserrat">
+                            <Calendar className="w-4 h-4 mr-2" />
+                            <span>{report.publishDate}</span>
+                            <span className="mx-2">???</span>
+                            <span>{report.pages} trang</span>
+                            <span className="mx-2">???</span>
+                            <span>{report.fileSize}</span>
+                          </div>
+                          <div className="flex items-center text-sm text-gray-600 font-montserrat">
+                            <Download className="w-4 h-4 mr-2" />
+                            <span>{report.downloads.toLocaleString()} l?????t t???i</span>
+                          </div>
                         </div>
+                      )}
+                      )}
                         <div className="flex items-center text-sm text-gray-600 font-montserrat">
                           <Calendar className="w-4 h-4 mr-2" />
                           <span>{report.publishDate}</span>
