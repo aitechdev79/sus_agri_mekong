@@ -11,7 +11,8 @@ export default function AgeCareReportPage() {
       </div>
 
       <main className="pt-16">
-        <section className="report-summary" lang="vi">
+        <div className="container mx-auto px-6 max-w-6xl">
+          <section className="report-summary mx-auto py-10" lang="vi">
           <style>{`
             .report-summary { max-width: 980px; line-height: 1.65; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
             .report-summary h1 { font-size: 1.9rem; margin-bottom: 0.4em; }
@@ -164,6 +165,7 @@ export default function AgeCareReportPage() {
             </p>
           </footer>
         </section>
+        </div>
       </main>
 
       <Footer />

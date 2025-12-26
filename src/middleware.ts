@@ -69,5 +69,5 @@ export default withAuth(
 
 export const config = {
   // Match only internationalized pathnames and protected routes, exclude static assets
-  matcher: ['/((?!_next|favicon.ico|uploads|hero|images|.*\\.jpg|.*\\.jpeg|.*\\.png|.*\\.gif|.*\\.svg|.*\\.webp).*)']
+  matcher: ['/((?!_next|favicon.ico|uploads|hero|images|.*\\.jpg|.*\\.jpeg|.*\\.png|.*\\.gif|.*\\.svg|.*\\.webp|.*\\.pdf).*)']
 };
