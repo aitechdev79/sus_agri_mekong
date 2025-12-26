@@ -473,7 +473,7 @@ export default function ReportsPage() {
                       <p className="text-gray-600 font-montserrat text-sm mb-4 line-clamp-3 leading-relaxed">
                         {report.description}
                       </p>
-                      {!report.link && (
+
                       {!report.link && (
                         <div className="space-y-2 mb-4">
                           {/* Meta Info */}
@@ -495,20 +495,6 @@ export default function ReportsPage() {
                           </div>
                         </div>
                       )}
-                      )}
-                        <div className="flex items-center text-sm text-gray-600 font-montserrat">
-                          <Calendar className="w-4 h-4 mr-2" />
-                          <span>{report.publishDate}</span>
-                          <span className="mx-2">???</span>
-                          <span>{report.pages} trang</span>
-                          <span className="mx-2">???</span>
-                          <span>{report.fileSize}</span>
-                        </div>
-                        <div className="flex items-center text-sm text-gray-600 font-montserrat">
-                          <Download className="w-4 h-4 mr-2" />
-                          <span>{report.downloads.toLocaleString()} l?????t t???i</span>
-                        </div>
-                      </div>
 
                       {/* Tags */}
                       <div className="flex flex-wrap gap-2 mb-4">
