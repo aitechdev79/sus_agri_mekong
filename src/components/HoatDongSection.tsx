@@ -75,7 +75,7 @@ export default function HoatDongSection() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-end">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-stretch">
           {activities.map((activity) => {
             const isGraisea = activity.id === 'graisea';
             const isRightToFood = activity.id === 'right-to-food';
@@ -95,7 +95,7 @@ export default function HoatDongSection() {
                 href={activity.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group block flex flex-col w-full max-w-md mx-auto md:max-w-none md:mx-0"
+                className="group block flex flex-col w-full h-full max-w-md mx-auto md:max-w-none md:mx-0"
                 aria-label={`${activity.title} - ${activity.description}`}
               >
                 <div
@@ -142,7 +142,7 @@ export default function HoatDongSection() {
                   )}
                 </div>
 
-                <div className="pb-4 relative flex-1 flex flex-col" style={{ minHeight: '120px' }}>
+                <div className="pb-4 relative flex-1 flex flex-col" style={{ minHeight: '160px' }}>
                   <div className="absolute bottom-0 left-0 w-full h-0.5" style={{ backgroundColor: '#E8F5E9' }}></div>
                   <div
                     className="absolute bottom-0 left-0 h-0.5 w-0 group-hover:w-full transition-all duration-500 ease-out"
@@ -153,7 +153,16 @@ export default function HoatDongSection() {
                       {activity.title}
                     </h3>
                   )}
-                  <p className="text-sm md:text-base font-montserrat flex-1" style={{ color: '#6B7280' }}>
+                  <p
+                    className="text-sm md:text-base font-montserrat flex-1"
+                    style={{
+                      color: '#6B7280',
+                      display: '-webkit-box',
+                      WebkitLineClamp: 5,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden',
+                    }}
+                  >
                     {activity.description}
                   </p>
                 </div>
