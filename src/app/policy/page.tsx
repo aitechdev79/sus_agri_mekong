@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
 import Image from 'next/image';
@@ -16,6 +17,7 @@ interface Policy {
   date: string;
   summary: string;
   source: string;
+  link?: string;
 }
 
 export default function PolicyPage() {
@@ -31,6 +33,16 @@ export default function PolicyPage() {
   ];
 
   const policies: Policy[] = [
+    {
+      id: 'policy-circular-economy-222',
+      title: 'Quyết định số 222/QĐ-TTg của Thủ tướng Chính phủ: Ban hành Kế hoạch hành động quốc gia thực hiện kinh tế tuần hoàn đến năm 2035',
+      category: 'environment',
+      status: 'new',
+      date: '23-01-2025',
+      summary: 'Kinh tế tuần hoàn được xác định là hướng tiếp cận để nâng cao năng suất – hiệu quả sử dụng tài nguyên, giảm phát thải và rủi ro môi trường, đồng thời tăng sức cạnh tranh của nền kinh tế; triển khai theo lộ trình, có trọng tâm theo ngành/lĩnh vực, gắn đổi mới sáng tạo, chuyển đổi số và thúc đẩy thị trường.',
+      source: 'Chính phủ Việt Nam',
+      link: '/policy_circular_economy',
+    },
     {
       id: '1',
       title: 'Nghị định về Báo cáo Phát triển Bền vững cho Doanh nghiệp',
@@ -225,9 +237,9 @@ export default function PolicyPage() {
               Chính sách & Quy định nổi bật
             </h2>
             <div className="grid gap-6">
-              {filteredPolicies.map((policy) => (
+              {filteredPolicies.map((policy) => {
+              const cardContent = (
                 <div
-                  key={policy.id}
                   className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow duration-200"
                 >
                   <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-4">
@@ -248,7 +260,22 @@ export default function PolicyPage() {
                     </div>
                   </div>
                 </div>
-              ))}
+              );
+
+              if (policy.link) {
+                return (
+                  <Link key={policy.id} href={policy.link} className="block">
+                    {cardContent}
+                  </Link>
+                );
+              }
+
+              return (
+                <div key={policy.id}>
+                  {cardContent}
+                </div>
+              );
+            })}
             </div>
           </div>
         </section>
