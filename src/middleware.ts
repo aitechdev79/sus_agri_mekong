@@ -28,6 +28,7 @@ export default withAuth(
           '/library',
           '/content',
           '/guidance-policy',
+          '/policy_circular_economy',
           '/esg',
           '/policy',
           '/reports',
@@ -69,5 +70,5 @@ export default withAuth(
 
 export const config = {
   // Match only internationalized pathnames and protected routes, exclude static assets
-  matcher: ['/((?!_next|favicon.ico|uploads|hero|images|.*\\.jpg|.*\\.jpeg|.*\\.png|.*\\.gif|.*\\.svg|.*\\.webp|.*\\.pdf).*)']
+  matcher: ['/((?!_next|favicon.ico|uploads|hero|images|policy_circular_economy|.*\\.jpg|.*\\.jpeg|.*\\.png|.*\\.gif|.*\\.svg|.*\\.webp|.*\\.pdf).*)']
 };
