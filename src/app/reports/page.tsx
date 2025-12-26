@@ -381,17 +381,17 @@ export default function ReportsPage() {
         </section>
 
         {/* Filter Section */}
-        <section className="py-6 bg-gray-50 sticky top-16 z-40 shadow-sm border-b">
+        <section className="py-3 bg-gray-50 sticky top-16 z-40 shadow-sm border-b">
           <div className="container mx-auto px-6 max-w-6xl">
             {/* Category Filters */}
-            <div className="mb-4">
-              <h3 className="font-montserrat font-semibold text-sm text-gray-600 mb-3">Chủ đề:</h3>
+            <div className="mb-2">
+              <h3 className="font-montserrat font-semibold text-xs text-gray-600 mb-2">Chủ đề:</h3>
               <div className="flex flex-wrap gap-2">
                 {categories.map((category) => (
                   <button
                     key={category.id}
                     onClick={() => setSelectedCategory(category.id)}
-                    className={`px-4 py-2 rounded-lg font-montserrat font-semibold transition-all duration-200 flex items-center gap-2 ${
+                    className={`px-3 py-1.5 rounded-lg font-montserrat font-semibold transition-all duration-200 flex items-center gap-2 text-sm ${
                       selectedCategory === category.id
                         ? 'bg-indigo-600 text-white shadow-md scale-105'
                         : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
@@ -406,13 +406,13 @@ export default function ReportsPage() {
 
             {/* Type Filters */}
             <div>
-              <h3 className="font-montserrat font-semibold text-sm text-gray-600 mb-3">Loại tài liệu:</h3>
+              <h3 className="font-montserrat font-semibold text-xs text-gray-600 mb-2">Loại tài liệu:</h3>
               <div className="flex flex-wrap gap-2">
                 {reportTypes.map((type) => (
                   <button
                     key={type.id}
                     onClick={() => setSelectedType(type.id)}
-                    className={`px-4 py-2 rounded-lg font-montserrat font-semibold transition-all duration-200 flex items-center gap-2 ${
+                    className={`px-3 py-1.5 rounded-lg font-montserrat font-semibold transition-all duration-200 flex items-center gap-2 text-sm ${
                       selectedType === type.id
                         ? 'bg-purple-600 text-white shadow-md scale-105'
                         : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
