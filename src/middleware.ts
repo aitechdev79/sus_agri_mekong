@@ -42,6 +42,7 @@ export default withAuth(
           '/congtyMinhphu',
           '/congtyTaiky',
           '/congtyVinhhien',
+          '/AgeCareReport',
           '/vi', // Internationalized routes
           '/en'
         ];

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
 import Image from 'next/image';
@@ -49,6 +50,7 @@ interface Report {
   fileSize: string;
   language: 'vi' | 'en' | 'both';
   thumbnail: string;
+  link?: string;
 }
 
 export default function ReportsPage() {
@@ -77,6 +79,23 @@ export default function ReportsPage() {
   ];
 
   const reports: Report[] = [
+    {
+      id: 'age-care-report',
+      title: 'Thi truong cac san pham, dich vu cham soc nguoi cao tuoi tai Viet Nam',
+      description: 'Bao cao nghien cuu ve gia hoa dan so, nhu cau cham soc va co hoi phat trien thi truong dich vu cho nguoi cao tuoi.',
+      category: 'policy',
+      type: 'research',
+      author: 'VCCI-HCM & UNFPA',
+      organization: 'VCCI-HCM',
+      publishDate: '2021',
+      pages: 0,
+      downloads: 0,
+      tags: ['Chinh sach nganh', 'Kinh doanh co trach nhiem'],
+      fileSize: 'PDF',
+      language: 'vi',
+      thumbnail: '/reports/age-care.jpg',
+      link: '/AgeCareReport',
+    },
     {
       id: '1',
       title: 'Báo cáo Phát triển Bền vững Việt Nam 2024',
@@ -431,11 +450,11 @@ export default function ReportsPage() {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredReports.map((report) => (
-                  <div
-                    key={report.id}
-                    className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group"
-                  >
+                {filteredReports.map((report) => {
+                  const cardClasses =
+                    'bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group';
+                  const cardContent = (
+                    <>
                     {/* Thumbnail */}
                     <div className="relative h-48 bg-gradient-to-br from-indigo-100 to-purple-100">
                       <div className="absolute inset-0 flex items-center justify-center">
@@ -458,20 +477,20 @@ export default function ReportsPage() {
                       {/* Meta Info */}
                       <div className="space-y-2 mb-4">
                         <div className="flex items-center text-sm text-gray-600 font-montserrat">
-                          <span className="font-semibold mr-2">Tác giả:</span>
+                          <span className="font-semibold mr-2">TA?c gi???:</span>
                           <span className="line-clamp-1">{report.author}</span>
                         </div>
                         <div className="flex items-center text-sm text-gray-600 font-montserrat">
                           <Calendar className="w-4 h-4 mr-2" />
                           <span>{report.publishDate}</span>
-                          <span className="mx-2">•</span>
+                          <span className="mx-2">???</span>
                           <span>{report.pages} trang</span>
-                          <span className="mx-2">•</span>
+                          <span className="mx-2">???</span>
                           <span>{report.fileSize}</span>
                         </div>
                         <div className="flex items-center text-sm text-gray-600 font-montserrat">
                           <Download className="w-4 h-4 mr-2" />
-                          <span>{report.downloads.toLocaleString()} lượt tải</span>
+                          <span>{report.downloads.toLocaleString()} l?????t t???i</span>
                         </div>
                       </div>
 
@@ -486,6 +505,38 @@ export default function ReportsPage() {
                             {tag}
                           </span>
                         ))}
+                      </div>
+
+                      {/* Download Button */}
+                      {report.link ? (
+                        <span className="w-full px-4 py-3 bg-indigo-600 text-white font-montserrat font-semibold rounded-lg hover:bg-indigo-700 transition-colors duration-200 flex items-center justify-center gap-2">
+                          <FileText className="w-5 h-5" />
+                          Xem tom tat
+                        </span>
+                      ) : (
+                        <button className="w-full px-4 py-3 bg-indigo-600 text-white font-montserrat font-semibold rounded-lg hover:bg-indigo-700 transition-colors duration-200 flex items-center justify-center gap-2">
+                          <Download className="w-5 h-5" />
+                          T???i xu??`ng PDF
+                        </button>
+                      )}
+                    </div>
+                    </>
+                  );
+
+                  if (report.link) {
+                    return (
+                      <Link key={report.id} href={report.link} className={cardClasses}>
+                        {cardContent}
+                      </Link>
+                    );
+                  }
+
+                  return (
+                    <div key={report.id} className={cardClasses}>
+                      {cardContent}
+                    </div>
+                  );
+                })}
                       </div>
 
                       {/* Download Button */}
