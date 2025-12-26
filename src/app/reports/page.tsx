@@ -93,7 +93,7 @@ export default function ReportsPage() {
       tags: ['Chinh sach nganh', 'Kinh doanh co trach nhiem'],
       fileSize: 'PDF',
       language: 'vi',
-      thumbnail: '/reports/age-care.jpg',
+      thumbnail: '/VN-VCCIHCM-Report-Market-Mapping-on-Elderly-Care.jpg',
       link: '/AgeCareReport',
     },
     {
@@ -456,10 +456,20 @@ export default function ReportsPage() {
                   const cardContent = (
                     <>
                     {/* Thumbnail */}
-                    <div className="relative h-48 bg-gradient-to-br from-indigo-100 to-purple-100">
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <FileText className="w-20 h-20 text-indigo-300" />
-                      </div>
+                    <div className="relative h-48 bg-gray-100 overflow-hidden">
+                      {report.thumbnail ? (
+                        <Image
+                          src={report.thumbnail}
+                          alt={report.title}
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <FileText className="w-20 h-20 text-indigo-300" />
+                        </div>
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                       <div className="absolute top-4 right-4">
                         {getLanguageBadge(report.language)}
                       </div>
