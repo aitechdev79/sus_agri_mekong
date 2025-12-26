@@ -81,8 +81,8 @@ export default function ReportsPage() {
   const reports: Report[] = [
     {
       id: 'age-care-report',
-      title: 'Th? tr??ng c?c s?n ph?m, d?ch v? ch?m s?c ng??i cao tu?i t?i Vi?t Nam',
-      description: 'B?o c?o nghi?n c?u v? gi? h?a d?n s?, nhu c?u ch?m s?c v? c? h?i ph?t tri?n th? tr??ng d?ch v? cho ng??i cao tu?i. T?c gi?: VCCI-HCM UNFPA.',
+      title: 'Thị trường các sản phẩm, dịch vụ chăm sóc người cao tuổi tại Việt Nam',
+      description: 'Báo cáo nghiên cứu về già hóa dân số, nhu cầu chăm sóc và cơ hội phát triển thị trường dịch vụ cho người cao tuổi. Tác giả: VCCI-HCM UNFPA.',
       category: 'policy',
       type: 'research',
       author: '',
