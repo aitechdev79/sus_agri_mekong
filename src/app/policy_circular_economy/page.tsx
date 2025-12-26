@@ -43,78 +43,78 @@ export default function PolicyCircularEconomyPage() {
             `}</style>
 
             <header>
-              <h1>Quy?t ??nh 222/Q?-TTg (23/01/2025): K? ho?ch h?nh ??ng qu?c gia th?c hi?n kinh t? tu?n ho?n ??n n?m 2035</h1>
+              <h1>Quyết định 222/QĐ-TTg (23/01/2025): Kế hoạch hành động quốc gia thực hiện kinh tế tuần hoàn đến năm 2035</h1>
               <p className="meta">
-                V?n b?n do Th? t??ng Ch?nh ph? ban h?nh, ??nh h??ng v? giao nhi?m v? tri?n khai kinh t? tu?n ho?n tr?n ph?m vi qu?c gia giai ?o?n 2025?2035.
+                Văn bản do Thủ tướng Chính phủ ban hành, định hướng và giao nhiệm vụ triển khai kinh tế tuần hoàn trên phạm vi quốc gia giai đoạn 2025–2035.
               </p>
               <p>
                 <a className="download-link" href="/222-ttg.signed.pdf" download>
-                  T?i v?n b?n g?c (PDF)
+                  Tải văn bản gốc (PDF)
                 </a>
               </p>
             </header>
 
             <section className="callout">
               <p style={{ margin: 0 }}>
-                <strong>Th?ng ?i?p ch?nh:</strong> Kinh t? tu?n ho?n ???c x?c ??nh l? h??ng ti?p c?n ?? n?ng cao n?ng su?t ? hi?u qu? s? d?ng t?i nguy?n,
-                gi?m ph?t th?i v? r?i ro m?i tr??ng, ??ng th?i t?ng s?c c?nh tranh c?a n?n kinh t?; tri?n khai theo l? tr?nh, c? tr?ng t?m theo ng?nh/l?nh v?c,
-                g?n ??i m?i s?ng t?o, chuy?n ??i s? v? th?c ??y th? tr??ng. <span className="muted">(Xem ph?n ?B?i c?nh/Quan ?i?m?)</span>
+                <strong>Thông điệp chính:</strong> Kinh tế tuần hoàn được xác định là hướng tiếp cận để nâng cao năng suất – hiệu quả sử dụng tài nguyên,
+                giảm phát thải và rủi ro môi trường, đồng thời tăng sức cạnh tranh của nền kinh tế; triển khai theo lộ trình, có trọng tâm theo ngành/lĩnh vực,
+                gắn đổi mới sáng tạo, chuyển đổi số và thúc đẩy thị trường. <span className="muted">(Xem phần “Bối cảnh/Quan điểm”)</span>
               </p>
             </section>
 
             <section>
-              <h2>1) B?i c?nh v? quan ?i?m tri?n khai</h2>
+              <h2>1) Bối cảnh và quan điểm triển khai</h2>
               <div className="grid">
                 <div className="card">
-                  <h3>B?i c?nh</h3>
+                  <h3>Bối cảnh</h3>
                   <p>
-                    V?n b?n nh?n m?nh c?c th?ch th?c v? bi?n ??i kh? h?u, suy gi?m ?a d?ng sinh h?c, ? nhi?m v? c?n ki?t t?i nguy?n,
-                    ??ng th?i n?u xu h??ng to?n c?u chuy?n d?ch sang m? h?nh t?ng tr??ng xanh ? ph?t th?i th?p v? y?u c?u th? tr??ng ng?y c?ng cao.
+                    Văn bản nhấn mạnh các thách thức về biến đổi khí hậu, suy giảm đa dạng sinh học, ô nhiễm và cạn kiệt tài nguyên,
+                    đồng thời nêu xu hướng toàn cầu chuyển dịch sang mô hình tăng trưởng xanh – phát thải thấp và yêu cầu thị trường ngày càng cao.
                   </p>
                 </div>
                 <div className="card">
-                  <h3>Quan ?i?m</h3>
+                  <h3>Quan điểm</h3>
                   <ul>
-                    <li>Tu?n ho?n l? ??ng l?c ??i m?i m? h?nh t?ng tr??ng; g?n v?i chuy?n ??i xanh v? m?c ti?u ph?t th?i r?ng b?ng ?0?.</li>
-                    <li>Tri?n khai theo l? tr?nh, tr?ng t?m theo ng?nh/l?nh v?c v? theo chu?i gi? tr?.</li>
-                    <li>Khuy?n kh?ch s?ng t?o, ??i m?i c?ng ngh? v? chuy?n ??i s?; t?ng ph?i h?p li?n ng?nh ? ??a ph??ng ? doanh nghi?p.</li>
+                    <li>Tuần hoàn là động lực đổi mới mô hình tăng trưởng; gắn với chuyển đổi xanh và mục tiêu phát thải ròng bằng “0”.</li>
+                    <li>Triển khai theo lộ trình, trọng tâm theo ngành/lĩnh vực và theo chuỗi giá trị.</li>
+                    <li>Khuyến khích sáng tạo, đổi mới công nghệ và chuyển đổi số; tăng phối hợp liên ngành – địa phương – doanh nghiệp.</li>
                   </ul>
                 </div>
               </div>
             </section>
 
             <section>
-              <h2>2) M?c ti?u ??n 2030 v? t?m nh?n 2035</h2>
+              <h2>2) Mục tiêu đến 2030 và tầm nhìn 2035</h2>
               <p className="note">
-                K? ho?ch ??t m?c ti?u th?c ??y m? h?nh kinh t? tu?n ho?n trong s?n xu?t ? kinh doanh ? ti?u d?ng; n?ng cao hi?u qu? s? d?ng t?i nguy?n;
-                gi?m ch?t th?i, t?ng t?i ch?/t?i s? d?ng v? ph?t tri?n th? tr??ng li?n quan.
+                Kế hoạch đặt mục tiêu thúc đẩy mô hình kinh tế tuần hoàn trong sản xuất – kinh doanh – tiêu dùng; nâng cao hiệu quả sử dụng tài nguyên;
+                giảm chất thải, tăng tái chế/tái sử dụng và phát triển thị trường liên quan.
               </p>
 
-              <table aria-label="M?c ti?u theo m?c th?i gian">
+              <table aria-label="Mục tiêu theo mốc thời gian">
                 <thead>
                   <tr>
-                    <th style={{ width: '18%' }}>M?c</th>
-                    <th>M?c ti?u tr?ng t?m (t?m l??c)</th>
+                    <th style={{ width: '18%' }}>Mốc</th>
+                    <th>Mục tiêu trọng tâm (tóm lược)</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td><strong>??n 2030</strong></td>
+                    <td><strong>Đến 2030</strong></td>
                     <td>
                       <ul style={{ margin: '0.2em 0 0.2em 1.2em' }}>
-                        <li>N?ng cao hi?u qu? s? d?ng t?i nguy?n, ??c bi?t v?i n?ng l??ng v? c?c ngu?n t?i nguy?n quan tr?ng.</li>
-                        <li>Th?c ??y ph?n lo?i ? thu gom ? x? l? ch?t th?i, t?ng t?i ch?/t?i s? d?ng; gi?m ch?t th?i ??a ?i ch?n l?p.</li>
-                        <li>Khuy?n kh?ch m? h?nh tu?n ho?n t?i doanh nghi?p/chu?i ng?nh; h?nh th?nh th? tr??ng cho s?n ph?m ? d?ch v? tu?n ho?n.</li>
+                        <li>Nâng cao hiệu quả sử dụng tài nguyên, đặc biệt với năng lượng và các nguồn tài nguyên quan trọng.</li>
+                        <li>Thúc đẩy phân loại – thu gom – xử lý chất thải, tăng tái chế/tái sử dụng; giảm chất thải đưa đi chôn lấp.</li>
+                        <li>Khuyến khích mô hình tuần hoàn tại doanh nghiệp/chuỗi ngành; hình thành thị trường cho sản phẩm – dịch vụ tuần hoàn.</li>
                       </ul>
-                      <p className="muted" style={{ margin: '0.3em 0 0' }}>(V?n b?n c? n?u m?t s? ch? ti?u ??nh l??ng theo nh?m t?i nguy?n/ch?t th?i.)</p>
+                      <p className="muted" style={{ margin: '0.3em 0 0' }}>(Văn bản có nêu một số chỉ tiêu định lượng theo nhóm tài nguyên/chất thải.)</p>
                     </td>
                   </tr>
                   <tr>
-                    <td><strong>??n 2035</strong></td>
+                    <td><strong>Đến 2035</strong></td>
                     <td>
                       <ul style={{ margin: '0.2em 0 0.2em 1.2em' }}>
-                        <li>Th?c h?nh tu?n ho?n tr? th?nh ph? bi?n h?n trong s?n xu?t v? ti?u d?ng; m? r?ng quy m? m? h?nh, chu?i gi? tr? tu?n ho?n.</li>
-                        <li>T?ng c??ng n?ng l?c ??i m?i s?ng t?o, c?ng ngh? v? qu?n tr? ?? duy tr? hi?u qu? gi?m ph?t th?i ? gi?m ch?t th?i d?i h?n.</li>
+                        <li>Thực hành tuần hoàn trở thành phổ biến hơn trong sản xuất và tiêu dùng; mở rộng quy mô mô hình, chuỗi giá trị tuần hoàn.</li>
+                        <li>Tăng cường năng lực đổi mới sáng tạo, công nghệ và quản trị để duy trì hiệu quả giảm phát thải – giảm chất thải dài hạn.</li>
                       </ul>
                     </td>
                   </tr>
@@ -123,67 +123,67 @@ export default function PolicyCircularEconomyPage() {
             </section>
 
             <section>
-              <h2>3) Nh?m nhi?m v? ? gi?i ph?p ch?nh</h2>
+              <h2>3) Nhóm nhiệm vụ – giải pháp chính</h2>
               <div className="grid">
                 <div className="card">
-                  <h3>(i) N?ng cao nh?n th?c &amp; tri th?c</h3>
+                  <h3>(i) Nâng cao nhận thức &amp; tri thức</h3>
                   <ul>
-                    <li>Truy?n th?ng, ph? bi?n ki?n th?c, nh?n r?ng th?c h?nh t?t.</li>
-                    <li>L?ng gh?p n?i dung kinh t? tu?n ho?n v?o gi?o d?c/??o t?o.</li>
-                    <li>X?y d?ng ? v?n h?nh n?n t?ng/k?nh chia s? th?ng tin v? d? li?u ph?c v? ?p d?ng m? h?nh.</li>
+                    <li>Truyền thông, phổ biến kiến thức, nhân rộng thực hành tốt.</li>
+                    <li>Lồng ghép nội dung kinh tế tuần hoàn vào giáo dục/đào tạo.</li>
+                    <li>Xây dựng – vận hành nền tảng/kênh chia sẻ thông tin và dữ liệu phục vụ áp dụng mô hình.</li>
                   </ul>
                 </div>
 
                 <div className="card">
-                  <h3>(ii) Ho?n thi?n th? ch? ? ch?nh s?ch</h3>
+                  <h3>(ii) Hoàn thiện thể chế – chính sách</h3>
                   <ul>
-                    <li>X?y d?ng k? ho?ch/l? tr?nh theo ng?nh v? theo ??a ph??ng.</li>
-                    <li>R? so?t, ho?n thi?n quy ??nh, ti?u chu?n/quy chu?n k? thu?t; c? ch? khuy?n kh?ch.</li>
-                    <li>N?ng cao hi?u l?c qu?n l? ch?t th?i theo h??ng tu?n ho?n.</li>
+                    <li>Xây dựng kế hoạch/lộ trình theo ngành và theo địa phương.</li>
+                    <li>Rà soát, hoàn thiện quy định, tiêu chuẩn/quy chuẩn kỹ thuật; cơ chế khuyến khích.</li>
+                    <li>Nâng cao hiệu lực quản lý chất thải theo hướng tuần hoàn.</li>
                   </ul>
                 </div>
 
                 <div className="card">
-                  <h3>(iii) Th?c ??y ?p d?ng trong s?n xu?t &amp; ti?u d?ng</h3>
+                  <h3>(iii) Thúc đẩy áp dụng trong sản xuất &amp; tiêu dùng</h3>
                   <ul>
-                    <li>H? tr? thi?t k? sinh th?i (eco-design) v? ??i m?i m? h?nh kinh doanh tu?n ho?n.</li>
-                    <li>Ph?t tri?n th? tr??ng s?n ph?m/d?ch v? tu?n ho?n; mua s?m xanh.</li>
-                    <li>Th?c ??y li?n k?t chu?i, h?p t?c c?ng?t?, c?m li?n k?t ng?nh.</li>
+                    <li>Hỗ trợ thiết kế sinh thái (eco-design) và đổi mới mô hình kinh doanh tuần hoàn.</li>
+                    <li>Phát triển thị trường sản phẩm/dịch vụ tuần hoàn; mua sắm xanh.</li>
+                    <li>Thúc đẩy liên kết chuỗi, hợp tác công–tư, cụm liên kết ngành.</li>
                   </ul>
                 </div>
 
                 <div className="card">
-                  <h3>(iv) Khoa h?c?c?ng ngh? &amp; ??i m?i s?ng t?o</h3>
+                  <h3>(iv) Khoa học–công nghệ &amp; đổi mới sáng tạo</h3>
                   <ul>
-                    <li>?u ti?n R&amp;D, chuy?n giao c?ng ngh? gi?m ph?t th?i, t?i ch?, v?t li?u m?i.</li>
-                    <li>?ng d?ng chuy?n ??i s?, d? li?u ?? t?i ?u t?i nguy?n v? qu?n tr? d?ng v?t ch?t.</li>
+                    <li>Ưu tiên R&amp;D, chuyển giao công nghệ giảm phát thải, tái chế, vật liệu mới.</li>
+                    <li>Ứng dụng chuyển đổi số, dữ liệu để tối ưu tài nguyên và quản trị dòng vật chất.</li>
                   </ul>
                 </div>
               </div>
             </section>
 
             <section>
-              <h2>4) Ng?nh/l?nh v?c ?u ti?n</h2>
+              <h2>4) Ngành/lĩnh vực ưu tiên</h2>
               <p>
-                K? ho?ch n?u c?c ng?nh/l?nh v?c tr?ng ?i?m c?n th?c ??y tu?n ho?n, bao g?m (t?m l??c): n?ng nghi?p &amp; th?y s?n; n?ng l??ng;
-                khai kho?ng &amp; ch? bi?n kho?ng s?n; c?ng nghi?p ch? bi?n, ch? t?o; h?a ch?t; x?y d?ng; giao th?ng v?n t?i; d?ch v? v? du l?ch;
-                qu?n l? ch?t th?i; ph?t tri?n khu ?? th?/khu c?ng nghi?p/c?m c?ng nghi?p?
-                <span className="muted"> (Danh m?c c? th? n?m trong n?i dung k? ho?ch.)</span>
+                Kế hoạch nêu các ngành/lĩnh vực trọng điểm cần thúc đẩy tuần hoàn, bao gồm (tóm lược): nông nghiệp &amp; thủy sản; năng lượng;
+                khai khoáng &amp; chế biến khoáng sản; công nghiệp chế biến, chế tạo; hóa chất; xây dựng; giao thông vận tải; dịch vụ và du lịch;
+                quản lý chất thải; phát triển khu đô thị/khu công nghiệp/cụm công nghiệp…
+                <span className="muted"> (Danh mục cụ thể nằm trong nội dung kế hoạch.)</span>
               </p>
             </section>
 
             <section>
-              <h2>5) T? ch?c th?c hi?n, ngu?n l?c v? b?o c?o</h2>
+              <h2>5) Tổ chức thực hiện, nguồn lực và báo cáo</h2>
               <ul>
-                <li><strong>Ph?n c?ng nhi?m v?:</strong> B?, ng?nh trung ??ng v? UBND c?p t?nh x?y d?ng k? ho?ch th?c hi?n theo ch?c n?ng/nhi?m v?.</li>
-                <li><strong>Ngu?n l?c:</strong> K?t h?p ng?n s?ch nh? n??c, v?n ODA/vay ?u ??i, v?n t? nh?n (t?n d?ng xanh, tr?i phi?u xanh, FDI?), v? ngu?n l?c c?ng ??ng/x? h?i h?a.</li>
-                <li><strong>B?o c?o ? gi?m s?t:</strong> C? ch? ?? t?ng h?p, theo d?i v? b?o c?o ??nh k? v? ti?n ?? th?c hi?n c?c m?c ti?u, nhi?m v? c?a K? ho?ch.</li>
+                <li><strong>Phân công nhiệm vụ:</strong> Bộ, ngành trung ương và UBND cấp tỉnh xây dựng kế hoạch thực hiện theo chức năng/nhiệm vụ.</li>
+                <li><strong>Nguồn lực:</strong> Kết hợp ngân sách nhà nước, vốn ODA/vay ưu đãi, vốn tư nhân (tín dụng xanh, trái phiếu xanh, FDI…), và nguồn lực cộng đồng/xã hội hóa.</li>
+                <li><strong>Báo cáo – giám sát:</strong> Có chế độ tổng hợp, theo dõi và báo cáo định kỳ về tiến độ thực hiện các mục tiêu, nhiệm vụ của Kế hoạch.</li>
               </ul>
             </section>
 
             <footer className="meta">
               <p>
-                Ngu?n: Quy?t ??nh s? 222/Q?-TTg ng?y 23/01/2025 c?a Th? t??ng Ch?nh ph? (K? ho?ch h?nh ??ng qu?c gia th?c hi?n kinh t? tu?n ho?n ??n n?m 2035).
+                Nguồn: Quyết định số 222/QĐ-TTg ngày 23/01/2025 của Thủ tướng Chính phủ (Kế hoạch hành động quốc gia thực hiện kinh tế tuần hoàn đến năm 2035).
               </p>
             </footer>
           </section>
