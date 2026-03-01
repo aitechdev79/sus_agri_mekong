@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { requireAuth, requireModerator } from '@/lib/auth-middleware'
 import { UpdateContentData } from '@/types/content'
+import { sanitizeRichText } from '@/lib/sanitize'
 
 interface RouteParams {
   params: Promise<{ id: string }>
@@ -154,6 +155,8 @@ export async function PUT(
       fileSize
     } = data
 
+    const sanitizedContent = sanitizeRichText(contentText || '')
+
     console.log('Update request for content:', id)
     console.log('Content type being saved:', type)
     console.log('Full data received:', { type, category, title })
@@ -162,7 +165,7 @@ export async function PUT(
     const updateData: UpdateContentData = {
       title,
       description,
-      content: contentText,
+      content: sanitizedContent,
       type,
       category,
       tags: Array.isArray(tags) ? tags.join(', ') : tags || '',

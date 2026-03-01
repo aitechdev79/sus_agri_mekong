@@ -6,6 +6,7 @@ import { FileUploadZone } from '@/components/upload/FileUploadZone'
 import { FileManager } from '@/components/upload/FileManager'
 import Image from 'next/image'
 import { ContentFormProps } from '@/types/content'
+import { RichTextEditor } from '@/components/admin/RichTextEditor'
 
 export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
   const [loading, setLoading] = useState(false)
@@ -181,6 +182,17 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
     setLoading(true)
 
     try {
+      const plainContent = (formData.content || '')
+        .replace(/<[^>]*>/g, ' ')
+        .replace(/&nbsp;/g, ' ')
+        .trim()
+
+      if (!plainContent) {
+        alert('Vui lòng nhập nội dung')
+        setLoading(false)
+        return
+      }
+
       const submitData = {
         ...formData,
         tags: formData.tags
@@ -321,13 +333,9 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Nội dung (Tiếng Việt) *
               </label>
-              <textarea
-                name="content"
+              <RichTextEditor
                 value={formData.content}
-                onChange={handleChange}
-                required
-                rows={8}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                onChange={(nextValue) => setFormData({ ...formData, content: nextValue })}
               />
             </div>
           </div>

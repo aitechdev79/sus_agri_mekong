@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import { requireAuth } from '@/lib/auth-middleware'
 import { ContentType } from '@/types/content'
+import { sanitizeRichText } from '@/lib/sanitize'
 
 // Use Prisma's generated types for proper type safety
 type ContentWhereInput = Prisma.ContentWhereInput
@@ -126,6 +127,8 @@ export async function POST(request: NextRequest) {
       fileSize
     } = data
 
+    const sanitizedContent = sanitizeRichText(content || '')
+
     // Only admins can create featured content or publish directly
     const finalStatus = user.role === 'ADMIN' ? (status || 'PUBLISHED') : 'DRAFT'
     const finalIsFeatured = user.role === 'ADMIN' ? (isFeatured || false) : false
@@ -134,7 +137,7 @@ export async function POST(request: NextRequest) {
       data: {
         title,
         description,
-        content,
+        content: sanitizedContent,
         type,
         category,
         tags: Array.isArray(tags) ? tags.join(', ') : tags || '',
