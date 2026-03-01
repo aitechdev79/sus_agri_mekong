@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { requireAuth } from '@/lib/auth-middleware'
 import { saveFile } from '@/lib/file-upload'
 import { prisma } from '@/lib/prisma'
-import { ContentType } from '@/types/content'
 
 export async function POST(request: NextRequest) {
   try {
@@ -88,7 +87,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-function getContentType(mimeType: string): ContentType {
+function getContentType(mimeType: string): 'INFOGRAPHIC' | 'VIDEO' | 'DOCUMENT' {
   if (mimeType.startsWith('image/')) return 'INFOGRAPHIC'
   if (mimeType.startsWith('video/')) return 'VIDEO'
   if (mimeType === 'application/pdf') return 'DOCUMENT'

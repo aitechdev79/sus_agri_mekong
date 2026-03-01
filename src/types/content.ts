@@ -34,6 +34,11 @@ export interface BaseContent {
   isFeatured: boolean;
   viewCount: number;
   downloadCount: number;
+  eventStartAt?: string | null;
+  eventEndAt?: string | null;
+  eventTimezone?: string | null;
+  eventLocation?: string | null;
+  isAllDay?: boolean;
   createdAt: string; // API returns ISO string, not Date
   updatedAt: string;
   authorId: string;
@@ -127,6 +132,11 @@ export interface FormContent {
   fileUrl?: string;
   fileType?: string;
   fileSize?: number;
+  eventStartAt?: string | null;
+  eventEndAt?: string | null;
+  eventTimezone?: string | null;
+  eventLocation?: string | null;
+  isAllDay?: boolean;
 }
 
 // 6. MINIMAL INTERFACE - For simple displays
@@ -145,6 +155,16 @@ export interface NewsContent extends ContentWithCompleteAuthor, MediaFields {
   descriptionEn?: string;
 }
 
+export interface EventContent extends ContentWithCompleteAuthor, MediaFields {
+  titleEn?: string;
+  descriptionEn?: string;
+  eventStartAt?: string | null;
+  eventEndAt?: string | null;
+  eventTimezone?: string | null;
+  eventLocation?: string | null;
+  isAllDay?: boolean;
+}
+
 // ===== ENUMS FOR CONSISTENCY =====
 export type ContentType =
   | 'ARTICLE'
@@ -154,7 +174,8 @@ export type ContentType =
   | 'STORY'
   | 'GUIDE'
   | 'POLICY'
-  | 'NEWS';
+  | 'NEWS'
+  | 'EVENT';
 
 export type ContentStatus =
   | 'DRAFT'

@@ -7,7 +7,7 @@ interface Event {
   id: string;
   title: string;
   date: Date;
-  type: 'event' | 'training';
+  isPast: boolean;
 }
 
 interface MiniEventCalendarProps {
@@ -34,12 +34,10 @@ export default function MiniEventCalendar({ events }: MiniEventCalendarProps) {
 
     const days = [];
 
-    // Add empty slots for days before the first day of the month
     for (let i = 0; i < startingDayOfWeek; i++) {
       days.push(null);
     }
 
-    // Add all days in the month
     for (let day = 1; day <= daysInMonth; day++) {
       days.push(new Date(year, month, day));
     }
@@ -50,7 +48,7 @@ export default function MiniEventCalendar({ events }: MiniEventCalendarProps) {
   const getEventsForDate = (date: Date | null) => {
     if (!date) return [];
 
-    return events.filter(event => {
+    return events.filter((event) => {
       const eventDate = new Date(event.date);
       return (
         eventDate.getDate() === date.getDate() &&
@@ -77,7 +75,6 @@ export default function MiniEventCalendar({ events }: MiniEventCalendarProps) {
         <h3 className="text-lg font-bold text-gray-800 font-montserrat">Lịch sự kiện</h3>
       </div>
 
-      {/* Month Navigation */}
       <div className="flex items-center justify-between mb-3">
         <h4 className="text-sm font-semibold text-gray-800">
           {monthNames[currentDate.getMonth()]}/{currentDate.getFullYear()}
@@ -100,23 +97,21 @@ export default function MiniEventCalendar({ events }: MiniEventCalendarProps) {
         </div>
       </div>
 
-      {/* Calendar Grid */}
       <div className="grid grid-cols-7 gap-1 mb-3 flex-1 content-start">
-        {/* Day headers */}
-        {dayNames.map(day => (
+        {dayNames.map((day) => (
           <div key={day} className="text-center text-xs font-semibold text-gray-600 py-1">
             {day}
           </div>
         ))}
 
-        {/* Calendar days */}
         {days.map((date, index) => {
           if (!date) {
             return <div key={`empty-${index}`} className="aspect-square" />;
           }
 
           const dateEvents = getEventsForDate(date);
-          const hasEvents = dateEvents.length > 0;
+          const hasUpcomingEvents = dateEvents.some((event) => !event.isPast);
+          const hasPastEvents = dateEvents.some((event) => event.isPast);
           const isToday =
             date.getDate() === today.getDate() &&
             date.getMonth() === today.getMonth() &&
@@ -128,27 +123,42 @@ export default function MiniEventCalendar({ events }: MiniEventCalendarProps) {
               className="aspect-square flex items-center justify-center relative"
             >
               <div
-                className={`
-                  w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold
-                  ${isToday ? 'text-white' : 'text-gray-800'}
-                  ${hasEvents ? 'text-white' : ''}
-                `}
-                style={{
-                  backgroundColor: hasEvents || isToday ? '#0A7029' : 'transparent'
-                }}
+                className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold ${
+                  isToday ? 'bg-gray-800 text-white' : 'text-gray-800'
+                }`}
               >
                 {date.getDate()}
               </div>
+
+              {(hasUpcomingEvents || hasPastEvents) && (
+                <div className="absolute bottom-1 flex items-center gap-1">
+                  {hasUpcomingEvents && (
+                    <span
+                      className="w-2 h-2 rounded-full"
+                      style={{ backgroundColor: '#0A7029' }}
+                    />
+                  )}
+                  {hasPastEvents && (
+                    <span
+                      className="w-2 h-2 rounded-full"
+                      style={{ backgroundColor: '#F97316' }}
+                    />
+                  )}
+                </div>
+              )}
             </div>
           );
         })}
       </div>
 
-      {/* Legend */}
       <div className="flex items-center justify-center gap-4 pt-3 border-t text-xs">
         <div className="flex items-center gap-1">
           <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#0A7029' }}></div>
-          <span className="text-gray-600">Sự kiện</span>
+          <span className="text-gray-600">Sự kiện sắp tới</span>
+        </div>
+        <div className="flex items-center gap-1">
+          <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#F97316' }}></div>
+          <span className="text-gray-600">Sự kiện đã qua</span>
         </div>
       </div>
     </div>

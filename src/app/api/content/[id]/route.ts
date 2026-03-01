@@ -1,11 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { requireAuth, requireModerator } from '@/lib/auth-middleware'
-import { UpdateContentData } from '@/types/content'
 import { sanitizeRichText } from '@/lib/sanitize'
 
 interface RouteParams {
   params: Promise<{ id: string }>
+}
+
+function normalizeEventDate(value?: string | null, isAllDay?: boolean) {
+  if (!value) return null
+
+  const normalized = isAllDay ? `${value}T00:00:00` : value
+  const date = new Date(normalized)
+  if (Number.isNaN(date.getTime())) {
+    return null
+  }
+
+  return date
 }
 
 export async function GET(
@@ -152,17 +163,38 @@ export async function PUT(
       thumbnailUrl,
       fileUrl,
       fileType,
-      fileSize
+      fileSize,
+      eventStartAt,
+      eventEndAt,
+      eventTimezone,
+      eventLocation,
+      isAllDay
     } = data
 
     const sanitizedContent = sanitizeRichText(contentText || '')
+    const normalizedEventStartAt = normalizeEventDate(eventStartAt, isAllDay)
+    const normalizedEventEndAt = normalizeEventDate(eventEndAt, isAllDay)
+
+    if (type === 'EVENT' && !normalizedEventStartAt) {
+      return NextResponse.json(
+        { error: 'Sự kiện cần có thời gian bắt đầu hợp lệ' },
+        { status: 400 }
+      )
+    }
+
+    if (normalizedEventStartAt && normalizedEventEndAt && normalizedEventEndAt < normalizedEventStartAt) {
+      return NextResponse.json(
+        { error: 'Thời gian kết thúc phải sau thời gian bắt đầu' },
+        { status: 400 }
+      )
+    }
 
     console.log('Update request for content:', id)
     console.log('Content type being saved:', type)
     console.log('Full data received:', { type, category, title })
 
     // Only admins can modify featured status or change status of published content
-    const updateData: UpdateContentData = {
+    const updateData: Record<string, unknown> = {
       title,
       description,
       content: sanitizedContent,
@@ -175,7 +207,12 @@ export async function PUT(
       thumbnailUrl: thumbnailUrl || null,
       fileUrl: fileUrl || null,
       fileType: fileType || null,
-      fileSize: fileSize || null
+      fileSize: fileSize || null,
+      eventStartAt: type === 'EVENT' ? normalizedEventStartAt : null,
+      eventEndAt: type === 'EVENT' ? normalizedEventEndAt : null,
+      eventTimezone: type === 'EVENT' ? (eventTimezone || null) : null,
+      eventLocation: type === 'EVENT' ? (eventLocation || null) : null,
+      isAllDay: type === 'EVENT' ? Boolean(isAllDay) : false
     }
 
     if (user.role === 'ADMIN') {
@@ -199,7 +236,7 @@ export async function PUT(
           }
         }
       }
-    })
+    } as never)
 
     console.log('Content updated successfully. New type:', updatedContent.type)
 

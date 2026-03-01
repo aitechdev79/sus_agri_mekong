@@ -5,6 +5,25 @@ import { Edit, Trash2, Eye, Star, Users } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import type { ContentTableProps } from '@/types/content'
 
+function formatEventDate(content: ContentTableProps['contents'][number]) {
+  if (!content.eventStartAt) return '-'
+
+  const start = new Date(content.eventStartAt)
+  if (Number.isNaN(start.getTime())) return '-'
+
+  if (content.isAllDay) {
+    return start.toLocaleDateString('vi-VN')
+  }
+
+  return start.toLocaleString('vi-VN', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  })
+}
+
 export function ContentTable({ contents, onEdit, onDelete, onBulkAction, userRole }: ContentTableProps) {
   const [selectedIds, setSelectedIds] = useState<string[]>([])
 
@@ -48,6 +67,7 @@ export function ContentTable({ contents, onEdit, onDelete, onBulkAction, userRol
       GUIDE: { color: 'bg-indigo-100 text-indigo-800', text: 'Hướng dẫn' },
       POLICY: { color: 'bg-pink-100 text-pink-800', text: 'Chính sách' },
       NEWS: { color: 'bg-green-100 text-green-800', text: 'Tin tức' },
+      EVENT: { color: 'bg-emerald-100 text-emerald-800', text: 'Sự kiện' },
       // Legacy types - map to appropriate new types
       VIDEO: { color: 'bg-red-100 text-red-800', text: 'Video' },
       INFOGRAPHIC: { color: 'bg-teal-100 text-teal-800', text: 'Infographic' }
@@ -143,6 +163,7 @@ export function ContentTable({ contents, onEdit, onDelete, onBulkAction, userRol
               <th className="text-left py-3 px-4 font-medium text-gray-700">Tiêu đề</th>
               <th className="text-left py-3 px-4 font-medium text-gray-700">Danh mục</th>
               <th className="text-left py-3 px-4 font-medium text-gray-700">Loại</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Ngày sự kiện</th>
               <th className="text-left py-3 px-4 font-medium text-gray-700">Trạng thái</th>
               <th className="text-left py-3 px-4 font-medium text-gray-700">Lượt xem</th>
               <th className="text-left py-3 px-4 font-medium text-gray-700">Tác giả</th>
@@ -189,6 +210,9 @@ export function ContentTable({ contents, onEdit, onDelete, onBulkAction, userRol
                 </td>
                 <td className="py-3 px-4">
                   {getTypeBadge(content.type)}
+                </td>
+                <td className="py-3 px-4 text-sm text-gray-600">
+                  {formatEventDate(content)}
                 </td>
                 <td className="py-3 px-4">
                   {getStatusBadge(content.status)}

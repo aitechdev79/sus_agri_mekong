@@ -21,7 +21,8 @@ export function SearchFilters({ selectedCategory, selectedType, onFilterChange }
     { value: 'GUIDE', label: 'Hướng dẫn' },
     { value: 'POLICY', label: 'Chính sách' },
     { value: 'INFOGRAPHIC', label: 'Infographic' },
-    { value: 'NEWS', label: 'Tin tức' }
+    { value: 'NEWS', label: 'Tin tức' },
+    { value: 'EVENT', label: 'Sự kiện' }
   ]
 
   useEffect(() => {

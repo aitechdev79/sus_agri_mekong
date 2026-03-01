@@ -2,11 +2,22 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import { requireAuth } from '@/lib/auth-middleware'
-import { ContentType } from '@/types/content'
 import { sanitizeRichText } from '@/lib/sanitize'
 
 // Use Prisma's generated types for proper type safety
 type ContentWhereInput = Prisma.ContentWhereInput
+
+function normalizeEventDate(value?: string | null, isAllDay?: boolean) {
+  if (!value) return null
+
+  const normalized = isAllDay ? `${value}T00:00:00` : value
+  const date = new Date(normalized)
+  if (Number.isNaN(date.getTime())) {
+    return null
+  }
+
+  return date
+}
 
 export async function GET(request: NextRequest) {
   try {
@@ -32,10 +43,10 @@ export async function GET(request: NextRequest) {
     if (type) {
       // Handle multiple types separated by comma
       if (type.includes(',')) {
-        const types = type.split(',').map(t => t.trim() as ContentType)
-        where.type = { in: types }
+        const types = type.split(',').map(t => t.trim())
+        where.type = { in: types as never }
       } else {
-        where.type = type as ContentType
+        where.type = type as never
       }
     }
 
@@ -124,10 +135,31 @@ export async function POST(request: NextRequest) {
       thumbnailUrl,
       fileUrl,
       fileType,
-      fileSize
+      fileSize,
+      eventStartAt,
+      eventEndAt,
+      eventTimezone,
+      eventLocation,
+      isAllDay
     } = data
 
     const sanitizedContent = sanitizeRichText(content || '')
+    const normalizedEventStartAt = normalizeEventDate(eventStartAt, isAllDay)
+    const normalizedEventEndAt = normalizeEventDate(eventEndAt, isAllDay)
+
+    if (type === 'EVENT' && !normalizedEventStartAt) {
+      return NextResponse.json(
+        { error: 'Sự kiện cần có thời gian bắt đầu hợp lệ' },
+        { status: 400 }
+      )
+    }
+
+    if (normalizedEventStartAt && normalizedEventEndAt && normalizedEventEndAt < normalizedEventStartAt) {
+      return NextResponse.json(
+        { error: 'Thời gian kết thúc phải sau thời gian bắt đầu' },
+        { status: 400 }
+      )
+    }
 
     // Only admins can create featured content or publish directly
     const finalStatus = user.role === 'ADMIN' ? (status || 'PUBLISHED') : 'DRAFT'
@@ -150,7 +182,12 @@ export async function POST(request: NextRequest) {
         thumbnailUrl: thumbnailUrl || null,
         fileUrl: fileUrl || null,
         fileType: fileType || null,
-        fileSize: fileSize || null
+        fileSize: fileSize || null,
+        eventStartAt: type === 'EVENT' ? normalizedEventStartAt : null,
+        eventEndAt: type === 'EVENT' ? normalizedEventEndAt : null,
+        eventTimezone: type === 'EVENT' ? (eventTimezone || null) : null,
+        eventLocation: type === 'EVENT' ? (eventLocation || null) : null,
+        isAllDay: type === 'EVENT' ? Boolean(isAllDay) : false
       },
       include: {
         author: {
@@ -161,7 +198,7 @@ export async function POST(request: NextRequest) {
           }
         }
       }
-    })
+    } as never)
 
     return NextResponse.json(newContent, { status: 201 })
   } catch (error) {

@@ -91,6 +91,11 @@ model Content {
   thumbnailUrl String?
   imageUrl    String?
   videoUrl    String?
+  eventStartAt DateTime?
+  eventEndAt  DateTime?
+  eventTimezone String?
+  eventLocation String?
+  isAllDay    Boolean       @default(false)
   isPublic    Boolean       @default(true)
   isFeatured  Boolean       @default(false)
   viewCount   Int           @default(0)
@@ -108,6 +113,7 @@ model Content {
   @@index([type])
   @@index([status])
   @@index([isPublic])
+  @@index([eventStartAt])
 }
 
 model Comment {
@@ -210,6 +216,7 @@ enum ContentType {
   GUIDE
   POLICY
   NEWS
+  EVENT
 }
 
 enum ContentStatus {

@@ -8,6 +8,28 @@ import Image from 'next/image'
 import { ContentFormProps } from '@/types/content'
 import { RichTextEditor } from '@/components/admin/RichTextEditor'
 
+function toDateTimeLocalValue(value?: string | null) {
+  if (!value) return ''
+
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return ''
+
+  const offset = date.getTimezoneOffset()
+  const localDate = new Date(date.getTime() - offset * 60 * 1000)
+  return localDate.toISOString().slice(0, 16)
+}
+
+function toDateValue(value?: string | null) {
+  if (!value) return ''
+
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return ''
+
+  const offset = date.getTimezoneOffset()
+  const localDate = new Date(date.getTime() - offset * 60 * 1000)
+  return localDate.toISOString().slice(0, 10)
+}
+
 export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
   const [loading, setLoading] = useState(false)
   const [showFileManager, setShowFileManager] = useState(false)
@@ -36,7 +58,12 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
         fileSize: content.fileSize || 0,
         thumbnailUrl: content.thumbnailUrl || '',
         imageUrl: content.imageUrl || '',
-        videoUrl: content.videoUrl || ''
+        videoUrl: content.videoUrl || '',
+        eventStartAt: content.isAllDay ? toDateValue(content.eventStartAt) : toDateTimeLocalValue(content.eventStartAt),
+        eventEndAt: content.isAllDay ? toDateValue(content.eventEndAt) : toDateTimeLocalValue(content.eventEndAt),
+        eventTimezone: content.eventTimezone || 'Asia/Ho_Chi_Minh',
+        eventLocation: content.eventLocation || '',
+        isAllDay: content.isAllDay || false
       }
     } else {
       // If creating new content, try to restore from localStorage
@@ -71,7 +98,12 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
         fileSize: 0,
         thumbnailUrl: '',
         imageUrl: '',
-        videoUrl: ''
+        videoUrl: '',
+        eventStartAt: '',
+        eventEndAt: '',
+        eventTimezone: 'Asia/Ho_Chi_Minh',
+        eventLocation: '',
+        isAllDay: false
       }
     }
   }
@@ -138,7 +170,12 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
         fileSize: 0,
         thumbnailUrl: '',
         imageUrl: '',
-        videoUrl: ''
+        videoUrl: '',
+        eventStartAt: '',
+        eventEndAt: '',
+        eventTimezone: 'Asia/Ho_Chi_Minh',
+        eventLocation: '',
+        isAllDay: false
       })
     }
   }
@@ -164,7 +201,8 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
     { value: 'STORY', label: 'Điển hình' },  // Using STORY for "Điển hình" (exemplary cases)
     { value: 'GUIDE', label: 'Hướng dẫn' },
     { value: 'POLICY', label: 'Chính sách' },
-    { value: 'NEWS', label: 'Tin tức' }
+    { value: 'NEWS', label: 'Tin tức' },
+    { value: 'EVENT', label: 'Sự kiện' }
   ]
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -189,6 +227,12 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
 
       if (!plainContent) {
         alert('Vui lòng nhập nội dung')
+        setLoading(false)
+        return
+      }
+
+      if (formData.type === 'EVENT' && !formData.eventStartAt) {
+        alert('Vui lòng nhập thời gian bắt đầu sự kiện')
         setLoading(false)
         return
       }
@@ -402,6 +446,81 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
               </select>
             </div>
           </div>
+
+          {formData.type === 'EVENT' && (
+            <div className="space-y-4 rounded-lg border border-emerald-200 bg-emerald-50/60 p-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-emerald-700">Thông tin sự kiện</h3>
+                <label className="flex items-center text-sm text-gray-700">
+                  <input
+                    type="checkbox"
+                    name="isAllDay"
+                    checked={formData.isAllDay}
+                    onChange={handleChange}
+                    className="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                  />
+                  <span className="ml-2">Cả ngày</span>
+                </label>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    {formData.isAllDay ? 'Ngày bắt đầu *' : 'Thời gian bắt đầu *'}
+                  </label>
+                  <input
+                    type={formData.isAllDay ? 'date' : 'datetime-local'}
+                    name="eventStartAt"
+                    value={formData.eventStartAt}
+                    onChange={handleChange}
+                    required={formData.type === 'EVENT'}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    {formData.isAllDay ? 'Ngày kết thúc' : 'Thời gian kết thúc'}
+                  </label>
+                  <input
+                    type={formData.isAllDay ? 'date' : 'datetime-local'}
+                    name="eventEndAt"
+                    value={formData.eventEndAt}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Múi giờ
+                  </label>
+                  <input
+                    type="text"
+                    name="eventTimezone"
+                    value={formData.eventTimezone}
+                    onChange={handleChange}
+                    placeholder="Asia/Ho_Chi_Minh"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Địa điểm
+                  </label>
+                  <input
+                    type="text"
+                    name="eventLocation"
+                    value={formData.eventLocation}
+                    onChange={handleChange}
+                    placeholder="Cần Thơ, Việt Nam"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">

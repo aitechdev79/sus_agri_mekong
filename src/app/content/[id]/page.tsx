@@ -44,9 +44,48 @@ function getContentTypeLabel(type: string): string {
     STORY: 'Điển hình',
     GUIDE: 'Hướng dẫn',
     POLICY: 'Chính sách',
-    NEWS: 'Tin tức'
+    NEWS: 'Tin tức',
+    EVENT: 'Sự kiện'
   };
   return typeMap[type] || type;
+}
+
+function formatEventRange(content: PublicContent) {
+  if (!content.eventStartAt) return null;
+
+  const start = new Date(content.eventStartAt);
+  if (Number.isNaN(start.getTime())) return null;
+
+  if (content.isAllDay) {
+    return start.toLocaleDateString('vi-VN', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
+  }
+
+  const startLabel = start.toLocaleString('vi-VN', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+
+  if (!content.eventEndAt) return startLabel;
+
+  const end = new Date(content.eventEndAt);
+  if (Number.isNaN(end.getTime())) return startLabel;
+
+  const endLabel = end.toLocaleString('vi-VN', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+
+  return `${startLabel} - ${endLabel}`;
 }
 
 function formatContentWithParagraphs(content: string): string {
@@ -100,6 +139,7 @@ export default async function ContentDetailPage({
 
   const bestImageUrl = getBestImageUrl(content.thumbnailUrl, content.imageUrl);
   const youtubeVideoId = content.videoUrl ? extractYouTubeVideoId(content.videoUrl) : null;
+  const eventRange = formatEventRange(content);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -131,6 +171,12 @@ export default async function ContentDetailPage({
 
               {/* Meta Information */}
               <div className="flex items-center space-x-6 text-sm text-gray-500 mb-6">
+                {content.type === 'EVENT' && eventRange && (
+                  <div className="flex items-center">
+                    <Calendar className="w-4 h-4 mr-2" />
+                    <span>Thời gian: {eventRange}</span>
+                  </div>
+                )}
                 <div className="flex items-center">
                   <Calendar className="w-4 h-4 mr-2" />
                   <span>Ngày đăng: {formatDate(content.createdAt)}</span>
@@ -140,6 +186,11 @@ export default async function ContentDetailPage({
                   <span>{content.viewCount.toLocaleString('vi-VN')} lượt xem</span>
                 </div>
               </div>
+              {content.type === 'EVENT' && content.eventLocation && (
+                <div className="text-sm text-gray-500 mb-6">
+                  Địa điểm: {content.eventLocation}
+                </div>
+              )}
             </div>
 
             {/* Main Image */}
