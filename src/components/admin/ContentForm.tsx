@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState, useEffect, useCallback } from 'react'
 import { Button } from '@/components/ui/button'
@@ -161,7 +161,7 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
 
   // Clear draft data
   const clearDraft = () => {
-    if (confirm('Báº¡n cÃ³ cháº¯c cháº¯n muá»‘n xÃ³a báº£n nhÃ¡p Ä‘Ã£ lÆ°u?')) {
+    if (confirm('Bạn có chắc chắn muốn xóa bản nháp đã lưu?')) {
       clearSavedData()
       setFormData({
         title: '',
@@ -193,35 +193,35 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
   }
 
   const categories = [
-    { value: 'shrimp_farming', label: 'NuÃ´i tÃ´m' },
-    { value: 'shrimp_processing', label: 'Cháº¿ biáº¿n tÃ´m' },
-    { value: 'shrimp_export', label: 'Xuáº¥t kháº©u tÃ´m' },
-    { value: 'rice_cultivation', label: 'Trá»“ng lÃºa' },
-    { value: 'rice_processing', label: 'Cháº¿ biáº¿n lÃºa' },
-    { value: 'rice_marketing', label: 'Tiáº¿p thá»‹ lÃºa' },
-    { value: 'sustainable_practices', label: 'Thá»±c hÃ nh bá»n vá»¯ng' },
-    { value: 'technology_innovation', label: 'CÃ´ng nghá»‡ vÃ  Ä‘á»•i má»›i' },
-    { value: 'financial_support', label: 'Há»— trá»£ tÃ i chÃ­nh' },
-    { value: 'market_access', label: 'Tiáº¿p cáº­n thá»‹ trÆ°á»ng' },
-    { value: 'policy_guidelines', label: 'ChÃ­nh sÃ¡ch vÃ  hÆ°á»›ng dáº«n' },
-    { value: 'success_stories', label: 'CÃ¢u chuyá»‡n thÃ nh cÃ´ng' }
+    { value: 'shrimp_farming', label: 'Nuôi tôm' },
+    { value: 'shrimp_processing', label: 'Chế biến tôm' },
+    { value: 'shrimp_export', label: 'Xuất khẩu tôm' },
+    { value: 'rice_cultivation', label: 'Trồng lúa' },
+    { value: 'rice_processing', label: 'Chế biến lúa' },
+    { value: 'rice_marketing', label: 'Tiếp thị lúa' },
+    { value: 'sustainable_practices', label: 'Thực hành bền vững' },
+    { value: 'technology_innovation', label: 'Công nghệ và đổi mới' },
+    { value: 'financial_support', label: 'Hỗ trợ tài chính' },
+    { value: 'market_access', label: 'Tiếp cận thị trường' },
+    { value: 'policy_guidelines', label: 'Chính sách và hướng dẫn' },
+    { value: 'success_stories', label: 'Câu chuyện thành công' }
   ]
 
   const contentTypes = [
-    { value: 'ARTICLE', label: 'Bài viết' },
-    { value: 'DOCUMENT', label: 'Tài liệu' },
-    { value: 'STORY', label: 'Điển hình' },  // Using STORY for 'Điển hình' (exemplary cases)
-    { value: 'PROJECT_ACTIVITY', label: 'Hoạt động dự án' },
-    { value: 'GUIDE', label: 'Hướng dẫn' },
-    { value: 'POLICY', label: 'Chính sách' },
-    { value: 'NEWS', label: 'Tin tức' },
-    { value: 'EVENT', label: 'Sự kiện' }
+    { value: 'ARTICLE', label: 'B�i vi?t' },
+    { value: 'DOCUMENT', label: 'T�i li?u' },
+    { value: 'STORY', label: '�i?n h�nh' },  // Using STORY for "�i?n h�nh" (exemplary cases)
+    { value: 'PROJECT_ACTIVITY', label: 'Ho?t d?ng d? �n' },
+    { value: 'GUIDE', label: 'Hu?ng d?n' },
+    { value: 'POLICY', label: 'Ch�nh s�ch' },
+    { value: 'NEWS', label: 'Tin t?c' },
+    { value: 'EVENT', label: 'S? ki?n' }
   ]
 
   const sectionOptions = [
-    { value: '', label: 'Không hiển thị trên trang chủ' },
-    { value: 'HOME_DIEN_HINH', label: 'Thực hành điển hình' },
-    { value: 'HOME_HOAT_DONG_DU_AN', label: 'Hoạt động dự án' }
+    { value: '', label: 'Kh�ng hi?n th? tr�n trang ch?' },
+    { value: 'HOME_DIEN_HINH', label: 'Th?c h�nh di?n h�nh' },
+    { value: 'HOME_HOAT_DONG_DU_AN', label: 'Ho?t d?ng d? �n' }
   ]
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target
@@ -244,19 +244,19 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
         .trim()
 
       if (!plainContent) {
-        alert('Vui lÃ²ng nháº­p ná»™i dung')
+        alert('Vui lòng nhập nội dung')
         setLoading(false)
         return
       }
 
       if (formData.type === 'EVENT' && !formData.eventStartAt) {
-        alert('Vui lÃ²ng nháº­p thá»i gian báº¯t Ä‘áº§u sá»± kiá»‡n')
+        alert('Vui lòng nhập thời gian bắt đầu sự kiện')
         setLoading(false)
         return
       }
 
       if (formData.type === 'PROJECT_ACTIVITY' && !formData.projectUrl) {
-        alert('Vui lÃ²ng nháº­p Ä‘Æ°á»ng dáº«n dá»± Ã¡n')
+        alert('Vui lòng nhập đường dẫn dự án')
         setLoading(false)
         return
       }
@@ -282,11 +282,11 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
         onClose()
       } else {
         const error = await response.json()
-        alert(error.error || 'ÄÃ£ xáº£y ra lá»—i')
+        alert(error.error || 'Đã xảy ra lỗi')
       }
     } catch (error) {
       console.error('Form submission error:', error)
-      alert('ÄÃ£ xáº£y ra lá»—i khi lÆ°u ná»™i dung')
+      alert('Đã xảy ra lỗi khi lưu nội dung')
     } finally {
       setLoading(false)
     }
@@ -299,7 +299,7 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-4">
               <h2 className="text-xl font-bold">
-                {content ? 'Chá»‰nh sá»­a ná»™i dung' : 'ThÃªm ná»™i dung má»›i'}
+                {content ? 'Chỉnh sửa nội dung' : 'Thêm nội dung mới'}
               </h2>
 
               {/* Auto-save indicator */}
@@ -311,7 +311,7 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
-                      Äang lÆ°u...
+                      Đang lưu...
                     </span>
                   )}
                   {autoSaveStatus === 'saved' && (
@@ -319,7 +319,7 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
                       <svg className="mr-1 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                       </svg>
-                      ÄÃ£ lÆ°u báº£n nhÃ¡p
+                      Đã lưu bản nháp
                     </span>
                   )}
                 </div>
@@ -334,7 +334,7 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
                   onClick={clearDraft}
                   className="text-red-600 hover:text-red-700 text-xs"
                 >
-                  XÃ³a báº£n nhÃ¡p
+                  Xóa bản nháp
                 </Button>
               )}
             </div>
@@ -343,7 +343,7 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
               onClick={onClose}
               className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
             >
-              Ã—
+              ×
             </button>
           </div>
         </div>
@@ -359,7 +359,7 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
               </div>
               <div className="ml-3">
                 <p className="text-sm text-blue-700">
-                  <strong>Báº£n nhÃ¡p Ä‘Ã£ Ä‘Æ°á»£c khÃ´i phá»¥c!</strong> Dá»¯ liá»‡u tá»« phiÃªn lÃ m viá»‡c trÆ°á»›c Ä‘Ã£ Ä‘Æ°á»£c tá»± Ä‘á»™ng khÃ´i phá»¥c.
+                  <strong>Bản nháp đã được khôi phục!</strong> Dữ liệu từ phiên làm việc trước đã được tự động khôi phục.
                 </p>
               </div>
             </div>
@@ -368,11 +368,11 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
 
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-green-600">Ná»™i dung tiáº¿ng Viá»‡t</h3>
+            <h3 className="text-lg font-semibold text-green-600">Nội dung tiếng Việt</h3>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                TiÃªu Ä‘á» (Tiáº¿ng Viá»‡t) *
+                Tiêu đề (Tiếng Việt) *
               </label>
               <input
                 type="text"
@@ -386,7 +386,7 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                MÃ´ táº£ ngáº¯n (Tiáº¿ng Viá»‡t)
+                Mô tả ngắn (Tiếng Việt)
               </label>
               <textarea
                 name="description"
@@ -399,7 +399,7 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Ná»™i dung (Tiáº¿ng Viá»‡t) *
+                Nội dung (Tiếng Việt) *
               </label>
               <RichTextEditor
                 value={formData.content}
@@ -437,7 +437,7 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Danh má»¥c *
+                Danh mục *
               </label>
               <select
                 name="category"
@@ -446,7 +446,7 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
                 required
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
               >
-                <option value="">Chá»n danh má»¥c</option>
+                <option value="">Chọn danh mục</option>
                 {categories.map(cat => (
                   <option key={cat.value} value={cat.value}>{cat.label}</option>
                 ))}
@@ -455,7 +455,7 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Loáº¡i ná»™i dung *
+                Loại nội dung *
               </label>
               <select
                 name="type"
@@ -474,7 +474,7 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Hiá»ƒn thá»‹ trÃªn trang chá»§
+                Hiển thị trên trang chủ
               </label>
               <select
                 name="sectionKey"
@@ -487,13 +487,13 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
                 ))}
               </select>
               <p className="text-xs text-gray-500 mt-1">
-                Chá»‰ chá»n khi muá»‘n hiá»ƒn thá»‹ ná»™i dung trÃªn trang chá»§.
+                Chỉ chọn khi muốn hiển thị nội dung trên trang chủ.
               </p>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Thá»© tá»± hiá»ƒn thá»‹
+                Thứ tự hiển thị
               </label>
               <input
                 type="number"
@@ -504,32 +504,32 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
               />
               <p className="text-xs text-gray-500 mt-1">
-                Sá»‘ nhá» hiá»ƒn thá»‹ trÆ°á»›c. Bá» trá»‘ng thÃ¬ sáº¯p xáº¿p theo ngÃ y táº¡o.
+                Số nhỏ hiển thị trước. Bỏ trống thì sắp xếp theo ngày tạo.
               </p>
             </div>
           </div>
 
           {formData.type === 'PROJECT_ACTIVITY' && (
             <div className="space-y-4 rounded-lg border border-amber-200 bg-amber-50/60 p-4">
-              <h3 className="text-lg font-semibold text-amber-700">ThÃ´ng tin Hoáº¡t Ä‘á»™ng dá»± Ã¡n</h3>
+              <h3 className="text-lg font-semibold text-amber-700">Thông tin Hoạt động dự án</h3>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  TiÃªu Ä‘á» phá»¥ (Undertitle)
+                  Tiêu đề phụ (Undertitle)
                 </label>
                 <input
                   type="text"
                   name="undertitle"
                   value={formData.undertitle}
                   onChange={handleChange}
-                  placeholder="VÃ­ dá»¥: GRAISEA"
+                  placeholder="Ví dụ: GRAISEA"
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  ÄÆ°á»ng dáº«n dá»± Ã¡n *
+                  Đường dẫn dự án *
                 </label>
                 <input
                   type="url"
@@ -547,7 +547,7 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
           {formData.type === 'EVENT' && (
             <div className="space-y-4 rounded-lg border border-emerald-200 bg-emerald-50/60 p-4">
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-emerald-700">ThÃ´ng tin sá»± kiá»‡n</h3>
+                <h3 className="text-lg font-semibold text-emerald-700">Thông tin sự kiện</h3>
                 <label className="flex items-center text-sm text-gray-700">
                   <input
                     type="checkbox"
@@ -556,14 +556,14 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
                     onChange={handleChange}
                     className="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
                   />
-                  <span className="ml-2">Cáº£ ngÃ y</span>
+                  <span className="ml-2">Cả ngày</span>
                 </label>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {formData.isAllDay ? 'NgÃ y báº¯t Ä‘áº§u *' : 'Thá»i gian báº¯t Ä‘áº§u *'}
+                    {formData.isAllDay ? 'Ngày bắt đầu *' : 'Thời gian bắt đầu *'}
                   </label>
                   <input
                     type={formData.isAllDay ? 'date' : 'datetime-local'}
@@ -577,7 +577,7 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {formData.isAllDay ? 'NgÃ y káº¿t thÃºc' : 'Thá»i gian káº¿t thÃºc'}
+                    {formData.isAllDay ? 'Ngày kết thúc' : 'Thời gian kết thúc'}
                   </label>
                   <input
                     type={formData.isAllDay ? 'date' : 'datetime-local'}
@@ -590,7 +590,7 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    MÃºi giá»
+                    Múi giờ
                   </label>
                   <input
                     type="text"
@@ -604,14 +604,14 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Äá»‹a Ä‘iá»ƒm
+                    Địa điểm
                   </label>
                   <input
                     type="text"
                     name="eventLocation"
                     value={formData.eventLocation}
                     onChange={handleChange}
-                    placeholder="Cáº§n ThÆ¡, Viá»‡t Nam"
+                    placeholder="Cần Thơ, Việt Nam"
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   />
                 </div>
@@ -621,14 +621,14 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Tá»« khÃ³a (phÃ¢n cÃ¡ch báº±ng dáº¥u pháº©y)
+              Từ khóa (phân cách bằng dấu phẩy)
             </label>
             <input
               type="text"
               name="tags"
               value={formData.tags}
               onChange={handleChange}
-              placeholder="nuÃ´i tÃ´m, sinh thÃ¡i, bá»n vá»¯ng"
+              placeholder="nuôi tôm, sinh thái, bền vững"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
             />
           </div>
@@ -639,7 +639,7 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Thumbnail (Trang chá»§)
+                Thumbnail (Trang chủ)
               </label>
               {formData.thumbnailUrl && (
                 <div className="mb-3 flex items-center gap-4">
@@ -657,7 +657,7 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
                     onClick={() => setFormData((prev: typeof formData) => ({ ...prev, thumbnailUrl: '' }))}
                     className="text-red-600 hover:text-red-700"
                   >
-                    XÃ³a thumbnail
+                    Xóa thumbnail
                   </Button>
                 </div>
               )}
@@ -729,7 +729,7 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
 
           {/* File Attachments */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-800">File Ä‘Ã­nh kÃ¨m</h3>
+            <h3 className="text-lg font-semibold text-gray-800">File đính kèm</h3>
 
             {/* Upload limitations notice */}
             <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
@@ -741,8 +741,8 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
                 </div>
                 <div className="ml-3">
                   <p className="text-sm text-amber-700">
-                    <strong>HÃ¬nh áº£nh hiá»ƒn thá»‹:</strong> Chá»‰ nhá»¯ng hÃ¬nh áº£nh Ä‘Æ°á»£c táº£i lÃªn thá»§ cÃ´ng sáº½ hiá»ƒn thá»‹ trong carousel tin tá»©c.
-                    Hiá»‡n táº¡i chá»‰ há»— trá»£ hÃ¬nh áº£nh dÆ°á»›i 1MB. TrÆ°á»ng &ldquo;News URL&rdquo; dÃ¹ng Ä‘á»ƒ liÃªn káº¿t Ä‘áº¿n bÃ i bÃ¡o gá»‘c.
+                    <strong>Hình ảnh hiển thị:</strong> Chỉ những hình ảnh được tải lên thủ công sẽ hiển thị trong carousel tin tức.
+                    Hiện tại chỉ hỗ trợ hình ảnh dưới 1MB. Trường &ldquo;News URL&rdquo; dùng để liên kết đến bài báo gốc.
                   </p>
                 </div>
               </div>
@@ -763,13 +763,13 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
                           className="w-full h-full object-cover rounded"
                         />
                       ) : (
-                        <span className="text-xl">ðŸ“„</span>
+                        <span className="text-xl">📄</span>
                       )}
                     </div>
                     <div>
-                      <div className="font-medium text-gray-900">File Ä‘Ã£ Ä‘Ã­nh kÃ¨m</div>
+                      <div className="font-medium text-gray-900">File đã đính kèm</div>
                       <div className="text-sm text-gray-500">
-                        {formData.fileType} â€¢ {Math.round(formData.fileSize / 1024)} KB
+                        {formData.fileType} • {Math.round(formData.fileSize / 1024)} KB
                       </div>
                     </div>
                   </div>
@@ -788,7 +788,7 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
                     }}
                     className="text-red-600 hover:text-red-700"
                   >
-                    XÃ³a file
+                    Xóa file
                   </Button>
                 </div>
               </div>
@@ -816,7 +816,7 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
                 />
 
                 <div className="text-center">
-                  <span className="text-gray-500">hoáº·c</span>
+                  <span className="text-gray-500">hoặc</span>
                 </div>
 
                 <Button
@@ -825,7 +825,7 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
                   onClick={() => setShowFileManager(true)}
                   className="w-full"
                 >
-                  Chá»n tá»« thÆ° viá»‡n file
+                  Chọn từ thư viện file
                 </Button>
               </div>
             )}
@@ -842,7 +842,7 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
                     onChange={handleChange}
                     className="rounded border-gray-300 text-green-600 focus:ring-green-500"
                   />
-                  <span className="ml-2 text-sm text-gray-700">Ná»™i dung ná»•i báº­t</span>
+                  <span className="ml-2 text-sm text-gray-700">Nội dung nổi bật</span>
                 </label>
               )}
 
@@ -854,13 +854,13 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
                   onChange={handleChange}
                   className="rounded border-gray-300 text-green-600 focus:ring-green-500"
                 />
-                <span className="ml-2 text-sm text-gray-700">CÃ´ng khai</span>
+                <span className="ml-2 text-sm text-gray-700">Công khai</span>
               </label>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Tráº¡ng thÃ¡i
+                Trạng thái
               </label>
               <select
                 name="status"
@@ -868,19 +868,19 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
               >
-                <option value="DRAFT">Báº£n nhÃ¡p</option>
-                <option value="PUBLISHED">ÄÃ£ xuáº¥t báº£n</option>
-                {userRole === 'ADMIN' && <option value="ARCHIVED">LÆ°u trá»¯</option>}
+                <option value="DRAFT">Bản nháp</option>
+                <option value="PUBLISHED">Đã xuất bản</option>
+                {userRole === 'ADMIN' && <option value="ARCHIVED">Lưu trữ</option>}
               </select>
             </div>
           </div>
 
           <div className="flex justify-end space-x-4 pt-6 border-t">
             <Button type="button" variant="ghost" onClick={onClose} disabled={loading}>
-              Há»§y
+              Hủy
             </Button>
             <Button type="submit" disabled={loading}>
-              {loading ? 'Äang lÆ°u...' : (content ? 'Cáº­p nháº­t' : 'Táº¡o má»›i')}
+              {loading ? 'Đang lưu...' : (content ? 'Cập nhật' : 'Tạo mới')}
             </Button>
           </div>
         </form>
@@ -892,12 +892,12 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
           <div className="bg-white rounded-lg shadow-xl w-full max-w-6xl max-h-screen overflow-y-auto">
             <div className="sticky top-0 bg-white border-b px-6 py-4">
               <div className="flex justify-between items-center">
-                <h3 className="text-xl font-bold">Chá»n file tá»« thÆ° viá»‡n</h3>
+                <h3 className="text-xl font-bold">Chọn file từ thư viện</h3>
                 <button
                   onClick={() => setShowFileManager(false)}
                   className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
                 >
-                  Ã—
+                  ×
                 </button>
               </div>
             </div>
