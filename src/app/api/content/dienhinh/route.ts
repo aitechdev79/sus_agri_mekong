@@ -8,6 +8,7 @@ export async function GET() {
         status: 'PUBLISHED',
         isPublic: true,
         type: 'STORY', // 'Điển hình' content uses STORY type
+        sectionKey: 'HOME_DIEN_HINH',
         // Remove category filter since we want all STORY type content for 'Điển hình'
       },
       select: {

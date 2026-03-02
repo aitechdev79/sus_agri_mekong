@@ -85,6 +85,10 @@ model Content {
   type        ContentType
   category    String
   tags        String
+  sectionKey  ContentSection?
+  displayOrder Int?
+  undertitle  String?
+  projectUrl  String?
   fileUrl     String?
   fileType    String?
   fileSize    Int?
@@ -114,6 +118,8 @@ model Content {
   @@index([status])
   @@index([isPublic])
   @@index([eventStartAt])
+  @@index([sectionKey])
+  @@index([sectionKey, displayOrder])
 }
 
 model Comment {
@@ -213,10 +219,16 @@ enum ContentType {
   INFOGRAPHIC
   DOCUMENT
   STORY
+  PROJECT_ACTIVITY
   GUIDE
   POLICY
   NEWS
   EVENT
+}
+
+enum ContentSection {
+  HOME_DIEN_HINH
+  HOME_HOAT_DONG_DU_AN
 }
 
 enum ContentStatus {

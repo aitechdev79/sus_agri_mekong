@@ -64,6 +64,7 @@ export function ContentTable({ contents, onEdit, onDelete, onBulkAction, userRol
       ARTICLE: { color: 'bg-blue-100 text-blue-800', text: 'Bài viết' },
       DOCUMENT: { color: 'bg-purple-100 text-purple-800', text: 'Tài liệu' },
       STORY: { color: 'bg-orange-100 text-orange-800', text: 'Điển hình' },
+      PROJECT_ACTIVITY: { color: 'bg-amber-100 text-amber-800', text: 'Hoạt động dự án' },
       GUIDE: { color: 'bg-indigo-100 text-indigo-800', text: 'Hướng dẫn' },
       POLICY: { color: 'bg-pink-100 text-pink-800', text: 'Chính sách' },
       NEWS: { color: 'bg-green-100 text-green-800', text: 'Tin tức' },

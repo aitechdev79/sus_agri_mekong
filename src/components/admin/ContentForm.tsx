@@ -50,6 +50,10 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
         category: content.category || '',
         type: content.type || 'ARTICLE',
         tags: content.tags || '',
+        sectionKey: content.sectionKey || '',
+        displayOrder: content.displayOrder ?? '',
+        undertitle: content.undertitle || '',
+        projectUrl: content.projectUrl || '',
         isFeatured: content.isFeatured || false,
         isPublic: content.isPublic !== false,
         status: content.status || 'DRAFT',
@@ -90,6 +94,10 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
         category: '',
         type: 'ARTICLE',
         tags: '',
+        sectionKey: '',
+        displayOrder: '',
+        undertitle: '',
+        projectUrl: '',
         isFeatured: false,
         isPublic: true,
         status: 'DRAFT',
@@ -162,6 +170,10 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
         category: '',
         type: 'ARTICLE',
         tags: '',
+        sectionKey: '',
+        displayOrder: '',
+        undertitle: '',
+        projectUrl: '',
         isFeatured: false,
         isPublic: true,
         status: 'DRAFT',
@@ -196,15 +208,21 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
   ]
 
   const contentTypes = [
-    { value: 'ARTICLE', label: 'Bài viết' },
-    { value: 'DOCUMENT', label: 'Tài liệu' },
-    { value: 'STORY', label: 'Điển hình' },  // Using STORY for "Điển hình" (exemplary cases)
-    { value: 'GUIDE', label: 'Hướng dẫn' },
-    { value: 'POLICY', label: 'Chính sách' },
-    { value: 'NEWS', label: 'Tin tức' },
-    { value: 'EVENT', label: 'Sự kiện' }
+    { value: 'ARTICLE', label: 'B�i vi?t' },
+    { value: 'DOCUMENT', label: 'T�i li?u' },
+    { value: 'STORY', label: '�i?n h�nh' },  // Using STORY for "�i?n h�nh" (exemplary cases)
+    { value: 'PROJECT_ACTIVITY', label: 'Ho?t d?ng d? �n' },
+    { value: 'GUIDE', label: 'Hu?ng d?n' },
+    { value: 'POLICY', label: 'Ch�nh s�ch' },
+    { value: 'NEWS', label: 'Tin t?c' },
+    { value: 'EVENT', label: 'S? ki?n' }
   ]
 
+  const sectionOptions = [
+    { value: '', label: 'Kh�ng hi?n th? tr�n trang ch?' },
+    { value: 'HOME_DIEN_HINH', label: 'Th?c h�nh di?n h�nh' },
+    { value: 'HOME_HOAT_DONG_DU_AN', label: 'Ho?t d?ng d? �n' }
+  ]
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target
     if (type === 'checkbox') {
@@ -233,6 +251,12 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
 
       if (formData.type === 'EVENT' && !formData.eventStartAt) {
         alert('Vui lòng nhập thời gian bắt đầu sự kiện')
+        setLoading(false)
+        return
+      }
+
+      if (formData.type === 'PROJECT_ACTIVITY' && !formData.projectUrl) {
+        alert('Vui lòng nhập đường dẫn dự án')
         setLoading(false)
         return
       }
@@ -447,6 +471,79 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
             </div>
           </div>
 
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Hiển thị trên trang chủ
+              </label>
+              <select
+                name="sectionKey"
+                value={formData.sectionKey}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+              >
+                {sectionOptions.map(option => (
+                  <option key={option.value} value={option.value}>{option.label}</option>
+                ))}
+              </select>
+              <p className="text-xs text-gray-500 mt-1">
+                Chỉ chọn khi muốn hiển thị nội dung trên trang chủ.
+              </p>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Thứ tự hiển thị
+              </label>
+              <input
+                type="number"
+                name="displayOrder"
+                value={formData.displayOrder}
+                onChange={handleChange}
+                placeholder="0"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Số nhỏ hiển thị trước. Bỏ trống thì sắp xếp theo ngày tạo.
+              </p>
+            </div>
+          </div>
+
+          {formData.type === 'PROJECT_ACTIVITY' && (
+            <div className="space-y-4 rounded-lg border border-amber-200 bg-amber-50/60 p-4">
+              <h3 className="text-lg font-semibold text-amber-700">Thông tin Hoạt động dự án</h3>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Tiêu đề phụ (Undertitle)
+                </label>
+                <input
+                  type="text"
+                  name="undertitle"
+                  value={formData.undertitle}
+                  onChange={handleChange}
+                  placeholder="Ví dụ: GRAISEA"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Đường dẫn dự án *
+                </label>
+                <input
+                  type="url"
+                  name="projectUrl"
+                  value={formData.projectUrl}
+                  onChange={handleChange}
+                  required={formData.type === 'PROJECT_ACTIVITY'}
+                  placeholder="https://example.com/project"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
+                />
+              </div>
+            </div>
+          )}
+
           {formData.type === 'EVENT' && (
             <div className="space-y-4 rounded-lg border border-emerald-200 bg-emerald-50/60 p-4">
               <div className="flex items-center justify-between">
@@ -540,6 +637,50 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-purple-600">Media Content</h3>
 
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Thumbnail (Trang chủ)
+              </label>
+              {formData.thumbnailUrl && (
+                <div className="mb-3 flex items-center gap-4">
+                  <Image
+                    src={formData.thumbnailUrl}
+                    alt="Thumbnail preview"
+                    width={120}
+                    height={80}
+                    className="rounded-md object-cover border"
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setFormData((prev: typeof formData) => ({ ...prev, thumbnailUrl: '' }))}
+                    className="text-red-600 hover:text-red-700"
+                  >
+                    Xóa thumbnail
+                  </Button>
+                </div>
+              )}
+
+              {!formData.thumbnailUrl && (
+                <FileUploadZone
+                  multiple={false}
+                  fileOnly={true}
+                  accept="image/*"
+                  maxSize={1}
+                  onUploadComplete={(files) => {
+                    if (files.length > 0) {
+                      const file = files[0]
+                      setFormData((prev: typeof formData) => ({
+                        ...prev,
+                        thumbnailUrl: file.url || ''
+                      }))
+                    }
+                  }}
+                  onUploadError={(error) => alert(error)}
+                />
+              )}
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -782,3 +923,4 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
     </div>
   )
 }
+

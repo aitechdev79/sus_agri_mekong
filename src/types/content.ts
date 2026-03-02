@@ -29,6 +29,10 @@ export interface BaseContent {
   type: ContentType;
   category: string;
   tags: string;
+  sectionKey?: ContentSection | null;
+  displayOrder?: number | null;
+  undertitle?: string | null;
+  projectUrl?: string | null;
   status: ContentStatus;
   isPublic: boolean;
   isFeatured: boolean;
@@ -120,6 +124,10 @@ export interface FormContent {
   type: ContentType;
   category?: string;
   tags?: string;
+  sectionKey?: ContentSection | null;
+  displayOrder?: number | null;
+  undertitle?: string | null;
+  projectUrl?: string | null;
   status: ContentStatus;
   isPublic?: boolean;
   isFeatured?: boolean;
@@ -172,10 +180,15 @@ export type ContentType =
   | 'INFOGRAPHIC'
   | 'DOCUMENT'
   | 'STORY'
+  | 'PROJECT_ACTIVITY'
   | 'GUIDE'
   | 'POLICY'
   | 'NEWS'
   | 'EVENT';
+
+export type ContentSection =
+  | 'HOME_DIEN_HINH'
+  | 'HOME_HOAT_DONG_DU_AN';
 
 export type ContentStatus =
   | 'DRAFT'

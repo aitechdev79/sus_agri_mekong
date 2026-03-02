@@ -42,6 +42,7 @@ function getContentTypeLabel(type: string): string {
     ARTICLE: 'Bài viết',
     DOCUMENT: 'Tài liệu',
     STORY: 'Điển hình',
+    PROJECT_ACTIVITY: 'Hoạt động dự án',
     GUIDE: 'Hướng dẫn',
     POLICY: 'Chính sách',
     NEWS: 'Tin tức',

@@ -1,47 +1,48 @@
-﻿'use client';
+'use client';
 
 import Link from 'next/link';
-import { Sprout, ShieldPlus, Wheat } from 'lucide-react';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
+
+interface ProjectActivityItem {
+  id: string;
+  title: string;
+  undertitle?: string | null;
+  description?: string | null;
+  projectUrl?: string | null;
+  thumbnailUrl?: string | null;
+  imageUrl?: string | null;
+}
 
 export default function HoatDongSection() {
-  const activities = [
-    {
-      id: 'graisea',
-      title: 'Dự án Graisea',
-      shortTitle: 'GRAISEA',
-      description:
-        'GRAISEA thúc đẩy các mô hình ba bên cùng có lợi (win-win-win), mang lại lợi ích cho cộng đồng, những nhà sản xuất quy mô nhỏ và các doanh nghiệp lớn.',
-      subtitle: 'Hỗ trợ nâng cao năng lực cho doanh nghiệp trong chuỗi chế biến tôm và lúa gạo',
-      link: 'https://graisea.github.io/',
-      borderColor: 'border-vn-green',
-      iconBgColor: 'bg-vn-green-light',
-      iconColor: 'text-vn-green',
-    },
-    {
-      id: 'right-to-food',
-      title: 'Dự án Right To Food',
-      shortTitle: 'RIGHT TO FOOD',
-      description:
-        'Các nghiên cứu nhằm phân tích cách người dân diễn giải và xác định trách nhiệm liên quan đến việc bảo đảm quyền được có lương thực.',
-      subtitle: 'Hỗ trợ doanh nghiệp trong chuỗi lúa gạo',
-      link: 'https://policy-practice.oxfam.org/resources/a-common-sense-approach-to-the-right-to-food-558742/',
-      borderColor: 'border-vn-green',
-      iconBgColor: 'bg-vn-green-light',
-      iconColor: 'text-vn-green',
-    },
-    {
-      id: 'dgd',
-      title: 'Dự án DGD',
-      shortTitle: 'DGD',
-      description:
-        'Cải thiện an sinh xã hội và việc làm bền vững cho lao động nữ và người lao động phi chính thức trong chuỗi giá trị lúa gạo và tôm tại Việt Nam',
-      subtitle: 'Hỗ trợ doanh nghiệp trong chuỗi chế biến tôm và lúa gạo',
-      link: 'https://vietnam.oxfam.org/kick-project-component-supporting-female-farmers-and-informal-workers',
-      borderColor: 'border-vn-green',
-      iconBgColor: 'bg-vn-green-light',
-      iconColor: 'text-vn-green',
-    },
-  ];
+  const [items, setItems] = useState<ProjectActivityItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchItems = async () => {
+      try {
+        const response = await fetch('/api/sections/home/hoat-dong-du-an');
+        if (!response.ok) return;
+        const data = await response.json();
+        if (isMounted) {
+          setItems(data || []);
+        }
+      } catch (error) {
+        console.error('Failed to load hoat-dong-du-an items:', error);
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchItems();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <section className="py-20 w-full bg-vn-rice-white">
@@ -75,103 +76,84 @@ export default function HoatDongSection() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-stretch">
-          {activities.map((activity) => {
-            const isGraisea = activity.id === 'graisea';
-            const isRightToFood = activity.id === 'right-to-food';
-            const isDgd = activity.id === 'dgd';
-            const icon =
-              activity.id === 'graisea' ? (
-                <Sprout size={72} strokeWidth={2} />
-              ) : activity.id === 'right-to-food' ? (
-                <Wheat size={48} strokeWidth={2} />
-              ) : (
-                <ShieldPlus size={48} strokeWidth={2} />
-              );
+        {loading && items.length === 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-stretch">
+            {[...Array(3)].map((_, index) => (
+              <div key={index} className="animate-pulse">
+                <div className="bg-gray-200 mb-4" style={{ aspectRatio: '16/9' }} />
+                <div className="h-4 bg-gray-200 mb-2" />
+                <div className="h-3 bg-gray-100 w-5/6" />
+              </div>
+            ))}
+          </div>
+        )}
 
-            return (
-              <Link
-                key={activity.id}
-                href={activity.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group block flex flex-col w-full h-full max-w-md mx-auto md:max-w-none md:mx-0"
-                aria-label={`${activity.title} - ${activity.description}`}
-              >
-                <div
-                  className="relative overflow-hidden mb-4 flex items-center justify-center group-hover:scale-110 transition-transform duration-500"
-                  style={{ aspectRatio: '16/9', backgroundColor: '#F7F3EA' }}
+        {!loading && items.length === 0 && (
+          <div className="text-sm text-gray-500">Chưa có hoạt động dự án.</div>
+        )}
+
+        {items.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-stretch">
+            {items.map((item) => {
+              const imageSrc = item.thumbnailUrl || item.imageUrl || '';
+
+              return (
+                <Link
+                  key={item.id}
+                  href={item.projectUrl || '#'}
+                  target={item.projectUrl ? '_blank' : undefined}
+                  rel={item.projectUrl ? 'noopener noreferrer' : undefined}
+                  className="group block flex flex-col w-full h-full max-w-md mx-auto md:max-w-none md:mx-0"
+                  aria-label={`${item.title} - ${item.description || ''}`}
                 >
-                  {isGraisea || isRightToFood || isDgd ? (
-                    <div className="flex flex-col items-start gap-3 text-left">
-                      <div className="flex items-center gap-4">
-                        <div
-                          className={`rounded-full flex items-center justify-center text-white shadow-md ${
-                            isGraisea || isRightToFood || isDgd ? 'w-24 h-24' : 'w-16 h-16'
-                          }`}
-                          style={{ backgroundColor: isGraisea ? '#5e42a6' : isDgd ? '#edd907' : '#0A7029' }}
-                        >
-                          {icon}
-                        </div>
-                        {isGraisea ? (
-                          <span className="font-montserrat font-black text-2xl md:text-3xl" style={{ color: '#3C3C3B' }}>
-                            Graisea
-                          </span>
-                        ) : isDgd ? (
-                          <span className="font-montserrat font-black text-xl md:text-2xl" style={{ color: '#3C3C3B' }}>
-                            DGD
-                          </span>
-                        ) : (
-                          <span className="font-montserrat font-black text-xl md:text-2xl" style={{ color: '#3C3C3B' }}>
-                            Right To Food
-                          </span>
-                        )}
-                      </div>
-                      <p className="text-xs md:text-sm font-montserrat max-w-xs" style={{ color: '#6B7280' }}>
-                        {isGraisea
-                          ? 'Bình đẳng giới và đầu tư kinh doanh nông nghiệp có trách nhiệm'
-                          : isDgd
-                            ? 'Nâng cao kỹ năng làm việc và an toàn vệ sinh lao động'
-                          : 'Quyền được có lương thực'}
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="w-16 h-16 rounded-full bg-[#0A7029] flex items-center justify-center text-white shadow-md">
-                      {icon}
+                  {imageSrc && (
+                    <div className="relative overflow-hidden mb-4" style={{ aspectRatio: '16/9' }}>
+                      <Image
+                        src={imageSrc}
+                        alt={item.title}
+                        fill
+                        className="object-cover group-hover:scale-110 transition-transform duration-500"
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                      />
                     </div>
                   )}
-                </div>
 
-                <div className="pb-4 relative flex-1 flex flex-col" style={{ minHeight: '160px' }}>
-                  <div className="absolute bottom-0 left-0 w-full h-0.5" style={{ backgroundColor: '#E8F5E9' }}></div>
-                  <div
-                    className="absolute bottom-0 left-0 h-0.5 w-0 group-hover:w-full transition-all duration-500 ease-out"
-                    style={{ backgroundColor: '#0A7029' }}
-                  ></div>
-                  {!isGraisea && !isRightToFood && !isDgd && (
+                  <div className="pb-4 relative flex-1 flex flex-col" style={{ minHeight: '160px' }}>
+                    <div className="absolute bottom-0 left-0 w-full h-0.5" style={{ backgroundColor: '#E8F5E9' }}></div>
+                    <div
+                      className="absolute bottom-0 left-0 h-0.5 w-0 group-hover:w-full transition-all duration-500 ease-out"
+                      style={{ backgroundColor: '#0A7029' }}
+                    ></div>
+
                     <h3 className="text-lg md:text-xl font-bold mb-2 font-montserrat" style={{ color: '#3C3C3B' }}>
-                      {activity.title}
+                      {item.title}
                     </h3>
-                  )}
-                  <p
-                    className="text-sm md:text-base font-montserrat flex-1"
-                    style={{
-                      color: '#6B7280',
-                      display: '-webkit-box',
-                      WebkitLineClamp: 5,
-                      WebkitBoxOrient: 'vertical',
-                      overflow: 'hidden',
-                    }}
-                  >
-                    {activity.description}
-                  </p>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
+                    {item.undertitle && (
+                      <p className="text-xs uppercase tracking-wide font-semibold mb-2" style={{ color: '#6B7280' }}>
+                        {item.undertitle}
+                      </p>
+                    )}
+                    {item.description && (
+                      <p
+                        className="text-sm md:text-base font-montserrat flex-1"
+                        style={{
+                          color: '#6B7280',
+                          display: '-webkit-box',
+                          WebkitLineClamp: 5,
+                          WebkitBoxOrient: 'vertical',
+                          overflow: 'hidden',
+                        }}
+                      >
+                        {item.description}
+                      </p>
+                    )}
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        )}
       </div>
     </section>
   );
 }
-

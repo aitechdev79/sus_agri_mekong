@@ -18,6 +18,7 @@ export function SearchFilters({ selectedCategory, selectedType, onFilterChange }
     { value: 'VIDEO', label: 'Video' },
     { value: 'DOCUMENT', label: 'Tài liệu' },
     { value: 'STORY', label: 'Điển hình' },
+    { value: 'PROJECT_ACTIVITY', label: 'Hoạt động dự án' },
     { value: 'GUIDE', label: 'Hướng dẫn' },
     { value: 'POLICY', label: 'Chính sách' },
     { value: 'INFOGRAPHIC', label: 'Infographic' },

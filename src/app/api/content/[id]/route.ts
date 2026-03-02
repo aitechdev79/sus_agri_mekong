@@ -19,6 +19,27 @@ function normalizeEventDate(value?: string | null, isAllDay?: boolean) {
   return date
 }
 
+function normalizeDisplayOrder(value?: unknown) {
+  if (value === null || value === undefined || value === '') return null
+  const parsed = Number(value)
+  if (!Number.isFinite(parsed)) return null
+  return Math.trunc(parsed)
+}
+
+function validateSectionPlacement(type: string, sectionKey?: string | null) {
+  if (!sectionKey) return { ok: true }
+
+  if (sectionKey === 'HOME_DIEN_HINH' && type !== 'STORY') {
+    return { ok: false, error: 'Mục "Thực hành điển hình" chỉ nhận nội dung loại Điển hình (STORY).' }
+  }
+
+  if (sectionKey === 'HOME_HOAT_DONG_DU_AN' && type !== 'PROJECT_ACTIVITY') {
+    return { ok: false, error: 'Mục "Hoạt động dự án" chỉ nhận nội dung loại Hoạt động dự án.' }
+  }
+
+  return { ok: true }
+}
+
 export async function GET(
   request: NextRequest,
   { params }: RouteParams
@@ -155,6 +176,10 @@ export async function PUT(
       type,
       category,
       tags,
+      sectionKey,
+      displayOrder,
+      undertitle,
+      projectUrl,
       isPublic,
       isFeatured,
       status,
@@ -174,6 +199,22 @@ export async function PUT(
     const sanitizedContent = sanitizeRichText(contentText || '')
     const normalizedEventStartAt = normalizeEventDate(eventStartAt, isAllDay)
     const normalizedEventEndAt = normalizeEventDate(eventEndAt, isAllDay)
+    const normalizedDisplayOrder = normalizeDisplayOrder(displayOrder)
+
+    const placementValidation = validateSectionPlacement(type, sectionKey)
+    if (!placementValidation.ok) {
+      return NextResponse.json(
+        { error: placementValidation.error },
+        { status: 400 }
+      )
+    }
+
+    if (type === 'PROJECT_ACTIVITY' && !projectUrl) {
+      return NextResponse.json(
+        { error: 'Hoạt động dự án cần có đường dẫn dự án (URL).' },
+        { status: 400 }
+      )
+    }
 
     if (type === 'EVENT' && !normalizedEventStartAt) {
       return NextResponse.json(
@@ -201,6 +242,10 @@ export async function PUT(
       type,
       category,
       tags: Array.isArray(tags) ? tags.join(', ') : tags || '',
+      sectionKey: sectionKey || null,
+      displayOrder: normalizedDisplayOrder,
+      undertitle: undertitle || null,
+      projectUrl: projectUrl || null,
       isPublic: isPublic !== false,
       videoUrl: videoUrl || null,
       imageUrl: imageUrl || null,
