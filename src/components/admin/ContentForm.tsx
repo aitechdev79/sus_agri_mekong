@@ -208,20 +208,20 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
   ]
 
   const contentTypes = [
-    { value: 'ARTICLE', label: 'B�i vi?t' },
-    { value: 'DOCUMENT', label: 'T�i li?u' },
-    { value: 'STORY', label: '�i?n h�nh' },  // Using STORY for "�i?n h�nh" (exemplary cases)
-    { value: 'PROJECT_ACTIVITY', label: 'Ho?t d?ng d? �n' },
-    { value: 'GUIDE', label: 'Hu?ng d?n' },
-    { value: 'POLICY', label: 'Ch�nh s�ch' },
-    { value: 'NEWS', label: 'Tin t?c' },
-    { value: 'EVENT', label: 'S? ki?n' }
+    { value: 'ARTICLE', label: 'Bài viết' },
+    { value: 'DOCUMENT', label: 'Tài liệu' },
+    { value: 'STORY', label: 'Điển hình' },  // Using STORY for "�i?n h�nh" (exemplary cases)
+    { value: 'PROJECT_ACTIVITY', label: 'Hoạt động dự án' },
+    { value: 'GUIDE', label: 'Hướng dẫn' },
+    { value: 'POLICY', label: 'Chính sách' },
+    { value: 'NEWS', label: 'Tin tức' },
+    { value: 'EVENT', label: 'Sự kiện' }
   ]
 
   const sectionOptions = [
-    { value: '', label: 'Kh�ng hi?n th? tr�n trang ch?' },
-    { value: 'HOME_DIEN_HINH', label: 'Th?c h�nh di?n h�nh' },
-    { value: 'HOME_HOAT_DONG_DU_AN', label: 'Ho?t d?ng d? �n' }
+    { value: '', label: 'Không hiển thị trên trang chủ' },
+    { value: 'HOME_DIEN_HINH', label: 'Thực hành điển hình' },
+    { value: 'HOME_HOAT_DONG_DU_AN', label: 'Hoạt động dự án' }
   ]
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target
