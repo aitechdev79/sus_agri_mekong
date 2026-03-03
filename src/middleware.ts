@@ -41,6 +41,7 @@ export default withAuth(
           '/daotaokiemkeKNK',
           '/hoat-dong-du-an',
           '/tat-ca-dien-hinh',
+          '/tat-ca-su-kien',
           '/congtyMinhphu',
           '/congtyTaiky',
           '/congtyVinhhien',

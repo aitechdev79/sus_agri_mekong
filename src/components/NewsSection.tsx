@@ -131,18 +131,17 @@ export default function NewsSection() {
             </p>
           </div>
           <Link
-            href="/news"
-            className="hidden md:inline-flex items-center gap-2 font-bold px-6 py-3 rounded-xl transition-all duration-300 hover:scale-105 hover:-translate-y-1"
+            href="/tat-ca-su-kien"
+            className="hidden md:inline-flex items-center gap-2 border border-[#FFC107] bg-transparent font-bold px-6 py-3 transition-all duration-300 hover:scale-105 hover:-translate-y-1"
             style={{
-              backgroundColor: '#FFC107',
               color: '#3C3C3B',
-              boxShadow: '0 4px 12px rgba(255, 193, 7, 0.3)'
+              boxShadow: '0 4px 12px rgba(255, 193, 7, 0.15)'
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.boxShadow = '0 8px 24px rgba(255, 193, 7, 0.4)';
+              e.currentTarget.style.boxShadow = '0 8px 24px rgba(255, 193, 7, 0.25)';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.boxShadow = '0 4px 12px rgba(255, 193, 7, 0.3)';
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(255, 193, 7, 0.15)';
             }}
           >
             Xem tất cả sự kiện
@@ -256,12 +255,11 @@ export default function NewsSection() {
 
         <div className="mt-8 md:hidden text-center">
           <Link
-            href="/news"
-            className="inline-flex items-center gap-2 font-bold px-6 py-3 rounded-xl transition-all duration-300 hover:scale-105"
+            href="/tat-ca-su-kien"
+            className="inline-flex items-center gap-2 border border-[#FFC107] bg-transparent font-bold px-6 py-3 transition-all duration-300 hover:scale-105"
             style={{
-              backgroundColor: '#FFC107',
               color: '#3C3C3B',
-              boxShadow: '0 4px 12px rgba(255, 193, 7, 0.3)'
+              boxShadow: '0 4px 12px rgba(255, 193, 7, 0.15)'
             }}
           >
             Xem tất cả sự kiện
