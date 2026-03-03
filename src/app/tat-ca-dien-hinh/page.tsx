@@ -137,7 +137,7 @@ export default function TatCaDienHinhPage() {
             {[...Array(itemsPerPage)].map((_, index) => (
               <div key={index} className="animate-pulse rounded-2xl bg-white p-5 shadow-sm">
                 <div className="flex flex-col gap-4 md:flex-row">
-                  <div className="rounded-xl bg-gray-200 md:w-1/2" style={{ aspectRatio: '16/9' }} />
+                  <div className="rounded-xl bg-gray-200 md:w-1/4" style={{ aspectRatio: '16/9' }} />
                   <div className="flex-1 space-y-3">
                     <div className="h-6 bg-gray-200" />
                     <div className="h-4 bg-gray-100" />
@@ -164,14 +164,14 @@ export default function TatCaDienHinhPage() {
                   className="group block overflow-hidden rounded-2xl bg-white p-5 shadow-sm transition-shadow hover:shadow-md"
                 >
                   <div className="flex flex-col gap-5 md:flex-row">
-                    <div className="relative overflow-hidden rounded-xl bg-gray-100 md:w-1/2" style={{ aspectRatio: '16/9' }}>
+                    <div className="relative overflow-hidden rounded-xl bg-gray-100 md:w-1/4" style={{ aspectRatio: '16/9' }}>
                       {imageSrc ? (
                         <Image
                           src={imageSrc}
                           alt={item.title}
                           fill
                           className="object-cover transition-transform duration-500 group-hover:scale-105"
-                          sizes="(max-width: 768px) 100vw, 50vw"
+                          sizes="(max-width: 768px) 100vw, 25vw"
                         />
                       ) : (
                         <div className="flex h-full w-full items-center justify-center text-sm text-gray-400">
