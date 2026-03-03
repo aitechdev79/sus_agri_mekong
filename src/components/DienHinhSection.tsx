@@ -103,7 +103,7 @@ export default function DienHinhSection() {
                     )}
                   </div>
 
-                  <div className="pb-4 relative flex-1 flex flex-col" style={{ minHeight: '120px' }}>
+                  <div className="relative flex h-[180px] flex-col pb-4 md:h-[200px]">
                     <div className="absolute bottom-0 left-0 w-full h-0.5" style={{ backgroundColor: '#E8F5E9' }}></div>
                     <div
                       className="absolute bottom-0 left-0 h-0.5 w-0 group-hover:w-full transition-all duration-500 ease-out"
@@ -114,7 +114,7 @@ export default function DienHinhSection() {
                       {item.title}
                     </h3>
                     {item.description && (
-                      <p className="text-sm md:text-base font-montserrat flex-1" style={{ color: '#6B7280' }}>
+                      <p className="line-clamp-5 flex-1 text-sm md:text-base font-montserrat" style={{ color: '#6B7280' }}>
                         {item.description}
                       </p>
                     )}
