@@ -44,18 +44,18 @@ function formatDate(dateString: string) {
   return date.toLocaleDateString('vi-VN', {
     day: '2-digit',
     month: '2-digit',
-    year: 'numeric'
+    year: 'numeric',
   });
 }
 
 function extractYouTubeVideoId(url: string): string | null {
-  const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+  const regex = /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/;
   const match = url.match(regex);
   return match ? match[1] : null;
 }
 
 function getContentTypeLabel(type: string): string {
-  const typeMap: { [key: string]: string } = {
+  const typeMap: Record<string, string> = {
     ARTICLE: 'Bài viết',
     DOCUMENT: 'Tài liệu',
     STORY: 'Điển hình',
@@ -63,8 +63,9 @@ function getContentTypeLabel(type: string): string {
     GUIDE: 'Hướng dẫn',
     POLICY: 'Chính sách',
     NEWS: 'Tin tức',
-    EVENT: 'Sự kiện'
+    EVENT: 'Sự kiện',
   };
+
   return typeMap[type] || type;
 }
 
@@ -78,7 +79,7 @@ function formatEventRange(content: PublicContent) {
     return start.toLocaleDateString('vi-VN', {
       day: '2-digit',
       month: '2-digit',
-      year: 'numeric'
+      year: 'numeric',
     });
   }
 
@@ -87,7 +88,7 @@ function formatEventRange(content: PublicContent) {
     month: '2-digit',
     year: 'numeric',
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
   });
 
   if (!content.eventEndAt) return startLabel;
@@ -100,55 +101,48 @@ function formatEventRange(content: PublicContent) {
     month: '2-digit',
     year: 'numeric',
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
   });
 
   return `${startLabel} - ${endLabel}`;
 }
 
 function formatContentWithParagraphs(content: string): string {
-  // If content already contains HTML tags, return as is
   if (content.includes('<p>') || content.includes('<br>') || content.includes('<div>')) {
     return content;
   }
 
-  // Split by double line breaks first (paragraph breaks)
-  const paragraphs = content.split(/\n\s*\n/);
-
-  // Convert each paragraph, handling single line breaks within paragraphs
-  const formattedParagraphs = paragraphs
-    .filter(paragraph => paragraph.trim().length > 0)
-    .map(paragraph => {
-      // Replace single line breaks with <br> tags within paragraphs
-      const formattedParagraph = paragraph.trim().replace(/\n/g, '<br>');
-      return `<p>${formattedParagraph}</p>`;
-    });
-
-  return formattedParagraphs.join('\n');
+  return content
+    .split(/\n\s*\n/)
+    .filter((paragraph) => paragraph.trim().length > 0)
+    .map((paragraph) => `<p>${paragraph.trim().replace(/\n/g, '<br>')}</p>`)
+    .join('\n');
 }
 
 function getBestImageUrl(thumbnailUrl?: string, imageUrl?: string): string | null {
-  // If thumbnailUrl starts with './uploads/', convert to absolute path
   if (thumbnailUrl && thumbnailUrl.startsWith('./uploads/')) {
     return thumbnailUrl.replace('./uploads/', '/uploads/');
   }
 
-  // If imageUrl starts with './uploads/', convert to absolute path
   if (imageUrl && imageUrl.startsWith('./uploads/')) {
     return imageUrl.replace('./uploads/', '/uploads/');
   }
 
-  // Return the first available URL or null
   return thumbnailUrl || imageUrl || null;
 }
 
+function getExternalLabel(type: string) {
+  if (type === 'EVENT') return 'Đăng ký tại:';
+  if (type === 'POLICY') return 'Link tham khảo:';
+  return 'Tham khảo thêm:';
+}
+
 export default async function ContentDetailPage({
-  params
+  params,
 }: {
-  params: Promise<{ id: string }>
+  params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-
   const content = await getContent(id);
 
   if (!content || content.status !== 'PUBLISHED') {
@@ -158,68 +152,66 @@ export default async function ContentDetailPage({
   const bestImageUrl = getBestImageUrl(content.thumbnailUrl, content.imageUrl);
   const youtubeVideoId = content.videoUrl ? extractYouTubeVideoId(content.videoUrl) : null;
   const eventRange = formatEventRange(content);
-  const hasPdf = !!content.fileUrl && (content.fileType === 'application/pdf' || content.fileUrl.toLowerCase().endsWith('.pdf'));
+  const hasPdf = !!content.fileUrl && (
+    content.fileType === 'application/pdf' || content.fileUrl.toLowerCase().endsWith('.pdf')
+  );
   const pdfUrl = content.fileUrl;
   const hasRichTextContent = Boolean(content.content?.trim());
   const externalUrl = content.projectUrl?.trim() || null;
+  const showMainImage = Boolean(bestImageUrl) && !hasPdf && content.type !== 'POLICY';
 
   return (
     <div className="min-h-screen bg-gray-50">
       <NavigationBar />
 
       <main className="container mx-auto px-6 py-20">
-        <div className="max-w-4xl mx-auto">
-          <article className="bg-white rounded-lg shadow-sm overflow-hidden">
-            {/* Content Header */}
-            <div className="p-8 border-b">
-              {/* Content Type Badge */}
+        <div className="mx-auto max-w-4xl">
+          <article className="overflow-hidden rounded-lg bg-white shadow-sm">
+            <div className="border-b p-8">
               <div className="mb-4">
-                <span className="inline-block bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">
+                <span className="inline-block rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800">
                   {getContentTypeLabel(content.type)}
                 </span>
               </div>
 
-              {/* Title */}
-              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+              <h1 className="mb-6 text-3xl font-bold text-gray-900 md:text-4xl">
                 {content.title}
               </h1>
 
-              {/* Description */}
               {content.description && (
-                <p className="text-lg text-gray-600 italic mb-6 leading-relaxed">
+                <p className="mb-6 text-lg italic leading-relaxed text-gray-600">
                   {content.description}
                 </p>
               )}
 
-              {/* Meta Information */}
-              <div className="flex items-center space-x-6 text-sm text-gray-500 mb-6">
+              <div className="mb-6 flex items-center space-x-6 text-sm text-gray-500">
                 {content.type === 'EVENT' && eventRange && (
                   <div className="flex items-center">
-                    <Calendar className="w-4 h-4 mr-2" />
+                    <Calendar className="mr-2 h-4 w-4" />
                     <span>Thời gian: {eventRange}</span>
                   </div>
                 )}
                 <div className="flex items-center">
-                  <Calendar className="w-4 h-4 mr-2" />
+                  <Calendar className="mr-2 h-4 w-4" />
                   <span>Ngày đăng: {formatDate(content.createdAt)}</span>
                 </div>
                 <div className="flex items-center">
-                  <Eye className="w-4 h-4 mr-2" />
+                  <Eye className="mr-2 h-4 w-4" />
                   <span>{content.viewCount.toLocaleString('vi-VN')} lượt xem</span>
                 </div>
               </div>
+
               {content.type === 'EVENT' && content.eventLocation && (
-                <div className="text-sm text-gray-500 mb-6">
+                <div className="mb-6 text-sm text-gray-500">
                   Địa điểm: {content.eventLocation}
                 </div>
               )}
             </div>
 
-            {/* Main Image */}
-            {bestImageUrl && !hasPdf && (
-              <div className="relative h-64 md:h-96 overflow-hidden">
+            {showMainImage && (
+              <div className="relative h-64 overflow-hidden md:h-96">
                 <Image
-                  src={bestImageUrl}
+                  src={bestImageUrl as string}
                   alt={content.title}
                   fill
                   className="object-cover"
@@ -284,7 +276,7 @@ export default async function ContentDetailPage({
               </div>
             )}
 
-            {hasPdf && bestImageUrl && (
+            {hasPdf && bestImageUrl && content.type !== 'POLICY' && (
               <div className="p-8 pb-0">
                 <div className="relative h-64 overflow-hidden rounded-2xl md:h-96">
                   <Image
@@ -297,43 +289,35 @@ export default async function ContentDetailPage({
               </div>
             )}
 
-            {/* Main Content */}
             <div className="p-8">
               {hasPdf ? (
                 hasRichTextContent && (
                   <section>
                     <h2 className="mb-4 text-2xl font-semibold text-gray-900">Giới thiệu</h2>
                     <div
-                      className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:leading-relaxed text-justify"
-                      style={{
-                        textAlign: 'justify',
-                        textAlignLast: 'left'
-                      }}
+                      className="prose prose-lg max-w-none text-justify prose-headings:text-gray-900 prose-p:leading-relaxed prose-p:text-gray-700"
+                      style={{ textAlign: 'justify', textAlignLast: 'left' }}
                       dangerouslySetInnerHTML={{ __html: formatContentWithParagraphs(content.content) }}
                     />
                   </section>
                 )
               ) : (
                 <div
-                  className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:leading-relaxed text-justify"
-                  style={{
-                    textAlign: 'justify',
-                    textAlignLast: 'left'
-                  }}
+                  className="prose prose-lg max-w-none text-justify prose-headings:text-gray-900 prose-p:leading-relaxed prose-p:text-gray-700"
+                  style={{ textAlign: 'justify', textAlignLast: 'left' }}
                   dangerouslySetInnerHTML={{ __html: formatContentWithParagraphs(content.content) }}
                 />
               )}
 
-              {/* Source Link */}
               {externalUrl && (
-                <div className="mt-8 pt-6 border-t border-gray-100">
-                  <p className="text-sm text-gray-500 italic">
-                    <span className="font-medium">Tham khảo thêm: </span>
+                <div className="mt-8 border-t border-gray-100 pt-6">
+                  <p className="text-sm italic text-gray-500">
+                    <span className="font-medium">{getExternalLabel(content.type)} </span>
                     <a
                       href={externalUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-gray-500 hover:text-gray-700 underline break-all"
+                      className="break-all text-gray-500 underline hover:text-gray-700"
                     >
                       {externalUrl}
                     </a>
@@ -342,19 +326,18 @@ export default async function ContentDetailPage({
               )}
             </div>
 
-            {/* YouTube Video Embed */}
             {youtubeVideoId && (
               <div className="p-8 pt-0">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Video liên quan</h3>
+                <h3 className="mb-4 text-xl font-semibold text-gray-900">Video liên quan</h3>
                 <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
                   <iframe
-                    className="absolute top-0 left-0 w-full h-full rounded-lg"
+                    className="absolute left-0 top-0 h-full w-full rounded-lg"
                     src={`https://www.youtube.com/embed/${youtubeVideoId}`}
                     title="YouTube video player"
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     allowFullScreen
-                  ></iframe>
+                  />
                 </div>
               </div>
             )}
