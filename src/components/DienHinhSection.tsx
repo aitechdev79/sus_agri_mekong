@@ -48,10 +48,10 @@ export default function DienHinhSection() {
       <div className="container mx-auto px-6 max-w-6xl">
         <div className="mb-12">
           <h2 className="text-3xl font-bold mb-4 md:text-4xl font-montserrat text-left" style={{ color: '#3C3C3B' }}>
-            Thuc hanh dien hinh - Lan toa gia tri
+            Thực hành điển hình - Lan tỏa giá trị
           </h2>
           <p className="text-lg font-montserrat text-left max-w-3xl" style={{ color: '#6B7280' }}>
-            Kham pha nhung cau chuyen thanh cong va mo hinh, sang kien dien hinh trong phat trien ben vung tai Viet Nam
+            Khám phá những câu chuyện thành công và mô hình, sáng kiến điển hình trong phát triển bền vững tại Việt Nam
           </p>
         </div>
 
@@ -114,7 +114,7 @@ export default function DienHinhSection() {
                       {item.title}
                     </h3>
                     {item.description && (
-                      <p className="line-clamp-5 flex-1 text-sm md:text-base font-montserrat" style={{ color: '#6B7280' }}>
+                      <p className="line-clamp-4 flex-1 text-sm md:text-base font-montserrat" style={{ color: '#6B7280' }}>
                         {item.description}
                       </p>
                     )}
