@@ -11,6 +11,7 @@ interface DienHinhItem {
   id: string;
   title: string;
   description?: string | null;
+  projectUrl?: string | null;
   thumbnailUrl?: string | null;
   imageUrl?: string | null;
   viewCount: number;
@@ -156,11 +157,15 @@ export default function TatCaDienHinhPage() {
           <div className="space-y-6">
             {items.map((item) => {
               const imageSrc = item.thumbnailUrl || item.imageUrl || '';
+              const href = item.projectUrl || `/content/${item.id}`;
+              const isExternal = Boolean(item.projectUrl);
 
               return (
                 <Link
                   key={item.id}
-                  href={`/content/${item.id}`}
+                  href={href}
+                  target={isExternal ? '_blank' : undefined}
+                  rel={isExternal ? 'noopener noreferrer' : undefined}
                   className="group block overflow-hidden rounded-2xl bg-white p-5 shadow-sm transition-shadow hover:shadow-md"
                 >
                   <div className="flex flex-col gap-5 md:flex-row">
