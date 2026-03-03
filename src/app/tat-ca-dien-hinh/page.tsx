@@ -136,9 +136,9 @@ export default function TatCaDienHinhPage() {
         {loading ? (
           <div className="space-y-6">
             {[...Array(itemsPerPage)].map((_, index) => (
-              <div key={index} className="animate-pulse rounded-2xl bg-white p-5 shadow-sm">
+              <div key={index} className="animate-pulse bg-white p-5 shadow-sm">
                 <div className="flex flex-col gap-4 md:flex-row">
-                  <div className="rounded-xl bg-gray-200 md:w-1/4" style={{ aspectRatio: '16/9' }} />
+                  <div className="bg-gray-200 md:w-1/4" style={{ aspectRatio: '16/9' }} />
                   <div className="flex-1 space-y-3">
                     <div className="h-6 bg-gray-200" />
                     <div className="h-4 bg-gray-100" />
@@ -150,7 +150,7 @@ export default function TatCaDienHinhPage() {
             ))}
           </div>
         ) : items.length === 0 ? (
-          <div className="rounded-2xl bg-white p-12 text-center text-gray-500 shadow-sm">
+          <div className="bg-white p-12 text-center text-gray-500 shadow-sm">
             Chưa có nội dung điển hình.
           </div>
         ) : (
@@ -166,10 +166,10 @@ export default function TatCaDienHinhPage() {
                   href={href}
                   target={isExternal ? '_blank' : undefined}
                   rel={isExternal ? 'noopener noreferrer' : undefined}
-                  className="group block overflow-hidden rounded-2xl bg-white p-5 shadow-sm transition-shadow hover:shadow-md"
+                  className="group block overflow-hidden bg-white p-5 shadow-sm transition-shadow hover:shadow-md"
                 >
                   <div className="flex flex-col gap-5 md:flex-row">
-                    <div className="relative overflow-hidden rounded-xl bg-gray-100 md:w-1/4" style={{ aspectRatio: '16/9' }}>
+                    <div className="relative overflow-hidden bg-gray-100 md:w-1/4" style={{ aspectRatio: '16/9' }}>
                       {imageSrc ? (
                         <Image
                           src={imageSrc}
