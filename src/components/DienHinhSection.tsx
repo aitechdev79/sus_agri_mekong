@@ -46,13 +46,34 @@ export default function DienHinhSection() {
   return (
     <section className="py-16 bg-vn-rice-white">
       <div className="container mx-auto px-6 max-w-6xl">
-        <div className="mb-12">
-          <h2 className="text-3xl font-bold mb-4 md:text-4xl font-montserrat text-left" style={{ color: '#3C3C3B' }}>
-            Thực hành điển hình - Lan tỏa giá trị
-          </h2>
-          <p className="text-lg font-montserrat text-left max-w-3xl" style={{ color: '#6B7280' }}>
-            Khám phá những câu chuyện thành công và mô hình, sáng kiến điển hình trong phát triển bền vững tại Việt Nam
-          </p>
+        <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h2 className="text-3xl font-bold mb-4 md:text-4xl font-montserrat text-left" style={{ color: '#3C3C3B' }}>
+              Thực hành điển hình - Lan tỏa giá trị
+            </h2>
+            <p className="text-lg font-montserrat text-left max-w-3xl" style={{ color: '#6B7280' }}>
+              Khám phá những câu chuyện thành công và mô hình, sáng kiến điển hình trong phát triển bền vững tại Việt Nam
+            </p>
+          </div>
+
+          <Link
+            href="/tat-ca-dien-hinh"
+            className="inline-flex items-center gap-2 rounded-xl px-6 py-3 font-bold transition-all duration-300 hover:-translate-y-1 hover:scale-105"
+            style={{
+              backgroundColor: '#FFC107',
+              color: '#3C3C3B',
+              boxShadow: '0 4px 12px rgba(255, 193, 7, 0.3)'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow = '0 8px 24px rgba(255, 193, 7, 0.4)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(255, 193, 7, 0.3)';
+            }}
+          >
+            Xem tất cả
+            <span className="text-xl">→</span>
+          </Link>
         </div>
 
         {loading && items.length === 0 && (
@@ -68,7 +89,7 @@ export default function DienHinhSection() {
         )}
 
         {!loading && items.length === 0 && (
-          <div className="text-sm text-gray-500">Chua co noi dung dien hinh.</div>
+          <div className="text-sm text-gray-500">Chưa có nội dung điển hình.</div>
         )}
 
         {items.length > 0 && (
@@ -98,7 +119,7 @@ export default function DienHinhSection() {
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-sm text-gray-400">
-                        Khong co anh
+                        Không có ảnh
                       </div>
                     )}
                   </div>
@@ -106,7 +127,7 @@ export default function DienHinhSection() {
                   <div className="relative flex h-[180px] flex-col pb-4 md:h-[200px]">
                     <div className="absolute bottom-0 left-0 w-full h-0.5" style={{ backgroundColor: '#E8F5E9' }}></div>
                     <div
-                      className="absolute bottom-0 left-0 h-0.5 w-0 group-hover:w-full transition-all duration-500 ease-out"
+                      className="absolute bottom-0 left-0 h-0.5 w-0 transition-all duration-500 ease-out group-hover:w-full"
                       style={{ backgroundColor: '#0A7029' }}
                     ></div>
 
