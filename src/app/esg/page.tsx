@@ -190,7 +190,12 @@ export default function ESGPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {/* Tool 1 */}
-              <div className="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+              <a
+                href="https://esg.edu.vn/global-reporting-initiative-gri/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+              >
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-montserrat font-bold text-xl text-gray-900">
                     GRI Standards
@@ -211,10 +216,15 @@ export default function ESGPage() {
                 <div className="flex items-center gap-2 text-sm text-gray-900 font-montserrat font-semibold">
                   <span>Tìm hiểu thêm →</span>
                 </div>
-              </div>
+              </a>
 
               {/* Tool 2 */}
-              <div className="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+              <a
+                href="https://fmit.vn/tu-dien-quan-ly/sasb-standards-sustainability-accounting-standards-board-la-gi"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+              >
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-montserrat font-bold text-xl text-gray-900">
                     SASB Standards
@@ -235,10 +245,15 @@ export default function ESGPage() {
                 <div className="flex items-center gap-2 text-sm text-gray-900 font-montserrat font-semibold">
                   <span>Tìm hiểu thêm →</span>
                 </div>
-              </div>
+              </a>
 
               {/* Tool 3 */}
-              <div className="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+              <a
+                href="https://m2mesg.com/bao-cao-cdp/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+              >
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-montserrat font-bold text-xl text-gray-900">
                     CDP Platform
@@ -259,10 +274,15 @@ export default function ESGPage() {
                 <div className="flex items-center gap-2 text-sm text-gray-900 font-montserrat font-semibold">
                   <span>Tìm hiểu thêm →</span>
                 </div>
-              </div>
+              </a>
 
               {/* Tool 4 */}
-              <div className="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+              <a
+                href="https://esgviet.com/tinh-nang-quan-ly-rui-ro-khi-hau-theo-tcfd/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+              >
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-montserrat font-bold text-xl text-gray-900">
                     TCFD Framework
@@ -283,10 +303,15 @@ export default function ESGPage() {
                 <div className="flex items-center gap-2 text-sm text-gray-900 font-montserrat font-semibold">
                   <span>Tìm hiểu thêm →</span>
                 </div>
-              </div>
+              </a>
 
               {/* Tool 5 */}
-              <div className="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+              <a
+                href="https://vietnam.un.org/vi/sdgs"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+              >
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-montserrat font-bold text-xl text-gray-900">
                     UN SDGs
@@ -307,10 +332,15 @@ export default function ESGPage() {
                 <div className="flex items-center gap-2 text-sm text-gray-900 font-montserrat font-semibold">
                   <span>Tìm hiểu thêm →</span>
                 </div>
-              </div>
+              </a>
 
               {/* Tool 6 */}
-              <div className="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+              <a
+                href="https://esgviet.com/esg-rating-la-gi-chien-luoc-cai-thien-cdp-msci-sustainalytics-cho-dn-viet-case-vinamilk-vingroup/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+              >
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-montserrat font-bold text-xl text-gray-900">
                     ESG Rating
@@ -326,7 +356,7 @@ export default function ESGPage() {
                 <div className="flex items-center gap-2 text-sm text-gray-900 font-montserrat font-semibold">
                   <span>Tìm hiểu thêm →</span>
                 </div>
-              </div>
+              </a>
             </div>
 
             {/* Join Us Section */}
