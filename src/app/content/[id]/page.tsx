@@ -3,19 +3,36 @@ import { Calendar, Download, Eye, ExternalLink } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
+import { prisma } from '@/lib/prisma';
 import { PublicContent } from '@/types/content';
 
 async function getContent(contentId: string): Promise<PublicContent | null> {
   try {
-    const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/content/${contentId}`, {
-      next: { revalidate: 300 }, // Cache for 5 minutes
+    const content = await prisma.content.findUnique({
+      where: { id: contentId },
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+            role: true,
+            organization: true,
+          },
+        },
+      },
     });
 
-    if (!response.ok) {
+    if (!content || !content.isPublic) {
       return null;
     }
 
-    return response.json();
+    return {
+      ...content,
+      createdAt: content.createdAt.toISOString(),
+      updatedAt: content.updatedAt.toISOString(),
+      eventStartAt: content.eventStartAt?.toISOString() || null,
+      eventEndAt: content.eventEndAt?.toISOString() || null,
+    } as PublicContent;
   } catch (error) {
     console.error('Error fetching content:', error);
     return null;
