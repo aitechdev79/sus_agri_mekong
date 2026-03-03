@@ -262,7 +262,7 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
         !hasPdfAttachment &&
         plainContent.length < HOME_DIEN_HINH_MIN_CONTENT_LENGTH
       ) {
-        alert('Thá»±c hÃ nh Ä‘iá»ƒn hÃ¬nh cáº§n cÃ³ PDF Ä‘Ã­nh kÃ¨m hoáº·c pháº§n giá»›i thiá»‡u Ä‘á»§ chi tiáº¿t.')
+        alert('Thực hành điển hình cần có PDF đính kèm hoặc phần giới thiệu đủ chi tiết.')
         setLoading(false)
         return
       }
@@ -546,18 +546,9 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Đường dẫn dự án *
-                </label>
-                <input
-                  type="url"
-                  name="projectUrl"
-                  value={formData.projectUrl}
-                  onChange={handleChange}
-                  required={formData.type === 'PROJECT_ACTIVITY'}
-                  placeholder="https://example.com/project"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
-                />
+                <p className="text-sm text-amber-800">
+                  Dien truong Content URL ben duoi de card mo lien ket ngoai. Truong nay bat buoc voi hoat dong du an.
+                </p>
               </div>
             </div>
           )}
@@ -702,18 +693,19 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  News URL
+                  Content URL {formData.type === 'PROJECT_ACTIVITY' ? '*' : '(tuy chon)'}
                 </label>
                 <input
                   type="url"
-                  name="imageUrl"
-                  value={formData.imageUrl}
+                  name="projectUrl"
+                  value={formData.projectUrl}
                   onChange={handleChange}
-                  placeholder="https://example.com/news-article"
+                  required={formData.type === 'PROJECT_ACTIVITY'}
+                  placeholder="https://example.com/article-or-pdf"
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                 />
                 <p className="text-xs text-gray-500 mt-1">
-                  Link to news article or external source
+                  Neu nhap, card se mo lien ket ngoai (PDF/bai viet). Neu bo trong, card se mo trang chi tiet noi dung.
                 </p>
               </div>
 
@@ -758,10 +750,11 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
                   </svg>
                 </div>
                 <div className="ml-3">
-                  <p className="text-sm text-amber-700">
-                    <strong>Hình ảnh hiển thị:</strong> Chỉ những hình ảnh được tải lên thủ công sẽ hiển thị trong carousel tin tức.
-                    Hiện tại chỉ hỗ trợ hình ảnh dưới 1MB. Trường &ldquo;News URL&rdquo; dùng để liên kết đến bài báo gốc.
-                  </p>
+                  <div className="space-y-1 text-sm text-amber-700">
+                    <p><strong>Thumbnail và image chỉ dùng cho ảnh hiển thị.</strong></p>
+                    <p>File đính kèm nội bộ hiện hạn chế trên Vercel.</p>
+                    <p>Khuyến nghị dùng Content URL cho PDF ngoài, bài viết, hoặc cloud link.</p>
+                  </div>
                 </div>
               </div>
             </div>

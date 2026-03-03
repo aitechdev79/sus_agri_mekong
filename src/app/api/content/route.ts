@@ -30,11 +30,11 @@ function validateSectionPlacement(type: string, sectionKey?: string | null) {
   if (!sectionKey) return { ok: true }
 
   if (sectionKey === 'HOME_DIEN_HINH' && type !== 'STORY') {
-    return { ok: false, error: 'Mục "Thực hành điển hình" chỉ nhận nội dung loại Điển hình (STORY).' }
+    return { ok: false, error: 'Muc "Thuc hanh dien hinh" chi nhan noi dung loai STORY.' }
   }
 
   if (sectionKey === 'HOME_HOAT_DONG_DU_AN' && type !== 'PROJECT_ACTIVITY') {
-    return { ok: false, error: 'Mục "Hoạt động dự án" chỉ nhận nội dung loại Hoạt động dự án.' }
+    return { ok: false, error: 'Muc "Hoat dong du an" chi nhan noi dung loai PROJECT_ACTIVITY.' }
   }
 
   return { ok: true }
@@ -123,7 +123,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('Content fetch error:', error)
     return NextResponse.json(
-      { error: 'Không thể tải nội dung' },
+      { error: 'Khong the tai noi dung' },
       { status: 500 }
     )
   }
@@ -135,7 +135,7 @@ export async function POST(request: NextRequest) {
 
     if (!user) {
       return NextResponse.json(
-        { error: 'Cần đăng nhập để tạo nội dung' },
+        { error: 'Can dang nhap de tao noi dung' },
         { status: 401 }
       )
     }
@@ -183,21 +183,21 @@ export async function POST(request: NextRequest) {
 
     if (type === 'PROJECT_ACTIVITY' && !projectUrl) {
       return NextResponse.json(
-        { error: 'Hoạt động dự án cần có đường dẫn dự án (URL).' },
+        { error: 'Hoat dong du an can co Content URL.' },
         { status: 400 }
       )
     }
 
     if (type === 'EVENT' && !normalizedEventStartAt) {
       return NextResponse.json(
-        { error: 'Sự kiện cần có thời gian bắt đầu hợp lệ' },
+        { error: 'Su kien can co thoi gian bat dau hop le' },
         { status: 400 }
       )
     }
 
     if (normalizedEventStartAt && normalizedEventEndAt && normalizedEventEndAt < normalizedEventStartAt) {
       return NextResponse.json(
-        { error: 'Thời gian kết thúc phải sau thời gian bắt đầu' },
+        { error: 'Thoi gian ket thuc phai sau thoi gian bat dau' },
         { status: 400 }
       )
     }
@@ -249,7 +249,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Content creation error:', error)
     return NextResponse.json(
-      { error: 'Không thể tạo nội dung' },
+      { error: 'Khong the tao noi dung' },
       { status: 500 }
     )
   }

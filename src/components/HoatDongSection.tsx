@@ -50,10 +50,10 @@ export default function HoatDongSection() {
         <div className="mb-16 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
           <div>
             <h2 className="text-4xl font-black mb-6 md:text-5xl font-montserrat text-left tracking-tight" style={{ color: '#3C3C3B' }}>
-              Hoạt động dự án
+              Hoat dong du an
             </h2>
             <p className="text-xl font-montserrat text-left max-w-3xl leading-relaxed" style={{ color: '#6B7280' }}>
-              Tìm hiểu thêm về các dự án đã và đang thực hiện của chúng tôi với các đối tác quốc tế.
+              Tim hieu them ve cac du an da va dang thuc hien cua chung toi voi cac doi tac quoc te.
             </p>
           </div>
           <Link
@@ -71,7 +71,7 @@ export default function HoatDongSection() {
               e.currentTarget.style.boxShadow = '0 4px 12px rgba(255, 193, 7, 0.3)';
             }}
           >
-            Xem tất cả
+            Xem tat ca
             <span className="text-xl">→</span>
           </Link>
         </div>
@@ -89,20 +89,22 @@ export default function HoatDongSection() {
         )}
 
         {!loading && items.length === 0 && (
-          <div className="text-sm text-gray-500">Chưa có hoạt động dự án.</div>
+          <div className="text-sm text-gray-500">Chua co hoat dong du an.</div>
         )}
 
         {items.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-stretch">
             {items.map((item) => {
               const imageSrc = item.thumbnailUrl || item.imageUrl || '';
+              const href = item.projectUrl || `/content/${item.id}`;
+              const isExternal = Boolean(item.projectUrl);
 
               return (
                 <Link
                   key={item.id}
-                  href={item.projectUrl || '#'}
-                  target={item.projectUrl ? '_blank' : undefined}
-                  rel={item.projectUrl ? 'noopener noreferrer' : undefined}
+                  href={href}
+                  target={isExternal ? '_blank' : undefined}
+                  rel={isExternal ? 'noopener noreferrer' : undefined}
                   className="group block flex flex-col w-full h-full max-w-md mx-auto md:max-w-none md:mx-0"
                   aria-label={`${item.title} - ${item.description || ''}`}
                 >

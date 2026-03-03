@@ -30,11 +30,11 @@ function validateSectionPlacement(type: string, sectionKey?: string | null) {
   if (!sectionKey) return { ok: true }
 
   if (sectionKey === 'HOME_DIEN_HINH' && type !== 'STORY') {
-    return { ok: false, error: 'Mục "Thực hành điển hình" chỉ nhận nội dung loại Điển hình (STORY).' }
+    return { ok: false, error: 'Muc "Thuc hanh dien hinh" chi nhan noi dung loai STORY.' }
   }
 
   if (sectionKey === 'HOME_HOAT_DONG_DU_AN' && type !== 'PROJECT_ACTIVITY') {
-    return { ok: false, error: 'Mục "Hoạt động dự án" chỉ nhận nội dung loại Hoạt động dự án.' }
+    return { ok: false, error: 'Muc "Hoat dong du an" chi nhan noi dung loai PROJECT_ACTIVITY.' }
   }
 
   return { ok: true }
@@ -91,7 +91,7 @@ export async function GET(
 
     if (!content) {
       return NextResponse.json(
-        { error: 'Không tìm thấy nội dung' },
+        { error: 'Khong tim thay noi dung' },
         { status: 404 }
       )
     }
@@ -100,7 +100,7 @@ export async function GET(
     const user = await requireAuth(request)
     if (!content.isPublic && (!user || (user.id !== content.authorId && user.role !== 'ADMIN'))) {
       return NextResponse.json(
-        { error: 'Không có quyền truy cập nội dung này' },
+        { error: 'Khong co quyen truy cap noi dung nay' },
         { status: 403 }
       )
     }
@@ -128,7 +128,7 @@ export async function GET(
   } catch (error) {
     console.error('Content fetch error:', error)
     return NextResponse.json(
-      { error: 'Không thể tải nội dung' },
+      { error: 'Khong the tai noi dung' },
       { status: 500 }
     )
   }
@@ -144,7 +144,7 @@ export async function PUT(
 
     if (!user) {
       return NextResponse.json(
-        { error: 'Cần đăng nhập để chỉnh sửa' },
+        { error: 'Can dang nhap de chinh sua' },
         { status: 401 }
       )
     }
@@ -155,7 +155,7 @@ export async function PUT(
 
     if (!content) {
       return NextResponse.json(
-        { error: 'Không tìm thấy nội dung' },
+        { error: 'Khong tim thay noi dung' },
         { status: 404 }
       )
     }
@@ -163,7 +163,7 @@ export async function PUT(
     // Check permissions
     if (content.authorId !== user.id && user.role !== 'ADMIN') {
       return NextResponse.json(
-        { error: 'Không có quyền chỉnh sửa nội dung này' },
+        { error: 'Khong co quyen chinh sua noi dung nay' },
         { status: 403 }
       )
     }
@@ -211,21 +211,21 @@ export async function PUT(
 
     if (type === 'PROJECT_ACTIVITY' && !projectUrl) {
       return NextResponse.json(
-        { error: 'Hoạt động dự án cần có đường dẫn dự án (URL).' },
+        { error: 'Hoat dong du an can co Content URL.' },
         { status: 400 }
       )
     }
 
     if (type === 'EVENT' && !normalizedEventStartAt) {
       return NextResponse.json(
-        { error: 'Sự kiện cần có thời gian bắt đầu hợp lệ' },
+        { error: 'Su kien can co thoi gian bat dau hop le' },
         { status: 400 }
       )
     }
 
     if (normalizedEventStartAt && normalizedEventEndAt && normalizedEventEndAt < normalizedEventStartAt) {
       return NextResponse.json(
-        { error: 'Thời gian kết thúc phải sau thời gian bắt đầu' },
+        { error: 'Thoi gian ket thuc phai sau thoi gian bat dau' },
         { status: 400 }
       )
     }
@@ -289,7 +289,7 @@ export async function PUT(
   } catch (error) {
     console.error('Content update error:', error)
     return NextResponse.json(
-      { error: 'Không thể cập nhật nội dung' },
+      { error: 'Khong the cap nhat noi dung' },
       { status: 500 }
     )
   }
@@ -305,7 +305,7 @@ export async function DELETE(
 
     if (!user) {
       return NextResponse.json(
-        { error: 'Không có quyền xóa nội dung' },
+        { error: 'Khong co quyen xoa noi dung' },
         { status: 403 }
       )
     }
@@ -316,7 +316,7 @@ export async function DELETE(
 
     if (!content) {
       return NextResponse.json(
-        { error: 'Không tìm thấy nội dung' },
+        { error: 'Khong tim thay noi dung' },
         { status: 404 }
       )
     }
@@ -324,7 +324,7 @@ export async function DELETE(
     // Check permissions
     if (content.authorId !== user.id && user.role !== 'ADMIN') {
       return NextResponse.json(
-        { error: 'Không có quyền xóa nội dung này' },
+        { error: 'Khong co quyen xoa noi dung nay' },
         { status: 403 }
       )
     }
@@ -333,11 +333,11 @@ export async function DELETE(
       where: { id }
     })
 
-    return NextResponse.json({ message: 'Đã xóa nội dung thành công' })
+    return NextResponse.json({ message: 'Da xoa noi dung thanh cong' })
   } catch (error) {
     console.error('Content deletion error:', error)
     return NextResponse.json(
-      { error: 'Không thể xóa nội dung' },
+      { error: 'Khong the xoa noi dung' },
       { status: 500 }
     )
   }

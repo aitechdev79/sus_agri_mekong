@@ -8,6 +8,7 @@ interface DienHinhItem {
   id: string;
   title: string;
   description?: string | null;
+  projectUrl?: string | null;
   thumbnailUrl?: string | null;
   imageUrl?: string | null;
 }
@@ -47,10 +48,10 @@ export default function DienHinhSection() {
       <div className="container mx-auto px-6 max-w-6xl">
         <div className="mb-12">
           <h2 className="text-3xl font-bold mb-4 md:text-4xl font-montserrat text-left" style={{ color: '#3C3C3B' }}>
-            Thực hành điển hình - Lan toả giá trị
+            Thuc hanh dien hinh - Lan toa gia tri
           </h2>
           <p className="text-lg font-montserrat text-left max-w-3xl" style={{ color: '#6B7280' }}>
-            Khám phá những câu chuyện thành công và mô hình hay sáng kiến điển hình trong phát triển bền vững tại Việt Nam
+            Kham pha nhung cau chuyen thanh cong va mo hinh, sang kien dien hinh trong phat trien ben vung tai Viet Nam
           </p>
         </div>
 
@@ -67,18 +68,22 @@ export default function DienHinhSection() {
         )}
 
         {!loading && items.length === 0 && (
-          <div className="text-sm text-gray-500">Chưa có nội dung điển hình.</div>
+          <div className="text-sm text-gray-500">Chua co noi dung dien hinh.</div>
         )}
 
         {items.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-end">
             {items.map((item) => {
               const imageSrc = item.thumbnailUrl || item.imageUrl || '';
+              const href = item.projectUrl || `/content/${item.id}`;
+              const isExternal = Boolean(item.projectUrl);
 
               return (
                 <Link
                   key={item.id}
-                  href={`/content/${item.id}`}
+                  href={href}
+                  target={isExternal ? '_blank' : undefined}
+                  rel={isExternal ? 'noopener noreferrer' : undefined}
                   className="group block flex flex-col"
                   aria-label={`${item.title} - ${item.description || ''}`}
                 >
@@ -93,7 +98,7 @@ export default function DienHinhSection() {
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-sm text-gray-400">
-                        Không có ảnh
+                        Khong co anh
                       </div>
                     )}
                   </div>

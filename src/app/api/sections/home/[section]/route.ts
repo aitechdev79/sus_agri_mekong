@@ -15,7 +15,7 @@ export async function GET(
     const config = SECTION_MAP[section]
 
     if (!config) {
-      return NextResponse.json({ error: 'Section not found' }, { status: 404 })
+      return NextResponse.json({ error: 'Khong tim thay section' }, { status: 404 })
     }
 
     const items = await prisma.content.findMany({
@@ -47,7 +47,7 @@ export async function GET(
   } catch (error) {
     console.error('Section fetch error:', error)
     return NextResponse.json(
-      { error: 'KhÃ´ng thá»ƒ táº£i ná»™i dung chá»n lá»c' },
+      { error: 'Khong the tai noi dung chon loc' },
       { status: 500 }
     )
   }
