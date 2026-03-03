@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { Calendar, Eye } from 'lucide-react';
+import { Calendar, Download, Eye, ExternalLink } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
@@ -141,6 +141,9 @@ export default async function ContentDetailPage({
   const bestImageUrl = getBestImageUrl(content.thumbnailUrl, content.imageUrl);
   const youtubeVideoId = content.videoUrl ? extractYouTubeVideoId(content.videoUrl) : null;
   const eventRange = formatEventRange(content);
+  const hasPdf = !!content.fileUrl && (content.fileType === 'application/pdf' || content.fileUrl.toLowerCase().endsWith('.pdf'));
+  const pdfUrl = content.fileUrl;
+  const hasRichTextContent = Boolean(content.content?.trim());
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -195,7 +198,7 @@ export default async function ContentDetailPage({
             </div>
 
             {/* Main Image */}
-            {bestImageUrl && (
+            {bestImageUrl && !hasPdf && (
               <div className="relative h-64 md:h-96 overflow-hidden">
                 <Image
                   src={bestImageUrl}
@@ -207,16 +210,101 @@ export default async function ContentDetailPage({
               </div>
             )}
 
+            {hasPdf && pdfUrl && (
+              <div className="p-8 pb-0">
+                <section className="rounded-3xl border border-gray-200 bg-gray-100 p-4 md:p-6">
+                  <div className="sticky top-4 z-10 mb-4 flex flex-col gap-4 rounded-2xl border border-gray-200 bg-white/95 p-4 backdrop-blur sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <h2 className="text-lg font-semibold text-gray-900">Tài liệu PDF</h2>
+                      <p className="text-sm text-gray-500">
+                        Dùng nút +/- của trình duyệt PDF để phóng to.
+                      </p>
+                    </div>
+
+                    <div className="flex flex-wrap gap-3">
+                      <a
+                        href={pdfUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center rounded-full bg-gray-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-gray-800"
+                      >
+                        <ExternalLink className="mr-2 h-4 w-4" />
+                        Mở toàn màn hình
+                      </a>
+                      <a
+                        href={pdfUrl}
+                        download
+                        className="inline-flex items-center justify-center rounded-full border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:border-gray-400 hover:text-gray-900"
+                      >
+                        <Download className="mr-2 h-4 w-4" />
+                        Tải PDF
+                      </a>
+                    </div>
+                  </div>
+
+                  <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+                    <object
+                      data={`${pdfUrl}#view=FitH`}
+                      type="application/pdf"
+                      className="h-[70vh] w-full md:h-[80vh]"
+                      aria-label={`PDF viewer for ${content.title}`}
+                    >
+                      <div className="p-6 text-sm text-gray-600">
+                        <p>Trình duyệt của bạn không hỗ trợ hiển thị PDF trực tiếp.</p>
+                        <a
+                          href={pdfUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-3 inline-flex items-center font-medium text-gray-900 underline"
+                        >
+                          Mở hoặc tải PDF
+                        </a>
+                      </div>
+                    </object>
+                  </div>
+                </section>
+              </div>
+            )}
+
+            {hasPdf && bestImageUrl && (
+              <div className="p-8 pb-0">
+                <div className="relative h-64 overflow-hidden rounded-2xl md:h-96">
+                  <Image
+                    src={bestImageUrl}
+                    alt={content.title}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              </div>
+            )}
+
             {/* Main Content */}
             <div className="p-8">
-              <div
-                className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:leading-relaxed text-justify"
-                style={{
-                  textAlign: 'justify',
-                  textAlignLast: 'left'
-                }}
-                dangerouslySetInnerHTML={{ __html: formatContentWithParagraphs(content.content) }}
-              />
+              {hasPdf ? (
+                hasRichTextContent && (
+                  <section>
+                    <h2 className="mb-4 text-2xl font-semibold text-gray-900">Giới thiệu</h2>
+                    <div
+                      className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:leading-relaxed text-justify"
+                      style={{
+                        textAlign: 'justify',
+                        textAlignLast: 'left'
+                      }}
+                      dangerouslySetInnerHTML={{ __html: formatContentWithParagraphs(content.content) }}
+                    />
+                  </section>
+                )
+              ) : (
+                <div
+                  className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:leading-relaxed text-justify"
+                  style={{
+                    textAlign: 'justify',
+                    textAlignLast: 'left'
+                  }}
+                  dangerouslySetInnerHTML={{ __html: formatContentWithParagraphs(content.content) }}
+                />
+              )}
 
               {/* Source Link */}
               {content.imageUrl && (

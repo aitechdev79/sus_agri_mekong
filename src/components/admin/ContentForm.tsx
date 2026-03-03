@@ -8,6 +8,8 @@ import Image from 'next/image'
 import { ContentFormProps } from '@/types/content'
 import { RichTextEditor } from '@/components/admin/RichTextEditor'
 
+const HOME_DIEN_HINH_MIN_CONTENT_LENGTH = 120
+
 function toDateTimeLocalValue(value?: string | null) {
   if (!value) return ''
 
@@ -242,9 +244,25 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
         .replace(/<[^>]*>/g, ' ')
         .replace(/&nbsp;/g, ' ')
         .trim()
+      const hasPdfAttachment = !!formData.fileUrl && (
+        formData.fileType === 'application/pdf' ||
+        formData.fileUrl.toLowerCase().endsWith('.pdf')
+      )
+      const isHomeDienHinhStory =
+        formData.type === 'STORY' && formData.sectionKey === 'HOME_DIEN_HINH'
 
-      if (!plainContent) {
+      if (!plainContent && !(isHomeDienHinhStory && hasPdfAttachment)) {
         alert('Vui lòng nhập nội dung')
+        setLoading(false)
+        return
+      }
+
+      if (
+        isHomeDienHinhStory &&
+        !hasPdfAttachment &&
+        plainContent.length < HOME_DIEN_HINH_MIN_CONTENT_LENGTH
+      ) {
+        alert('Thá»±c hÃ nh Ä‘iá»ƒn hÃ¬nh cáº§n cÃ³ PDF Ä‘Ã­nh kÃ¨m hoáº·c pháº§n giá»›i thiá»‡u Ä‘á»§ chi tiáº¿t.')
         setLoading(false)
         return
       }
