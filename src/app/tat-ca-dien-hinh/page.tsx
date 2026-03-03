@@ -11,7 +11,6 @@ interface DienHinhItem {
   id: string;
   title: string;
   description?: string | null;
-  projectUrl?: string | null;
   thumbnailUrl?: string | null;
   imageUrl?: string | null;
   viewCount: number;
@@ -77,7 +76,7 @@ export default function TatCaDienHinhPage() {
         <button
           key="1"
           onClick={() => goToPage(1)}
-          className="px-3 py-1 rounded border hover:bg-gray-100"
+          className="rounded border px-3 py-1 hover:bg-gray-100"
         >
           1
         </button>
@@ -92,8 +91,8 @@ export default function TatCaDienHinhPage() {
         <button
           key={page}
           onClick={() => goToPage(page)}
-          className={`px-3 py-1 rounded border ${
-            page === currentPage ? 'bg-green-600 text-white border-green-600' : 'hover:bg-gray-100'
+          className={`rounded border px-3 py-1 ${
+            page === currentPage ? 'border-green-600 bg-green-600 text-white' : 'hover:bg-gray-100'
           }`}
         >
           {page}
@@ -109,7 +108,7 @@ export default function TatCaDienHinhPage() {
         <button
           key="last"
           onClick={() => goToPage(totalPages)}
-          className="px-3 py-1 rounded border hover:bg-gray-100"
+          className="rounded border px-3 py-1 hover:bg-gray-100"
         >
           Trang cuối
         </button>
@@ -134,12 +133,18 @@ export default function TatCaDienHinhPage() {
         </header>
 
         {loading ? (
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
+          <div className="space-y-6">
             {[...Array(itemsPerPage)].map((_, index) => (
-              <div key={index} className="animate-pulse rounded-2xl bg-white p-4 shadow-sm">
-                <div className="mb-4 bg-gray-200" style={{ aspectRatio: '16/9' }} />
-                <div className="mb-2 h-5 bg-gray-200" />
-                <div className="h-4 w-5/6 bg-gray-100" />
+              <div key={index} className="animate-pulse rounded-2xl bg-white p-5 shadow-sm">
+                <div className="flex flex-col gap-4 md:flex-row">
+                  <div className="rounded-xl bg-gray-200 md:w-1/2" style={{ aspectRatio: '16/9' }} />
+                  <div className="flex-1 space-y-3">
+                    <div className="h-6 bg-gray-200" />
+                    <div className="h-4 bg-gray-100" />
+                    <div className="h-4 w-5/6 bg-gray-100" />
+                    <div className="h-4 w-2/3 bg-gray-100" />
+                  </div>
+                </div>
               </div>
             ))}
           </div>
@@ -148,52 +153,52 @@ export default function TatCaDienHinhPage() {
             Chưa có nội dung điển hình.
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
+          <div className="space-y-6">
             {items.map((item) => {
               const imageSrc = item.thumbnailUrl || item.imageUrl || '';
-              const href = item.projectUrl || `/content/${item.id}`;
-              const isExternal = Boolean(item.projectUrl);
 
               return (
                 <Link
                   key={item.id}
-                  href={href}
-                  target={isExternal ? '_blank' : undefined}
-                  rel={isExternal ? 'noopener noreferrer' : undefined}
-                  className="group flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-sm transition-shadow hover:shadow-md"
+                  href={`/content/${item.id}`}
+                  className="group block overflow-hidden rounded-2xl bg-white p-5 shadow-sm transition-shadow hover:shadow-md"
                 >
-                  <div className="relative bg-gray-100" style={{ aspectRatio: '16/9' }}>
-                    {imageSrc ? (
-                      <Image
-                        src={imageSrc}
-                        alt={item.title}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center text-sm text-gray-400">
-                        Không có ảnh
+                  <div className="flex flex-col gap-5 md:flex-row">
+                    <div className="relative overflow-hidden rounded-xl bg-gray-100 md:w-1/2" style={{ aspectRatio: '16/9' }}>
+                      {imageSrc ? (
+                        <Image
+                          src={imageSrc}
+                          alt={item.title}
+                          fill
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                          sizes="(max-width: 768px) 100vw, 50vw"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center text-sm text-gray-400">
+                          Không có ảnh
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex flex-1 flex-col justify-between">
+                      <div>
+                        <h2 className="mb-3 line-clamp-2 text-xl font-bold text-gray-900">
+                          {item.title}
+                        </h2>
+                        {item.description && (
+                          <p className="line-clamp-4 text-sm leading-relaxed text-gray-600 md:line-clamp-5">
+                            {item.description}
+                          </p>
+                        )}
                       </div>
-                    )}
-                  </div>
 
-                  <div className="flex flex-1 flex-col p-5">
-                    <h2 className="mb-3 line-clamp-2 text-xl font-bold text-gray-900">
-                      {item.title}
-                    </h2>
-                    {item.description && (
-                      <p className="mb-4 line-clamp-4 flex-1 text-sm leading-relaxed text-gray-600">
-                        {item.description}
-                      </p>
-                    )}
-
-                    <div className="flex items-center justify-between border-t border-gray-100 pt-4 text-sm text-gray-500">
-                      <span>{new Date(item.createdAt).toLocaleDateString('vi-VN')}</span>
-                      <span className="flex items-center gap-1">
-                        <Eye className="h-4 w-4" />
-                        {item.viewCount.toLocaleString('vi-VN')}
-                      </span>
+                      <div className="mt-5 flex items-center justify-between border-t border-gray-100 pt-4 text-sm text-gray-500">
+                        <span>{new Date(item.createdAt).toLocaleDateString('vi-VN')}</span>
+                        <span className="flex items-center gap-1">
+                          <Eye className="h-4 w-4" />
+                          {item.viewCount.toLocaleString('vi-VN')}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </Link>
