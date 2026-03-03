@@ -513,20 +513,6 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
               <h3 className="text-lg font-semibold text-amber-700">Thông tin Hoạt động dự án</h3>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Tiêu đề phụ (Undertitle)
-                </label>
-                <input
-                  type="text"
-                  name="undertitle"
-                  value={formData.undertitle}
-                  onChange={handleChange}
-                  placeholder="Ví dụ: GRAISEA"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
-                />
-              </div>
-
-              <div>
                 <p className="text-sm text-amber-800">
                   Dien truong Content URL ben duoi de card mo lien ket ngoai. Truong nay bat buoc voi hoat dong du an.
                 </p>
