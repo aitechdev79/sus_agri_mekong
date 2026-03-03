@@ -3,21 +3,60 @@
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
 import Image from 'next/image';
-import Link from 'next/link';
 import { Building2, Factory, Shirt, Zap } from 'lucide-react';
+
+const practiceCards = [
+  {
+    title: 'Unilever - Kế hoạch Sống Bền vững',
+    description:
+      'Unilever đã cam kết giảm tác động môi trường, thúc đẩy chuỗi cung ứng bền vững và mở rộng tác động xã hội tích cực thông qua chương trình phát triển bền vững của doanh nghiệp.',
+    href: 'https://www.unilever.com/planet-and-society/climate-action/',
+    ariaLabel: 'Unilever - Kế hoạch Sống Bền vững',
+    icon: Factory,
+    iconWrapperClassName: 'bg-blue-100 text-blue-700',
+    tags: ['Giảm carbon', 'Chuỗi cung ứng bền vững', 'Trách nhiệm xã hội'],
+  },
+  {
+    title: 'Tesla - Năng lượng Tái tạo',
+    description:
+      'Tesla tiên phong trong việc chuyển đổi sang năng lượng sạch thông qua xe điện, pin lưu trữ và hệ sinh thái năng lượng mặt trời, qua đó thúc đẩy quá trình điện hóa ở quy mô toàn cầu.',
+    href: 'https://www.tesla.com/impact',
+    ariaLabel: 'Tesla - Năng lượng Tái tạo',
+    icon: Zap,
+    iconWrapperClassName: 'bg-green-100 text-green-700',
+    tags: ['Năng lượng sạch', 'Đổi mới công nghệ', 'Net Zero'],
+  },
+  {
+    title: 'Patagonia - Kinh tế Tuần hoàn',
+    description:
+      'Patagonia theo đuổi mô hình kinh tế tuần hoàn với Worn Wear, khuyến khích sửa chữa, tái sử dụng và kéo dài vòng đời sản phẩm để giảm phát thải và giảm tiêu thụ tài nguyên mới.',
+    href: 'https://wornwear.patagonia.com/',
+    ariaLabel: 'Patagonia - Kinh tế Tuần hoàn',
+    icon: Shirt,
+    iconWrapperClassName: 'bg-purple-100 text-purple-700',
+    tags: ['Tái chế', 'Kinh tế tuần hoàn', 'Bảo vệ môi trường'],
+  },
+  {
+    title: 'Microsoft - Phát thải Carbon Âm',
+    description:
+      'Microsoft cam kết đạt carbon âm vào năm 2030 và loại bỏ toàn bộ lượng carbon lịch sử của mình vào năm 2050, đồng thời đầu tư mạnh vào đổi mới khí hậu và công nghệ loại bỏ carbon.',
+    href: 'https://blogs.microsoft.com/blog/2020/01/16/microsoft-will-be-carbon-negative-by-2030/',
+    ariaLabel: 'Microsoft - Phát thải Carbon Âm',
+    icon: Building2,
+    iconWrapperClassName: 'bg-yellow-100 text-yellow-700',
+    tags: ['Carbon âm', 'Đổi mới khí hậu', 'Cam kết dài hạn'],
+  },
+] as const;
 
 export default function GlobalBestPracticePage() {
   return (
     <div className="min-h-screen">
-      {/* Navigation Bar */}
       <div className="relative z-50">
         <NavigationBar />
       </div>
 
-      {/* Main Content */}
       <main className="pt-16">
-        {/* Hero Section - Full Width Banner */}
-        <section className="relative w-full h-[400px] md:h-[500px]">
+        <section className="relative h-[400px] w-full md:h-[500px]">
           <Image
             src="/esg_hero.jpg"
             alt="Global Best Practices Hero Banner"
@@ -28,128 +67,48 @@ export default function GlobalBestPracticePage() {
           />
         </section>
 
-        {/* Global Best Practices */}
-        <section id="global-practices" className="py-16 bg-gradient-to-br from-blue-50 to-indigo-50">
-          <div className="container mx-auto px-6 max-w-6xl">
-            <h2 className="font-montserrat font-bold text-3xl md:text-4xl text-gray-800 mb-8">
+        <section id="global-practices" className="bg-gradient-to-br from-blue-50 to-indigo-50 py-16">
+          <div className="container mx-auto max-w-6xl px-6">
+            <h2 className="mb-8 font-montserrat text-3xl font-bold text-gray-800 md:text-4xl">
               Thực hành tốt trên thế giới
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Example 1 */}
-              <Link
-                href="/unilever"
-                className="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-shadow duration-300 block"
-                aria-label="Unilever - Kế hoạch Sống Bền vững"
-              >
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-700">
-                    <Factory className="w-6 h-6" />
-                  </div>
-                  <h3 className="font-montserrat font-bold text-xl text-gray-800">
-                    Unilever - Kế hoạch Sống Bền vững
-                  </h3>
-                </div>
-                <p className="text-gray-700 font-montserrat leading-relaxed mb-4">
-                  Unilever đã cam kết giảm 50% tác động môi trường từ sản phẩm của mình vào năm 2030,
-                  đồng thời cải thiện sức khỏe và phúc lợi cho hơn 1 tỷ người. Công ty tập trung vào
-                  nguồn cung ứng bền vững, giảm phát thải carbon và đóng góp tích cực cho cộng đồng.
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">
-                    Giảm carbon
-                  </span>
-                  <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold">
-                    Chuỗi cung ứng bền vững
-                  </span>
-                  <span className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-semibold">
-                    Trách nhiệm xã hội
-                  </span>
-                </div>
-              </Link>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              {practiceCards.map((card) => {
+                const Icon = card.icon;
 
-              {/* Example 2 */}
-              <div className="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-700">
-                    <Zap className="w-6 h-6" />
-                  </div>
-                  <h3 className="font-montserrat font-bold text-xl text-gray-800">
-                    Tesla - Năng lượng Tái tạo
-                  </h3>
-                </div>
-                <p className="text-gray-700 font-montserrat leading-relaxed mb-4">
-                  Tesla tiên phong trong việc chuyển đổi sang năng lượng sạch thông qua xe điện và
-                  giải pháp lưu trữ năng lượng. Công ty đã giảm hàng triệu tấn CO2 và thúc đẩy ngành
-                  công nghiệp ô tô toàn cầu chuyển sang điện hóa.
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold">
-                    Năng lượng sạch
-                  </span>
-                  <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">
-                    Đổi mới công nghệ
-                  </span>
-                  <span className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-semibold">
-                    Net Zero
-                  </span>
-                </div>
-              </div>
-
-              {/* Example 3 */}
-              <div className="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center text-purple-700">
-                    <Shirt className="w-6 h-6" />
-                  </div>
-                  <h3 className="font-montserrat font-bold text-xl text-gray-800">
-                    Patagonia - Kinh tế Tuần hoàn
-                  </h3>
-                </div>
-                <p className="text-gray-700 font-montserrat leading-relaxed mb-4">
-                  Patagonia áp dụng mô hình kinh tế tuần hoàn với chương trình Worn Wear - sửa chữa,
-                  tái chế và tái sử dụng sản phẩm. Công ty cam kết sử dụng 100% vật liệu tái chế và
-                  hữu cơ, đồng thời đóng góp 1% doanh thu cho bảo vệ môi trường.
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold">
-                    Tái chế
-                  </span>
-                  <span className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-semibold">
-                    Kinh tế tuần hoàn
-                  </span>
-                  <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">
-                    Bảo vệ môi trường
-                  </span>
-                </div>
-              </div>
-
-              {/* Example 4 */}
-              <div className="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center text-yellow-700">
-                    <Building2 className="w-6 h-6" />
-                  </div>
-                  <h3 className="font-montserrat font-bold text-xl text-gray-800">
-                    Microsoft - Phát thải Carbon Âm
-                  </h3>
-                </div>
-                <p className="text-gray-700 font-montserrat leading-relaxed mb-4">
-                  Microsoft cam kết đạt carbon âm vào năm 2030 và loại bỏ toàn bộ lượng carbon từng
-                  phát thải kể từ khi thành lập vào năm 2050. Công ty đầu tư 1 tỷ USD vào Quỹ Đổi
-                  mới Khí hậu để phát triển công nghệ carbon âm.
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">
-                    Carbon âm
-                  </span>
-                  <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold">
-                    Đổi mới khí hậu
-                  </span>
-                  <span className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-semibold">
-                    Cam kết dài hạn
-                  </span>
-                </div>
-              </div>
+                return (
+                  <a
+                    key={card.title}
+                    href={card.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block rounded-lg bg-white p-6 shadow-md transition-shadow duration-300 hover:shadow-xl"
+                    aria-label={card.ariaLabel}
+                  >
+                    <div className="mb-4 flex items-center gap-3">
+                      <div className={`flex h-12 w-12 items-center justify-center rounded-full ${card.iconWrapperClassName}`}>
+                        <Icon className="h-6 w-6" />
+                      </div>
+                      <h3 className="font-montserrat text-xl font-bold text-gray-800">
+                        {card.title}
+                      </h3>
+                    </div>
+                    <p className="mb-4 font-montserrat leading-relaxed text-gray-700">
+                      {card.description}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {card.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-800"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </a>
+                );
+              })}
             </div>
           </div>
         </section>
