@@ -76,7 +76,7 @@ export default function CommitmentPage() {
               </div>
 
               {/* Part 2: 3 Cards Stacked Vertically (1/3 width) */}
-              <div className="md:col-span-1 flex flex-col gap-6">
+              <div className="md:col-span-1 self-start flex flex-col gap-6 md:sticky md:top-24 lg:top-1/2 lg:-translate-y-1/2">
                 {/* Nhà nước */}
                 <div className="flex items-start gap-4 p-4 bg-green-50 rounded-lg">
                   {/* Icon on left */}
