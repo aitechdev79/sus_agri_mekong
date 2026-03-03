@@ -56,7 +56,7 @@ export default function DienHinhSection() {
         </div>
 
         {loading && items.length === 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-end">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-start">
             {[...Array(3)].map((_, index) => (
               <div key={index} className="animate-pulse">
                 <div className="bg-gray-200 mb-4" style={{ aspectRatio: '16/9' }} />
@@ -72,7 +72,7 @@ export default function DienHinhSection() {
         )}
 
         {items.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-end">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-start">
             {items.map((item) => {
               const imageSrc = item.thumbnailUrl || item.imageUrl || '';
               const href = item.projectUrl || `/content/${item.id}`;
