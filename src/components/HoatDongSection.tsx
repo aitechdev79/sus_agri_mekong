@@ -66,7 +66,7 @@ export default function HoatDongSection() {
               color: '#C28A00',
             }}
           >
-            Xem tat ca
+            Xem tất cả
             <span className="text-xl">→</span>
           </Link>
         </div>
@@ -100,7 +100,7 @@ export default function HoatDongSection() {
                   href={href}
                   target={isExternal ? '_blank' : undefined}
                   rel={isExternal ? 'noopener noreferrer' : undefined}
-                  className="group block flex h-full w-full max-w-md flex-col rounded-2xl bg-white p-5 mx-auto md:mx-0 md:max-w-none"
+                  className="group block flex h-full w-full max-w-md flex-col bg-white p-5 mx-auto md:mx-0 md:max-w-none"
                   aria-label={`${item.title} - ${item.description || ''}`}
                 >
                   {imageSrc && (
