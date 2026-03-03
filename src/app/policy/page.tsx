@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { ChevronLeft, ChevronRight, ScrollText } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
 
@@ -57,36 +57,42 @@ export default function PolicyPage() {
       name: 'Social Accountability International',
       description: 'Tiêu chuẩn quốc tế về trách nhiệm xã hội trong môi trường làm việc',
       areas: ['Lao động', 'Nhân quyền', 'An toàn'],
+      href: 'https://sa-intl.org/wp-content/uploads/2020/01/SA8000Standard2014-VietnameseFinal1.pdf',
     },
     {
       code: 'BSCI',
       name: 'Business Social Compliance Initiative',
       description: 'Sáng kiến tuân thủ xã hội doanh nghiệp châu Âu',
       areas: ['Chuỗi cung ứng', 'Lao động', 'Đạo đức'],
+      href: 'https://clv.vn/tieu-chuan-bsci-la-gi/',
     },
     {
       code: 'ASC',
       name: 'Aquaculture Stewardship Council',
       description: 'Tiêu chuẩn nuôi trồng thủy sản có trách nhiệm',
       areas: ['Thủy sản', 'Môi trường', 'Bền vững'],
+      href: 'https://times.seafoodlegacy.com/vi/words/asc/',
     },
     {
       code: 'SRP',
       name: 'Sustainable Rice Platform',
       description: 'Nền tảng lúa gạo bền vững toàn cầu',
       areas: ['Nông nghiệp', 'Lúa gạo', 'Bền vững'],
+      href: 'https://tiasang.com.vn/srp-bo-tieu-chuan-san-xuat-lua-gao-ben-vung-4967298.html',
     },
     {
       code: 'ISO 22000',
       name: 'Food Safety Management',
       description: 'Hệ thống quản lý an toàn thực phẩm',
       areas: ['An toàn thực phẩm', 'Chất lượng', 'Quản lý'],
+      href: 'https://tqc.vn/iso-22000-la-gi-cac-yeu-cau-va-loi-ich-khi-chung-nhan-iso-22000-2018.htm',
     },
     {
       code: 'GRS',
       name: 'Global Reporting Initiative',
       description: 'Tiêu chuẩn báo cáo bền vững toàn cầu',
       areas: ['ESG', 'Báo cáo', 'Minh bạch'],
+      href: 'https://tqc.vn/grs-la-gi.htm',
     },
   ];
 
@@ -294,17 +300,17 @@ export default function PolicyPage() {
             </p>
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
               {internationalStandards.map((standard) => (
-                <div
+                <a
                   key={standard.code}
+                  href={standard.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="rounded-lg border border-gray-200 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
                 >
                   <div className="mb-4 flex items-center justify-between">
                     <h3 className="font-montserrat text-2xl font-bold text-blue-600">
                       {standard.code}
                     </h3>
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-blue-600">
-                      <ScrollText className="h-6 w-6" />
-                    </div>
                   </div>
                   <h4 className="mb-2 font-montserrat text-lg font-semibold text-gray-800">
                     {standard.name}
@@ -312,17 +318,7 @@ export default function PolicyPage() {
                   <p className="mb-4 font-montserrat text-sm leading-relaxed text-gray-600">
                     {standard.description}
                   </p>
-                  <div className="flex flex-wrap gap-2">
-                    {standard.areas.map((area) => (
-                      <span
-                        key={area}
-                        className="rounded-full bg-blue-50 px-3 py-1 font-montserrat text-xs font-semibold text-blue-700"
-                      >
-                        {area}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+                </a>
               ))}
             </div>
           </div>
