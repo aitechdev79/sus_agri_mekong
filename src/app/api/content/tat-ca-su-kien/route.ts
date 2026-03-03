@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
           createdAt: true,
         },
         orderBy: [
-          { eventStartAt: 'asc' },
+          { eventStartAt: 'desc' },
           { createdAt: 'desc' },
         ],
         skip,

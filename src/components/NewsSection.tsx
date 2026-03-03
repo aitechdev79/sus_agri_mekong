@@ -132,7 +132,7 @@ export default function NewsSection() {
           </div>
           <Link
             href="/tat-ca-su-kien"
-            className="hidden md:inline-flex items-center gap-2 border border-[#FFC107] bg-transparent font-bold px-6 py-3 transition-all duration-300 hover:scale-105 hover:-translate-y-1"
+            className="hidden md:inline-flex items-center gap-2 rounded-full border border-[#FFC107] bg-transparent px-6 py-3 font-bold transition-all duration-300 hover:scale-105 hover:-translate-y-1"
             style={{
               color: '#3C3C3B',
               boxShadow: '0 4px 12px rgba(255, 193, 7, 0.15)'
@@ -256,7 +256,7 @@ export default function NewsSection() {
         <div className="mt-8 md:hidden text-center">
           <Link
             href="/tat-ca-su-kien"
-            className="inline-flex items-center gap-2 border border-[#FFC107] bg-transparent font-bold px-6 py-3 transition-all duration-300 hover:scale-105"
+            className="inline-flex items-center gap-2 rounded-full border border-[#FFC107] bg-transparent px-6 py-3 font-bold transition-all duration-300 hover:scale-105"
             style={{
               color: '#3C3C3B',
               boxShadow: '0 4px 12px rgba(255, 193, 7, 0.15)'
