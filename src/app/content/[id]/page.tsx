@@ -144,6 +144,7 @@ export default async function ContentDetailPage({
   const hasPdf = !!content.fileUrl && (content.fileType === 'application/pdf' || content.fileUrl.toLowerCase().endsWith('.pdf'));
   const pdfUrl = content.fileUrl;
   const hasRichTextContent = Boolean(content.content?.trim());
+  const externalUrl = content.projectUrl?.trim() || null;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -307,17 +308,17 @@ export default async function ContentDetailPage({
               )}
 
               {/* Source Link */}
-              {content.imageUrl && (
+              {externalUrl && (
                 <div className="mt-8 pt-6 border-t border-gray-100">
                   <p className="text-sm text-gray-500 italic">
                     <span className="font-medium">Tham khảo thêm: </span>
                     <a
-                      href={content.imageUrl}
+                      href={externalUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-gray-500 hover:text-gray-700 underline break-all"
                     >
-                      {content.imageUrl}
+                      {externalUrl}
                     </a>
                   </p>
                 </div>
