@@ -47,29 +47,23 @@ export default function HoatDongSection() {
   return (
     <section className="py-20 w-full bg-vn-rice-white">
       <div className="container mx-auto px-6 max-w-6xl">
-        <div className="mb-16 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+        <div className="mb-16 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
           <div>
             <h2 className="text-4xl font-black mb-6 md:text-5xl font-montserrat text-left tracking-tight" style={{ color: '#3C3C3B' }}>
-              Hoat dong du an
+              Hoạt động dự án
             </h2>
             <p className="text-xl font-montserrat text-left max-w-3xl leading-relaxed" style={{ color: '#6B7280' }}>
-              Tim hieu them ve cac du an da va dang thuc hien cua chung toi voi cac doi tac quoc te.
+              Tìm hiểu thêm về các dự án đã và đang thực hiện của chúng tôi với các đối tác quốc tế.
             </p>
           </div>
+
           <Link
             href="/hoat-dong-du-an"
-            className="inline-flex items-center gap-2 rounded-xl border px-6 py-3 font-bold transition-all duration-300 hover:scale-105 hover:-translate-y-1"
+            className="inline-flex items-center gap-2 self-start rounded-xl border px-6 py-3 font-bold transition-all duration-300 hover:scale-105 hover:-translate-y-1"
             style={{
               backgroundColor: 'transparent',
               borderColor: '#FFC107',
-              color: '#3C3C3B',
-              boxShadow: '0 4px 12px rgba(255, 193, 7, 0.12)'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.boxShadow = '0 8px 24px rgba(255, 193, 7, 0.18)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.boxShadow = '0 4px 12px rgba(255, 193, 7, 0.12)';
+              color: '#C28A00',
             }}
           >
             Xem tat ca
@@ -90,7 +84,7 @@ export default function HoatDongSection() {
         )}
 
         {!loading && items.length === 0 && (
-          <div className="text-sm text-gray-500">Chua co hoat dong du an.</div>
+          <div className="text-sm text-gray-500">Chưa có hoạt động dự án.</div>
         )}
 
         {items.length > 0 && (
@@ -106,7 +100,7 @@ export default function HoatDongSection() {
                   href={href}
                   target={isExternal ? '_blank' : undefined}
                   rel={isExternal ? 'noopener noreferrer' : undefined}
-                  className="group block flex flex-col w-full h-full max-w-md mx-auto md:max-w-none md:mx-0"
+                  className="group block flex h-full w-full max-w-md flex-col rounded-2xl bg-white p-5 mx-auto md:mx-0 md:max-w-none"
                   aria-label={`${item.title} - ${item.description || ''}`}
                 >
                   {imageSrc && (

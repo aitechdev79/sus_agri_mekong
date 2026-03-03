@@ -139,7 +139,7 @@ export default function HoatDongDuAnPage() {
             {loading ? (
               <div className="grid grid-cols-1 items-stretch gap-8 md:grid-cols-3">
                 {[...Array(itemsPerPage)].map((_, index) => (
-                  <div key={index} className="animate-pulse rounded-2xl bg-white p-5">
+                  <div key={index} className="animate-pulse bg-white p-5">
                     <div className="mb-4 bg-gray-200" style={{ aspectRatio: '16/9' }} />
                     <div className="mb-2 h-6 bg-gray-200" />
                     <div className="mb-2 h-4 w-1/3 bg-gray-100" />
@@ -148,7 +148,7 @@ export default function HoatDongDuAnPage() {
                 ))}
               </div>
             ) : items.length === 0 ? (
-              <div className="rounded-2xl bg-white p-12 text-center text-gray-500 shadow-sm">
+              <div className="bg-white p-12 text-center text-gray-500 shadow-sm">
                 Chưa có hoạt động dự án.
               </div>
             ) : (
@@ -164,7 +164,7 @@ export default function HoatDongDuAnPage() {
                       href={href}
                       target={isExternal ? '_blank' : undefined}
                       rel={isExternal ? 'noopener noreferrer' : undefined}
-                      className="group mx-auto flex h-full w-full max-w-md flex-col rounded-2xl bg-white p-5 md:mx-0 md:max-w-none"
+                      className="group mx-auto flex h-full w-full max-w-md flex-col bg-white p-5 md:mx-0 md:max-w-none"
                       aria-label={`${item.title} - ${item.description || ''}`}
                     >
                       {imageSrc && (
