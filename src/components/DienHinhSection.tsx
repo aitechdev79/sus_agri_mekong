@@ -58,17 +58,18 @@ export default function DienHinhSection() {
 
           <Link
             href="/tat-ca-dien-hinh"
-            className="inline-flex items-center gap-2 rounded-xl px-6 py-3 font-bold transition-all duration-300 hover:-translate-y-1 hover:scale-105"
+            className="inline-flex items-center gap-2 rounded-xl border px-6 py-3 font-bold transition-all duration-300 hover:-translate-y-1 hover:scale-105"
             style={{
-              backgroundColor: '#FFC107',
+              backgroundColor: 'transparent',
+              borderColor: '#FFC107',
               color: '#3C3C3B',
-              boxShadow: '0 4px 12px rgba(255, 193, 7, 0.3)'
+              boxShadow: '0 4px 12px rgba(255, 193, 7, 0.12)'
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.boxShadow = '0 8px 24px rgba(255, 193, 7, 0.4)';
+              e.currentTarget.style.boxShadow = '0 8px 24px rgba(255, 193, 7, 0.18)';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.boxShadow = '0 4px 12px rgba(255, 193, 7, 0.3)';
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(255, 193, 7, 0.12)';
             }}
           >
             Xem tất cả
