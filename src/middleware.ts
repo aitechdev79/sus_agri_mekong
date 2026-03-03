@@ -40,6 +40,7 @@ export default withAuth(
           '/tomcamau',
           '/daotaokiemkeKNK',
           '/hoat-dong-du-an',
+          '/tat-ca-dien-hinh',
           '/congtyMinhphu',
           '/congtyTaiky',
           '/congtyVinhhien',
