@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
-import { ArrowLeft, Search, ShieldCheck, UserCheck, Users } from 'lucide-react'
+import { ArrowLeft, Download, Search, ShieldCheck, UserCheck, Users } from 'lucide-react'
 
 interface AdminUser {
   id: string
@@ -52,6 +52,33 @@ function getRoleBadge(role: AdminUser['role']) {
   }
 
   return styles[role]
+}
+
+function escapeCsvValue(value: string) {
+  if (value.includes('"') || value.includes(',') || value.includes('\n')) {
+    return `"${value.replace(/"/g, '""')}"`
+  }
+
+  return value
+}
+
+function escapeXmlValue(value: string) {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;')
+}
+
+function downloadBlob(content: BlobPart, filename: string, type: string) {
+  const blob = new Blob([content], { type })
+  const url = URL.createObjectURL(blob)
+  const anchor = document.createElement('a')
+  anchor.href = url
+  anchor.download = filename
+  anchor.click()
+  URL.revokeObjectURL(url)
 }
 
 export function UserManager({ backHref }: UserManagerProps) {
@@ -111,6 +138,108 @@ export function UserManager({ backHref }: UserManagerProps) {
     }
   }, [users])
 
+  const handleExportCsv = () => {
+    const header = [
+      'ID',
+      'Tên',
+      'Email',
+      'Số điện thoại',
+      'Vai trò',
+      'Đã xác minh',
+      'Tỉnh/Thành',
+      'Tổ chức',
+      'Số nội dung',
+      'Số bài gửi',
+      'Số bình luận',
+      'Số bookmark',
+      'Ngày tạo'
+    ]
+
+    const rows = filteredUsers.map((user) => [
+      user.id,
+      user.name || '',
+      user.email,
+      user.phone || '',
+      getRoleLabel(user.role),
+      user.isVerified ? 'Có' : 'Không',
+      user.province || '',
+      user.organization || '',
+      String(user._count.contents),
+      String(user._count.submissions),
+      String(user._count.comments),
+      String(user._count.bookmarks),
+      formatDate(user.createdAt)
+    ])
+
+    const csvContent = [header, ...rows]
+      .map((row) => row.map((cell) => escapeCsvValue(cell)).join(','))
+      .join('\n')
+
+    downloadBlob(
+      `\uFEFF${csvContent}`,
+      `users-${new Date().toISOString().slice(0, 10)}.csv`,
+      'text/csv;charset=utf-8;'
+    )
+  }
+
+  const handleExportExcel = () => {
+    const header = [
+      'ID',
+      'Tên',
+      'Email',
+      'Số điện thoại',
+      'Vai trò',
+      'Đã xác minh',
+      'Tỉnh/Thành',
+      'Tổ chức',
+      'Số nội dung',
+      'Số bài gửi',
+      'Số bình luận',
+      'Số bookmark',
+      'Ngày tạo'
+    ]
+
+    const rows = filteredUsers.map((user) => [
+      user.id,
+      user.name || '',
+      user.email,
+      user.phone || '',
+      getRoleLabel(user.role),
+      user.isVerified ? 'Có' : 'Không',
+      user.province || '',
+      user.organization || '',
+      String(user._count.contents),
+      String(user._count.submissions),
+      String(user._count.comments),
+      String(user._count.bookmarks),
+      formatDate(user.createdAt)
+    ])
+
+    const tableHeader = header.map((cell) => `<th>${escapeXmlValue(cell)}</th>`).join('')
+    const tableRows = rows
+      .map((row) => `<tr>${row.map((cell) => `<td>${escapeXmlValue(cell)}</td>`).join('')}</tr>`)
+      .join('')
+
+    const excelContent = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+</head>
+<body>
+<table border="1">
+<thead><tr>${tableHeader}</tr></thead>
+<tbody>${tableRows}</tbody>
+</table>
+</body>
+</html>`
+
+    downloadBlob(
+      excelContent,
+      `users-${new Date().toISOString().slice(0, 10)}.xls`,
+      'application/vnd.ms-excel;charset=utf-8;'
+    )
+  }
+
   return (
     <div className="space-y-6">
       <div className="mb-2">
@@ -124,6 +253,24 @@ export function UserManager({ backHref }: UserManagerProps) {
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Quản lý người dùng</h2>
           <p className="text-sm text-gray-600">Admin có thể xem danh sách tài khoản đã đăng ký, trạng thái xác minh và mức độ hoạt động cơ bản.</p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={handleExportCsv}
+            className="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+          >
+            <Download className="mr-2 h-4 w-4" />
+            Tải CSV
+          </button>
+          <button
+            type="button"
+            onClick={handleExportExcel}
+            className="inline-flex items-center rounded-md bg-green-600 px-3 py-2 text-sm font-medium text-white hover:bg-green-700"
+          >
+            <Download className="mr-2 h-4 w-4" />
+            Tải Excel
+          </button>
         </div>
       </div>
 
