@@ -233,7 +233,7 @@ export default function PolicyPage() {
                 </h2>
                 {!loadingPolicies && (
                   <p className="mt-2 font-montserrat text-sm text-gray-500">
-                    Tim thay {totalPolicies} noi dung chinh sach
+                    Tìm thấy {totalPolicies} nội dung chính sách
                     {searchTerm ? ` cho "${searchTerm}"` : ''}
                   </p>
                 )}
@@ -247,7 +247,7 @@ export default function PolicyPage() {
                       type="text"
                       value={searchInput}
                       onChange={(event) => setSearchInput(event.target.value)}
-                      placeholder="Tim kiem policy..."
+                      placeholder="Tìm kiếm policy..."
                       className="w-full rounded-md border border-gray-300 py-2.5 pl-10 pr-4 font-montserrat text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                     />
                   </div>
@@ -255,7 +255,7 @@ export default function PolicyPage() {
                     type="submit"
                     className="rounded-md bg-blue-600 px-4 py-2.5 font-montserrat text-sm font-semibold text-white hover:bg-blue-700"
                   >
-                    Tim
+                    Tìm
                   </button>
                 </div>
               </form>
