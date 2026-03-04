@@ -9,7 +9,7 @@ const heroPlaybackId = process.env.NEXT_PUBLIC_MUX_HERO_PLAYBACK_ID;
 export default function HeroSection() {
   return (
     <section
-      className="relative min-h-[75vh] w-screen overflow-hidden"
+      className="relative min-h-[75vh] w-screen overflow-hidden md:min-h-0 md:aspect-[5/2]"
       style={{
         marginLeft: 'calc(50% - 50vw)',
         marginRight: 'calc(50% - 50vw)',
@@ -54,7 +54,7 @@ export default function HeroSection() {
             className="h-full w-full bg-cover"
             style={{
               backgroundImage: 'url(/hero-main.jpg)',
-              backgroundSize: '120%',
+              backgroundSize: 'cover',
               backgroundPosition: 'center center',
             }}
           />
@@ -68,7 +68,7 @@ export default function HeroSection() {
         />
       </div>
 
-      <div className="relative flex min-h-[75vh] h-full items-center pt-16" style={{ zIndex: 10 }}>
+      <div className="relative flex min-h-[75vh] h-full items-center pt-16 md:min-h-0" style={{ zIndex: 10 }}>
         <div className="mx-auto w-full max-w-6xl px-6">
           <div className="max-w-2xl">
             <div className="mb-6">
