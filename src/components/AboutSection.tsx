@@ -51,7 +51,7 @@ export default function AboutSection() {
       title: 'Đối tác chiến lược',
       description: 'Kết nối với các đối tác và tổ chức hợp tác để thúc đẩy phát triển bền vững',
       href: '/partners',
-      image: '/doitac_chienluoc.jpeg',
+      image: '/doitac_chienluoc2.jpg',
       accentColor: 'vn-green',
     },
   ];
@@ -152,5 +152,6 @@ export default function AboutSection() {
     </section>
   );
 }
+
 
 
