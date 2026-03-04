@@ -7,7 +7,7 @@ import NavigationBar from '@/components/NavigationBar'
 import Footer from '@/components/Footer'
 import { SearchFilters } from '@/components/content/SearchFilters'
 import { getBestImageUrl } from '@/lib/image-utils'
-import { Search, Filter, ExternalLink, FileText, BarChart3, Globe2, Map, BookOpen, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Search, Filter, ExternalLink, FileText, BarChart3, Globe2, BookOpen, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { LibraryContent } from '@/types/content'
 
@@ -15,7 +15,7 @@ const quickAccessCards = [
   {
     id: 'policy',
     title: 'Chính sách và quy định',
-    description: 'Theo dõi các nội dung chính sách, hướng dẫn và chuẩn mực liên quan đến phát triển bền vững.',
+    description: 'Cập nhật các chính sách, quy định và văn bản pháp luật liên quan đến doanh nghiệp',
     href: '/policy',
     icon: FileText,
     accentClassName: 'bg-[#FFB81C] text-[#3C3C3B]',
@@ -23,26 +23,27 @@ const quickAccessCards = [
   {
     id: 'reports',
     title: 'Nghiên cứu và Báo cáo',
-    description: 'Khám phá các phân tích chuyên sâu, số liệu nền và báo cáo tổng hợp cho doanh nghiệp.',
+    description: 'Khám phá các nghiên cứu, báo cáo và phân tích chuyên sâu về phát triển bền vững',
     href: '/reports',
     icon: BarChart3,
-    accentClassName: 'bg-[#D9ECCA] text-[#0A7029]',
+    accentClassName: 'bg-[#FFB81C] text-[#3C3C3B]',
   },
   {
     id: 'global',
     title: 'Thực hành tốt trên thế giới',
-    description: 'Tham khảo các mô hình quốc tế có giá trị ứng dụng cho doanh nghiệp và chuỗi cung ứng.',
+    description: 'Học hỏi từ các mô hình phát triển bền vững thành công của doanh nghiệp toàn cầu',
     href: '/global_best_practice',
     icon: Globe2,
-    accentClassName: 'bg-[#FDE7D2] text-[#C65A00]',
+    accentClassName: 'bg-[#FFB81C] text-[#3C3C3B]',
   },
   {
     id: 'vietnam',
     title: 'Thực hành tốt tại Việt Nam',
-    description: 'Nhìn vào các điển hình trong nước để học cách triển khai các sáng kiến bền vững hiệu quả.',
+    description: 'Khám phá các điển hình ESG xuất sắc trong doanh nghiệp và cộng đồng Việt Nam',
     href: '/VN_best_practice',
-    icon: Map,
-    accentClassName: 'bg-[#E8F5E9] text-[#0A7029]',
+    icon: Globe2,
+    accentClassName: 'bg-[#FFB81C] text-[#3C3C3B]',
+    imageIcon: '/VN map icon.png',
   },
 ] as const
 
@@ -238,15 +239,6 @@ export default function LibraryPage() {
 
         <section className="bg-vn-rice-white py-16">
           <div className="container mx-auto max-w-6xl px-6">
-            <div className="mb-12">
-              <h2 className="mb-4 font-montserrat text-3xl font-bold text-[#3C3C3B] md:text-4xl">
-                Lối vào nhanh
-              </h2>
-              <p className="max-w-3xl font-montserrat text-lg text-[#6B7280]">
-                Bắt đầu từ nhóm nội dung phù hợp với nhu cầu tra cứu của bạn.
-              </p>
-            </div>
-
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
               {quickAccessCards.map((card) => {
                 const Icon = card.icon
@@ -255,17 +247,39 @@ export default function LibraryPage() {
                   <Link
                     key={card.id}
                     href={card.href}
-                    className="group block bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+                    className="group block overflow-hidden bg-white transition-all duration-500"
+                    style={{
+                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.12)'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.08)'
+                    }}
                   >
-                    <div className={`mb-5 flex h-16 w-16 items-center justify-center ${card.accentClassName}`}>
-                      <Icon className="h-8 w-8" />
+                    <div className="flex flex-col items-center p-6 text-center transition-transform duration-500 group-hover:scale-105">
+                      <div
+                        className={`mb-4 flex h-16 w-16 items-center justify-center transition-transform duration-500 ${card.accentClassName}`}
+                      >
+                        {'imageIcon' in card ? (
+                          <Image
+                            src={card.imageIcon}
+                            alt="Vietnam map"
+                            width={48}
+                            height={48}
+                          />
+                        ) : (
+                          <Icon className="h-10 w-10" />
+                        )}
+                      </div>
+                      <h3 className="mb-3 font-montserrat text-lg font-bold text-[#3C3C3B] md:text-xl">
+                        {card.title}
+                      </h3>
+                      <p className="font-montserrat text-sm leading-relaxed text-[#6B7280] md:text-base">
+                        {card.description}
+                      </p>
                     </div>
-                    <h3 className="mb-3 font-montserrat text-xl font-bold text-[#3C3C3B]">
-                      {card.title}
-                    </h3>
-                    <p className="font-montserrat text-sm leading-relaxed text-[#6B7280]">
-                      {card.description}
-                    </p>
                   </Link>
                 )
               })}
