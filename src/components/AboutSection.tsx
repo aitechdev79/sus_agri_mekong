@@ -118,12 +118,12 @@ export default function AboutSection() {
         </div>
 
         {/* Info Cards Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-end">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-start">
           {infoCards.map((card) => (
             <Link
               key={card.id}
               href={card.href}
-              className="group block flex flex-col"
+              className="group flex h-full flex-col self-start"
               aria-label={`${card.title} - ${card.description}`}
             >
               {/* Image Container - No rounded corners, no overlay */}
