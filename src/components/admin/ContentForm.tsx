@@ -326,19 +326,19 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
           displayOrder: quickCategory.displayOrder
         })
       })
-      const data = await response.json()
+      const data = await response.json().catch(() => null)
       if (!response.ok) {
-        alert(data.error || 'Không thể tạo danh mục')
+        alert(data?.error || ('Khong the tao danh muc (HTTP ' + response.status + ')'))
         return
       }
-      const createdCategory = data.category as CategorySummary
+      const createdCategory = data?.category as CategorySummary
       onCategoryCreated?.(createdCategory)
       setFormData((current: typeof formData) => ({ ...current, category: createdCategory.slug }))
       setShowCategoryModal(false)
       resetQuickCategory()
     } catch (error) {
       console.error('Quick category create error:', error)
-      alert('Không thể tạo danh mục')
+      alert('Khong the tao danh muc')
     } finally {
       setCategorySaveLoading(false)
     }
@@ -1101,6 +1101,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
     </div>
   )
 }
+
 
 
 

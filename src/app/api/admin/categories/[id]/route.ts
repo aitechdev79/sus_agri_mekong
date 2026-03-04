@@ -12,19 +12,37 @@ interface RouteParams {
   params: Promise<{ id: string }>
 }
 
+function getCategoryRouteErrorMessage(error: unknown, fallback: string) {
+  if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    if (error.code === 'P2021' || error.code === 'P2022') {
+      return 'Bang Category chua co trong DB. Hay chay migration moi nhat.'
+    }
+
+    if (error.code === 'P2002') {
+      return 'Slug da ton tai'
+    }
+  }
+
+  if (error instanceof Prisma.PrismaClientInitializationError) {
+    return 'Khong the ket noi database'
+  }
+
+  return fallback
+}
+
 export async function PUT(request: NextRequest, { params }: RouteParams) {
   try {
     const user = await requireAdmin(request)
 
     if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: 'Chi ADMIN moi duoc cap nhat danh muc' }, { status: 401 })
     }
 
     const { id } = await params
     const existing = await prisma.category.findUnique({ where: { id } })
 
     if (!existing) {
-      return NextResponse.json({ error: 'Không tìm thấy danh mục' }, { status: 404 })
+      return NextResponse.json({ error: 'Khong tim thay danh muc' }, { status: 404 })
     }
 
     const body = await request.json()
@@ -41,27 +59,27 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     })
 
     if (!slug) {
-      return NextResponse.json({ error: 'Slug là bắt buộc' }, { status: 400 })
+      return NextResponse.json({ error: 'Slug la bat buoc' }, { status: 400 })
     }
 
     if (!isValidCategorySlug(slug)) {
       return NextResponse.json(
-        { error: 'Slug chỉ được chứa chữ thường, số, dấu gạch ngang hoặc underscore' },
+        { error: 'Slug chi duoc chua chu thuong, so, dau gach ngang hoac underscore' },
         { status: 400 }
       )
     }
 
     if (!nameVi) {
-      return NextResponse.json({ error: 'Tên danh mục là bắt buộc' }, { status: 400 })
+      return NextResponse.json({ error: 'Ten danh muc la bat buoc' }, { status: 400 })
     }
 
     if (!Number.isFinite(displayOrder)) {
-      return NextResponse.json({ error: 'Thứ tự hiển thị không hợp lệ' }, { status: 400 })
+      return NextResponse.json({ error: 'Thu tu hien thi khong hop le' }, { status: 400 })
     }
 
     if (existing.slug !== slug && usageCount > 0) {
       return NextResponse.json(
-        { error: 'Danh mục đang được sử dụng. Chỉ nên đổi tên hiển thị, không đổi slug.' },
+        { error: 'Danh muc dang duoc su dung. Chi nen doi ten hien thi, khong doi slug.' },
         { status: 409 }
       )
     }
@@ -101,14 +119,12 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     })
   } catch (error) {
     console.error('Admin category update error:', error)
-
-    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
-      return NextResponse.json({ error: 'Slug đã tồn tại' }, { status: 409 })
-    }
+    const status =
+      error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002' ? 409 : 500
 
     return NextResponse.json(
-      { error: 'Không thể cập nhật danh mục' },
-      { status: 500 }
+      { error: getCategoryRouteErrorMessage(error, 'Khong the cap nhat danh muc') },
+      { status }
     )
   }
 }
@@ -118,14 +134,14 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     const user = await requireAdmin(request)
 
     if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: 'Chi ADMIN moi duoc xoa danh muc' }, { status: 401 })
     }
 
     const { id } = await params
     const existing = await prisma.category.findUnique({ where: { id } })
 
     if (!existing) {
-      return NextResponse.json({ error: 'Không tìm thấy danh mục' }, { status: 404 })
+      return NextResponse.json({ error: 'Khong tim thay danh muc' }, { status: 404 })
     }
 
     const usageCount = await prisma.content.count({
@@ -134,7 +150,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
 
     if (usageCount > 0) {
       return NextResponse.json(
-        { error: 'Danh mục đang được sử dụng. Hãy deactivate thay vì xóa.' },
+        { error: 'Danh muc dang duoc su dung. Hay deactivate thay vi xoa.' },
         { status: 409 }
       )
     }
@@ -155,7 +171,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
   } catch (error) {
     console.error('Admin category delete error:', error)
     return NextResponse.json(
-      { error: 'Không thể xóa danh mục' },
+      { error: getCategoryRouteErrorMessage(error, 'Khong the xoa danh muc') },
       { status: 500 }
     )
   }
