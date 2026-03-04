@@ -108,7 +108,7 @@ export interface AdminContent extends ContentWithMedia {
 export interface PublicContent extends ContentWithCompleteAuthor, MediaFields {}
 
 // 3. LIBRARY INTERFACE - For library/search displays with counts
-export interface LibraryContent extends ContentWithRoleAuthor, BilingualFields, ContentCounts {
+export interface LibraryContent extends ContentWithRoleAuthor, BilingualFields, ContentCounts, MediaFields {
   downloadCount: number;
 }
 
