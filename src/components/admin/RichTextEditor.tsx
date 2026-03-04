@@ -3,7 +3,7 @@
 import { useEffect } from 'react'
 import { EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
-import { Mark, mergeAttributes } from '@tiptap/core'
+import { Extension, Mark, mergeAttributes } from '@tiptap/core'
 
 type RichTextEditorProps = {
   value: string
@@ -18,6 +18,8 @@ const FONT_FAMILIES = [
 ]
 
 const FONT_SIZES = ['12px', '14px', '16px', '18px', '20px', '24px']
+const LIST_INDENT_STEP_REM = 1.5
+const MAX_LIST_INDENT = 6
 
 const TextStyleMark = Mark.create({
   name: 'textStyle',
@@ -54,9 +56,38 @@ const TextStyleMark = Mark.create({
   }
 })
 
+const ListIndentExtension = Extension.create({
+  name: 'listIndent',
+
+  addGlobalAttributes() {
+    return [
+      {
+        types: ['listItem'],
+        attributes: {
+          indent: {
+            default: 0,
+            parseHTML: element => Number(element.getAttribute('data-indent') || 0),
+            renderHTML: attributes => {
+              const indent = Number(attributes.indent || 0)
+              if (!indent) {
+                return {}
+              }
+
+              return {
+                'data-indent': indent,
+                style: `margin-left: ${indent * LIST_INDENT_STEP_REM}rem`
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+})
+
 export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
   const editor = useEditor({
-    extensions: [StarterKit, TextStyleMark] as never,
+    extensions: [StarterKit, TextStyleMark, ListIndentExtension] as never,
     content: value || '',
     onUpdate({ editor: editorInstance }) {
       onChange(editorInstance.getHTML())
@@ -99,11 +130,29 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
       toggleItalic: () => { run: () => void }
       toggleBulletList: () => { run: () => void }
       toggleOrderedList: () => { run: () => void }
-      sinkListItem: (type: string) => { run: () => void }
       liftListItem: (type: string) => { run: () => void }
     }
   } | undefined
   const activeFontSize = currentTextStyle?.fontSize || '12px'
+  const isListActive = Boolean(editor?.isActive('bulletList') || editor?.isActive('orderedList'))
+  const currentListIndent = Number(editor?.getAttributes('listItem')?.indent || 0)
+
+  const handleIndent = () => {
+    if (!editor || !isListActive) return
+    const nextIndent = Math.min(currentListIndent + 1, MAX_LIST_INDENT)
+    editor.chain().focus().updateAttributes('listItem', { indent: nextIndent }).run()
+  }
+
+  const handleOutdent = () => {
+    if (!editor || !isListActive) return
+
+    if (currentListIndent > 0) {
+      editor.chain().focus().updateAttributes('listItem', { indent: currentListIndent - 1 }).run()
+      return
+    }
+
+    chain?.focus().liftListItem('listItem').run()
+  }
 
   return (
     <div className="border border-gray-300 rounded-md overflow-hidden focus-within:ring-2 focus-within:ring-green-500">
@@ -142,17 +191,17 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
         </button>
         <button
           type="button"
-          onClick={() => chain?.focus().liftListItem('listItem').run()}
+          onClick={handleOutdent}
           className="px-2 py-1 text-sm border rounded bg-white text-gray-700 border-gray-300"
-          disabled={!editor || (!editor.isActive('bulletList') && !editor.isActive('orderedList'))}
+          disabled={!editor || !isListActive}
         >
           Outdent
         </button>
         <button
           type="button"
-          onClick={() => chain?.focus().sinkListItem('listItem').run()}
+          onClick={handleIndent}
           className="px-2 py-1 text-sm border rounded bg-white text-gray-700 border-gray-300"
-          disabled={!editor || (!editor.isActive('bulletList') && !editor.isActive('orderedList'))}
+          disabled={!editor || !isListActive}
         >
           Indent
         </button>
