@@ -36,13 +36,16 @@ export default function HeroSection() {
             preload="auto"
             nohotkeys
             aria-hidden="true"
-            className="pointer-events-none h-full w-full object-cover"
+            className="pointer-events-none block h-full w-full"
             poster="/hero-main.jpg"
             style={{
               '--controls': 'none',
+              '--media-object-fit': 'cover',
+              '--media-object-position': 'center',
+              '--media-poster-image-background-size': 'cover',
               width: '100%',
               height: '100%',
-              objectFit: 'cover',
+              display: 'block',
             }}
           />
         ) : (
