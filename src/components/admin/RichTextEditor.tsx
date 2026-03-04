@@ -62,7 +62,7 @@ const ListIndentExtension = Extension.create({
   addGlobalAttributes() {
     return [
       {
-        types: ['listItem'],
+        types: ['paragraph', 'heading', 'listItem'],
         attributes: {
           indent: {
             default: 0,
@@ -135,23 +135,39 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
   } | undefined
   const activeFontSize = currentTextStyle?.fontSize || '12px'
   const isListActive = Boolean(editor?.isActive('bulletList') || editor?.isActive('orderedList'))
-  const currentListIndent = Number(editor?.getAttributes('listItem')?.indent || 0)
+  const getIndentTargetType = () => {
+    if (!editor) return 'paragraph' as const
+    if (isListActive) return 'listItem' as const
+
+    for (const level of [1, 2, 3, 4, 5, 6]) {
+      if (editor.isActive('heading', { level })) {
+        return 'heading' as const
+      }
+    }
+
+    return 'paragraph' as const
+  }
+
+  const indentTargetType = getIndentTargetType()
+  const currentIndent = Number(editor?.getAttributes(indentTargetType)?.indent || 0)
 
   const handleIndent = () => {
-    if (!editor || !isListActive) return
-    const nextIndent = Math.min(currentListIndent + 1, MAX_LIST_INDENT)
-    editor.chain().focus().updateAttributes('listItem', { indent: nextIndent }).run()
+    if (!editor) return
+    const nextIndent = Math.min(currentIndent + 1, MAX_LIST_INDENT)
+    editor.chain().focus().updateAttributes(indentTargetType, { indent: nextIndent }).run()
   }
 
   const handleOutdent = () => {
-    if (!editor || !isListActive) return
+    if (!editor) return
 
-    if (currentListIndent > 0) {
-      editor.chain().focus().updateAttributes('listItem', { indent: currentListIndent - 1 }).run()
+    if (currentIndent > 0) {
+      editor.chain().focus().updateAttributes(indentTargetType, { indent: currentIndent - 1 }).run()
       return
     }
 
-    chain?.focus().liftListItem('listItem').run()
+    if (isListActive) {
+      chain?.focus().liftListItem('listItem').run()
+    }
   }
 
   return (
@@ -193,7 +209,7 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
           type="button"
           onClick={handleOutdent}
           className="px-2 py-1 text-sm border rounded bg-white text-gray-700 border-gray-300"
-          disabled={!editor || !isListActive}
+          disabled={!editor}
         >
           Outdent
         </button>
@@ -201,7 +217,7 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
           type="button"
           onClick={handleIndent}
           className="px-2 py-1 text-sm border rounded bg-white text-gray-700 border-gray-300"
-          disabled={!editor || !isListActive}
+          disabled={!editor}
         >
           Indent
         </button>
