@@ -90,16 +90,6 @@ export default function AboutSection() {
               </div>
             </div>
 
-            {/* CTA Button */}
-            <div>
-              <Link
-                href="/vision-mission"
-                className="inline-block font-montserrat font-bold text-sm text-white bg-vn-green hover:bg-vn-green-dark transition-all duration-300 px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105"
-                aria-label="Khám phá về chúng tôi"
-              >
-                Khám phá →
-              </Link>
-            </div>
 
           </div>
 
@@ -162,3 +152,4 @@ export default function AboutSection() {
     </section>
   );
 }
+
