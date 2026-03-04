@@ -101,7 +101,7 @@ export default function HoatDongSection() {
                   target={isExternal ? '_blank' : undefined}
                   rel={isExternal ? 'noopener noreferrer' : undefined}
                   className="group block flex h-full w-full max-w-md flex-col p-5 mx-auto md:mx-0 md:max-w-none"
-                  style={{ backgroundColor: '#FFB81C' }}
+                  style={{ backgroundColor: '#CC9316' }}
                   aria-label={`${item.title} - ${item.description || ''}`}
                 >
                   {imageSrc && (

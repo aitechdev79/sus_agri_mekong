@@ -165,7 +165,7 @@ export default function HoatDongDuAnPage() {
                       target={isExternal ? '_blank' : undefined}
                       rel={isExternal ? 'noopener noreferrer' : undefined}
                       className="group mx-auto flex h-full w-full max-w-md flex-col p-5 md:mx-0 md:max-w-none"
-                      style={{ backgroundColor: '#FFB81C' }}
+                      style={{ backgroundColor: '#CC9316' }}
                       aria-label={`${item.title} - ${item.description || ''}`}
                     >
                       {imageSrc && (
