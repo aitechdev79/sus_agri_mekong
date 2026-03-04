@@ -40,6 +40,27 @@ function validateSectionPlacement(type: string, sectionKey?: string | null) {
   return { ok: true }
 }
 
+async function validateCategoryForCreate(category?: string) {
+  if (!category) {
+    return { ok: false, error: 'Danh muc la bat buoc' }
+  }
+
+  const existingCategory = await prisma.category.findUnique({
+    where: { slug: category },
+    select: { isActive: true }
+  })
+
+  if (!existingCategory) {
+    return { ok: false, error: 'Danh muc khong ton tai' }
+  }
+
+  if (!existingCategory.isActive) {
+    return { ok: false, error: 'Danh muc da ngung hoat dong' }
+  }
+
+  return { ok: true }
+}
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
@@ -183,6 +204,14 @@ export async function POST(request: NextRequest) {
     if (!placementValidation.ok) {
       return NextResponse.json(
         { error: placementValidation.error },
+        { status: 400 }
+      )
+    }
+
+    const categoryValidation = await validateCategoryForCreate(category)
+    if (!categoryValidation.ok) {
+      return NextResponse.json(
+        { error: categoryValidation.error },
         { status: 400 }
       )
     }

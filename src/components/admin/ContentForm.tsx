@@ -7,6 +7,8 @@ import { FileManager } from '@/components/upload/FileManager'
 import Image from 'next/image'
 import { ContentFormProps } from '@/types/content'
 import { RichTextEditor } from '@/components/admin/RichTextEditor'
+import type { CategorySummary } from '@/types/category'
+import { normalizeCategorySlug } from '@/lib/category-utils'
 
 function toDateTimeLocalValue(value?: string | null) {
   if (!value) return ''
@@ -30,9 +32,11 @@ function toDateValue(value?: string | null) {
   return localDate.toISOString().slice(0, 10)
 }
 
-export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
+export function ContentForm({ content, onClose, userRole, categories = [], onCategoryCreated }: ContentFormProps) {
   const [loading, setLoading] = useState(false)
   const [showFileManager, setShowFileManager] = useState(false)
+  const [showCategoryModal, setShowCategoryModal] = useState(false)
+  const [categorySaveLoading, setCategorySaveLoading] = useState(false)
   const [autoSaveStatus, setAutoSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle')
   const [showRestoredNotice, setShowRestoredNotice] = useState(false)
 
@@ -117,6 +121,12 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
   }
 
   const [formData, setFormData] = useState(getInitialFormData)
+  const [quickCategory, setQuickCategory] = useState({
+    slug: '',
+    nameVi: '',
+    nameEn: '',
+    displayOrder: categories.length > 0 ? Math.max(...categories.map((item) => item.displayOrder), 0) + 10 : 10
+  })
 
   // Auto-save to localStorage when form data changes (debounced)
   const saveToLocalStorage = useCallback(() => {
@@ -192,21 +202,25 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
     }
   }
 
-  const categories = [
-    { value: 'shrimp_farming', label: 'Nuôi tôm' },
-    { value: 'shrimp_processing', label: 'Chế biến tôm' },
-    { value: 'shrimp_export', label: 'Xuất khẩu tôm' },
-    { value: 'rice_cultivation', label: 'Trồng lúa' },
-    { value: 'rice_processing', label: 'Chế biến lúa' },
-    { value: 'rice_marketing', label: 'Tiếp thị lúa' },
-    { value: 'sustainable_practices', label: 'Thực hành bền vững' },
-    { value: 'technology_innovation', label: 'Công nghệ và đổi mới' },
-    { value: 'financial_support', label: 'Hỗ trợ tài chính' },
-    { value: 'market_access', label: 'Tiếp cận thị trường' },
-    { value: 'policy_guidelines', label: 'Chính sách và hướng dẫn' },
-    { value: 'success_stories', label: 'Câu chuyện thành công' }
-  ]
-
+  const categoryOptions: CategorySummary[] = (() => {
+    const activeCategories = categories.filter((category) => category.isActive)
+    if (!formData.category || activeCategories.some((category) => category.slug === formData.category)) {
+      return activeCategories
+    }
+    return [
+      ...activeCategories,
+      {
+        id: `legacy-${formData.category}`,
+        slug: formData.category,
+        name: formData.category,
+        nameVi: formData.category,
+        nameEn: null,
+        isActive: false,
+        displayOrder: Number.MAX_SAFE_INTEGER,
+        count: 0
+      }
+    ]
+  })()
   const contentTypes = [
     { value: 'ARTICLE', label: 'Bài viết' },
     { value: 'DOCUMENT', label: 'Tài liệu' },
@@ -232,7 +246,58 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
       setFormData({ ...formData, [name]: value })
     }
   }
-
+  const handleQuickCategoryNameChange = (value: string) => {
+    setQuickCategory((current) => {
+      const nextNameVi = value
+      const shouldSyncSlug = !current.slug || current.slug === normalizeCategorySlug(current.nameVi)
+      return {
+        ...current,
+        nameVi: nextNameVi,
+        slug: shouldSyncSlug ? normalizeCategorySlug(nextNameVi) : current.slug
+      }
+    })
+  }
+  const resetQuickCategory = () => {
+    setQuickCategory({
+      slug: '',
+      nameVi: '',
+      nameEn: '',
+      displayOrder: categories.length > 0 ? Math.max(...categories.map((item) => item.displayOrder), 0) + 10 : 10
+    })
+  }
+  const handleQuickCategorySubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setCategorySaveLoading(true)
+    try {
+      const response = await fetch('/api/admin/categories', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          slug: normalizeCategorySlug(quickCategory.slug),
+          nameVi: quickCategory.nameVi,
+          nameEn: quickCategory.nameEn,
+          displayOrder: quickCategory.displayOrder
+        })
+      })
+      const data = await response.json()
+      if (!response.ok) {
+        alert(data.error || 'Khong the tao danh muc')
+        return
+      }
+      const createdCategory = data.category as CategorySummary
+      onCategoryCreated?.(createdCategory)
+      setFormData((current: typeof formData) => ({ ...current, category: createdCategory.slug }))
+      setShowCategoryModal(false)
+      resetQuickCategory()
+    } catch (error) {
+      console.error('Quick category create error:', error)
+      alert('Khong the tao danh muc')
+    } finally {
+      setCategorySaveLoading(false)
+    }
+  }
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
@@ -434,10 +499,21 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Danh mục *
-              </label>
+                        <div>
+              <div className="mb-2 flex items-center justify-between gap-3">
+                <label className="block text-sm font-medium text-gray-700">
+                  Danh muc *
+                </label>
+                {userRole === 'ADMIN' && (
+                  <button
+                    type="button"
+                    onClick={() => setShowCategoryModal(true)}
+                    className="text-sm font-medium text-green-700 hover:text-green-800"
+                  >
+                    + Tao danh muc moi
+                  </button>
+                )}
+              </div>
               <select
                 name="category"
                 value={formData.category}
@@ -445,9 +521,11 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
                 required
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
               >
-                <option value="">Chọn danh mục</option>
-                {categories.map(cat => (
-                  <option key={cat.value} value={cat.value}>{cat.label}</option>
+                <option value="">Chon danh muc</option>
+                {categoryOptions.map((category) => (
+                  <option key={category.slug} value={category.slug}>
+                    {category.nameVi}{category.isActive ? '' : ' (ngung hoat dong)'}
+                  </option>
                 ))}
               </select>
             </div>
@@ -864,6 +942,83 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
         </form>
       </div>
 
+      {showCategoryModal && (
+        <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/50 p-4">
+          <div className="w-full max-w-lg rounded-lg bg-white shadow-xl">
+            <div className="flex items-center justify-between border-b px-6 py-4">
+              <h3 className="text-lg font-bold text-gray-900">Tao danh muc moi</h3>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowCategoryModal(false)
+                  resetQuickCategory()
+                }}
+                className="text-2xl font-bold text-gray-500 hover:text-gray-700"
+              >
+                x
+              </button>
+            </div>
+            <form onSubmit={handleQuickCategorySubmit} className="space-y-4 px-6 py-5">
+              <div>
+                <label className="mb-2 block text-sm font-medium text-gray-700">Ten danh muc *</label>
+                <input
+                  type="text"
+                  value={quickCategory.nameVi}
+                  onChange={(event) => handleQuickCategoryNameChange(event.target.value)}
+                  required
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+              <div>
+                <label className="mb-2 block text-sm font-medium text-gray-700">Slug *</label>
+                <input
+                  type="text"
+                  value={quickCategory.slug}
+                  onChange={(event) => setQuickCategory((current) => ({ ...current, slug: normalizeCategorySlug(event.target.value) }))}
+                  required
+                  pattern="[a-z0-9]+(?:[-_][a-z0-9]+)*"
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+                <p className="mt-1 text-xs text-gray-500">Dung slug chu thuong, khong dau. Legacy slug co underscore van duoc giu de tuong thich.</p>
+              </div>
+              <div>
+                <label className="mb-2 block text-sm font-medium text-gray-700">Ten tieng Anh</label>
+                <input
+                  type="text"
+                  value={quickCategory.nameEn}
+                  onChange={(event) => setQuickCategory((current) => ({ ...current, nameEn: event.target.value }))}
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+              <div>
+                <label className="mb-2 block text-sm font-medium text-gray-700">Thu tu hien thi</label>
+                <input
+                  type="number"
+                  value={quickCategory.displayOrder}
+                  onChange={(event) => setQuickCategory((current) => ({ ...current, displayOrder: Number(event.target.value || 0) }))}
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+              <div className="flex justify-end gap-3 border-t pt-4">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={() => {
+                    setShowCategoryModal(false)
+                    resetQuickCategory()
+                  }}
+                  disabled={categorySaveLoading}
+                >
+                  Huy
+                </Button>
+                <Button type="submit" disabled={categorySaveLoading}>
+                  {categorySaveLoading ? 'Dang tao...' : 'Tao danh muc'}
+                </Button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
       {/* File Manager Modal */}
       {showFileManager && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-60 p-4">
@@ -901,4 +1056,6 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
     </div>
   )
 }
+
+
 

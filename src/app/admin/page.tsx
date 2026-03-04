@@ -1,15 +1,17 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Header } from '@/components/layout/Header'
 import { ContentTable } from '@/components/admin/ContentTable'
 import { ContentForm } from '@/components/admin/ContentForm'
 import { StatsCards } from '@/components/admin/StatsCards'
-import { Plus } from 'lucide-react'
+import { Plus, Tags } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { AdminContent } from '@/types/content'
+import { useAdminCategories } from '@/hooks/use-admin-categories'
 
 export default function AdminPage() {
   const { data: session, status } = useSession()
@@ -24,6 +26,9 @@ export default function AdminPage() {
     draft: 0,
     totalViews: 0
   })
+  const { categories, categoryLabels, loadCategories, upsertCategory } = useAdminCategories(
+    status !== 'loading' && !!session && (session.user.role === 'ADMIN' || session.user.role === 'MODERATOR')
+  )
 
   useEffect(() => {
     if (status === 'loading') return
@@ -42,15 +47,13 @@ export default function AdminPage() {
       const response = await fetch('/api/admin/content')
       if (response.ok) {
         const data = await response.json()
-        // The API returns an array directly, not an object with contents property
-        const contentList = Array.isArray(data) ? data : (data.contents || [])
+        const contentList = Array.isArray(data) ? data : data.contents || []
         setContents(contentList)
 
-        // Calculate stats with null checks
         const total = contentList.length
-        const published = contentList.filter((c: AdminContent) => c.status === 'PUBLISHED').length
-        const draft = contentList.filter((c: AdminContent) => c.status === 'DRAFT').length
-        const totalViews = contentList.reduce((sum: number, c: AdminContent) => sum + (c.viewCount || 0), 0)
+        const published = contentList.filter((content: AdminContent) => content.status === 'PUBLISHED').length
+        const draft = contentList.filter((content: AdminContent) => content.status === 'DRAFT').length
+        const totalViews = contentList.reduce((sum: number, content: AdminContent) => sum + (content.viewCount || 0), 0)
 
         setStats({ total, published, draft, totalViews })
       } else {
@@ -79,10 +82,11 @@ export default function AdminPage() {
     setShowForm(false)
     setEditingContent(null)
     loadContents()
+    loadCategories()
   }
 
   const handleDeleteContent = async (content: AdminContent) => {
-    if (!confirm('Bạn có chắc chắn muốn xóa nội dung này?')) {
+    if (!confirm('Ban co chac chan muon xoa noi dung nay?')) {
       return
     }
 
@@ -94,11 +98,11 @@ export default function AdminPage() {
       if (response.ok) {
         loadContents()
       } else {
-        alert('Không thể xóa nội dung')
+        alert('Khong the xoa noi dung')
       }
     } catch (error) {
       console.error('Error deleting content:', error)
-      alert('Đã xảy ra lỗi khi xóa nội dung')
+      alert('Da xay ra loi khi xoa noi dung')
     }
   }
 
@@ -116,11 +120,11 @@ export default function AdminPage() {
         loadContents()
       } else {
         const error = await response.json()
-        alert(error.error || 'Không thể thực hiện hành động')
+        alert(error.error || 'Khong the thuc hien hanh dong')
       }
     } catch (error) {
       console.error('Error with bulk action:', error)
-      alert('Đã xảy ra lỗi')
+      alert('Da xay ra loi')
     }
   }
 
@@ -129,8 +133,8 @@ export default function AdminPage() {
       <div className="min-h-screen bg-gray-50">
         <Header currentPath="/admin" />
         <div className="container mx-auto px-4 py-8">
-          <div className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-green-600"></div>
+          <div className="flex h-64 items-center justify-center">
+            <div className="h-32 w-32 animate-spin rounded-full border-b-2 border-green-600"></div>
           </div>
         </div>
       </div>
@@ -146,33 +150,46 @@ export default function AdminPage() {
       <Header currentPath="/admin" />
 
       <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold">Quản Lý Nội Dung</h1>
-          <Button onClick={handleCreateContent}>
-            <Plus className="w-4 h-4 mr-2" />
-            Thêm Nội Dung
-          </Button>
+        <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h1 className="text-3xl font-bold">Quan Ly Noi Dung</h1>
+            <p className="mt-2 text-sm text-gray-600">Danh muc da duoc tach sang taxonomy dong va dung chung tu database.</p>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            {session.user.role === 'ADMIN' && (
+              <Link
+                href="/admin/categories"
+                className="inline-flex items-center rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+              >
+                <Tags className="mr-2 h-4 w-4" />
+                Quan ly danh muc
+              </Link>
+            )}
+            <Button onClick={handleCreateContent}>
+              <Plus className="mr-2 h-4 w-4" />
+              Them Noi Dung
+            </Button>
+          </div>
         </div>
 
-        {/* Stats Cards */}
         <StatsCards stats={stats} />
 
-        {/* Content Table */}
         <ContentTable
           contents={contents}
           onEdit={handleEditContent}
           onDelete={handleDeleteContent}
           onBulkAction={handleBulkAction}
           userRole={session.user.role}
+          categoryLabels={categoryLabels}
         />
 
-        {/* Content Form Modal */}
         {showForm && (
           <ContentForm
             content={editingContent}
             onClose={handleFormClose}
             userRole={session.user.role}
+            categories={categories}
+            onCategoryCreated={upsertCategory}
           />
         )}
       </div>

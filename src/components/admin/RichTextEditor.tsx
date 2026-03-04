@@ -56,7 +56,7 @@ const TextStyleMark = Mark.create({
 
 export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
   const editor = useEditor({
-    extensions: [StarterKit, TextStyleMark],
+    extensions: [StarterKit, TextStyleMark] as never,
     content: value || '',
     onUpdate({ editor: editorInstance }) {
       onChange(editorInstance.getHTML())
@@ -99,7 +99,7 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
       <div className="flex flex-wrap items-center gap-2 border-b bg-gray-50 px-3 py-2">
         <button
           type="button"
-          onClick={() => editor?.chain().focus().toggleBold().run()}
+          onClick={() => (editor?.chain() as never as { focus: () => { toggleBold: () => { run: () => void } } })?.focus().toggleBold().run()}
           className={`px-2 py-1 text-sm border rounded ${editor?.isActive('bold') ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
           disabled={!editor}
         >
@@ -107,7 +107,7 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
         </button>
         <button
           type="button"
-          onClick={() => editor?.chain().focus().toggleItalic().run()}
+          onClick={() => (editor?.chain() as never as { focus: () => { toggleItalic: () => { run: () => void } } })?.focus().toggleItalic().run()}
           className={`px-2 py-1 text-sm border rounded ${editor?.isActive('italic') ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
           disabled={!editor}
         >

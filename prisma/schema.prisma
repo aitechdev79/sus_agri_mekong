@@ -56,6 +56,41 @@ model User {
   bookmarks     Bookmark[]
   submissions   UserSubmission[]
   notifications Notification[]
+  categoryAuditLogs CategoryAuditLog[] @relation("CategoryAuditPerformedBy")
+}
+
+model Category {
+  id           String             @id @default(cuid())
+  slug         String             @unique
+  nameVi       String
+  nameEn       String?
+  isActive     Boolean            @default(true)
+  displayOrder Int                @default(0)
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+
+  auditLogs    CategoryAuditLog[]
+
+  @@index([isActive])
+  @@index([displayOrder])
+}
+
+model CategoryAuditLog {
+  id            String              @id @default(cuid())
+  categoryId    String?
+  performedById String?
+  action        CategoryAuditAction
+  beforeData    Json?
+  afterData     Json?
+  createdAt     DateTime            @default(now())
+
+  category      Category?           @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  performedBy   User?               @relation("CategoryAuditPerformedBy", fields: [performedById], references: [id], onDelete: SetNull)
+
+  @@index([categoryId])
+  @@index([performedById])
+  @@index([action])
+  @@index([createdAt])
 }
 
 model VerificationToken {
@@ -250,4 +285,12 @@ enum NotificationType {
   SUBMISSION_UPDATE
   SYSTEM_ANNOUNCEMENT
   NEWSLETTER
+}
+
+enum CategoryAuditAction {
+  CREATE
+  UPDATE
+  DELETE
+  ACTIVATE
+  DEACTIVATE
 }

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Calendar, Eye, ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import EventCalendar from '@/components/EventCalendar';
+import { usePublicCategories } from '@/hooks/use-public-categories';
 
 interface NewsItem {
   id: string;
@@ -23,6 +24,7 @@ export default function NewsPage({ params }: { params: Promise<{ locale: string 
   const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const { categoryLabels } = usePublicCategories();
 
   useEffect(() => {
     params.then(p => setLocale(p.locale));
@@ -56,6 +58,11 @@ export default function NewsPage({ params }: { params: Promise<{ locale: string 
     });
   };
 
+  const getCategoryLabel = (category?: string) => {
+    if (!category) return '';
+    return categoryLabels[category] || category;
+  };
+
   // Sort events by date and prepare carousel items
   const sortedEvents = [...newsItems].sort((a, b) =>
     new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -83,18 +90,18 @@ export default function NewsPage({ params }: { params: Promise<{ locale: string 
   useEffect(() => {
     if (carouselItems.length > 1) {
       const interval = setInterval(() => {
-        nextSlide();
+        setCurrentSlide((prev) => (prev + 1) % carouselItems.length);
       }, 5000);
       return () => clearInterval(interval);
     }
-  }, [carouselItems.length, currentSlide]);
+  }, [carouselItems.length]);
 
   // Prepare events for calendar
   const calendarEvents = newsItems.map(item => ({
     id: item.id,
     title: item.title,
     date: new Date(item.createdAt),
-    type: (item.category?.toLowerCase().includes('đào tạo') || item.category?.toLowerCase().includes('training')) ? 'training' as const : 'event' as const,
+    type: (getCategoryLabel(item.category).toLowerCase().includes('dao tao') || getCategoryLabel(item.category).toLowerCase().includes('training')) ? 'training' as const : 'event' as const,
   }));
 
   return (
@@ -198,7 +205,7 @@ export default function NewsPage({ params }: { params: Promise<{ locale: string 
                                 </div>
                                 {item.category && (
                                   <span className="px-3 py-1 text-xs font-semibold font-montserrat" style={{ backgroundColor: '#E8F5E9', color: '#0A7029' }}>
-                                    {item.category}
+                                    {getCategoryLabel(item.category)}
                                   </span>
                                 )}
                               </div>
@@ -369,7 +376,7 @@ export default function NewsPage({ params }: { params: Promise<{ locale: string 
                         </div>
                         {item.category && (
                           <span className="px-3 py-1 text-xs font-semibold font-montserrat" style={{ backgroundColor: '#E8F5E9', color: '#0A7029' }}>
-                            {item.category}
+                            {getCategoryLabel(item.category)}
                           </span>
                         )}
                       </div>
@@ -388,3 +395,4 @@ export default function NewsPage({ params }: { params: Promise<{ locale: string 
     </div>
   );
 }
+

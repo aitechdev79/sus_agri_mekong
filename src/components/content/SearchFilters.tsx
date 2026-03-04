@@ -9,7 +9,7 @@ interface SearchFiltersProps {
 }
 
 export function SearchFilters({ selectedCategory, selectedType, onFilterChange }: SearchFiltersProps) {
-  const [categories, setCategories] = useState<{ name: string; nameVi: string; count: number }[]>([])
+  const [categories, setCategories] = useState<{ slug: string; name: string; nameVi: string; count: number }[]>([])
   const [loading, setLoading] = useState(true)
 
   const contentTypes = [
@@ -72,7 +72,7 @@ export function SearchFilters({ selectedCategory, selectedType, onFilterChange }
           >
             <option value="">Tất cả danh mục</option>
             {categories.map((category) => (
-              <option key={category.name} value={category.name}>
+              <option key={category.slug} value={category.slug}>
                 {category.nameVi} ({category.count})
               </option>
             ))}
@@ -114,7 +114,7 @@ export function SearchFilters({ selectedCategory, selectedType, onFilterChange }
           <span className="text-sm text-gray-600">Bộ lọc đang áp dụng:</span>
           {selectedCategory && (
             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-              {categories.find(c => c.name === selectedCategory)?.nameVi}
+              {categories.find(c => c.slug === selectedCategory)?.nameVi}
               <button
                 onClick={() => handleCategoryChange('')}
                 className="ml-1 text-green-600 hover:text-green-800"

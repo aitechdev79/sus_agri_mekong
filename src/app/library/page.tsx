@@ -9,6 +9,7 @@ import { SearchFilters } from '@/components/content/SearchFilters'
 import { Search, Filter, ExternalLink, FileText, BarChart3, Globe2, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { LibraryContent } from '@/types/content'
+import { usePublicCategories } from '@/hooks/use-public-categories'
 
 const quickAccessCards = [
   {
@@ -148,6 +149,7 @@ export default function LibraryPage() {
     total: 0,
     pages: 0,
   })
+  const { categoryLabels } = usePublicCategories()
 
   const loadContents = useCallback(async () => {
     try {
@@ -194,28 +196,10 @@ export default function LibraryPage() {
     setCurrentPage(page)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
-
   const getCategoryLabel = (category?: string | null) => {
     if (!category) return 'Chưa phân loại'
-
-    const categoryMap: Record<string, string> = {
-      shrimp_farming: 'Nuôi tôm',
-      shrimp_processing: 'Chế biến tôm',
-      shrimp_export: 'Xuất khẩu tôm',
-      rice_cultivation: 'Trồng lúa',
-      rice_processing: 'Chế biến lúa',
-      rice_marketing: 'Tiếp thị lúa',
-      sustainable_practices: 'Thực hành bền vững',
-      technology_innovation: 'Công nghệ và đổi mới',
-      financial_support: 'Hỗ trợ tài chính',
-      market_access: 'Tiếp cận thị trường',
-      policy_guidelines: 'Chính sách và hướng dẫn',
-      success_stories: 'Câu chuyện thành công',
-    }
-
-    return categoryMap[category] || category
+    return categoryLabels[category] || category
   }
-
   return (
     <div className="min-h-screen bg-vn-rice-white">
       <NavigationBar />

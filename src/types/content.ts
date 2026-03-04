@@ -245,18 +245,22 @@ export interface ContentTableProps {
   onDelete: (content: AdminContent) => void;
   onBulkAction?: (action: string, ids: string[]) => void;
   userRole: UserRole;
+  categoryLabels?: Record<string, string>;
 }
 
 export interface ContentFormProps {
   content?: FormContent | null;
   onClose: () => void;
   userRole: UserRole;
+  categories?: import('@/types/category').CategorySummary[];
+  onCategoryCreated?: (category: import('@/types/category').CategorySummary) => void;
 }
 
 export interface ContentCardProps {
   content: CardContent;
   onEdit?: (content: CardContent) => void;
   onDelete?: (content: CardContent) => void;
+  categoryLabels?: Record<string, string>;
 }
 
 // ===== UTILITY TYPES =====
