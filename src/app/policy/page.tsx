@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
 
@@ -28,6 +28,9 @@ export default function PolicyPage() {
   const [loadingPolicies, setLoadingPolicies] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [totalPolicies, setTotalPolicies] = useState(0);
+  const [searchInput, setSearchInput] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
   const itemsPerPage = 10;
 
   useEffect(() => {
@@ -35,12 +38,23 @@ export default function PolicyPage() {
       setLoadingPolicies(true);
 
       try {
-        const response = await fetch(`/api/content?type=POLICY&page=${currentPage}&limit=${itemsPerPage}`);
+        const params = new URLSearchParams({
+          type: 'POLICY',
+          page: currentPage.toString(),
+          limit: itemsPerPage.toString(),
+        });
+
+        if (searchTerm) {
+          params.append('search', searchTerm);
+        }
+
+        const response = await fetch(`/api/content?${params.toString()}`);
         if (!response.ok) return;
 
         const data: PolicyResponse = await response.json();
         setPolicies(data.contents);
         setTotalPages(data.pagination.pages);
+        setTotalPolicies(data.pagination.total);
       } catch (error) {
         console.error('Failed to load policies:', error);
       } finally {
@@ -49,7 +63,7 @@ export default function PolicyPage() {
     };
 
     fetchPolicies();
-  }, [currentPage]);
+  }, [currentPage, searchTerm]);
 
   const internationalStandards = [
     {
@@ -115,6 +129,12 @@ export default function PolicyPage() {
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setCurrentPage(1);
+    setSearchTerm(searchInput.trim());
   };
 
   const renderPaginationButtons = () => {
@@ -206,9 +226,40 @@ export default function PolicyPage() {
 
         <section className="bg-white py-12">
           <div className="container mx-auto max-w-6xl px-6">
-            <h2 className="mb-8 font-montserrat text-3xl font-bold text-gray-800">
+            <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+              <div>
+                <h2 className="font-montserrat text-3xl font-bold text-gray-800">
               Chính sách & Quy định nổi bật
-            </h2>
+                </h2>
+                {!loadingPolicies && (
+                  <p className="mt-2 font-montserrat text-sm text-gray-500">
+                    Tim thay {totalPolicies} noi dung chinh sach
+                    {searchTerm ? ` cho "${searchTerm}"` : ''}
+                  </p>
+                )}
+              </div>
+
+              <form onSubmit={handleSearchSubmit} className="w-full md:w-[380px]">
+                <div className="flex items-center justify-end gap-2">
+                  <div className="relative w-full">
+                    <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                    <input
+                      type="text"
+                      value={searchInput}
+                      onChange={(event) => setSearchInput(event.target.value)}
+                      placeholder="Tim kiem policy..."
+                      className="w-full rounded-md border border-gray-300 py-2.5 pl-10 pr-4 font-montserrat text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="rounded-md bg-blue-600 px-4 py-2.5 font-montserrat text-sm font-semibold text-white hover:bg-blue-700"
+                  >
+                    Tim
+                  </button>
+                </div>
+              </form>
+            </div>
 
             {loadingPolicies ? (
               <div className="overflow-hidden border border-gray-200">
