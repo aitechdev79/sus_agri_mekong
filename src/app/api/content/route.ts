@@ -49,6 +49,7 @@ export async function GET(request: NextRequest) {
     const type = searchParams.get('type')
     const search = searchParams.get('search')
     const featured = searchParams.get('featured') === 'true'
+    const sort = searchParams.get('sort')
 
     const skip = (page - 1) * limit
 
@@ -83,6 +84,14 @@ export async function GET(request: NextRequest) {
       ]
     }
 
+    const orderBy =
+      sort === 'newest'
+        ? [{ createdAt: 'desc' as const }]
+        : [
+            { isFeatured: 'desc' as const },
+            { createdAt: 'desc' as const }
+          ]
+
     const [contents, total] = await Promise.all([
       prisma.content.findMany({
         where,
@@ -101,10 +110,7 @@ export async function GET(request: NextRequest) {
             }
           }
         },
-        orderBy: [
-          { isFeatured: 'desc' },
-          { createdAt: 'desc' }
-        ],
+        orderBy,
         skip,
         take: limit
       }),

@@ -6,8 +6,7 @@ import Link from 'next/link'
 import NavigationBar from '@/components/NavigationBar'
 import Footer from '@/components/Footer'
 import { SearchFilters } from '@/components/content/SearchFilters'
-import { getBestImageUrl } from '@/lib/image-utils'
-import { Search, Filter, ExternalLink, FileText, BarChart3, Globe2, BookOpen, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Search, Filter, ExternalLink, FileText, BarChart3, Globe2, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { LibraryContent } from '@/types/content'
 
@@ -145,7 +144,7 @@ export default function LibraryPage() {
   const [currentPage, setCurrentPage] = useState(1)
   const [pagination, setPagination] = useState({
     page: 1,
-    limit: 12,
+    limit: 10,
     total: 0,
     pages: 0,
   })
@@ -157,6 +156,7 @@ export default function LibraryPage() {
         page: currentPage.toString(),
         limit: pagination.limit.toString(),
         type: selectedType || 'STORY,GUIDE,POLICY',
+        sort: 'newest',
       })
 
       if (searchTerm) params.append('search', searchTerm)
@@ -193,6 +193,27 @@ export default function LibraryPage() {
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
     window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const getCategoryLabel = (category?: string | null) => {
+    if (!category) return 'Chưa phân loại'
+
+    const categoryMap: Record<string, string> = {
+      shrimp_farming: 'Nuôi tôm',
+      shrimp_processing: 'Chế biến tôm',
+      shrimp_export: 'Xuất khẩu tôm',
+      rice_cultivation: 'Trồng lúa',
+      rice_processing: 'Chế biến lúa',
+      rice_marketing: 'Tiếp thị lúa',
+      sustainable_practices: 'Thực hành bền vững',
+      technology_innovation: 'Công nghệ và đổi mới',
+      financial_support: 'Hỗ trợ tài chính',
+      market_access: 'Tiếp cận thị trường',
+      policy_guidelines: 'Chính sách và hướng dẫn',
+      success_stories: 'Câu chuyện thành công',
+    }
+
+    return categoryMap[category] || category
   }
 
   return (
@@ -344,67 +365,68 @@ export default function LibraryPage() {
             </div>
 
             {loading ? (
-              <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+              <div className="overflow-hidden border border-[#E5E7EB] bg-white shadow-sm">
                 {[...Array(6)].map((_, index) => (
-                  <div key={index} className="animate-pulse">
-                    <div className="mb-4 bg-gray-200" style={{ aspectRatio: '16/9' }} />
-                    <div className="mb-3 h-5 bg-gray-200" />
-                    <div className="mb-2 h-4 bg-gray-100" />
-                    <div className="h-4 w-5/6 bg-gray-100" />
+                  <div key={index} className="animate-pulse border-b border-[#E5E7EB] px-5 py-4 last:border-b-0">
+                    <div className="flex items-center gap-4">
+                      <div className="h-6 w-8 bg-gray-200" />
+                      <div className="flex-1">
+                        <div className="mb-2 h-5 bg-gray-200" />
+                        <div className="h-4 w-2/3 bg-gray-100" />
+                      </div>
+                      <div className="h-6 w-20 bg-gray-100" />
+                    </div>
                   </div>
                 ))}
               </div>
             ) : contents.length > 0 ? (
               <>
-                <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-                  {contents.map((content) => {
-                    const imageSrc = getBestImageUrl(content.thumbnailUrl, content.imageUrl)
+                <div className="overflow-hidden border border-[#E5E7EB] bg-white shadow-sm">
+                  <div className="hidden grid-cols-[72px_minmax(0,1fr)_160px_140px] gap-4 border-b border-[#E5E7EB] bg-[#FAFAF7] px-5 py-3 text-sm font-semibold text-[#6B7280] md:grid">
+                    <div>STT</div>
+                    <div>Nội dung</div>
+                    <div>Loại</div>
+                    <div>Ngày tạo</div>
+                  </div>
+
+                  {contents.map((content, index) => {
+                    const itemNumber = (currentPage - 1) * pagination.limit + index + 1
 
                     return (
                       <Link
                         key={content.id}
                         href={`/content/${content.id}`}
-                        className="group block"
+                        className="group block border-b border-[#E5E7EB] px-5 py-4 last:border-b-0 hover:bg-[#FAFAF7]"
                         aria-label={`${content.title} - ${content.description || ''}`}
                       >
-                        <div className="mb-4 relative overflow-hidden bg-gray-100" style={{ aspectRatio: '16/9' }}>
-                          {imageSrc ? (
-                            <Image
-                              src={imageSrc}
-                              alt={content.title}
-                              fill
-                              className="object-cover transition-transform duration-500 group-hover:scale-110"
-                              sizes="(max-width: 768px) 100vw, 33vw"
-                            />
-                          ) : (
-                            <div className="flex h-full w-full items-center justify-center bg-[#FFF7DA]">
-                              <BookOpen className="h-10 w-10 text-[#C28A00]" />
-                            </div>
-                          )}
-                        </div>
+                        <div className="flex flex-col gap-3 md:grid md:grid-cols-[72px_minmax(0,1fr)_160px_140px] md:items-center md:gap-4">
+                          <div className="font-montserrat text-base font-bold text-[#0A7029] md:text-lg">
+                            {itemNumber.toString().padStart(2, '0')}
+                          </div>
 
-                        <div className="relative flex h-[220px] flex-col pb-4">
-                          <div className="mb-3 flex items-center justify-between gap-3">
+                          <div className="min-w-0">
+                            <h3 className="mb-1 font-montserrat text-lg font-bold text-[#3C3C3B] transition-colors group-hover:text-[#0A7029]">
+                              {content.title}
+                            </h3>
+                            <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-[#6B7280]">
+                              <span>{getCategoryLabel(content.category)}</span>
+                              {content.description && (
+                                <span className="max-w-2xl truncate">
+                                  {content.description}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+
+                          <div>
                             <span className={`inline-flex px-3 py-1 text-xs font-semibold ${getTypeAccent(content.type)}`}>
                               {getTypeLabel(content.type)}
                             </span>
-                            <span className="font-montserrat text-xs text-[#9CA3AF]">
-                              {formatDate(content.createdAt)}
-                            </span>
                           </div>
 
-                          <h3 className="mb-3 font-montserrat text-xl font-bold text-[#3C3C3B]">
-                            {content.title}
-                          </h3>
-
-                          {content.description && (
-                            <p className="line-clamp-4 flex-1 font-montserrat text-sm leading-relaxed text-[#6B7280]">
-                              {content.description}
-                            </p>
-                          )}
-
-                          <div className="absolute bottom-0 left-0 h-0.5 w-full bg-[#E8F5E9]" />
-                          <div className="absolute bottom-0 left-0 h-0.5 w-0 bg-[#0A7029] transition-all duration-500 ease-out group-hover:w-full" />
+                          <div className="font-montserrat text-sm text-[#6B7280]">
+                            {formatDate(content.createdAt)}
+                          </div>
                         </div>
                       </Link>
                     )
