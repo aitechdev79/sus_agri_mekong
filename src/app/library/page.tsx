@@ -157,12 +157,12 @@ export default function LibraryPage() {
       const params = new URLSearchParams({
         page: currentPage.toString(),
         limit: pagination.limit.toString(),
-        type: selectedType || 'STORY,GUIDE,POLICY',
         sort: 'newest',
       })
 
       if (searchTerm) params.append('search', searchTerm)
       if (selectedCategory) params.append('category', selectedCategory)
+      if (selectedType) params.append('type', selectedType)
 
       const response = await fetch(`/api/content?${params}`)
       if (response.ok) {
