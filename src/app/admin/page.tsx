@@ -8,7 +8,7 @@ import { Header } from '@/components/layout/Header'
 import { ContentTable } from '@/components/admin/ContentTable'
 import { ContentForm } from '@/components/admin/ContentForm'
 import { StatsCards } from '@/components/admin/StatsCards'
-import { Plus, Tags } from 'lucide-react'
+import { Plus, Tags, Users } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { AdminContent } from '@/types/content'
 import { useAdminCategories } from '@/hooks/use-admin-categories'
@@ -156,6 +156,15 @@ export default function AdminPage() {
             <p className="mt-2 text-sm text-gray-600">Danh mục đã được tách sang taxonomy động và dùng chung từ database.</p>
           </div>
           <div className="flex flex-wrap gap-3">
+            {session.user.role === 'ADMIN' && (
+              <Link
+                href="/admin/users"
+                className="inline-flex items-center rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+              >
+                <Users className="mr-2 h-4 w-4" />
+                Quản lý người dùng
+              </Link>
+            )}
             {session.user.role === 'ADMIN' && (
               <Link
                 href="/admin/categories"

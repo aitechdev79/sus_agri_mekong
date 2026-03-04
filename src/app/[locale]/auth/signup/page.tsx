@@ -65,14 +65,14 @@ export default function SignUpPage() {
       const data = await response.json();
 
       if (response.ok) {
-        setSuccess(t('registrationSuccess'));
+        setSuccess(data.message || t('registrationSuccess'));
         setTimeout(() => {
           router.push(`/${locale}/auth/signin`);
         }, 2000);
       } else {
-        setError(data.error || t('registrationError'));
+        setError(data.message || data.error || t('registrationError'));
       }
-    } catch (error) {
+    } catch {
       setError(t('registrationError'));
     } finally {
       setIsLoading(false);

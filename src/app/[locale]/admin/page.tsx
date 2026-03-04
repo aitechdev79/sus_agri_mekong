@@ -9,7 +9,7 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { ContentTable } from '@/components/admin/ContentTable'
 import { ContentForm } from '@/components/admin/ContentForm'
-import { Plus, Tags } from 'lucide-react'
+import { Plus, Tags, Users } from 'lucide-react'
 import { AdminContent } from '@/types/content'
 import { useAdminCategories } from '@/hooks/use-admin-categories'
 
@@ -169,6 +169,15 @@ export default function AdminPage() {
               </p>
             </div>
             <div className="flex flex-wrap gap-3">
+              {session.user.role === 'ADMIN' && (
+                <Link
+                  href={`/${locale}/admin/users`}
+                className="inline-flex items-center rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+              >
+                <Users className="mr-2 h-4 w-4" />
+                Quản lý người dùng
+              </Link>
+            )}
               {session.user.role === 'ADMIN' && (
                 <Link
                   href={`/${locale}/admin/categories`}
