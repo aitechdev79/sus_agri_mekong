@@ -9,11 +9,7 @@ const heroPlaybackId = process.env.NEXT_PUBLIC_MUX_HERO_PLAYBACK_ID;
 export default function HeroSection() {
   return (
     <section
-      className="relative min-h-[75vh] w-screen overflow-hidden md:min-h-0 md:aspect-[5/2]"
-      style={{
-        marginLeft: 'calc(50% - 50vw)',
-        marginRight: 'calc(50% - 50vw)',
-      }}
+      className="relative left-1/2 min-h-[75vh] w-screen -translate-x-1/2 overflow-hidden md:min-h-0 md:aspect-[5/2]"
     >
       <NavigationBar />
 
