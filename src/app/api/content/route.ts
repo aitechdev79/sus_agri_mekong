@@ -30,11 +30,11 @@ function validateSectionPlacement(type: string, sectionKey?: string | null) {
   if (!sectionKey) return { ok: true }
 
   if (sectionKey === 'HOME_DIEN_HINH' && type !== 'STORY') {
-    return { ok: false, error: 'Muc "Thuc hanh dien hinh" chi nhan noi dung loai STORY.' }
+    return { ok: false, error: 'Mục "Thực hành điển hình" chỉ nhận nội dung loại STORY.' }
   }
 
   if (sectionKey === 'HOME_HOAT_DONG_DU_AN' && type !== 'PROJECT_ACTIVITY') {
-    return { ok: false, error: 'Muc "Hoat dong du an" chi nhan noi dung loai PROJECT_ACTIVITY.' }
+    return { ok: false, error: 'Mục "Hoạt động dự án" chỉ nhận nội dung loại PROJECT_ACTIVITY.' }
   }
 
   return { ok: true }
@@ -42,7 +42,7 @@ function validateSectionPlacement(type: string, sectionKey?: string | null) {
 
 async function validateCategoryForCreate(category?: string) {
   if (!category) {
-    return { ok: false, error: 'Danh muc la bat buoc' }
+    return { ok: false, error: 'Danh mục là bắt buộc' }
   }
 
   const existingCategory = await prisma.category.findUnique({
@@ -51,11 +51,11 @@ async function validateCategoryForCreate(category?: string) {
   })
 
   if (!existingCategory) {
-    return { ok: false, error: 'Danh muc khong ton tai' }
+    return { ok: false, error: 'Danh mục không tồn tại' }
   }
 
   if (!existingCategory.isActive) {
-    return { ok: false, error: 'Danh muc da ngung hoat dong' }
+    return { ok: false, error: 'Danh mục đã ngừng hoạt động' }
   }
 
   return { ok: true }
@@ -150,7 +150,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('Content fetch error:', error)
     return NextResponse.json(
-      { error: 'Khong the tai noi dung' },
+      { error: 'Không thể tải nội dung' },
       { status: 500 }
     )
   }
@@ -162,7 +162,7 @@ export async function POST(request: NextRequest) {
 
     if (!user) {
       return NextResponse.json(
-        { error: 'Can dang nhap de tao noi dung' },
+        { error: 'Cần đăng nhập để tạo nội dung' },
         { status: 401 }
       )
     }
@@ -218,21 +218,21 @@ export async function POST(request: NextRequest) {
 
     if (type === 'PROJECT_ACTIVITY' && !projectUrl) {
       return NextResponse.json(
-        { error: 'Hoat dong du an can co Content URL.' },
+        { error: 'Hoạt động dự án cần có Content URL.' },
         { status: 400 }
       )
     }
 
     if (type === 'EVENT' && !normalizedEventStartAt) {
       return NextResponse.json(
-        { error: 'Su kien can co thoi gian bat dau hop le' },
+        { error: 'Sự kiện cần có thời gian bắt đầu hợp lệ' },
         { status: 400 }
       )
     }
 
     if (normalizedEventStartAt && normalizedEventEndAt && normalizedEventEndAt < normalizedEventStartAt) {
       return NextResponse.json(
-        { error: 'Thoi gian ket thuc phai sau thoi gian bat dau' },
+        { error: 'Thời gian kết thúc phải sau thời gian bắt đầu' },
         { status: 400 }
       )
     }
@@ -284,7 +284,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Content creation error:', error)
     return NextResponse.json(
-      { error: 'Khong the tao noi dung' },
+      { error: 'Không thể tạo nội dung' },
       { status: 500 }
     )
   }

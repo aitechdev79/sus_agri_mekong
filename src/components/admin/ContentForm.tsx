@@ -39,9 +39,12 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
   const [categorySaveLoading, setCategorySaveLoading] = useState(false)
   const [autoSaveStatus, setAutoSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle')
   const [showRestoredNotice, setShowRestoredNotice] = useState(false)
+  const [fallbackCategories, setFallbackCategories] = useState<CategorySummary[]>([])
 
   // Generate a unique key for this form session
   const formStorageKey = `content-form-${content?.id || 'new'}`
+  const getNextCategoryOrder = (source: CategorySummary[]) =>
+    source.length > 0 ? Math.max(...source.map((item) => item.displayOrder), 0) + 10 : 10
 
   // Initialize form data with content or from localStorage
   const getInitialFormData = () => {
@@ -125,8 +128,9 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
     slug: '',
     nameVi: '',
     nameEn: '',
-    displayOrder: categories.length > 0 ? Math.max(...categories.map((item) => item.displayOrder), 0) + 10 : 10
+    displayOrder: getNextCategoryOrder(categories)
   })
+  const availableCategories = categories.length > 0 ? categories : fallbackCategories
 
   // Auto-save to localStorage when form data changes (debounced)
   const saveToLocalStorage = useCallback(() => {
@@ -148,6 +152,47 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
     const timer = setTimeout(saveToLocalStorage, 1000) // Save after 1 second of inactivity
     return () => clearTimeout(timer)
   }, [saveToLocalStorage])
+
+  useEffect(() => {
+    if (categories.length > 0) {
+      setFallbackCategories([])
+      return
+    }
+
+    let isMounted = true
+
+    const loadFallbackCategories = async () => {
+      try {
+        const endpoint =
+          userRole === 'ADMIN' || userRole === 'MODERATOR'
+            ? '/api/admin/categories'
+            : '/api/categories'
+
+        const response = await fetch(endpoint)
+        const data = await response.json()
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Không thể tải danh mục')
+        }
+
+        const nextCategories = Array.isArray(data) ? data : data.categories || []
+        if (isMounted) {
+          setFallbackCategories(nextCategories)
+        }
+      } catch (error) {
+        console.error('ContentForm category fallback load error:', error)
+        if (isMounted) {
+          setFallbackCategories([])
+        }
+      }
+    }
+
+    loadFallbackCategories()
+
+    return () => {
+      isMounted = false
+    }
+  }, [categories, userRole])
 
   // Clear saved data when form is successfully submitted
   const clearSavedData = () => {
@@ -203,7 +248,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
   }
 
   const categoryOptions: CategorySummary[] = (() => {
-    const activeCategories = categories.filter((category) => category.isActive)
+    const activeCategories = availableCategories.filter((category) => category.isActive)
     if (!formData.category || activeCategories.some((category) => category.slug === formData.category)) {
       return activeCategories
     }
@@ -262,7 +307,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
       slug: '',
       nameVi: '',
       nameEn: '',
-      displayOrder: categories.length > 0 ? Math.max(...categories.map((item) => item.displayOrder), 0) + 10 : 10
+      displayOrder: getNextCategoryOrder(availableCategories)
     })
   }
   const handleQuickCategorySubmit = async (e: React.FormEvent) => {
@@ -283,7 +328,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
       })
       const data = await response.json()
       if (!response.ok) {
-        alert(data.error || 'Khong the tao danh muc')
+        alert(data.error || 'Không thể tạo danh mục')
         return
       }
       const createdCategory = data.category as CategorySummary
@@ -293,7 +338,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
       resetQuickCategory()
     } catch (error) {
       console.error('Quick category create error:', error)
-      alert('Khong the tao danh muc')
+      alert('Không thể tạo danh mục')
     } finally {
       setCategorySaveLoading(false)
     }
@@ -502,7 +547,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
                         <div>
               <div className="mb-2 flex items-center justify-between gap-3">
                 <label className="block text-sm font-medium text-gray-700">
-                  Danh muc *
+                  Danh mục *
                 </label>
                 {userRole === 'ADMIN' && (
                   <button
@@ -510,7 +555,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
                     onClick={() => setShowCategoryModal(true)}
                     className="text-sm font-medium text-green-700 hover:text-green-800"
                   >
-                    + Tao danh muc moi
+                    + Tạo danh mục mới
                   </button>
                 )}
               </div>
@@ -521,10 +566,10 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
                 required
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
               >
-                <option value="">Chon danh muc</option>
+                <option value="">Chọn danh mục</option>
                 {categoryOptions.map((category) => (
                   <option key={category.slug} value={category.slug}>
-                    {category.nameVi}{category.isActive ? '' : ' (ngung hoat dong)'}
+                    {category.nameVi}{category.isActive ? '' : ' (ngừng hoạt động)'}
                   </option>
                 ))}
               </select>
@@ -592,7 +637,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
 
               <div>
                 <p className="text-sm text-amber-800">
-                  Dien truong Content URL ben duoi de card mo lien ket ngoai. Truong nay bat buoc voi hoat dong du an.
+                  Điền trường Content URL bên dưới để card mở liên kết ngoài. Trường này bắt buộc với hoạt động dự án.
                 </p>
               </div>
             </div>
@@ -738,7 +783,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Content URL {formData.type === 'PROJECT_ACTIVITY' ? '*' : '(tuy chon)'}
+                  Content URL {formData.type === 'PROJECT_ACTIVITY' ? '*' : '(tùy chọn)'}
                 </label>
                 <input
                   type="url"
@@ -750,7 +795,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                 />
                 <p className="text-xs text-gray-500 mt-1">
-                  Neu nhap, card se mo lien ket ngoai (PDF/bai viet). Neu bo trong, card se mo trang chi tiet noi dung.
+                  Nếu nhập, card sẽ mở liên kết ngoài (PDF/bài viết). Nếu bỏ trống, card sẽ mở trang chi tiết nội dung.
                 </p>
               </div>
 
@@ -946,7 +991,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
         <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/50 p-4">
           <div className="w-full max-w-lg rounded-lg bg-white shadow-xl">
             <div className="flex items-center justify-between border-b px-6 py-4">
-              <h3 className="text-lg font-bold text-gray-900">Tao danh muc moi</h3>
+              <h3 className="text-lg font-bold text-gray-900">Tạo danh mục mới</h3>
               <button
                 type="button"
                 onClick={() => {
@@ -960,7 +1005,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
             </div>
             <form onSubmit={handleQuickCategorySubmit} className="space-y-4 px-6 py-5">
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700">Ten danh muc *</label>
+                <label className="mb-2 block text-sm font-medium text-gray-700">Tên danh mục *</label>
                 <input
                   type="text"
                   value={quickCategory.nameVi}
@@ -979,10 +1024,10 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
                   pattern="[a-z0-9]+(?:[-_][a-z0-9]+)*"
                   className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
-                <p className="mt-1 text-xs text-gray-500">Dung slug chu thuong, khong dau. Legacy slug co underscore van duoc giu de tuong thich.</p>
+                <p className="mt-1 text-xs text-gray-500">Dùng slug chữ thường, không dấu. Legacy slug có underscore vẫn được giữ để tương thích.</p>
               </div>
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700">Ten tieng Anh</label>
+                <label className="mb-2 block text-sm font-medium text-gray-700">Tên tiếng Anh</label>
                 <input
                   type="text"
                   value={quickCategory.nameEn}
@@ -991,7 +1036,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
                 />
               </div>
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700">Thu tu hien thi</label>
+                <label className="mb-2 block text-sm font-medium text-gray-700">Thứ tự hiển thị</label>
                 <input
                   type="number"
                   value={quickCategory.displayOrder}
@@ -1009,10 +1054,10 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
                   }}
                   disabled={categorySaveLoading}
                 >
-                  Huy
+                  Hủy
                 </Button>
                 <Button type="submit" disabled={categorySaveLoading}>
-                  {categorySaveLoading ? 'Dang tao...' : 'Tao danh muc'}
+                  {categorySaveLoading ? 'Đang tạo...' : 'Tạo danh mục'}
                 </Button>
               </div>
             </form>

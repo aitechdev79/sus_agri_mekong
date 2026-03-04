@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('Admin categories fetch error:', error)
     return NextResponse.json(
-      { error: 'Khong the tai danh muc' },
+      { error: 'Không thể tải danh mục' },
       { status: 500 }
     )
   }
@@ -57,22 +57,22 @@ export async function POST(request: NextRequest) {
         : Number(body.displayOrder)
 
     if (!slug) {
-      return NextResponse.json({ error: 'Slug la bat buoc' }, { status: 400 })
+      return NextResponse.json({ error: 'Slug là bắt buộc' }, { status: 400 })
     }
 
     if (!isValidCategorySlug(slug)) {
       return NextResponse.json(
-        { error: 'Slug chi duoc chua chu thuong, so, dau gach ngang hoac underscore' },
+        { error: 'Slug chỉ được chứa chữ thường, số, dấu gạch ngang hoặc underscore' },
         { status: 400 }
       )
     }
 
     if (!nameVi) {
-      return NextResponse.json({ error: 'Ten danh muc la bat buoc' }, { status: 400 })
+      return NextResponse.json({ error: 'Tên danh mục là bắt buộc' }, { status: 400 })
     }
 
     if (!Number.isFinite(displayOrder)) {
-      return NextResponse.json({ error: 'Thu tu hien thi khong hop le' }, { status: 400 })
+      return NextResponse.json({ error: 'Thứ tự hiển thị không hợp lệ' }, { status: 400 })
     }
 
     const created = await prisma.category.create({
@@ -110,11 +110,11 @@ export async function POST(request: NextRequest) {
     console.error('Admin category create error:', error)
 
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
-      return NextResponse.json({ error: 'Slug da ton tai' }, { status: 409 })
+      return NextResponse.json({ error: 'Slug đã tồn tại' }, { status: 409 })
     }
 
     return NextResponse.json(
-      { error: 'Khong the tao danh muc' },
+      { error: 'Không thể tạo danh mục' },
       { status: 500 }
     )
   }

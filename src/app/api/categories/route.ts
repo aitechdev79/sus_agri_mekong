@@ -10,7 +10,7 @@ export async function GET() {
   } catch (error) {
     console.error('Categories fetch error:', error)
     return NextResponse.json(
-      { error: 'Khong the tai danh muc' },
+      { error: 'Không thể tải danh mục' },
       { status: 500 }
     )
   }

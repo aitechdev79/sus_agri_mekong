@@ -24,7 +24,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     const existing = await prisma.category.findUnique({ where: { id } })
 
     if (!existing) {
-      return NextResponse.json({ error: 'Khong tim thay danh muc' }, { status: 404 })
+      return NextResponse.json({ error: 'Không tìm thấy danh mục' }, { status: 404 })
     }
 
     const body = await request.json()
@@ -41,27 +41,27 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     })
 
     if (!slug) {
-      return NextResponse.json({ error: 'Slug la bat buoc' }, { status: 400 })
+      return NextResponse.json({ error: 'Slug là bắt buộc' }, { status: 400 })
     }
 
     if (!isValidCategorySlug(slug)) {
       return NextResponse.json(
-        { error: 'Slug chi duoc chua chu thuong, so, dau gach ngang hoac underscore' },
+        { error: 'Slug chỉ được chứa chữ thường, số, dấu gạch ngang hoặc underscore' },
         { status: 400 }
       )
     }
 
     if (!nameVi) {
-      return NextResponse.json({ error: 'Ten danh muc la bat buoc' }, { status: 400 })
+      return NextResponse.json({ error: 'Tên danh mục là bắt buộc' }, { status: 400 })
     }
 
     if (!Number.isFinite(displayOrder)) {
-      return NextResponse.json({ error: 'Thu tu hien thi khong hop le' }, { status: 400 })
+      return NextResponse.json({ error: 'Thứ tự hiển thị không hợp lệ' }, { status: 400 })
     }
 
     if (existing.slug !== slug && usageCount > 0) {
       return NextResponse.json(
-        { error: 'Danh muc dang duoc su dung. Chi nen doi ten hien thi, khong doi slug.' },
+        { error: 'Danh mục đang được sử dụng. Chỉ nên đổi tên hiển thị, không đổi slug.' },
         { status: 409 }
       )
     }
@@ -103,11 +103,11 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     console.error('Admin category update error:', error)
 
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
-      return NextResponse.json({ error: 'Slug da ton tai' }, { status: 409 })
+      return NextResponse.json({ error: 'Slug đã tồn tại' }, { status: 409 })
     }
 
     return NextResponse.json(
-      { error: 'Khong the cap nhat danh muc' },
+      { error: 'Không thể cập nhật danh mục' },
       { status: 500 }
     )
   }
@@ -125,7 +125,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     const existing = await prisma.category.findUnique({ where: { id } })
 
     if (!existing) {
-      return NextResponse.json({ error: 'Khong tim thay danh muc' }, { status: 404 })
+      return NextResponse.json({ error: 'Không tìm thấy danh mục' }, { status: 404 })
     }
 
     const usageCount = await prisma.content.count({
@@ -134,7 +134,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
 
     if (usageCount > 0) {
       return NextResponse.json(
-        { error: 'Danh muc dang duoc su dung. Hay deactivate thay vi xoa.' },
+        { error: 'Danh mục đang được sử dụng. Hãy deactivate thay vì xóa.' },
         { status: 409 }
       )
     }
@@ -155,7 +155,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
   } catch (error) {
     console.error('Admin category delete error:', error)
     return NextResponse.json(
-      { error: 'Khong the xoa danh muc' },
+      { error: 'Không thể xóa danh mục' },
       { status: 500 }
     )
   }
