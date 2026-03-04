@@ -164,8 +164,8 @@ export default function HoatDongDuAnPage() {
                       href={href}
                       target={isExternal ? '_blank' : undefined}
                       rel={isExternal ? 'noopener noreferrer' : undefined}
-                      className="group mx-auto flex h-full w-full max-w-md flex-col p-5 md:mx-0 md:max-w-none"
-                      style={{ backgroundColor: '#CC9316' }}
+                      className="group mx-auto flex h-full w-full max-w-md flex-col bg-white p-5 border md:mx-0 md:max-w-none"
+                      style={{ borderColor: '#FFB81C' }}
                       aria-label={`${item.title} - ${item.description || ''}`}
                     >
                       {imageSrc && (
