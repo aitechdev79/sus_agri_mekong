@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { ChevronLeft, ChevronRight, FileText } from 'lucide-react';
+import { ChevronLeft, ChevronRight, FileText, Search } from 'lucide-react';
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
 import { ContentListResponse } from '@/types/content';
@@ -23,6 +23,8 @@ export default function ReportsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalDocuments, setTotalDocuments] = useState(0);
+  const [searchInput, setSearchInput] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
   const itemsPerPage = 6;
 
   useEffect(() => {
@@ -35,6 +37,10 @@ export default function ReportsPage() {
           page: currentPage.toString(),
           limit: itemsPerPage.toString(),
         });
+
+        if (searchTerm) {
+          params.append('search', searchTerm);
+        }
 
         const response = await fetch(`/api/content?${params.toString()}`);
         if (!response.ok) {
@@ -56,12 +62,18 @@ export default function ReportsPage() {
     };
 
     fetchDocuments();
-  }, [currentPage]);
+  }, [currentPage, searchTerm]);
 
   const goToPage = (page: number) => {
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setCurrentPage(1);
+    setSearchTerm(searchInput.trim());
   };
 
   const renderPaginationButtons = () => {
@@ -134,10 +146,32 @@ export default function ReportsPage() {
                 </h2>
                 {!loading && (
                   <p className="mt-2 font-montserrat text-sm text-gray-500">
-                    Hiển thị {documents.length} / {totalDocuments} tài liệu
+                    Tìm thấy {totalDocuments} tài liệu
+                    {searchTerm ? ` cho "${searchTerm}"` : ''}
                   </p>
                 )}
               </div>
+
+              <form onSubmit={handleSearchSubmit} className="w-full md:w-[380px]">
+                <div className="flex items-center justify-end gap-2">
+                  <div className="relative w-full">
+                    <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                    <input
+                      type="text"
+                      value={searchInput}
+                      onChange={(event) => setSearchInput(event.target.value)}
+                      placeholder="Tìm kiếm tài liệu..."
+                      className="w-full rounded-md border border-gray-300 py-2.5 pl-10 pr-4 font-montserrat text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="rounded-md bg-indigo-600 px-4 py-2.5 font-montserrat text-sm font-semibold text-white hover:bg-indigo-700"
+                  >
+                    Tìm
+                  </button>
+                </div>
+              </form>
             </div>
 
             {loading ? (
@@ -171,9 +205,9 @@ export default function ReportsPage() {
                         href={href}
                         target={document.fileUrl ? '_blank' : undefined}
                         rel={document.fileUrl ? 'noreferrer' : undefined}
-                        className="group flex h-full min-h-[220px] overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
+                        className="group flex h-full min-h-[360px] flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
                       >
-                        <div className="relative w-[38%] shrink-0 overflow-hidden bg-slate-100">
+                        <div className="relative h-52 w-full overflow-hidden bg-slate-100">
                           {previewImage ? (
                             <Image
                               src={previewImage}
@@ -188,7 +222,7 @@ export default function ReportsPage() {
                           )}
                         </div>
 
-                        <div className="flex flex-1 flex-col justify-center p-5">
+                        <div className="flex flex-1 flex-col p-5">
                           <h3 className="line-clamp-2 font-montserrat text-lg font-bold text-gray-900 transition-colors group-hover:text-indigo-700">
                             {document.title}
                           </h3>
@@ -242,3 +276,4 @@ export default function ReportsPage() {
     </div>
   );
 }
+
