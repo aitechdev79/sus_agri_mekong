@@ -47,7 +47,7 @@ export function CategoryManager({ categories = [], onCategoriesChange }: Categor
         const data = await response.json()
 
         if (!response.ok) {
-          throw new Error(data.error || 'Khong the tai danh muc')
+          throw new Error(data.error || 'Không thể tải danh mục')
         }
 
         const nextCategories = sortCategories(data.categories || [])
@@ -129,7 +129,7 @@ export function CategoryManager({ categories = [], onCategoriesChange }: Categor
 
       const data = await response.json()
       if (!response.ok) {
-        alert(data.error || 'Khong the luu danh muc')
+        alert(data.error || 'Không thể lưu danh mục')
         return
       }
 
@@ -142,7 +142,7 @@ export function CategoryManager({ categories = [], onCategoriesChange }: Categor
       resetForm()
     } catch (error) {
       console.error('Category save error:', error)
-      alert('Khong the luu danh muc')
+      alert('Không thể lưu danh mục')
     } finally {
       setSaving(false)
     }
@@ -166,19 +166,19 @@ export function CategoryManager({ categories = [], onCategoriesChange }: Categor
 
       const data = await response.json()
       if (!response.ok) {
-        alert(data.error || 'Khong the cap nhat trang thai')
+        alert(data.error || 'Không thể cập nhật trạng thái')
         return
       }
 
       syncCategories(localCategories.map((item) => (item.id === category.id ? data.category : item)))
     } catch (error) {
       console.error('Category toggle error:', error)
-      alert('Khong the cap nhat trang thai')
+      alert('Không thể cập nhật trạng thái')
     }
   }
 
   const handleDelete = async (category: CategorySummary) => {
-    if (!confirm(`Xoa danh muc "${category.nameVi}"?`)) {
+    if (!confirm(`Xóa danh mục "${category.nameVi}"?`)) {
       return
     }
 
@@ -189,7 +189,7 @@ export function CategoryManager({ categories = [], onCategoriesChange }: Categor
       const data = await response.json()
 
       if (!response.ok) {
-        alert(data.error || 'Khong the xoa danh muc')
+        alert(data.error || 'Không thể xóa danh mục')
         return
       }
 
@@ -199,7 +199,7 @@ export function CategoryManager({ categories = [], onCategoriesChange }: Categor
       }
     } catch (error) {
       console.error('Category delete error:', error)
-      alert('Khong the xoa danh muc')
+      alert('Không thể xóa danh mục')
     }
   }
 
@@ -207,11 +207,11 @@ export function CategoryManager({ categories = [], onCategoriesChange }: Categor
     <div className="space-y-6">
       <div className="flex flex-col gap-4 rounded-xl border bg-white p-5 shadow-sm md:flex-row md:items-center md:justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Quan ly danh muc</h2>
-          <p className="text-sm text-gray-600">Admin co the tao, sua, khoa va xoa danh muc chua duoc su dung.</p>
+          <h2 className="text-2xl font-bold text-gray-900">Quản lý danh mục</h2>
+          <p className="text-sm text-gray-600">Admin có thể tạo, sửa, khóa và xóa danh mục chưa được sử dụng.</p>
         </div>
         <Button type="button" onClick={openCreate}>
-          Tao danh muc
+          Tạo danh mục
         </Button>
       </div>
 
@@ -224,7 +224,7 @@ export function CategoryManager({ categories = [], onCategoriesChange }: Categor
                 type="search"
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                placeholder="Tim theo ten hoac slug"
+                placeholder="Tìm theo tên hoặc slug"
                 className="w-full rounded-md border border-gray-300 py-2 pl-9 pr-3 focus:outline-none focus:ring-2 focus:ring-green-500"
               />
             </div>
@@ -234,12 +234,12 @@ export function CategoryManager({ categories = [], onCategoriesChange }: Categor
             <table className="w-full">
               <thead className="border-b bg-gray-50">
                 <tr>
-                  <th className="px-5 py-3 text-left text-sm font-medium text-gray-700">Danh muc</th>
+                  <th className="px-5 py-3 text-left text-sm font-medium text-gray-700">Danh mục</th>
                   <th className="px-5 py-3 text-left text-sm font-medium text-gray-700">Slug</th>
-                  <th className="px-5 py-3 text-left text-sm font-medium text-gray-700">Thu tu</th>
-                  <th className="px-5 py-3 text-left text-sm font-medium text-gray-700">So noi dung</th>
-                  <th className="px-5 py-3 text-left text-sm font-medium text-gray-700">Trang thai</th>
-                  <th className="px-5 py-3 text-left text-sm font-medium text-gray-700">Thao tac</th>
+                  <th className="px-5 py-3 text-left text-sm font-medium text-gray-700">Thứ tự</th>
+                  <th className="px-5 py-3 text-left text-sm font-medium text-gray-700">Số nội dung</th>
+                  <th className="px-5 py-3 text-left text-sm font-medium text-gray-700">Trạng thái</th>
+                  <th className="px-5 py-3 text-left text-sm font-medium text-gray-700">Thao tác</th>
                 </tr>
               </thead>
               <tbody>
@@ -258,7 +258,7 @@ export function CategoryManager({ categories = [], onCategoriesChange }: Categor
                           category.isActive ? 'bg-green-100 text-green-800' : 'bg-gray-200 text-gray-700'
                         }`}
                       >
-                        {category.isActive ? 'Dang hoat dong' : 'Da khoa'}
+                        {category.isActive ? 'Đang hoạt động' : 'Đã khóa'}
                       </span>
                     </td>
                     <td className="px-5 py-4">
@@ -267,7 +267,7 @@ export function CategoryManager({ categories = [], onCategoriesChange }: Categor
                           type="button"
                           onClick={() => openEdit(category)}
                           className="rounded p-2 text-blue-600 hover:bg-blue-50"
-                          title="Sua"
+                          title="Sửa"
                         >
                           <Pencil className="h-4 w-4" />
                         </button>
@@ -275,7 +275,7 @@ export function CategoryManager({ categories = [], onCategoriesChange }: Categor
                           type="button"
                           onClick={() => handleToggleActive(category)}
                           className="rounded p-2 text-amber-600 hover:bg-amber-50"
-                          title={category.isActive ? 'Ngung hoat dong' : 'Kich hoat'}
+                          title={category.isActive ? 'Ngừng hoạt động' : 'Kích hoạt'}
                         >
                           <Power className="h-4 w-4" />
                         </button>
@@ -284,7 +284,7 @@ export function CategoryManager({ categories = [], onCategoriesChange }: Categor
                           onClick={() => handleDelete(category)}
                           disabled={category.count > 0}
                           className="rounded p-2 text-red-600 hover:bg-red-50 disabled:cursor-not-allowed disabled:text-gray-300"
-                          title={category.count > 0 ? 'Danh muc dang duoc su dung' : 'Xoa'}
+                          title={category.count > 0 ? 'Danh mục đang được sử dụng' : 'Xóa'}
                         >
                           <Trash2 className="h-4 w-4" />
                         </button>
@@ -296,20 +296,20 @@ export function CategoryManager({ categories = [], onCategoriesChange }: Categor
             </table>
 
             {!loading && filteredCategories.length === 0 && (
-              <div className="px-5 py-10 text-center text-sm text-gray-500">Khong tim thay danh muc nao.</div>
+              <div className="px-5 py-10 text-center text-sm text-gray-500">Không tìm thấy danh mục nào.</div>
             )}
           </div>
         </div>
 
         <div className="rounded-xl border bg-white p-5 shadow-sm">
           <div className="mb-5">
-            <h3 className="text-lg font-semibold text-gray-900">{editingCategory ? 'Sua danh muc' : 'Tao danh muc'}</h3>
-            <p className="text-sm text-gray-600">Slug nen co dinh sau khi dua vao su dung. Khi can doi ten, uu tien sua label.</p>
+            <h3 className="text-lg font-semibold text-gray-900">{editingCategory ? 'Sửa danh mục' : 'Tạo danh mục'}</h3>
+            <p className="text-sm text-gray-600">Slug nên cố định sau khi đưa vào sử dụng. Khi cần đổi tên, ưu tiên sửa label.</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-700">Ten danh muc *</label>
+              <label className="mb-2 block text-sm font-medium text-gray-700">Tên danh mục *</label>
               <input
                 type="text"
                 value={formState.nameVi}
@@ -342,7 +342,7 @@ export function CategoryManager({ categories = [], onCategoriesChange }: Categor
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-700">Ten tieng Anh</label>
+              <label className="mb-2 block text-sm font-medium text-gray-700">Tên tiếng Anh</label>
               <input
                 type="text"
                 value={formState.nameEn}
@@ -352,7 +352,7 @@ export function CategoryManager({ categories = [], onCategoriesChange }: Categor
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-700">Thu tu hien thi</label>
+              <label className="mb-2 block text-sm font-medium text-gray-700">Thứ tự hiển thị</label>
               <input
                 type="number"
                 value={formState.displayOrder}
@@ -370,17 +370,17 @@ export function CategoryManager({ categories = [], onCategoriesChange }: Categor
                 onChange={(event) => setFormState((current) => ({ ...current, isActive: event.target.checked }))}
                 className="rounded border-gray-300"
               />
-              Dang hoat dong
+              Đang hoạt động
             </label>
 
             <div className="flex justify-end gap-3 border-t pt-4">
               {editingCategory && (
                 <Button type="button" variant="ghost" onClick={resetForm}>
-                  Huy chinh sua
+                  Hủy chỉnh sửa
                 </Button>
               )}
               <Button type="submit" disabled={saving}>
-                {saving ? 'Dang luu...' : editingCategory ? 'Cap nhat' : 'Tao danh muc'}
+                {saving ? 'Đang lưu...' : editingCategory ? 'Cập nhật' : 'Tạo danh mục'}
               </Button>
             </div>
           </form>

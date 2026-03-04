@@ -51,7 +51,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('Hoat-dong-du-an fetch error:', error)
     return NextResponse.json(
-      { error: 'Khong the tai danh sach hoat dong du an' },
+      { error: 'Không thể tải danh sách hoạt động dự án' },
       { status: 500 }
     )
   }

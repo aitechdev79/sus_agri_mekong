@@ -51,7 +51,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('Dien-hinh fetch error:', error)
     return NextResponse.json(
-      { error: 'Khong the tai danh sach dien hinh' },
+      { error: 'Không thể tải danh sách điển hình' },
       { status: 500 }
     )
   }

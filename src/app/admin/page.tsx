@@ -86,7 +86,7 @@ export default function AdminPage() {
   }
 
   const handleDeleteContent = async (content: AdminContent) => {
-    if (!confirm('Ban co chac chan muon xoa noi dung nay?')) {
+    if (!confirm('Bạn có chắc chắn muốn xóa nội dung này?')) {
       return
     }
 
@@ -98,11 +98,11 @@ export default function AdminPage() {
       if (response.ok) {
         loadContents()
       } else {
-        alert('Khong the xoa noi dung')
+        alert('Không thể xóa nội dung')
       }
     } catch (error) {
       console.error('Error deleting content:', error)
-      alert('Da xay ra loi khi xoa noi dung')
+      alert('Đã xảy ra lỗi khi xóa nội dung')
     }
   }
 
@@ -120,11 +120,11 @@ export default function AdminPage() {
         loadContents()
       } else {
         const error = await response.json()
-        alert(error.error || 'Khong the thuc hien hanh dong')
+        alert(error.error || 'Không thể thực hiện hành động')
       }
     } catch (error) {
       console.error('Error with bulk action:', error)
-      alert('Da xay ra loi')
+      alert('Đã xảy ra lỗi')
     }
   }
 
@@ -152,8 +152,8 @@ export default function AdminPage() {
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
-            <h1 className="text-3xl font-bold">Quan Ly Noi Dung</h1>
-            <p className="mt-2 text-sm text-gray-600">Danh muc da duoc tach sang taxonomy dong va dung chung tu database.</p>
+            <h1 className="text-3xl font-bold">Quản lý nội dung</h1>
+            <p className="mt-2 text-sm text-gray-600">Danh mục đã được tách sang taxonomy động và dùng chung từ database.</p>
           </div>
           <div className="flex flex-wrap gap-3">
             {session.user.role === 'ADMIN' && (
@@ -162,12 +162,12 @@ export default function AdminPage() {
                 className="inline-flex items-center rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
               >
                 <Tags className="mr-2 h-4 w-4" />
-                Quan ly danh muc
+                Quản lý danh mục
               </Link>
             )}
             <Button onClick={handleCreateContent}>
               <Plus className="mr-2 h-4 w-4" />
-              Them Noi Dung
+              Thêm nội dung
             </Button>
           </div>
         </div>

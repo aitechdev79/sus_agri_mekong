@@ -24,7 +24,7 @@ export function useAdminCategories(enabled = true) {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || 'Khong the tai danh muc')
+        throw new Error(data.error || 'Không thể tải danh mục')
       }
 
       setCategories(sortCategories(data.categories || []))

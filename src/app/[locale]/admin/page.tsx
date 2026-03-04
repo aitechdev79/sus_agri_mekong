@@ -97,7 +97,7 @@ export default function AdminPage() {
   }
 
   const handleDeleteContent = async (content: AdminContent) => {
-    if (!confirm('Ban co chac chan muon xoa noi dung nay?')) {
+    if (!confirm('Bạn có chắc chắn muốn xóa nội dung này?')) {
       return
     }
 
@@ -109,11 +109,11 @@ export default function AdminPage() {
       if (response.ok) {
         fetchAdminData()
       } else {
-        alert('Khong the xoa noi dung')
+        alert('Không thể xóa nội dung')
       }
     } catch (error) {
       console.error('Error deleting content:', error)
-      alert('Da xay ra loi khi xoa noi dung')
+      alert('Đã xảy ra lỗi khi xóa nội dung')
     }
   }
 
@@ -131,11 +131,11 @@ export default function AdminPage() {
         fetchAdminData()
       } else {
         const error = await response.json()
-        alert(error.error || 'Khong the thuc hien hanh dong')
+        alert(error.error || 'Không thể thực hiện hành động')
       }
     } catch (error) {
       console.error('Error with bulk action:', error)
-      alert('Da xay ra loi')
+      alert('Đã xảy ra lỗi')
     }
   }
 
@@ -165,40 +165,40 @@ export default function AdminPage() {
             <div>
               <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
               <p className="mt-2 text-sm text-gray-600">
-                Tong {stats.totalContent} noi dung, {stats.published} da xuat ban, {stats.draft} ban nhap.
+                Tổng {stats.totalContent} nội dung, {stats.published} đã xuất bản, {stats.draft} bản nháp.
               </p>
             </div>
             <div className="flex flex-wrap gap-3">
               {session.user.role === 'ADMIN' && (
                 <Link
                   href={`/${locale}/admin/categories`}
-                  className="inline-flex items-center rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-                >
-                  <Tags className="mr-2 h-4 w-4" />
-                  Quan ly danh muc
-                </Link>
-              )}
+                className="inline-flex items-center rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+              >
+                <Tags className="mr-2 h-4 w-4" />
+                Quản lý danh mục
+              </Link>
+            )}
               <button
                 onClick={handleCreateContent}
                 className="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
               >
                 <Plus className="mr-2 h-4 w-4" />
-                Them noi dung
+                Thêm nội dung
               </button>
             </div>
           </div>
 
           <div className="mb-6 grid gap-4 md:grid-cols-3">
             <div className="rounded-xl bg-white p-5 shadow-sm">
-              <div className="text-sm text-gray-500">Tong noi dung</div>
+              <div className="text-sm text-gray-500">Tổng nội dung</div>
               <div className="mt-2 text-3xl font-bold text-gray-900">{stats.totalContent}</div>
             </div>
             <div className="rounded-xl bg-white p-5 shadow-sm">
-              <div className="text-sm text-gray-500">Luot xem</div>
+              <div className="text-sm text-gray-500">Lượt xem</div>
               <div className="mt-2 text-3xl font-bold text-gray-900">{stats.totalViews.toLocaleString('vi-VN')}</div>
             </div>
             <div className="rounded-xl bg-white p-5 shadow-sm">
-              <div className="text-sm text-gray-500">Danh muc dang dung</div>
+              <div className="text-sm text-gray-500">Danh mục đang dùng</div>
               <div className="mt-2 text-3xl font-bold text-gray-900">{categories.filter((item) => item.isActive).length}</div>
             </div>
           </div>
