@@ -35,7 +35,7 @@ export default function AboutSection() {
       title: 'Tầm nhìn, sứ mệnh, mục tiêu',
       description: 'Cam kết cung cấp thông tin minh bạch và đáng tin cậy để xây dựng tương lai bền vững',
       href: '/commitment',
-      image: '/camket.jpeg',
+      image: '/nong dan duoc mua.jpg',
       accentColor: 'vn-green',
     },
     {
@@ -152,4 +152,5 @@ export default function AboutSection() {
     </section>
   );
 }
+
 
