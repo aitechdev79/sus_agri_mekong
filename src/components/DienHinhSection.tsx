@@ -21,6 +21,7 @@ export default function DienHinhSection() {
   const [loading, setLoading] = useState(true);
   const pathname = usePathname();
   const locale = getLocaleFromPathname(pathname);
+  const isEn = locale === 'en';
   const localizedContentPrefix = locale === 'en' || locale === 'vi' ? `/${locale}` : '';
   const allStoriesHref = `${localizedContentPrefix}/tat-ca-dien-hinh`;
 
@@ -32,15 +33,11 @@ export default function DienHinhSection() {
         const response = await fetch('/api/sections/home/dien-hinh');
         if (!response.ok) return;
         const data = await response.json();
-        if (isMounted) {
-          setItems(data || []);
-        }
+        if (isMounted) setItems(data || []);
       } catch (error) {
         console.error('Failed to load dien-hinh items:', error);
       } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
+        if (isMounted) setLoading(false);
       }
     };
 
@@ -56,23 +53,21 @@ export default function DienHinhSection() {
         <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
           <div>
             <h2 className="text-3xl font-bold mb-4 md:text-4xl font-montserrat text-left" style={{ color: '#3C3C3B' }}>
-              Thực hành điển hình - Lan tỏa giá trị
+              {isEn ? 'Best Practices - Stories that inspire' : 'Thực hành điển hình - Lan tỏa giá trị'}
             </h2>
             <p className="text-lg font-montserrat text-left max-w-3xl" style={{ color: '#6B7280' }}>
-              Khám phá những câu chuyện thành công và mô hình, sáng kiến điển hình trong phát triển bền vững tại Việt Nam
+              {isEn
+                ? 'Discover successful stories, models and initiatives for sustainable development in Viet Nam.'
+                : 'Khám phá những câu chuyện thành công và mô hình, sáng kiến điển hình trong phát triển bền vững tại Việt Nam'}
             </p>
           </div>
 
           <Link
             href={allStoriesHref}
             className="inline-flex items-center gap-2 self-start rounded-xl border px-6 py-3 font-bold transition-all duration-300 hover:-translate-y-1 hover:scale-105"
-            style={{
-              backgroundColor: 'transparent',
-              borderColor: '#FFC107',
-              color: '#C28A00',
-            }}
+            style={{ backgroundColor: 'transparent', borderColor: '#FFC107', color: '#C28A00' }}
           >
-            Xem tất cả
+            {isEn ? 'View all' : 'Xem tất cả'}
             <span className="text-xl">→</span>
           </Link>
         </div>
@@ -90,7 +85,7 @@ export default function DienHinhSection() {
         )}
 
         {!loading && items.length === 0 && (
-          <div className="text-sm text-gray-500">Chưa có nội dung điển hình.</div>
+          <div className="text-sm text-gray-500">{isEn ? 'No best-practice content yet.' : 'Chưa có nội dung điển hình.'}</div>
         )}
 
         {items.length > 0 && (
@@ -102,12 +97,7 @@ export default function DienHinhSection() {
               const href = `${localizedContentPrefix}/content/${item.id}`;
 
               return (
-                <Link
-                  key={item.id}
-                  href={href}
-                  className="group block flex flex-col"
-                  aria-label={`${title} - ${description || ''}`}
-                >
+                <Link key={item.id} href={href} className="group block flex flex-col" aria-label={`${title} - ${description || ''}`}>
                   <div className="relative overflow-hidden mb-4 bg-gray-100" style={{ aspectRatio: '16/9' }}>
                     {imageSrc ? (
                       <Image
@@ -119,17 +109,14 @@ export default function DienHinhSection() {
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-sm text-gray-400">
-                        Không có ảnh
+                        {isEn ? 'No image' : 'Không có ảnh'}
                       </div>
                     )}
                   </div>
 
                   <div className="relative flex h-[180px] flex-col pb-4 md:h-[200px]">
-                    <div className="absolute bottom-0 left-0 w-full h-0.5" style={{ backgroundColor: '#E8F5E9' }}></div>
-                    <div
-                      className="absolute bottom-0 left-0 h-0.5 w-0 transition-all duration-500 ease-out group-hover:w-full"
-                      style={{ backgroundColor: '#0A7029' }}
-                    ></div>
+                    <div className="absolute bottom-0 left-0 w-full h-0.5" style={{ backgroundColor: '#E8F5E9' }} />
+                    <div className="absolute bottom-0 left-0 h-0.5 w-0 transition-all duration-500 ease-out group-hover:w-full" style={{ backgroundColor: '#0A7029' }} />
 
                     <h3 className="text-lg md:text-xl font-bold mb-2 font-montserrat" style={{ color: '#3C3C3B' }}>
                       {title}

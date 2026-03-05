@@ -2,21 +2,27 @@
 
 import Link from 'next/link';
 import { Leaf, Search } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import { getLocaleFromPathname, withLocalePrefix } from '@/lib/content-locale';
 
 export default function ToolsGrid() {
+  const pathname = usePathname();
+  const locale = getLocaleFromPathname(pathname);
+  const isEn = locale === 'en';
+
   const tools = [
     {
       id: 'library',
-      title: 'Tìm kiếm thông tin',
-      href: '/library',
-      icon: <Search className="w-8 h-8" strokeWidth={2.25} />,
+      title: isEn ? 'Search Knowledge' : 'Tìm kiếm thông tin',
+      href: withLocalePrefix('/library', locale),
+      icon: <Search className="w-8 h-8" strokeWidth={2.25} />
     },
     {
       id: 'policy',
-      title: 'Tìm hiểu ESG',
-      href: '/esg',
-      icon: <Leaf className="w-8 h-8" strokeWidth={2.25} />,
-    },
+      title: isEn ? 'Explore ESG' : 'Tìm hiểu ESG',
+      href: withLocalePrefix('/esg', locale),
+      icon: <Leaf className="w-8 h-8" strokeWidth={2.25} />
+    }
   ];
 
   return (
@@ -24,7 +30,7 @@ export default function ToolsGrid() {
       <div className="container mx-auto px-6 max-w-6xl relative z-10">
         <div className="mb-12 text-left">
           <h2 className="text-3xl font-bold mb-4 md:text-4xl font-montserrat" style={{ color: '#3C3C3B' }}>
-            Công Cụ Hỗ Trợ
+            {isEn ? 'Support Tools' : 'Công Cụ Hỗ Trợ'}
           </h2>
         </div>
 
@@ -35,9 +41,7 @@ export default function ToolsGrid() {
                 key={tool.id}
                 href={tool.href}
                 className="group block overflow-hidden bg-white transition-all duration-500"
-                style={{
-                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)'
-                }}
+                style={{ boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)' }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.12)';
                 }}
@@ -49,7 +53,6 @@ export default function ToolsGrid() {
                   <div className="w-16 h-16 flex-shrink-0 mr-4 bg-[#0A7029] flex items-center justify-center text-white">
                     {tool.icon}
                   </div>
-
                   <div className="flex-1 flex flex-col justify-center">
                     <h3 className="text-lg md:text-xl font-bold font-montserrat" style={{ color: '#3C3C3B' }}>
                       {tool.title}
@@ -63,10 +66,7 @@ export default function ToolsGrid() {
           <div className="md:flex-1">
             <div
               className="group block overflow-hidden transition-all duration-500 h-full"
-              style={{
-                backgroundColor: '#0A7029',
-                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
-              }}
+              style={{ backgroundColor: '#0A7029', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)' }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.12)';
               }}
@@ -78,16 +78,10 @@ export default function ToolsGrid() {
                 <div className="mb-3 w-12 h-12 bg-white/20 flex items-center justify-center">
                   <span className="text-3xl">📊</span>
                 </div>
-
-                <h3 className="font-montserrat font-black text-2xl mb-1 text-white">
-                  BÁO CÁO
-                </h3>
-                <h4 className="font-montserrat font-black text-3xl mb-2 text-white">
-                  2025
-                </h4>
-
+                <h3 className="font-montserrat font-black text-2xl mb-1 text-white">{isEn ? 'REPORT' : 'BÁO CÁO'}</h3>
+                <h4 className="font-montserrat font-black text-3xl mb-2 text-white">2025</h4>
                 <p className="font-montserrat text-sm font-semibold text-white/90">
-                  Phát triển Bền vững
+                  {isEn ? 'Sustainable Development' : 'Phát triển Bền vững'}
                 </p>
               </div>
             </div>
