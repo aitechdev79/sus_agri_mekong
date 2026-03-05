@@ -129,7 +129,7 @@ export default function TatCaDienHinhPage() {
             Thực hành điển hình
           </h1>
           <p className="mt-3 max-w-3xl text-lg text-gray-600">
-            Khám phá toàn bộ các câu chuyện, mô hình và sáng kiến điển hình đang được giới thiệu trên trang chủ.
+            Khám phá toàn bộ các câu chuyện, mô hình và sáng kiến điển hình.
           </p>
         </header>
 
