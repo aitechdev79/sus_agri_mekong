@@ -3,7 +3,9 @@ export function isEnglishLocale(locale?: string | null) {
   return locale.toLowerCase().startsWith('en')
 }
 
-export function getLocaleFromPathname(pathname: string) {
+export function getLocaleFromPathname(pathname?: string | null) {
+  if (!pathname) return 'vi'
+
   const segment = pathname.split('/')[1]
   if (segment === 'en' || segment === 'vi') {
     return segment
