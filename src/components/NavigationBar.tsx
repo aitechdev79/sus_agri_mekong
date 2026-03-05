@@ -31,11 +31,11 @@ export default function NavigationBar() {
           signIn: 'SIGN IN'
         }
       : {
-          home: 'Trang chu',
-          library: 'Thu vien',
-          news: 'Tin tuc',
-          explore: 'Kham pha',
-          signIn: 'DANG NHAP'
+          home: 'Trang chủ',
+          library: 'Thư viện',
+          news: 'Tin tức',
+          explore: 'Khám phá',
+          signIn: 'ĐĂNG NHẬP'
         };
 
   return (

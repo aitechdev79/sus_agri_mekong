@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import { getLocaleFromPathname } from '@/lib/content-locale';
 
 interface Event {
   id: string;
@@ -16,13 +18,15 @@ interface EventCalendarProps {
 
 export default function EventCalendar({ events }: EventCalendarProps) {
   const [currentDate, setCurrentDate] = useState(new Date());
+  const pathname = usePathname();
+  const locale = getLocaleFromPathname(pathname);
+  const isEn = locale === 'en';
 
-  const monthNames = [
-    'Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6',
-    'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'
-  ];
+  const monthNames = isEn
+    ? ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    : ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'];
 
-  const dayNames = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
+  const dayNames = isEn ? ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] : ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
 
   const getDaysInMonth = (date: Date) => {
     const year = date.getFullYear();
@@ -74,7 +78,7 @@ export default function EventCalendar({ events }: EventCalendarProps) {
   return (
     <div className="bg-white rounded-lg p-6 shadow-md">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-xl font-bold text-gray-800 font-montserrat">LỊCH SỰ KIỆN</h3>
+        <h3 className="text-xl font-bold text-gray-800 font-montserrat">{isEn ? 'EVENT CALENDAR' : 'LỊCH SỰ KIỆN'}</h3>
         <button className="text-blue-600 hover:text-blue-700">
           <span className="text-2xl">»</span>
         </button>
@@ -89,14 +93,14 @@ export default function EventCalendar({ events }: EventCalendarProps) {
           <button
             onClick={previousMonth}
             className="w-10 h-10 rounded-full border-2 border-gray-300 flex items-center justify-center hover:bg-gray-100 transition-colors"
-            aria-label="Previous month"
+            aria-label={isEn ? 'Previous month' : 'Tháng trước'}
           >
             <ChevronLeft className="w-5 h-5 text-gray-600" />
           </button>
           <button
             onClick={nextMonth}
             className="w-10 h-10 rounded-full border-2 border-gray-300 flex items-center justify-center hover:bg-gray-100 transition-colors"
-            aria-label="Next month"
+            aria-label={isEn ? 'Next month' : 'Tháng sau'}
           >
             <ChevronRight className="w-5 h-5 text-gray-600" />
           </button>
@@ -153,11 +157,11 @@ export default function EventCalendar({ events }: EventCalendarProps) {
       <div className="flex items-center justify-center gap-6 pt-4 border-t">
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 rounded-full bg-blue-600"></div>
-          <span className="text-sm text-gray-600">Sự kiện</span>
+          <span className="text-sm text-gray-600">{isEn ? 'Event' : 'Sự kiện'}</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 rounded-full bg-yellow-500"></div>
-          <span className="text-sm text-gray-600">Đào tạo</span>
+          <span className="text-sm text-gray-600">{isEn ? 'Training' : 'Đào tạo'}</span>
         </div>
       </div>
     </div>

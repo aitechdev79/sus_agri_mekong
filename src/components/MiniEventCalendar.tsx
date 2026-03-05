@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import { getLocaleFromPathname } from '@/lib/content-locale';
 
 interface Event {
   id: string;
@@ -16,13 +18,15 @@ interface MiniEventCalendarProps {
 
 export default function MiniEventCalendar({ events }: MiniEventCalendarProps) {
   const [currentDate, setCurrentDate] = useState(new Date());
+  const pathname = usePathname();
+  const locale = getLocaleFromPathname(pathname);
+  const isEn = locale === 'en';
 
-  const monthNames = [
-    'Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6',
-    'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'
-  ];
+  const monthNames = isEn
+    ? ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    : ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'];
 
-  const dayNames = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
+  const dayNames = isEn ? ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] : ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
 
   const getDaysInMonth = (date: Date) => {
     const year = date.getFullYear();
@@ -72,7 +76,7 @@ export default function MiniEventCalendar({ events }: MiniEventCalendarProps) {
   return (
     <div className="bg-white rounded-lg p-4 shadow-md h-full flex flex-col">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-bold text-gray-800 font-montserrat">Lịch sự kiện</h3>
+        <h3 className="text-lg font-bold text-gray-800 font-montserrat">{isEn ? 'Event Calendar' : 'Lịch sự kiện'}</h3>
       </div>
 
       <div className="flex items-center justify-between mb-3">
@@ -83,14 +87,14 @@ export default function MiniEventCalendar({ events }: MiniEventCalendarProps) {
           <button
             onClick={previousMonth}
             className="w-7 h-7 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 transition-colors"
-            aria-label="Previous month"
+            aria-label={isEn ? 'Previous month' : 'Tháng trước'}
           >
             <ChevronLeft className="w-4 h-4 text-gray-600" />
           </button>
           <button
             onClick={nextMonth}
             className="w-7 h-7 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 transition-colors"
-            aria-label="Next month"
+            aria-label={isEn ? 'Next month' : 'Tháng sau'}
           >
             <ChevronRight className="w-4 h-4 text-gray-600" />
           </button>
@@ -154,11 +158,11 @@ export default function MiniEventCalendar({ events }: MiniEventCalendarProps) {
       <div className="flex items-center justify-center gap-4 pt-3 border-t text-xs">
         <div className="flex items-center gap-1">
           <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#0A7029' }}></div>
-          <span className="text-gray-600">Sự kiện sắp tới</span>
+          <span className="text-gray-600">{isEn ? 'Upcoming events' : 'Sự kiện sắp tới'}</span>
         </div>
         <div className="flex items-center gap-1">
           <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#F97316' }}></div>
-          <span className="text-gray-600">Sự kiện đã qua</span>
+          <span className="text-gray-600">{isEn ? 'Past events' : 'Sự kiện đã qua'}</span>
         </div>
       </div>
     </div>
