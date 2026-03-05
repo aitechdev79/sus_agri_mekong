@@ -8,7 +8,6 @@ interface DienHinhItem {
   id: string;
   title: string;
   description?: string | null;
-  projectUrl?: string | null;
   thumbnailUrl?: string | null;
   imageUrl?: string | null;
 }
@@ -90,15 +89,12 @@ export default function DienHinhSection() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-start">
             {items.map((item) => {
               const imageSrc = item.thumbnailUrl || item.imageUrl || '';
-              const href = item.projectUrl || `/content/${item.id}`;
-              const isExternal = Boolean(item.projectUrl);
+              const href = `/content/${item.id}`;
 
               return (
                 <Link
                   key={item.id}
                   href={href}
-                  target={isExternal ? '_blank' : undefined}
-                  rel={isExternal ? 'noopener noreferrer' : undefined}
                   className="group block flex flex-col"
                   aria-label={`${item.title} - ${item.description || ''}`}
                 >
