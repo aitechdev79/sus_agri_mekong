@@ -4,10 +4,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight, FileText, Search } from 'lucide-react';
+import { usePathname } from 'next/navigation';
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
 import { ContentListResponse } from '@/types/content';
-import { usePathname } from 'next/navigation';
 import { getLocaleFromPathname, pickLocalizedText, withLocalePrefix } from '@/lib/content-locale';
 
 interface ReportDocument {
@@ -24,7 +24,9 @@ interface ReportDocument {
 export default function ReportsPage() {
   const pathname = usePathname();
   const locale = getLocaleFromPathname(pathname);
+  const isEn = locale === 'en';
   const contentDetailPrefix = withLocalePrefix('/content', locale);
+
   const [documents, setDocuments] = useState<ReportDocument[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -37,12 +39,11 @@ export default function ReportsPage() {
   useEffect(() => {
     const fetchDocuments = async () => {
       setLoading(true);
-
       try {
         const params = new URLSearchParams({
           type: 'DOCUMENT',
           page: currentPage.toString(),
-          limit: itemsPerPage.toString(),
+          limit: itemsPerPage.toString()
         });
 
         if (searchTerm) {
@@ -86,7 +87,6 @@ export default function ReportsPage() {
   const renderPaginationButtons = () => {
     const buttons = [];
     const maxButtons = 5;
-
     let startPage = Math.max(1, currentPage - Math.floor(maxButtons / 2));
     const endPage = Math.min(totalPages, startPage + maxButtons - 1);
 
@@ -122,23 +122,17 @@ export default function ReportsPage() {
       <main className="pt-16">
         <section className="relative overflow-hidden bg-gradient-to-br from-indigo-900 via-indigo-800 to-blue-900 py-20 text-white">
           <div className="absolute inset-0 opacity-10">
-            <Image
-              src="/vecteezy_topo_34242655.svg"
-              alt="Background pattern"
-              fill
-              className="object-cover"
-              priority={false}
-            />
+            <Image src="/vecteezy_topo_34242655.svg" alt="Background pattern" fill className="object-cover" priority={false} />
           </div>
-
           <div className="container relative z-10 mx-auto max-w-6xl px-6">
             <div className="max-w-4xl">
               <h1 className="font-montserrat text-4xl font-bold md:text-5xl">
-                Thư viện Nghiên cứu & Báo cáo
+                {isEn ? 'Research & Reports Library' : 'Thư viện Nghiên cứu & Báo cáo'}
               </h1>
               <p className="mt-6 max-w-3xl font-montserrat text-lg leading-relaxed text-indigo-100 md:text-xl">
-                Tổng hợp các tài liệu nghiên cứu, báo cáo và ấn phẩm chuyên sâu để bạn tra cứu nhanh
-                theo từng nội dung đã được xuất bản trên hệ thống.
+                {isEn
+                  ? 'A curated collection of research documents, reports, and publications for quick reference.'
+                  : 'Tổng hợp các tài liệu nghiên cứu, báo cáo và ấn phẩm chuyên sâu để bạn tra cứu nhanh theo từng nội dung đã được xuất bản trên hệ thống.'}
               </p>
             </div>
           </div>
@@ -148,13 +142,11 @@ export default function ReportsPage() {
           <div className="container mx-auto max-w-6xl px-6">
             <div className="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
               <div>
-                <h2 className="font-montserrat text-3xl font-bold text-gray-900">
-                  Tài liệu
-                </h2>
+                <h2 className="font-montserrat text-3xl font-bold text-gray-900">{isEn ? 'Documents' : 'Tài liệu'}</h2>
                 {!loading && (
                   <p className="mt-2 font-montserrat text-sm text-gray-500">
-                    Tìm thấy {totalDocuments} tài liệu
-                    {searchTerm ? ` cho "${searchTerm}"` : ''}
+                    {isEn ? `Found ${totalDocuments} documents` : `Tìm thấy ${totalDocuments} tài liệu`}
+                    {searchTerm ? (isEn ? ` for "${searchTerm}"` : ` cho "${searchTerm}"`) : ''}
                   </p>
                 )}
               </div>
@@ -167,15 +159,12 @@ export default function ReportsPage() {
                       type="text"
                       value={searchInput}
                       onChange={(event) => setSearchInput(event.target.value)}
-                      placeholder="Tìm kiếm tài liệu..."
+                      placeholder={isEn ? 'Search documents...' : 'Tìm kiếm tài liệu...'}
                       className="w-full rounded-md border border-gray-300 py-2.5 pl-10 pr-4 font-montserrat text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
                     />
                   </div>
-                  <button
-                    type="submit"
-                    className="rounded-md bg-indigo-600 px-4 py-2.5 font-montserrat text-sm font-semibold text-white hover:bg-indigo-700"
-                  >
-                    Tìm
+                  <button type="submit" className="rounded-md bg-indigo-600 px-4 py-2.5 font-montserrat text-sm font-semibold text-white hover:bg-indigo-700">
+                    {isEn ? 'Search' : 'Tìm'}
                   </button>
                 </div>
               </form>
@@ -184,19 +173,14 @@ export default function ReportsPage() {
             {loading ? (
               <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
                 {Array.from({ length: itemsPerPage }).map((_, index) => (
-                  <div
-                    key={index}
-                    className="h-52 animate-pulse rounded-2xl border border-gray-200 bg-gray-100"
-                  />
+                  <div key={index} className="h-52 animate-pulse rounded-2xl border border-gray-200 bg-gray-100" />
                 ))}
               </div>
             ) : documents.length === 0 ? (
               <div className="rounded-2xl border border-dashed border-gray-300 bg-gray-50 px-6 py-16 text-center">
-                <h3 className="font-montserrat text-xl font-bold text-gray-700">
-                  Chưa có tài liệu nào
-                </h3>
+                <h3 className="font-montserrat text-xl font-bold text-gray-700">{isEn ? 'No documents yet' : 'Chưa có tài liệu nào'}</h3>
                 <p className="mt-2 font-montserrat text-sm text-gray-500">
-                  Khi có nội dung loại Tài liệu được xuất bản, danh sách sẽ hiển thị tại đây.
+                  {isEn ? 'Published document contents will appear here.' : 'Khi có nội dung loại Tài liệu được xuất bản, danh sách sẽ hiển thị tại đây.'}
                 </p>
               </div>
             ) : (
@@ -218,12 +202,7 @@ export default function ReportsPage() {
                       >
                         <div className="relative h-52 w-full overflow-hidden bg-slate-100">
                           {previewImage ? (
-                            <Image
-                              src={previewImage}
-                              alt={localizedTitle}
-                              fill
-                              className="object-cover transition-transform duration-300 group-hover:scale-105"
-                            />
+                            <Image src={previewImage} alt={localizedTitle} fill className="object-cover transition-transform duration-300 group-hover:scale-105" />
                           ) : (
                             <div className="flex h-full items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200">
                               <FileText className="h-12 w-12 text-slate-400" />
@@ -236,7 +215,7 @@ export default function ReportsPage() {
                             {localizedTitle}
                           </h3>
                           <p className="mt-3 line-clamp-3 font-montserrat text-sm leading-6 text-gray-600">
-                            {localizedDescription?.trim() || 'Tài liệu đang được cập nhật mô tả ngắn.'}
+                            {localizedDescription?.trim() || (isEn ? 'Short description is being updated.' : 'Tài liệu đang được cập nhật mô tả ngắn.')}
                           </p>
                         </div>
                       </Link>
@@ -251,9 +230,7 @@ export default function ReportsPage() {
                         onClick={() => goToPage(currentPage - 1)}
                         disabled={currentPage === 1}
                         className={`flex h-10 w-10 items-center justify-center rounded-md border ${
-                          currentPage === 1
-                            ? 'cursor-not-allowed border-gray-200 text-gray-300'
-                            : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                          currentPage === 1 ? 'cursor-not-allowed border-gray-200 text-gray-300' : 'border-gray-300 text-gray-700 hover:bg-gray-50'
                         }`}
                       >
                         <ChevronLeft className="h-5 w-5" />
@@ -265,9 +242,7 @@ export default function ReportsPage() {
                         onClick={() => goToPage(currentPage + 1)}
                         disabled={currentPage === totalPages}
                         className={`flex h-10 w-10 items-center justify-center rounded-md border ${
-                          currentPage === totalPages
-                            ? 'cursor-not-allowed border-gray-200 text-gray-300'
-                            : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                          currentPage === totalPages ? 'cursor-not-allowed border-gray-200 text-gray-300' : 'border-gray-300 text-gray-700 hover:bg-gray-50'
                         }`}
                       >
                         <ChevronRight className="h-5 w-5" />
@@ -285,4 +260,3 @@ export default function ReportsPage() {
     </div>
   );
 }
-
