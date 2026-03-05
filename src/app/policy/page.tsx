@@ -30,6 +30,7 @@ interface PolicyResponse {
 export default function PolicyPage() {
   const pathname = usePathname();
   const locale = getLocaleFromPathname(pathname);
+  const isEn = locale === 'en';
   const contentDetailPrefix = withLocalePrefix('/content', locale);
   const [policies, setPolicies] = useState<PolicyItem[]>([]);
   const [loadingPolicies, setLoadingPolicies] = useState(true);
@@ -76,58 +77,62 @@ export default function PolicyPage() {
     {
       code: 'SA8000',
       name: 'Social Accountability International',
-      description: 'Tiêu chuẩn quốc tế về trách nhiệm xã hội trong môi trường làm việc',
-      areas: ['Lao động', 'Nhân quyền', 'An toàn'],
+      description: locale === 'en' ? 'International social accountability standard for workplaces' : 'Tiêu chuẩn quốc tế về trách nhiệm xã hội trong môi trường làm việc',
+      areas: locale === 'en' ? ['Labor', 'Human rights', 'Safety'] : ['Lao động', 'Nhân quyền', 'An toàn'],
       href: 'https://sa-intl.org/wp-content/uploads/2020/01/SA8000Standard2014-VietnameseFinal1.pdf',
     },
     {
       code: 'BSCI',
       name: 'Business Social Compliance Initiative',
-      description: 'Sáng kiến tuân thủ xã hội doanh nghiệp châu Âu',
-      areas: ['Chuỗi cung ứng', 'Lao động', 'Đạo đức'],
+      description: locale === 'en' ? 'European social compliance initiative for business supply chains' : 'Sáng kiến tuân thủ xã hội doanh nghiệp châu Âu',
+      areas: locale === 'en' ? ['Supply chain', 'Labor', 'Ethics'] : ['Chuỗi cung ứng', 'Lao động', 'Đạo đức'],
       href: 'https://clv.vn/tieu-chuan-bsci-la-gi/',
     },
     {
       code: 'ASC',
       name: 'Aquaculture Stewardship Council',
-      description: 'Tiêu chuẩn nuôi trồng thủy sản có trách nhiệm',
-      areas: ['Thủy sản', 'Môi trường', 'Bền vững'],
+      description: locale === 'en' ? 'Responsible aquaculture standard' : 'Tiêu chuẩn nuôi trồng thủy sản có trách nhiệm',
+      areas: locale === 'en' ? ['Aquaculture', 'Environment', 'Sustainability'] : ['Thủy sản', 'Môi trường', 'Bền vững'],
       href: 'https://times.seafoodlegacy.com/vi/words/asc/',
     },
     {
       code: 'SRP',
       name: 'Sustainable Rice Platform',
-      description: 'Nền tảng lúa gạo bền vững toàn cầu',
-      areas: ['Nông nghiệp', 'Lúa gạo', 'Bền vững'],
+      description: locale === 'en' ? 'Global platform for sustainable rice production' : 'Nền tảng lúa gạo bền vững toàn cầu',
+      areas: locale === 'en' ? ['Agriculture', 'Rice', 'Sustainability'] : ['Nông nghiệp', 'Lúa gạo', 'Bền vững'],
       href: 'https://tiasang.com.vn/srp-bo-tieu-chuan-san-xuat-lua-gao-ben-vung-4967298.html',
     },
     {
       code: 'ISO 22000',
       name: 'Food Safety Management',
-      description: 'Hệ thống quản lý an toàn thực phẩm',
-      areas: ['An toàn thực phẩm', 'Chất lượng', 'Quản lý'],
+      description: locale === 'en' ? 'Food safety management system standard' : 'Hệ thống quản lý an toàn thực phẩm',
+      areas: locale === 'en' ? ['Food safety', 'Quality', 'Management'] : ['An toàn thực phẩm', 'Chất lượng', 'Quản lý'],
       href: 'https://tqc.vn/iso-22000-la-gi-cac-yeu-cau-va-loi-ich-khi-chung-nhan-iso-22000-2018.htm',
     },
     {
       code: 'GRS',
       name: 'Global Reporting Initiative',
-      description: 'Tiêu chuẩn báo cáo bền vững toàn cầu',
-      areas: ['ESG', 'Báo cáo', 'Minh bạch'],
+      description: locale === 'en' ? 'Global sustainability reporting framework' : 'Tiêu chuẩn báo cáo bền vững toàn cầu',
+      areas: locale === 'en' ? ['ESG', 'Reporting', 'Transparency'] : ['ESG', 'Báo cáo', 'Minh bạch'],
       href: 'https://tqc.vn/grs-la-gi.htm',
     },
   ];
 
   const expertQuotes = [
     {
-      quote: 'Việc cập nhật và tuân thủ các quy định pháp lý về ESG không chỉ là nghĩa vụ mà còn là cơ hội để doanh nghiệp nâng cao năng lực cạnh tranh và tiếp cận thị trường quốc tế.',
-      author: 'TS. Nguyễn Văn Minh',
-      position: 'Chuyên gia Chính sách Phát triển Bền vững',
+      quote: locale === 'en'
+        ? 'Keeping up with ESG regulations is not only a compliance duty but also a strategic opportunity to improve competitiveness and reach international markets.'
+        : 'Việc cập nhật và tuân thủ các quy định pháp lý về ESG không chỉ là nghĩa vụ mà còn là cơ hội để doanh nghiệp nâng cao năng lực cạnh tranh và tiếp cận thị trường quốc tế.',
+      author: locale === 'en' ? 'Dr. Nguyen Van Minh' : 'TS. Nguyễn Văn Minh',
+      position: locale === 'en' ? 'Sustainable Development Policy Expert' : 'Chuyên gia Chính sách Phát triển Bền vững',
       organization: 'Viện Chiến lược và Chính sách Tài nguyên Môi trường',
     },
     {
-      quote: 'Doanh nghiệp cần chủ động theo dõi và điều chỉnh hoạt động kinh doanh phù hợp với các tiêu chuẩn quốc tế như SA8000, BSCI để đảm bảo vị thế trong chuỗi giá trị toàn cầu.',
-      author: 'Luật sư Trần Thị Hương',
-      position: 'Giám đốc Pháp chế',
+      quote: locale === 'en'
+        ? 'Businesses should proactively align their operations with international standards such as SA8000 and BSCI to stay competitive in global value chains.'
+        : 'Doanh nghiệp cần chủ động theo dõi và điều chỉnh hoạt động kinh doanh phù hợp với các tiêu chuẩn quốc tế như SA8000, BSCI để đảm bảo vị thế trong chuỗi giá trị toàn cầu.',
+      author: locale === 'en' ? 'Lawyer Tran Thi Huong' : 'Luật sư Trần Thị Hương',
+      position: locale === 'en' ? 'Legal Director' : 'Giám đốc Pháp chế',
       organization: 'Phòng Thương mại và Công nghiệp Việt Nam (VCCI)',
     },
   ];
@@ -194,7 +199,7 @@ export default function PolicyPage() {
           onClick={() => goToPage(totalPages)}
           className="rounded border px-3 py-1 hover:bg-gray-100"
         >
-          Trang cuối
+          {isEn ? 'Last page' : 'Trang cuối'}
         </button>
       );
     }
@@ -220,13 +225,13 @@ export default function PolicyPage() {
             />
           </div>
           <div className="container relative z-10 mx-auto max-w-6xl px-6">
-            <h1 className="mb-6 font-montserrat text-4xl font-bold md:text-5xl">
-              Theo dõi Chính sách & Quy định
+          <h1 className="mb-6 font-montserrat text-4xl font-bold md:text-5xl">
+              {isEn ? 'Policy & Regulation Watch' : 'Theo dõi Chính sách & Quy định'}
             </h1>
             <p className="max-w-4xl font-montserrat text-lg leading-relaxed text-blue-100 md:text-xl">
-              Khám phá chuyên mục Theo dõi chính sách & quy định, nơi cập nhật những thay đổi pháp lý quan trọng
-              trong lĩnh vực phát triển bền vững, báo cáo bền vững ESG, chuyển đổi xanh. Với tóm tắt ngắn gọn,
-              bạn dễ dàng nắm bắt tác động chính sách và tiếp cận bối cảnh thực tiễn từ các nghiên cứu, tiêu chuẩn quốc tế.
+              {isEn
+                ? 'Track key legal and compliance updates across sustainability, ESG reporting, and green transition with practical summaries and reference context.'
+                : 'Khám phá chuyên mục Theo dõi chính sách & quy định, nơi cập nhật những thay đổi pháp lý quan trọng trong lĩnh vực phát triển bền vững, báo cáo bền vững ESG, chuyển đổi xanh. Với tóm tắt ngắn gọn, bạn dễ dàng nắm bắt tác động chính sách và tiếp cận bối cảnh thực tiễn từ các nghiên cứu, tiêu chuẩn quốc tế.'}
             </p>
           </div>
         </section>
@@ -236,12 +241,12 @@ export default function PolicyPage() {
             <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
               <div>
                 <h2 className="font-montserrat text-3xl font-bold text-gray-800">
-              Chính sách & Quy định nổi bật
+              {isEn ? 'Featured Policies & Regulations' : 'Chính sách & Quy định nổi bật'}
                 </h2>
                 {!loadingPolicies && (
                   <p className="mt-2 font-montserrat text-sm text-gray-500">
-                    Tìm thấy {totalPolicies} nội dung chính sách
-                    {searchTerm ? ` cho "${searchTerm}"` : ''}
+                    {isEn ? `Found ${totalPolicies} policy items` : `Tìm thấy ${totalPolicies} nội dung chính sách`}
+                    {searchTerm ? (isEn ? ` for "${searchTerm}"` : ` cho "${searchTerm}"`) : ''}
                   </p>
                 )}
               </div>
@@ -254,7 +259,7 @@ export default function PolicyPage() {
                       type="text"
                       value={searchInput}
                       onChange={(event) => setSearchInput(event.target.value)}
-                      placeholder="Tìm kiếm policy..."
+                      placeholder={isEn ? 'Search policy...' : 'Tìm kiếm policy...'}
                       className="w-full rounded-md border border-gray-300 py-2.5 pl-10 pr-4 font-montserrat text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                     />
                   </div>
@@ -262,7 +267,7 @@ export default function PolicyPage() {
                     type="submit"
                     className="rounded-md bg-blue-600 px-4 py-2.5 font-montserrat text-sm font-semibold text-white hover:bg-blue-700"
                   >
-                    Tìm
+                    {isEn ? 'Search' : 'Tìm'}
                   </button>
                 </div>
               </form>
@@ -282,15 +287,15 @@ export default function PolicyPage() {
               </div>
             ) : policies.length === 0 ? (
               <div className="border border-gray-200 bg-gray-50 p-12 text-center text-gray-500">
-                Chưa có nội dung chính sách nào.
+                {isEn ? 'No policy content available yet.' : 'Chưa có nội dung chính sách nào.'}
               </div>
             ) : (
               <div>
                 <div className="overflow-hidden border border-gray-200 bg-white">
                   <div className="grid grid-cols-[80px_minmax(0,1.1fr)_minmax(0,0.9fr)] border-b border-gray-200 bg-gray-50 font-montserrat text-sm font-semibold uppercase tracking-wide text-gray-600">
                     <div className="p-4 text-center">STT</div>
-                    <div className="border-l border-gray-200 p-4">Tiêu đề</div>
-                    <div className="border-l border-gray-200 p-4">Mô tả ngắn</div>
+                    <div className="border-l border-gray-200 p-4">{isEn ? 'Title' : 'Tiêu đề'}</div>
+                    <div className="border-l border-gray-200 p-4">{isEn ? 'Short description' : 'Mô tả ngắn'}</div>
                   </div>
 
                   {policies.map((policy, index) => (
@@ -313,7 +318,7 @@ export default function PolicyPage() {
                       </div>
                       <div className="border-l border-gray-200 p-4">
                         <p className="font-montserrat text-sm italic leading-relaxed text-gray-600">
-                          {localizedDescription || 'Chưa có mô tả ngắn.'}
+                          {localizedDescription || (isEn ? 'No short description.' : 'Chưa có mô tả ngắn.')}
                         </p>
                       </div>
                     </Link>
@@ -357,10 +362,10 @@ export default function PolicyPage() {
         <section className="bg-gray-50 py-16">
           <div className="container mx-auto max-w-6xl px-6">
             <h2 className="mb-4 font-montserrat text-3xl font-bold text-gray-800">
-              Tiêu chuẩn Quốc tế
+              {isEn ? 'International Standards' : 'Tiêu chuẩn Quốc tế'}
             </h2>
             <p className="mb-8 font-montserrat text-lg text-gray-600">
-              Các tiêu chuẩn quốc tế được áp dụng rộng rãi trong chuỗi giá trị bền vững
+              {isEn ? 'International standards widely applied in sustainable value chains' : 'Các tiêu chuẩn quốc tế được áp dụng rộng rãi trong chuỗi giá trị bền vững'}
             </p>
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
               {internationalStandards.map((standard) => (
@@ -391,7 +396,7 @@ export default function PolicyPage() {
         <section className="bg-white py-16">
           <div className="container mx-auto max-w-6xl px-6">
             <h2 className="mb-8 text-center font-montserrat text-3xl font-bold text-gray-800">
-              Ý kiến Chuyên gia
+              {isEn ? 'Expert Opinions' : 'Ý kiến Chuyên gia'}
             </h2>
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
               {expertQuotes.map((item, index) => (
@@ -425,13 +430,13 @@ export default function PolicyPage() {
         <section className="bg-blue-900 py-12 text-white">
           <div className="container mx-auto max-w-6xl px-6 text-center">
             <h2 className="mb-4 font-montserrat text-3xl font-bold">
-              Cần hỗ trợ về chính sách và quy định?
+              {isEn ? 'Need support on policies and regulations?' : 'Cần hỗ trợ về chính sách và quy định?'}
             </h2>
             <p className="mb-6 font-montserrat text-lg text-blue-100">
-              Liên hệ với chúng tôi để được tư vấn chi tiết về các chính sách, quy định và tiêu chuẩn quốc tế
+              {isEn ? 'Contact us for detailed guidance on policies, regulations, and international standards.' : 'Liên hệ với chúng tôi để được tư vấn chi tiết về các chính sách, quy định và tiêu chuẩn quốc tế'}
             </p>
             <button className="rounded-lg bg-white px-8 py-3 font-montserrat font-bold text-blue-900 transition-colors duration-200 hover:bg-blue-50">
-              Liên hệ ngay
+              {isEn ? 'Contact now' : 'Liên hệ ngay'}
             </button>
           </div>
         </section>

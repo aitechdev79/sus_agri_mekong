@@ -26,6 +26,7 @@ export default function NewsPage({ params }: { params: Promise<{ locale: string 
   const [loading, setLoading] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
   const { categoryLabels } = usePublicCategories();
+  const isEn = locale === 'en';
 
   useEffect(() => {
     params.then(p => setLocale(p.locale));
@@ -52,7 +53,7 @@ export default function NewsPage({ params }: { params: Promise<{ locale: string 
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('vi-VN', {
+    return date.toLocaleDateString(isEn ? 'en-US' : 'vi-VN', {
       day: '2-digit',
       month: '2-digit',
       year: 'numeric'
@@ -122,7 +123,7 @@ export default function NewsPage({ params }: { params: Promise<{ locale: string 
             }}
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Về trang chủ
+            {isEn ? 'Back to home' : 'Về trang chủ'}
           </Link>
         </div>
       </header>
@@ -133,10 +134,10 @@ export default function NewsPage({ params }: { params: Promise<{ locale: string 
           <div className="lg:col-span-2">
             <div className="mb-8">
               <h1 className="text-3xl md:text-4xl font-bold mb-2 font-montserrat" style={{ color: '#3C3C3B' }}>
-                Sự Kiện Sắp Diễn Ra
+                {isEn ? 'Upcoming Events' : 'Sự Kiện Sắp Diễn Ra'}
               </h1>
               <p className="text-lg font-montserrat" style={{ color: '#6B7280' }}>
-                Cập nhật những sự kiện mới nhất và sắp diễn ra
+                {isEn ? 'Latest updates on upcoming activities and events' : 'Cập nhật những sự kiện mới nhất và sắp diễn ra'}
               </p>
             </div>
 
@@ -173,7 +174,7 @@ export default function NewsPage({ params }: { params: Promise<{ locale: string 
                                 />
                               ) : (
                                 <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                                  <span className="text-gray-500">Không có hình ảnh</span>
+                                  <span className="text-gray-500">{isEn ? 'No image' : 'Không có hình ảnh'}</span>
                                 </div>
                               )}
                               {/* Date Badge - Green theme */}
@@ -206,7 +207,7 @@ export default function NewsPage({ params }: { params: Promise<{ locale: string 
                               <div className="flex items-center gap-4 text-sm" style={{ color: '#9CA3AF' }}>
                                 <div className="flex items-center gap-1">
                                   <Eye className="w-4 h-4" />
-                                  <span>{item.viewCount} lượt xem</span>
+                                  <span>{item.viewCount} {isEn ? 'views' : 'lượt xem'}</span>
                                 </div>
                                 {item.category && (
                                   <span className="px-3 py-1 text-xs font-semibold font-montserrat" style={{ backgroundColor: '#E8F5E9', color: '#0A7029' }}>
@@ -287,7 +288,9 @@ export default function NewsPage({ params }: { params: Promise<{ locale: string 
               </div>
             ) : (
               <div className="bg-white p-12 text-center" style={{ boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)' }}>
-                <p className="text-lg font-montserrat" style={{ color: '#6B7280' }}>Chưa có sự kiện nào được đăng</p>
+                <p className="text-lg font-montserrat" style={{ color: '#6B7280' }}>
+                  {isEn ? 'No events have been published yet' : 'Chưa có sự kiện nào được đăng'}
+                </p>
               </div>
             )}
           </div>
@@ -305,10 +308,10 @@ export default function NewsPage({ params }: { params: Promise<{ locale: string 
         <div className="mt-16">
           <div className="mb-8">
             <h2 className="text-3xl font-bold mb-2 md:text-4xl font-montserrat" style={{ color: '#3C3C3B' }}>
-              Tin Sự Kiện
+              {isEn ? 'Event News' : 'Tin Sự Kiện'}
             </h2>
             <p className="text-lg font-montserrat max-w-3xl" style={{ color: '#6B7280' }}>
-              Danh sách các tin tức và sự kiện nổi bật
+              {isEn ? 'Highlighted news and event updates' : 'Danh sách các tin tức và sự kiện nổi bật'}
             </p>
           </div>
 
@@ -382,7 +385,7 @@ export default function NewsPage({ params }: { params: Promise<{ locale: string 
                       <div className="flex items-center gap-4 text-sm" style={{ color: '#9CA3AF' }}>
                         <div className="flex items-center gap-1">
                           <Eye className="w-4 h-4" />
-                          <span>{item.viewCount} lượt xem</span>
+                          <span>{item.viewCount} {isEn ? 'views' : 'lượt xem'}</span>
                         </div>
                         {item.category && (
                           <span className="px-3 py-1 text-xs font-semibold font-montserrat" style={{ backgroundColor: '#E8F5E9', color: '#0A7029' }}>
@@ -398,7 +401,9 @@ export default function NewsPage({ params }: { params: Promise<{ locale: string 
             </div>
           ) : (
             <div className="bg-white p-12 text-center" style={{ boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)' }}>
-              <p className="text-lg font-montserrat" style={{ color: '#6B7280' }}>Chưa có tin tức nào được đăng</p>
+              <p className="text-lg font-montserrat" style={{ color: '#6B7280' }}>
+                {isEn ? 'No news has been published yet' : 'Chưa có tin tức nào được đăng'}
+              </p>
             </div>
           )}
         </div>

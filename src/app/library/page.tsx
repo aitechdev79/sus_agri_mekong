@@ -13,103 +13,123 @@ import { usePublicCategories } from '@/hooks/use-public-categories'
 import { usePathname } from 'next/navigation'
 import { getLocaleFromPathname, pickLocalizedText, withLocalePrefix } from '@/lib/content-locale'
 
-const quickAccessCards = [
-  {
-    id: 'policy',
-    title: 'Chính sách và quy định',
-    description: 'Cập nhật các chính sách, quy định và văn bản pháp luật liên quan đến doanh nghiệp',
-    href: '/policy',
-    icon: FileText,
-    accentClassName: 'bg-[#FFB81C] text-[#3C3C3B]',
-  },
-  {
-    id: 'reports',
-    title: 'Nghiên cứu và Báo cáo',
-    description: 'Khám phá các nghiên cứu, báo cáo và phân tích chuyên sâu về phát triển bền vững',
-    href: '/reports',
-    icon: BarChart3,
-    accentClassName: 'bg-[#FFB81C] text-[#3C3C3B]',
-  },
-  {
-    id: 'global',
-    title: 'Thực hành tốt trên thế giới',
-    description: 'Học hỏi từ các mô hình phát triển bền vững thành công của doanh nghiệp toàn cầu',
-    href: '/global_best_practice',
-    icon: Globe2,
-    accentClassName: 'bg-[#FFB81C] text-[#3C3C3B]',
-  },
-  {
-    id: 'vietnam',
-    title: 'Thực hành tốt tại Việt Nam',
-    description: 'Khám phá các điển hình ESG xuất sắc trong doanh nghiệp và cộng đồng Việt Nam',
-    href: '/VN_best_practice',
-    icon: Globe2,
-    accentClassName: 'bg-[#FFB81C] text-[#3C3C3B]',
-    imageIcon: '/VN map icon.png',
-  },
-] as const
+function getQuickAccessCards(isEn: boolean) {
+  return [
+    {
+      id: 'policy',
+      title: isEn ? 'Policies & Regulations' : 'Chính sách và quy định',
+      description: isEn
+        ? 'Latest regulations, legal updates, and compliance references for businesses'
+        : 'Cập nhật các chính sách, quy định và văn bản pháp luật liên quan đến doanh nghiệp',
+      href: '/policy',
+      icon: FileText,
+      accentClassName: 'bg-[#FFB81C] text-[#3C3C3B]',
+    },
+    {
+      id: 'reports',
+      title: isEn ? 'Research & Reports' : 'Nghiên cứu và Báo cáo',
+      description: isEn
+        ? 'Explore in-depth research, reports, and analysis on sustainable development'
+        : 'Khám phá các nghiên cứu, báo cáo và phân tích chuyên sâu về phát triển bền vững',
+      href: '/reports',
+      icon: BarChart3,
+      accentClassName: 'bg-[#FFB81C] text-[#3C3C3B]',
+    },
+    {
+      id: 'global',
+      title: isEn ? 'Global Good Practices' : 'Thực hành tốt trên thế giới',
+      description: isEn
+        ? 'Learn from successful sustainability models and international case studies'
+        : 'Học hỏi từ các mô hình phát triển bền vững thành công của doanh nghiệp toàn cầu',
+      href: '/global_best_practice',
+      icon: Globe2,
+      accentClassName: 'bg-[#FFB81C] text-[#3C3C3B]',
+    },
+    {
+      id: 'vietnam',
+      title: isEn ? 'Good Practices in Vietnam' : 'Thực hành tốt tại Việt Nam',
+      description: isEn
+        ? 'Discover outstanding ESG stories from Vietnamese businesses and communities'
+        : 'Khám phá các điển hình ESG xuất sắc trong doanh nghiệp và cộng đồng Việt Nam',
+      href: '/VN_best_practice',
+      icon: Globe2,
+      accentClassName: 'bg-[#FFB81C] text-[#3C3C3B]',
+      imageIcon: '/VN map icon.png',
+    },
+  ] as const
+}
 
-const resourceSections = [
-  {
-    title: 'An toàn vệ sinh lao động',
-    icon: '🦺',
-    iconType: 'emoji' as const,
-    links: [
-      { title: 'ILO - Occupational Safety and Health', url: 'https://www.ilo.org/global/topics/safety-and-health-at-work/lang--en/index.htm' },
-      { title: 'WHO - Occupational Health', url: 'https://www.who.int/health-topics/occupational-health' },
-      { title: 'OSHA - Vietnam Safety Guidelines', url: 'https://www.osha.gov/international-cooperation' },
-    ],
-  },
-  {
-    title: 'ESG',
-    icon: '/ESG_rice.jpg',
-    iconType: 'image' as const,
-    links: [
-      { title: 'UN Global Compact - ESG Reporting', url: 'https://www.unglobalcompact.org/what-is-gc/our-work/environment' },
-      { title: 'GRI Standards - Sustainability Reporting', url: 'https://www.globalreporting.org/standards/' },
-      { title: 'SASB Standards - ESG Disclosure', url: 'https://www.sasb.org/standards/' },
-    ],
-  },
-  {
-    title: 'Chính sách và quy định',
-    icon: '📋',
-    iconType: 'emoji' as const,
-    links: [
-      { title: 'Luật Lao động Việt Nam 2019', url: 'https://thuvienphapluat.vn/van-ban/Lao-dong-Tien-luong/Bo-luat-lao-dong-2019-333670.aspx' },
-      { title: 'Nghị định về An toàn lao động', url: 'https://thuvienphapluat.vn/tim-van-ban-phap-luat.html' },
-      { title: 'Quy chuẩn ESG tại Việt Nam', url: 'https://www.ssc.gov.vn/' },
-    ],
-  },
-  {
-    title: 'Thực hành tốt trên thế giới',
-    icon: '🌍',
-    iconType: 'emoji' as const,
-    links: [
-      { title: 'ILO - Better Work Programme', url: 'https://betterwork.org/' },
-      { title: 'Sustainable Agriculture Practices - FAO', url: 'https://www.fao.org/sustainability/en/' },
-      { title: 'Global Good Agricultural Practices', url: 'https://www.globalgap.org/' },
-    ],
-  },
-  {
-    title: 'Thực hành tốt tại Việt Nam',
-    icon: '/VN map icon.png',
-    iconType: 'image' as const,
-    links: [
-      { title: 'VCCI - Doanh nghiệp bền vững', url: 'https://www.vcci.com.vn/' },
-      { title: 'VnSAT - Nông nghiệp bền vững', url: 'https://www.vnsat.org.vn/' },
-      { title: 'GRAISEA - Thực hành tốt Đông Nam Á', url: 'https://graisea.github.io/' },
-    ],
-  },
-]
+function getResourceSections(isEn: boolean) {
+  return [
+    {
+      title: isEn ? 'Occupational Health & Safety' : 'An toàn vệ sinh lao động',
+      icon: '🦺',
+      iconType: 'emoji' as const,
+      links: [
+        { title: 'ILO - Occupational Safety and Health', url: 'https://www.ilo.org/global/topics/safety-and-health-at-work/lang--en/index.htm' },
+        { title: 'WHO - Occupational Health', url: 'https://www.who.int/health-topics/occupational-health' },
+        { title: 'OSHA - Vietnam Safety Guidelines', url: 'https://www.osha.gov/international-cooperation' },
+      ],
+    },
+    {
+      title: 'ESG',
+      icon: '/ESG_rice.jpg',
+      iconType: 'image' as const,
+      links: [
+        { title: 'UN Global Compact - ESG Reporting', url: 'https://www.unglobalcompact.org/what-is-gc/our-work/environment' },
+        { title: 'GRI Standards - Sustainability Reporting', url: 'https://www.globalreporting.org/standards/' },
+        { title: 'SASB Standards - ESG Disclosure', url: 'https://www.sasb.org/standards/' },
+      ],
+    },
+    {
+      title: isEn ? 'Policies & Regulations' : 'Chính sách và quy định',
+      icon: '📋',
+      iconType: 'emoji' as const,
+      links: [
+        { title: isEn ? 'Vietnam Labour Code 2019' : 'Luật Lao động Việt Nam 2019', url: 'https://thuvienphapluat.vn/van-ban/Lao-dong-Tien-luong/Bo-luat-lao-dong-2019-333670.aspx' },
+        { title: isEn ? 'Occupational Safety Decrees' : 'Nghị định về An toàn lao động', url: 'https://thuvienphapluat.vn/tim-van-ban-phap-luat.html' },
+        { title: isEn ? 'Vietnam ESG Standards' : 'Quy chuẩn ESG tại Việt Nam', url: 'https://www.ssc.gov.vn/' },
+      ],
+    },
+    {
+      title: isEn ? 'Global Good Practices' : 'Thực hành tốt trên thế giới',
+      icon: '🌍',
+      iconType: 'emoji' as const,
+      links: [
+        { title: 'ILO - Better Work Programme', url: 'https://betterwork.org/' },
+        { title: 'Sustainable Agriculture Practices - FAO', url: 'https://www.fao.org/sustainability/en/' },
+        { title: 'Global Good Agricultural Practices', url: 'https://www.globalgap.org/' },
+      ],
+    },
+    {
+      title: isEn ? 'Good Practices in Vietnam' : 'Thực hành tốt tại Việt Nam',
+      icon: '/VN map icon.png',
+      iconType: 'image' as const,
+      links: [
+        { title: isEn ? 'VCCI - Sustainable Business' : 'VCCI - Doanh nghiệp bền vững', url: 'https://www.vcci.com.vn/' },
+        { title: isEn ? 'VnSAT - Sustainable Agriculture' : 'VnSAT - Nông nghiệp bền vững', url: 'https://www.vnsat.org.vn/' },
+        { title: isEn ? 'GRAISEA - ASEAN Good Practices' : 'GRAISEA - Thực hành tốt Đông Nam Á', url: 'https://graisea.github.io/' },
+      ],
+    },
+  ]
+}
 
-function getTypeLabel(type: string) {
-  const typeMap: Record<string, string> = {
-    STORY: 'Điển hình',
-    GUIDE: 'Hướng dẫn',
-    POLICY: 'Chính sách',
-    ARTICLE: 'Bài viết',
-    DOCUMENT: 'Tài liệu',
-  }
+function getTypeLabel(type: string, isEn: boolean) {
+  const typeMap: Record<string, string> = isEn
+    ? {
+      STORY: 'Story',
+      GUIDE: 'Guide',
+      POLICY: 'Policy',
+      ARTICLE: 'Article',
+      DOCUMENT: 'Document',
+    }
+    : {
+      STORY: 'Điển hình',
+      GUIDE: 'Hướng dẫn',
+      POLICY: 'Chính sách',
+      ARTICLE: 'Bài viết',
+      DOCUMENT: 'Tài liệu',
+    }
 
   return typeMap[type] || type
 }
@@ -126,11 +146,11 @@ function getTypeAccent(type: string) {
   return accentMap[type] || 'bg-[#E8F5E9] text-[#0A7029]'
 }
 
-function formatDate(dateString: string) {
+function formatDate(dateString: string, isEn: boolean) {
   const date = new Date(dateString)
   if (Number.isNaN(date.getTime())) return ''
 
-  return date.toLocaleDateString('vi-VN', {
+  return date.toLocaleDateString(isEn ? 'en-US' : 'vi-VN', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
@@ -140,7 +160,10 @@ function formatDate(dateString: string) {
 export default function LibraryPage() {
   const pathname = usePathname()
   const locale = getLocaleFromPathname(pathname)
+  const isEn = locale === 'en'
   const contentDetailPrefix = withLocalePrefix('/content', locale)
+  const quickAccessCards = getQuickAccessCards(isEn)
+  const resourceSections = getResourceSections(isEn)
   const [contents, setContents] = useState<LibraryContent[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
@@ -202,7 +225,7 @@ export default function LibraryPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
   const getCategoryLabel = (category?: string | null) => {
-    if (!category) return 'Chưa phân loại'
+    if (!category) return isEn ? 'Uncategorized' : 'Chưa phân loại'
     return categoryLabels[category] || category
   }
   return (
@@ -215,31 +238,33 @@ export default function LibraryPage() {
             <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
               <div>
                 <p className="mb-4 font-montserrat text-sm font-semibold uppercase tracking-[0.22em] text-[#0A7029]">
-                  Knowledge Hub
+                  {isEn ? 'Knowledge Hub' : 'Knowledge Hub'}
                 </p>
                 <h1 className="mb-6 font-montserrat text-4xl font-bold text-[#3C3C3B] md:text-5xl">
-                  Thư viện nội dung cho hành trình phát triển bền vững
+                  {isEn ? 'Content library for your sustainable development journey' : 'Thư viện nội dung cho hành trình phát triển bền vững'}
                 </h1>
                 <p className="max-w-3xl font-montserrat text-lg leading-relaxed text-[#5F6368]">
-                  Tập hợp báo cáo, hướng dẫn, chính sách và các thực hành đáng chú ý để doanh nghiệp, tổ chức và nhà nghiên cứu có thể tra cứu nhanh, đọc sâu và áp dụng vào thực tiễn.
+                  {isEn
+                    ? 'A curated collection of reports, guides, policies, and good practices so businesses, organizations, and researchers can quickly access and apply practical insights.'
+                    : 'Tập hợp báo cáo, hướng dẫn, chính sách và các thực hành đáng chú ý để doanh nghiệp, tổ chức và nhà nghiên cứu có thể tra cứu nhanh, đọc sâu và áp dụng vào thực tiễn.'}
                 </p>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-white p-5 shadow-sm">
-                  <div className="mb-2 font-montserrat text-sm uppercase tracking-wide text-[#6B7280]">Tổng tài liệu</div>
+                  <div className="mb-2 font-montserrat text-sm uppercase tracking-wide text-[#6B7280]">{isEn ? 'Total items' : 'Tổng tài liệu'}</div>
                   <div className="font-montserrat text-4xl font-bold text-[#0A7029]">{pagination.total}</div>
                 </div>
                 <div className="bg-white p-5 shadow-sm">
-                  <div className="mb-2 font-montserrat text-sm uppercase tracking-wide text-[#6B7280]">Nhóm nội dung</div>
+                  <div className="mb-2 font-montserrat text-sm uppercase tracking-wide text-[#6B7280]">{isEn ? 'Content groups' : 'Nhóm nội dung'}</div>
                   <div className="font-montserrat text-4xl font-bold text-[#C28A00]">{quickAccessCards.length}</div>
                 </div>
                 <div className="bg-white p-5 shadow-sm">
-                  <div className="mb-2 font-montserrat text-sm uppercase tracking-wide text-[#6B7280]">Trang hiện tại</div>
+                  <div className="mb-2 font-montserrat text-sm uppercase tracking-wide text-[#6B7280]">{isEn ? 'Current page' : 'Trang hiện tại'}</div>
                   <div className="font-montserrat text-4xl font-bold text-[#3C3C3B]">{pagination.page}</div>
                 </div>
                 <div className="bg-white p-5 shadow-sm">
-                  <div className="mb-2 font-montserrat text-sm uppercase tracking-wide text-[#6B7280]">Tài liệu / trang</div>
+                  <div className="mb-2 font-montserrat text-sm uppercase tracking-wide text-[#6B7280]">{isEn ? 'Items / page' : 'Tài liệu / trang'}</div>
                   <div className="font-montserrat text-4xl font-bold text-[#3C3C3B]">{pagination.limit}</div>
                 </div>
               </div>
@@ -302,18 +327,18 @@ export default function LibraryPage() {
             <div className="mb-10 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
               <div>
                 <h2 className="mb-3 font-montserrat text-3xl font-bold text-[#3C3C3B] md:text-4xl">
-                  Kho tài liệu
+                  {isEn ? 'Document Repository' : 'Kho tài liệu'}
                 </h2>
                 <p className="max-w-3xl font-montserrat text-lg text-[#6B7280]">
-                  Tìm theo chủ đề, loại nội dung hoặc truy cập trực tiếp các tài liệu mới nhất.
+                  {isEn ? 'Search by topic, content type, or browse the latest publications.' : 'Tìm theo chủ đề, loại nội dung hoặc truy cập trực tiếp các tài liệu mới nhất.'}
                 </p>
               </div>
 
               <div className="text-sm font-montserrat text-[#6B7280]">
                 {!loading && (
                   <span>
-                    Tìm thấy {pagination.total} tài liệu
-                    {searchTerm && ` cho "${searchTerm}"`}
+                    {isEn ? `Found ${pagination.total} items` : `Tìm thấy ${pagination.total} tài liệu`}
+                    {searchTerm && (isEn ? ` for "${searchTerm}"` : ` cho "${searchTerm}"`)}
                   </span>
                 )}
               </div>
@@ -325,7 +350,7 @@ export default function LibraryPage() {
                   <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
                   <input
                     type="text"
-                    placeholder="Tìm kiếm tài liệu, câu chuyện, hướng dẫn..."
+                    placeholder={isEn ? 'Search documents, stories, guides...' : 'Tìm kiếm tài liệu, câu chuyện, hướng dẫn...'}
                     value={searchTerm}
                     onChange={(e) => handleSearch(e.target.value)}
                     className="w-full border border-gray-300 bg-white py-3 pl-11 pr-4 font-montserrat text-sm focus:outline-none focus:ring-1 focus:ring-[#0A7029]"
@@ -338,7 +363,7 @@ export default function LibraryPage() {
                   className="border border-[#FFC107] bg-transparent px-5 py-3 font-montserrat text-sm font-semibold text-[#C28A00] hover:bg-[#FFF7DA]"
                 >
                   <Filter className="mr-2 h-4 w-4" />
-                  Bộ lọc
+                  {isEn ? 'Filters' : 'Bộ lọc'}
                 </Button>
               </div>
 
@@ -373,9 +398,9 @@ export default function LibraryPage() {
                 <div className="overflow-hidden border border-[#E5E7EB] bg-white shadow-sm">
                   <div className="hidden grid-cols-[72px_minmax(0,1fr)_160px_140px] gap-4 border-b border-[#E5E7EB] bg-[#FAFAF7] px-5 py-3 text-sm font-semibold text-[#6B7280] md:grid">
                     <div>STT</div>
-                    <div>Nội dung</div>
-                    <div>Loại</div>
-                    <div>Ngày tạo</div>
+                    <div>{isEn ? 'Content' : 'Nội dung'}</div>
+                    <div>{isEn ? 'Type' : 'Loại'}</div>
+                    <div>{isEn ? 'Created date' : 'Ngày tạo'}</div>
                   </div>
 
                   {contents.map((content, index) => {
@@ -411,12 +436,12 @@ export default function LibraryPage() {
 
                           <div>
                             <span className={`inline-flex px-3 py-1 text-xs font-semibold ${getTypeAccent(content.type)}`}>
-                              {getTypeLabel(content.type)}
+                              {getTypeLabel(content.type, isEn)}
                             </span>
                           </div>
 
                           <div className="font-montserrat text-sm text-[#6B7280]">
-                            {formatDate(content.createdAt)}
+                            {formatDate(content.createdAt, isEn)}
                           </div>
                         </div>
                       </Link>
@@ -473,13 +498,13 @@ export default function LibraryPage() {
               <div className="py-16 text-center">
                 <p className="mb-2 font-montserrat text-lg text-[#6B7280]">
                   {searchTerm || selectedCategory || selectedType
-                    ? 'Không tìm thấy tài liệu phù hợp'
-                    : 'Chưa có tài liệu nào'}
+                    ? (isEn ? 'No matching documents found' : 'Không tìm thấy tài liệu phù hợp')
+                    : (isEn ? 'No documents available yet' : 'Chưa có tài liệu nào')}
                 </p>
                 <p className="font-montserrat text-sm text-[#9CA3AF]">
                   {searchTerm || selectedCategory || selectedType
-                    ? 'Thử thay đổi từ khóa tìm kiếm hoặc bộ lọc.'
-                    : 'Vui lòng quay lại sau để khám phá thêm tài liệu mới.'}
+                    ? (isEn ? 'Try another keyword or adjust your filters.' : 'Thử thay đổi từ khóa tìm kiếm hoặc bộ lọc.')
+                    : (isEn ? 'Please check back later for newly published content.' : 'Vui lòng quay lại sau để khám phá thêm tài liệu mới.')}
                 </p>
               </div>
             )}
@@ -490,10 +515,10 @@ export default function LibraryPage() {
           <div className="container mx-auto max-w-6xl px-6">
             <div className="mb-12">
               <h2 className="mb-4 font-montserrat text-3xl font-bold text-[#3C3C3B] md:text-4xl">
-                Tài nguyên tham khảo
+                {isEn ? 'Reference Resources' : 'Tài nguyên tham khảo'}
               </h2>
               <p className="max-w-3xl font-montserrat text-lg text-[#6B7280]">
-                Một số nguồn tra cứu nhanh để mở rộng việc học tập và đối chiếu thông tin.
+                {isEn ? 'Curated external resources for quick lookup and cross-reference.' : 'Một số nguồn tra cứu nhanh để mở rộng việc học tập và đối chiếu thông tin.'}
               </p>
             </div>
 

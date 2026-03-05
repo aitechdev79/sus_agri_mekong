@@ -40,6 +40,7 @@ async function getNewsContent(id: string): Promise<NewsContent | null> {
 export default async function NewsPage({ params }: { params: Promise<{ locale: string; id: string }> }) {
   const { locale, id } = await params;
   const content = await getNewsContent(id);
+  const isEn = locale === 'en';
 
   if (!content) {
     notFound();
@@ -59,7 +60,7 @@ export default async function NewsPage({ params }: { params: Promise<{ locale: s
             className="inline-flex items-center text-blue-600 hover:text-blue-700 transition-colors"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Về trang chủ
+            {isEn ? 'Back to home' : 'Về trang chủ'}
           </Link>
         </div>
       </header>
@@ -76,7 +77,7 @@ export default async function NewsPage({ params }: { params: Promise<{ locale: s
             <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-6">
               <div className="flex items-center">
                 <Calendar className="w-4 h-4 mr-2" />
-                {new Date(content.createdAt).toLocaleDateString('vi-VN', {
+                {new Date(content.createdAt).toLocaleDateString(isEn ? 'en-US' : 'vi-VN', {
                   year: 'numeric',
                   month: 'long',
                   day: 'numeric'
@@ -85,7 +86,7 @@ export default async function NewsPage({ params }: { params: Promise<{ locale: s
 
               <div className="flex items-center">
                 <Eye className="w-4 h-4 mr-2" />
-                {content.viewCount} lượt xem
+                {content.viewCount} {isEn ? 'views' : 'lượt xem'}
               </div>
 
               {content.author.name && (
@@ -131,7 +132,7 @@ export default async function NewsPage({ params }: { params: Promise<{ locale: s
           {/* Video Section */}
           {content.videoUrl && (
             <div className="mb-8">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">Video liên quan</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">{isEn ? 'Related video' : 'Video liên quan'}</h3>
               <div className="relative w-full h-64 md:h-96 rounded-lg overflow-hidden bg-black">
                 {content.videoUrl.includes('youtube.com') || content.videoUrl.includes('youtu.be') ? (
                   <iframe
@@ -149,7 +150,7 @@ export default async function NewsPage({ params }: { params: Promise<{ locale: s
                     preload="metadata"
                   >
                     <source src={content.videoUrl} type="video/mp4" />
-                    Trình duyệt của bạn không hỗ trợ video.
+                    {isEn ? 'Your browser does not support video.' : 'Trình duyệt của bạn không hỗ trợ video.'}
                   </video>
                 )}
               </div>
@@ -164,14 +165,14 @@ export default async function NewsPage({ params }: { params: Promise<{ locale: s
                 className="inline-flex items-center text-blue-600 hover:text-blue-700 transition-colors"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                Xem tất cả tin tức
+                {isEn ? 'View all news' : 'Xem tất cả tin tức'}
               </Link>
 
               <Link
                 href={`/${locale}`}
                 className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
               >
-                Về trang chủ
+                {isEn ? 'Back to home' : 'Về trang chủ'}
               </Link>
             </div>
           </div>
