@@ -6,11 +6,15 @@ import { useEffect, useState } from 'react';
 import { Calendar, Presentation } from 'lucide-react';
 import { getBestImageUrl } from '@/lib/image-utils';
 import MiniEventCalendar from '@/components/MiniEventCalendar';
+import { usePathname } from 'next/navigation';
+import { getLocaleFromPathname, pickLocalizedText } from '@/lib/content-locale';
 
 interface EventItem {
   id: string;
   title: string;
+  titleEn?: string | null;
   description?: string;
+  descriptionEn?: string | null;
   thumbnailUrl?: string;
   imageUrl?: string;
   createdAt: string;
@@ -47,6 +51,9 @@ function formatEventDate(item: EventItem) {
 export default function NewsSection() {
   const [events, setEvents] = useState<EventItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const pathname = usePathname();
+  const locale = getLocaleFromPathname(pathname);
+  const localizedContentPrefix = locale === 'en' || locale === 'vi' ? `/${locale}` : '';
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -79,7 +86,7 @@ export default function NewsSection() {
 
   const calendarEvents = events.map((item) => ({
     id: item.id,
-    title: item.title,
+    title: pickLocalizedText(locale, item.title, item.titleEn),
     date: new Date(item.eventStartAt),
     isPast: new Date(item.eventStartAt).getTime() < now.getTime(),
   }));
@@ -153,11 +160,13 @@ export default function NewsSection() {
           <div className="lg:col-span-2 space-y-6">
             {featuredEvents.map((item, index) => {
               const isUpcoming = new Date(item.eventStartAt).getTime() >= now.getTime();
+              const title = pickLocalizedText(locale, item.title, item.titleEn);
+              const description = pickLocalizedText(locale, item.description, item.descriptionEn);
 
               return (
                 <Link
                   key={item.id}
-                  href={`/content/${item.id}`}
+                  href={`${localizedContentPrefix}/content/${item.id}`}
                   className="group block overflow-hidden bg-white transition-all duration-500"
                   style={{
                     boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)'
@@ -186,13 +195,13 @@ export default function NewsSection() {
                             // eslint-disable-next-line @next/next/no-img-element
                             <img
                               src={imageUrl}
-                              alt={item.title}
+                              alt={title}
                               className="w-full h-full object-cover"
                             />
                           ) : (
                             <Image
                               src={imageUrl}
-                              alt={item.title}
+                              alt={title}
                               fill
                               className="object-cover"
                             />
@@ -226,12 +235,12 @@ export default function NewsSection() {
                       </div>
 
                       <h3 className="text-lg md:text-xl font-bold mb-2 font-montserrat line-clamp-2" style={{ color: '#3C3C3B' }}>
-                        {item.title}
+                        {title}
                       </h3>
 
-                      {item.description && (
+                      {description && (
                         <p className="text-sm md:text-base line-clamp-2 font-montserrat" style={{ color: '#6B7280' }}>
-                          {item.description}
+                          {description}
                         </p>
                       )}
                       {item.eventLocation && (

@@ -38,7 +38,9 @@ export async function GET(request: NextRequest) {
       select: {
         id: true,
         title: true,
+        titleEn: true,
         description: true,
+        descriptionEn: true,
         thumbnailUrl: true,
         imageUrl: true,
         createdAt: true,

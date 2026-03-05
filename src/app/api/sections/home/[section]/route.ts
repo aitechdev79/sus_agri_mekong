@@ -28,7 +28,9 @@ export async function GET(
       select: {
         id: true,
         title: true,
+        titleEn: true,
         description: true,
+        descriptionEn: true,
         undertitle: true,
         projectUrl: true,
         thumbnailUrl: true,

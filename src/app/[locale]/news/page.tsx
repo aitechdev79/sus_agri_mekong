@@ -6,13 +6,14 @@ import { Calendar, Eye, ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-reac
 import { useState, useEffect } from 'react';
 import EventCalendar from '@/components/EventCalendar';
 import { usePublicCategories } from '@/hooks/use-public-categories';
+import { pickLocalizedText } from '@/lib/content-locale';
 
 interface NewsItem {
   id: string;
   title: string;
-  titleEn?: string;
-  description?: string;
-  descriptionEn?: string;
+  titleEn?: string | null;
+  description?: string | null;
+  descriptionEn?: string | null;
   thumbnailUrl?: string;
   viewCount: number;
   createdAt: string;
@@ -99,7 +100,7 @@ export default function NewsPage({ params }: { params: Promise<{ locale: string 
   // Prepare events for calendar
   const calendarEvents = newsItems.map(item => ({
     id: item.id,
-    title: item.title,
+    title: pickLocalizedText(locale, item.title, item.titleEn),
     date: new Date(item.createdAt),
     type: (getCategoryLabel(item.category).toLowerCase().includes('dao tao') || getCategoryLabel(item.category).toLowerCase().includes('training')) ? 'training' as const : 'event' as const,
   }));
@@ -153,7 +154,11 @@ export default function NewsPage({ params }: { params: Promise<{ locale: string 
                     className="flex transition-transform duration-500 ease-in-out"
                     style={{ transform: `translateX(-${currentSlide * 100}%)` }}
                   >
-                    {carouselItems.map((item, index) => (
+                    {carouselItems.map((item, index) => {
+                      const title = pickLocalizedText(locale, item.title, item.titleEn);
+                      const description = pickLocalizedText(locale, item.description, item.descriptionEn);
+
+                      return (
                       <div key={`${item.id}-${index}`} className="w-full flex-shrink-0 px-2">
                         <Link href={`/${locale}/news/${item.id}`} className="block group">
                           <div className="bg-white overflow-hidden transition-all duration-300" style={{ boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)' }}>
@@ -162,7 +167,7 @@ export default function NewsPage({ params }: { params: Promise<{ locale: string 
                               {item.thumbnailUrl ? (
                                 <Image
                                   src={item.thumbnailUrl}
-                                  alt={item.title}
+                                  alt={title}
                                   fill
                                   className="object-cover group-hover:scale-110 transition-transform duration-500"
                                 />
@@ -191,11 +196,11 @@ export default function NewsPage({ params }: { params: Promise<{ locale: string 
                               ></div>
 
                               <h2 className="text-xl md:text-2xl font-bold mb-3 font-montserrat line-clamp-2" style={{ color: '#3C3C3B' }}>
-                                {item.title}
+                                {title}
                               </h2>
-                              {item.description && (
+                              {description && (
                                 <p className="leading-relaxed line-clamp-3 mb-4 font-montserrat" style={{ color: '#6B7280' }}>
-                                  {item.description}
+                                  {description}
                                 </p>
                               )}
                               <div className="flex items-center gap-4 text-sm" style={{ color: '#9CA3AF' }}>
@@ -213,7 +218,8 @@ export default function NewsPage({ params }: { params: Promise<{ locale: string 
                           </div>
                         </Link>
                       </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
 
@@ -314,7 +320,11 @@ export default function NewsPage({ params }: { params: Promise<{ locale: string 
             </div>
           ) : newsItems.length > 0 ? (
             <div className="space-y-6">
-              {newsItems.slice(0, 5).map((item) => (
+              {newsItems.slice(0, 5).map((item) => {
+                const title = pickLocalizedText(locale, item.title, item.titleEn);
+                const description = pickLocalizedText(locale, item.description, item.descriptionEn);
+
+                return (
                 <Link
                   key={item.id}
                   href={`/${locale}/news/${item.id}`}
@@ -326,7 +336,7 @@ export default function NewsPage({ params }: { params: Promise<{ locale: string 
                       {item.thumbnailUrl ? (
                         <Image
                           src={item.thumbnailUrl}
-                          alt={item.title}
+                          alt={title}
                           fill
                           className="object-cover group-hover:scale-110 transition-transform duration-500"
                         />
@@ -358,13 +368,13 @@ export default function NewsPage({ params }: { params: Promise<{ locale: string 
 
                       {/* Title */}
                       <h3 className="text-lg md:text-xl font-bold mb-2 font-montserrat line-clamp-2" style={{ color: '#3C3C3B' }}>
-                        {item.title}
+                        {title}
                       </h3>
 
                       {/* Description */}
-                      {item.description && (
+                      {description && (
                         <p className="text-sm md:text-base line-clamp-2 mb-3 font-montserrat" style={{ color: '#6B7280' }}>
-                          {item.description}
+                          {description}
                         </p>
                       )}
 
@@ -383,7 +393,8 @@ export default function NewsPage({ params }: { params: Promise<{ locale: string 
                     </div>
                   </article>
                 </Link>
-              ))}
+                );
+              })}
             </div>
           ) : (
             <div className="bg-white p-12 text-center" style={{ boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)' }}>

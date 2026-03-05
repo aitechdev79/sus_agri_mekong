@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Calendar, Eye, User, ArrowLeft } from 'lucide-react';
 import { NewsContent } from '@/types/content';
 import { prisma } from '@/lib/prisma';
+import { pickLocalizedText } from '@/lib/content-locale';
 
 // Use dynamic rendering for Vercel deployment
 export const dynamic = 'force-dynamic';
@@ -44,6 +45,10 @@ export default async function NewsPage({ params }: { params: Promise<{ locale: s
     notFound();
   }
 
+  const localizedTitle = pickLocalizedText(locale, content.title, content.titleEn);
+  const localizedDescription = pickLocalizedText(locale, content.description, content.descriptionEn);
+  const localizedBody = pickLocalizedText(locale, content.content, content.contentEn);
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -64,7 +69,7 @@ export default async function NewsPage({ params }: { params: Promise<{ locale: s
           {/* Article Header */}
           <header className="mb-8">
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 leading-tight">
-              {content.title}
+              {localizedTitle}
             </h1>
 
             {/* Meta Information */}
@@ -95,9 +100,9 @@ export default async function NewsPage({ params }: { params: Promise<{ locale: s
             </div>
 
             {/* Description */}
-            {content.description && (
+            {localizedDescription && (
               <div className="text-lg text-gray-700 bg-gray-100 p-4 rounded-lg mb-6">
-                {content.description}
+                {localizedDescription}
               </div>
             )}
           </header>
@@ -107,7 +112,7 @@ export default async function NewsPage({ params }: { params: Promise<{ locale: s
             <div className="relative w-full h-64 md:h-96 mb-8 rounded-lg overflow-hidden">
               <Image
                 src={content.imageUrl || content.thumbnailUrl || ''}
-                alt={content.title}
+                alt={localizedTitle}
                 fill
                 className="object-cover"
                 priority
@@ -119,7 +124,7 @@ export default async function NewsPage({ params }: { params: Promise<{ locale: s
           <div className="prose prose-lg max-w-none mb-8">
             <div
               className="text-gray-800 leading-relaxed"
-              dangerouslySetInnerHTML={{ __html: content.content.replace(/\n/g, '<br>') }}
+              dangerouslySetInnerHTML={{ __html: localizedBody.replace(/\n/g, '<br>') }}
             />
           </div>
 
@@ -131,7 +136,7 @@ export default async function NewsPage({ params }: { params: Promise<{ locale: s
                 {content.videoUrl.includes('youtube.com') || content.videoUrl.includes('youtu.be') ? (
                   <iframe
                     src={content.videoUrl.replace('watch?v=', 'embed/')}
-                    title={content.title}
+                    title={localizedTitle}
                     className="w-full h-full"
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

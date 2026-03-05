@@ -3,11 +3,15 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { getLocaleFromPathname, pickLocalizedText } from '@/lib/content-locale';
 
 interface DienHinhItem {
   id: string;
   title: string;
+  titleEn?: string | null;
   description?: string | null;
+  descriptionEn?: string | null;
   thumbnailUrl?: string | null;
   imageUrl?: string | null;
 }
@@ -15,6 +19,9 @@ interface DienHinhItem {
 export default function DienHinhSection() {
   const [items, setItems] = useState<DienHinhItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const pathname = usePathname();
+  const locale = getLocaleFromPathname(pathname);
+  const localizedContentPrefix = locale === 'en' || locale === 'vi' ? `/${locale}` : '';
 
   useEffect(() => {
     let isMounted = true;
@@ -89,20 +96,22 @@ export default function DienHinhSection() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-start">
             {items.map((item) => {
               const imageSrc = item.thumbnailUrl || item.imageUrl || '';
-              const href = `/content/${item.id}`;
+              const title = pickLocalizedText(locale, item.title, item.titleEn);
+              const description = pickLocalizedText(locale, item.description, item.descriptionEn);
+              const href = `${localizedContentPrefix}/content/${item.id}`;
 
               return (
                 <Link
                   key={item.id}
                   href={href}
                   className="group block flex flex-col"
-                  aria-label={`${item.title} - ${item.description || ''}`}
+                  aria-label={`${title} - ${description || ''}`}
                 >
                   <div className="relative overflow-hidden mb-4 bg-gray-100" style={{ aspectRatio: '16/9' }}>
                     {imageSrc ? (
                       <Image
                         src={imageSrc}
-                        alt={item.title}
+                        alt={title}
                         fill
                         className="object-cover group-hover:scale-110 transition-transform duration-500"
                         sizes="(max-width: 768px) 100vw, 33vw"
@@ -122,11 +131,11 @@ export default function DienHinhSection() {
                     ></div>
 
                     <h3 className="text-lg md:text-xl font-bold mb-2 font-montserrat" style={{ color: '#3C3C3B' }}>
-                      {item.title}
+                      {title}
                     </h3>
-                    {item.description && (
+                    {description && (
                       <p className="line-clamp-4 flex-1 text-sm md:text-base font-montserrat" style={{ color: '#6B7280' }}>
-                        {item.description}
+                        {description}
                       </p>
                     )}
                   </div>
