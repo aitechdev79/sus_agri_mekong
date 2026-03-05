@@ -192,8 +192,11 @@ export async function PUT(
     const data = await request.json()
     const {
       title,
+      titleEn,
       description,
+      descriptionEn,
       content: contentText,
+      contentEn,
       type,
       category,
       tags,
@@ -218,6 +221,7 @@ export async function PUT(
     } = data
 
     const sanitizedContent = sanitizeRichText(contentText || '')
+    const sanitizedContentEn = sanitizeRichText(contentEn || '')
     const normalizedEventStartAt = normalizeEventDate(eventStartAt, isAllDay)
     const normalizedEventEndAt = normalizeEventDate(eventEndAt, isAllDay)
     const normalizedDisplayOrder = normalizeDisplayOrder(displayOrder)
@@ -266,8 +270,11 @@ export async function PUT(
     // Only admins can modify featured status or change status of published content
     const updateData: Record<string, unknown> = {
       title,
+      titleEn: titleEn || null,
       description,
+      descriptionEn: descriptionEn || null,
       content: sanitizedContent,
+      contentEn: sanitizedContentEn || null,
       type,
       category,
       tags: Array.isArray(tags) ? tags.join(', ') : tags || '',

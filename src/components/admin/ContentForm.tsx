@@ -52,8 +52,11 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
       // If editing existing content, use content data
       return {
         title: content.title || '',
+        titleEn: content.titleEn || '',
         description: content.description || '',
+        descriptionEn: content.descriptionEn || '',
         content: content.content || '',
+        contentEn: content.contentEn || '',
         category: content.category || '',
         type: content.type || 'ARTICLE',
         tags: content.tags || '',
@@ -96,8 +99,11 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
       // Default values for new content
       return {
         title: '',
+        titleEn: '',
         description: '',
+        descriptionEn: '',
         content: '',
+        contentEn: '',
         category: '',
         type: 'ARTICLE',
         tags: '',
@@ -220,8 +226,11 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
       clearSavedData()
       setFormData({
         title: '',
+        titleEn: '',
         description: '',
+        descriptionEn: '',
         content: '',
+        contentEn: '',
         category: '',
         type: 'ARTICLE',
         tags: '',
@@ -526,7 +535,22 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
               </label>
               <input
                 type="text"
+                name="titleEn"
+                value={formData.titleEn}
                 onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Short Description (English)
+              </label>
+              <textarea
+                name="descriptionEn"
+                value={formData.descriptionEn}
+                onChange={handleChange}
+                rows={3}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -535,10 +559,9 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Content (English)
               </label>
-              <textarea
-                onChange={handleChange}
-                rows={8}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              <RichTextEditor
+                value={formData.contentEn}
+                onChange={(nextValue) => setFormData({ ...formData, contentEn: nextValue })}
               />
             </div>
           </div>

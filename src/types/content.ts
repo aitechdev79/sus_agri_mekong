@@ -24,8 +24,11 @@ export interface AuthorComplete extends AuthorWithRole, AuthorWithOrganization {
 export interface BaseContent {
   id: string;
   title: string;
+  titleEn?: string | null;
   description: string;
+  descriptionEn?: string | null;
   content: string;
+  contentEn?: string | null;
   type: ContentType;
   category: string;
   tags: string;
@@ -100,7 +103,9 @@ export interface ContentWithCounts extends ContentWithRoleAuthor, ContentCounts 
 
 // 1. ADMIN INTERFACE - Full data for admin operations
 export interface AdminContent extends ContentWithMedia {
-  titleEn?: string;
+  titleEn?: string | null;
+  descriptionEn?: string | null;
+  contentEn?: string | null;
   updatedAt: string;
 }
 
@@ -119,8 +124,11 @@ export interface CardContent extends ContentWithRoleAuthor, MediaFields, Content
 export interface FormContent {
   id: string;
   title: string;
+  titleEn?: string | null;
   description?: string;
+  descriptionEn?: string | null;
   content?: string;
+  contentEn?: string | null;
   type: ContentType;
   category?: string;
   tags?: string;

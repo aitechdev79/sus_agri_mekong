@@ -100,7 +100,10 @@ export async function GET(request: NextRequest) {
     if (search) {
       where.OR = [
         { title: { contains: search } },
+        { titleEn: { contains: search } },
         { description: { contains: search } },
+        { descriptionEn: { contains: search } },
+        { contentEn: { contains: search } },
         { content: { contains: search } }
       ]
     }
@@ -170,8 +173,11 @@ export async function POST(request: NextRequest) {
     const data = await request.json()
     const {
       title,
+      titleEn,
       description,
+      descriptionEn,
       content,
+      contentEn,
       type,
       category,
       tags,
@@ -196,6 +202,7 @@ export async function POST(request: NextRequest) {
     } = data
 
     const sanitizedContent = sanitizeRichText(content || '')
+    const sanitizedContentEn = sanitizeRichText(contentEn || '')
     const normalizedEventStartAt = normalizeEventDate(eventStartAt, isAllDay)
     const normalizedEventEndAt = normalizeEventDate(eventEndAt, isAllDay)
     const normalizedDisplayOrder = normalizeDisplayOrder(displayOrder)
@@ -244,8 +251,11 @@ export async function POST(request: NextRequest) {
     const newContent = await prisma.content.create({
       data: {
         title,
+        titleEn: titleEn || null,
         description,
+        descriptionEn: descriptionEn || null,
         content: sanitizedContent,
+        contentEn: sanitizedContentEn || null,
         type,
         category,
         tags: Array.isArray(tags) ? tags.join(', ') : tags || '',

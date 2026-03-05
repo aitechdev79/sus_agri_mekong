@@ -115,8 +115,11 @@ model OTPVerification {
 model Content {
   id          String        @id @default(cuid())
   title       String
+  titleEn     String?
   description String?
+  descriptionEn String?
   content     String
+  contentEn   String?
   type        ContentType
   category    String
   tags        String
