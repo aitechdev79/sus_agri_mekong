@@ -4,51 +4,68 @@ import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
 import Image from 'next/image';
 import { Building2, Factory, Shirt, Zap } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import { getLocaleFromPathname } from '@/lib/content-locale';
 
-const practiceCards = [
+function getPracticeCards(isEn: boolean) {
+  return [
   {
-    title: 'Unilever - Kế hoạch Sống Bền vững',
+    title: isEn ? 'Unilever - Sustainable Living Plan' : 'Unilever - Kế hoạch Sống Bền vững',
     description:
-      'Unilever đã cam kết giảm tác động môi trường, thúc đẩy chuỗi cung ứng bền vững và mở rộng tác động xã hội tích cực thông qua chương trình phát triển bền vững của doanh nghiệp.',
+      isEn
+        ? 'Unilever commits to reducing environmental impact, scaling sustainable supply chains, and expanding positive social outcomes through its sustainability program.'
+        : 'Unilever đã cam kết giảm tác động môi trường, thúc đẩy chuỗi cung ứng bền vững và mở rộng tác động xã hội tích cực thông qua chương trình phát triển bền vững của doanh nghiệp.',
     href: 'https://www.unilever.com/planet-and-society/climate-action/',
-    ariaLabel: 'Unilever - Kế hoạch Sống Bền vững',
+    ariaLabel: isEn ? 'Unilever - Sustainable Living Plan' : 'Unilever - Kế hoạch Sống Bền vững',
     icon: Factory,
     iconWrapperClassName: 'bg-blue-100 text-blue-700',
-    tags: ['Giảm carbon', 'Chuỗi cung ứng bền vững', 'Trách nhiệm xã hội'],
+    tags: isEn ? ['Carbon reduction', 'Sustainable supply chain', 'Social impact'] : ['Giảm carbon', 'Chuỗi cung ứng bền vững', 'Trách nhiệm xã hội'],
   },
   {
-    title: 'Tesla - Năng lượng Tái tạo',
+    title: isEn ? 'Tesla - Renewable Energy' : 'Tesla - Năng lượng Tái tạo',
     description:
-      'Tesla tiên phong trong việc chuyển đổi sang năng lượng sạch thông qua xe điện, pin lưu trữ và hệ sinh thái năng lượng mặt trời, qua đó thúc đẩy quá trình điện hóa ở quy mô toàn cầu.',
+      isEn
+        ? 'Tesla pioneers clean energy transition through EVs, battery storage, and solar ecosystems, accelerating global electrification.'
+        : 'Tesla tiên phong trong việc chuyển đổi sang năng lượng sạch thông qua xe điện, pin lưu trữ và hệ sinh thái năng lượng mặt trời, qua đó thúc đẩy quá trình điện hóa ở quy mô toàn cầu.',
     href: 'https://www.tesla.com/impact',
-    ariaLabel: 'Tesla - Năng lượng Tái tạo',
+    ariaLabel: isEn ? 'Tesla - Renewable Energy' : 'Tesla - Năng lượng Tái tạo',
     icon: Zap,
     iconWrapperClassName: 'bg-green-100 text-green-700',
-    tags: ['Năng lượng sạch', 'Đổi mới công nghệ', 'Net Zero'],
+    tags: isEn ? ['Clean energy', 'Technology innovation', 'Net Zero'] : ['Năng lượng sạch', 'Đổi mới công nghệ', 'Net Zero'],
   },
   {
-    title: 'Patagonia - Kinh tế Tuần hoàn',
+    title: isEn ? 'Patagonia - Circular Economy' : 'Patagonia - Kinh tế Tuần hoàn',
     description:
-      'Patagonia theo đuổi mô hình kinh tế tuần hoàn với Worn Wear, khuyến khích sửa chữa, tái sử dụng và kéo dài vòng đời sản phẩm để giảm phát thải và giảm tiêu thụ tài nguyên mới.',
+      isEn
+        ? 'Patagonia advances circular economy through Worn Wear by promoting repair, reuse, and longer product lifecycles.'
+        : 'Patagonia theo đuổi mô hình kinh tế tuần hoàn với Worn Wear, khuyến khích sửa chữa, tái sử dụng và kéo dài vòng đời sản phẩm để giảm phát thải và giảm tiêu thụ tài nguyên mới.',
     href: 'https://wornwear.patagonia.com/',
-    ariaLabel: 'Patagonia - Kinh tế Tuần hoàn',
+    ariaLabel: isEn ? 'Patagonia - Circular Economy' : 'Patagonia - Kinh tế Tuần hoàn',
     icon: Shirt,
     iconWrapperClassName: 'bg-purple-100 text-purple-700',
-    tags: ['Tái chế', 'Kinh tế tuần hoàn', 'Bảo vệ môi trường'],
+    tags: isEn ? ['Recycling', 'Circular economy', 'Environmental protection'] : ['Tái chế', 'Kinh tế tuần hoàn', 'Bảo vệ môi trường'],
   },
   {
-    title: 'Microsoft - Phát thải Carbon Âm',
+    title: isEn ? 'Microsoft - Carbon Negative' : 'Microsoft - Phát thải Carbon Âm',
     description:
-      'Microsoft cam kết đạt carbon âm vào năm 2030 và loại bỏ toàn bộ lượng carbon lịch sử của mình vào năm 2050, đồng thời đầu tư mạnh vào đổi mới khí hậu và công nghệ loại bỏ carbon.',
+      isEn
+        ? 'Microsoft commits to becoming carbon negative by 2030 and removing historical emissions by 2050 with major climate-tech investments.'
+        : 'Microsoft cam kết đạt carbon âm vào năm 2030 và loại bỏ toàn bộ lượng carbon lịch sử của mình vào năm 2050, đồng thời đầu tư mạnh vào đổi mới khí hậu và công nghệ loại bỏ carbon.',
     href: 'https://blogs.microsoft.com/blog/2020/01/16/microsoft-will-be-carbon-negative-by-2030/',
-    ariaLabel: 'Microsoft - Phát thải Carbon Âm',
+    ariaLabel: isEn ? 'Microsoft - Carbon Negative' : 'Microsoft - Phát thải Carbon Âm',
     icon: Building2,
     iconWrapperClassName: 'bg-yellow-100 text-yellow-700',
-    tags: ['Carbon âm', 'Đổi mới khí hậu', 'Cam kết dài hạn'],
+    tags: isEn ? ['Carbon negative', 'Climate innovation', 'Long-term commitment'] : ['Carbon âm', 'Đổi mới khí hậu', 'Cam kết dài hạn'],
   },
-] as const;
+  ] as const;
+}
 
 export default function GlobalBestPracticePage() {
+  const pathname = usePathname();
+  const locale = getLocaleFromPathname(pathname);
+  const isEn = locale === 'en';
+  const practiceCards = getPracticeCards(isEn);
+
   return (
     <div className="min-h-screen">
       <div className="relative z-50">
@@ -70,7 +87,7 @@ export default function GlobalBestPracticePage() {
         <section id="global-practices" className="bg-gradient-to-br from-blue-50 to-indigo-50 py-16">
           <div className="container mx-auto max-w-6xl px-6">
             <h2 className="mb-8 font-montserrat text-3xl font-bold text-gray-800 md:text-4xl">
-              Thực hành tốt trên thế giới
+              {isEn ? 'Global Good Practices' : 'Thực hành tốt trên thế giới'}
             </h2>
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               {practiceCards.map((card) => {

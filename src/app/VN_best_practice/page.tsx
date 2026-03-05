@@ -4,16 +4,24 @@ import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
 import Image from 'next/image';
 import { Factory, Fish, MapPin, Sprout, Tag, Zap } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import { getLocaleFromPathname } from '@/lib/content-locale';
 
 export default function VNBestPracticePage() {
+  const pathname = usePathname();
+  const locale = getLocaleFromPathname(pathname);
+  const isEn = locale === 'en';
+
   const practices = [
     {
       id: 'ca-mau',
-      title: 'Mô hình Tôm - Rừng Cà Mau',
+      title: isEn ? 'Ca Mau Shrimp-Forest Model' : 'Mô hình Tôm - Rừng Cà Mau',
       description:
-        'Mô hình nuôi tôm kết hợp bảo vệ rừng ngập mặn tại Cà Mau đang được mở rộng theo chuẩn ASC, giúp tăng giá trị sản phẩm đồng thời bảo tồn hệ sinh thái rừng ven biển.',
-      metaLabel: 'Địa điểm',
-      metaValue: 'Cà Mau, Đồng bằng sông Cửu Long',
+        isEn
+          ? 'Integrated shrimp farming with mangrove conservation in Ca Mau is scaling under ASC standards, increasing product value while protecting coastal ecosystems.'
+          : 'Mô hình nuôi tôm kết hợp bảo vệ rừng ngập mặn tại Cà Mau đang được mở rộng theo chuẩn ASC, giúp tăng giá trị sản phẩm đồng thời bảo tồn hệ sinh thái rừng ven biển.',
+      metaLabel: isEn ? 'Location' : 'Địa điểm',
+      metaValue: isEn ? 'Ca Mau, Mekong Delta' : 'Cà Mau, Đồng bằng sông Cửu Long',
       metaIcon: MapPin,
       icon: Fish,
       accent: 'emerald',
@@ -21,11 +29,13 @@ export default function VNBestPracticePage() {
     },
     {
       id: 'an-giang',
-      title: 'Lúa Hữu cơ An Giang',
+      title: isEn ? 'An Giang Organic Rice' : 'Lúa Hữu cơ An Giang',
       description:
-        'An Giang đang mở rộng các mô hình lúa theo chuẩn SRP, VietGAP và hữu cơ để giảm chi phí đầu vào, tăng chất lượng gạo và đáp ứng tốt hơn các yêu cầu xuất khẩu bền vững.',
-      metaLabel: 'Địa điểm',
-      metaValue: 'An Giang, Đồng bằng sông Cửu Long',
+        isEn
+          ? 'An Giang is scaling rice models under SRP, VietGAP, and organic standards to reduce input costs and meet sustainable export requirements.'
+          : 'An Giang đang mở rộng các mô hình lúa theo chuẩn SRP, VietGAP và hữu cơ để giảm chi phí đầu vào, tăng chất lượng gạo và đáp ứng tốt hơn các yêu cầu xuất khẩu bền vững.',
+      metaLabel: isEn ? 'Location' : 'Địa điểm',
+      metaValue: isEn ? 'An Giang, Mekong Delta' : 'An Giang, Đồng bằng sông Cửu Long',
       metaIcon: MapPin,
       icon: Sprout,
       accent: 'sky',
@@ -33,11 +43,13 @@ export default function VNBestPracticePage() {
     },
     {
       id: 'vinamilk',
-      title: 'Vinamilk - Trang trại Bò sữa Xanh',
+      title: isEn ? 'Vinamilk - Green Dairy Farm' : 'Vinamilk - Trang trại Bò sữa Xanh',
       description:
-        'Vinamilk phát triển hệ thống Green Farm và lộ trình Dairy Net Zero 2050, kết hợp nông nghiệp tái tạo, năng lượng tái tạo và chuẩn carbon trung hòa trong chăn nuôi bò sữa.',
-      metaLabel: 'Lĩnh vực',
-      metaValue: 'Chế biến thực phẩm, Nông nghiệp công nghệ cao',
+        isEn
+          ? 'Vinamilk develops its Green Farm system and Dairy Net Zero 2050 roadmap, combining regenerative agriculture, renewable energy, and carbon-neutral standards.'
+          : 'Vinamilk phát triển hệ thống Green Farm và lộ trình Dairy Net Zero 2050, kết hợp nông nghiệp tái tạo, năng lượng tái tạo và chuẩn carbon trung hòa trong chăn nuôi bò sữa.',
+      metaLabel: isEn ? 'Sector' : 'Lĩnh vực',
+      metaValue: isEn ? 'Food processing, High-tech agriculture' : 'Chế biến thực phẩm, Nông nghiệp công nghệ cao',
       metaIcon: Tag,
       icon: Factory,
       accent: 'violet',
@@ -45,11 +57,13 @@ export default function VNBestPracticePage() {
     },
     {
       id: 'trung-nam',
-      title: 'Trung Nam Group - Năng lượng Tái tạo',
+      title: isEn ? 'Trung Nam Group - Renewable Energy' : 'Trung Nam Group - Năng lượng Tái tạo',
       description:
-        'Trung Nam Group là một trong những đơn vị tiên phong phát triển các dự án điện mặt trời và điện gió quy mô lớn tại Việt Nam, góp phần thúc đẩy chuyển dịch năng lượng sạch.',
-      metaLabel: 'Lĩnh vực',
-      metaValue: 'Năng lượng tái tạo, Điện mặt trời, Điện gió',
+        isEn
+          ? 'Trung Nam Group is among Vietnam’s pioneers in large-scale solar and wind projects, contributing to clean energy transition.'
+          : 'Trung Nam Group là một trong những đơn vị tiên phong phát triển các dự án điện mặt trời và điện gió quy mô lớn tại Việt Nam, góp phần thúc đẩy chuyển dịch năng lượng sạch.',
+      metaLabel: isEn ? 'Sector' : 'Lĩnh vực',
+      metaValue: isEn ? 'Renewable energy, Solar, Wind' : 'Năng lượng tái tạo, Điện mặt trời, Điện gió',
       metaIcon: Tag,
       icon: Zap,
       accent: 'amber',
@@ -80,11 +94,12 @@ export default function VNBestPracticePage() {
                 Vietnam Best Practices
               </p>
               <h1 className="mb-4 font-montserrat text-3xl font-bold text-white md:text-5xl">
-                Thực hành tốt tại Việt Nam
+                {isEn ? 'Good Practices in Vietnam' : 'Thực hành tốt tại Việt Nam'}
               </h1>
               <p className="max-w-3xl font-montserrat text-base text-white/80 md:text-lg">
-                Tập hợp những mô hình điển hình về phát triển bền vững, đổi mới xanh và trách nhiệm xã hội từ các
-                doanh nghiệp, hợp tác xã và cộng đồng tại Việt Nam.
+                {isEn
+                  ? 'A collection of notable models on sustainability, green innovation, and social responsibility from businesses and communities in Vietnam.'
+                  : 'Tập hợp những mô hình điển hình về phát triển bền vững, đổi mới xanh và trách nhiệm xã hội từ các doanh nghiệp, hợp tác xã và cộng đồng tại Việt Nam.'}
               </p>
             </div>
           </div>
@@ -94,11 +109,12 @@ export default function VNBestPracticePage() {
           <div className="container mx-auto max-w-6xl px-6">
             <div className="mb-10">
               <h2 className="mb-3 font-montserrat text-3xl font-bold text-gray-900 md:text-4xl">
-                Những mô hình tiêu biểu
+                {isEn ? 'Featured Models' : 'Những mô hình tiêu biểu'}
               </h2>
               <p className="max-w-3xl font-montserrat text-gray-600">
-                Các mô hình dưới đây thể hiện cách doanh nghiệp và cộng đồng Việt Nam chuyển hóa các mục tiêu
-                phát triển bền vững thành tác động thực tế, từ nông nghiệp sinh thái đến năng lượng tái tạo.
+                {isEn
+                  ? 'These examples show how Vietnamese businesses and communities turn sustainability goals into real-world impact, from regenerative agriculture to renewable energy.'
+                  : 'Các mô hình dưới đây thể hiện cách doanh nghiệp và cộng đồng Việt Nam chuyển hóa các mục tiêu phát triển bền vững thành tác động thực tế, từ nông nghiệp sinh thái đến năng lượng tái tạo.'}
               </p>
             </div>
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">

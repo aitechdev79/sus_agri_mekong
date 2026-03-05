@@ -3,8 +3,14 @@
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
+import { getLocaleFromPathname } from '@/lib/content-locale';
 
 export default function AboutVCCIPage() {
+  const pathname = usePathname();
+  const locale = getLocaleFromPathname(pathname);
+  const isEn = locale === 'en';
+
   return (
     <div className="min-h-screen">
       {/* Navigation Bar */}
@@ -46,17 +52,21 @@ export default function AboutVCCIPage() {
               {/* Content Column (2/3 width) */}
               <div className="md:col-span-2">
                 <h2 className="font-montserrat font-bold text-3xl md:text-4xl text-gray-800 mb-6">
-                  Về VCCI
+                  {isEn ? 'About VCCI' : 'Về VCCI'}
                 </h2>
 
                 <div className="space-y-4">
                   <p className="text-lg text-gray-700 leading-relaxed font-montserrat">
-                    Liên đoàn Thương mại và Công nghiệp Việt Nam (VCCI) là tổ chức quốc gia tập hợp và đại diện cho cộng đồng doanh nghiệp, doanh nhân, người sử dụng lao động và các hiệp hội doanh nghiệp ở Việt Nam nhằm mục đích phát triển, bảo vệ và hỗ trợ cộng đồng doanh nghiệp phát triển bền vững.
+                    {isEn
+                      ? 'The Vietnam Chamber of Commerce and Industry (VCCI) is a national organization representing the business community, entrepreneurs, employers, and business associations in Vietnam, with the mission to support sustainable business development.'
+                      : 'Liên đoàn Thương mại và Công nghiệp Việt Nam (VCCI) là tổ chức quốc gia tập hợp và đại diện cho cộng đồng doanh nghiệp, doanh nhân, người sử dụng lao động và các hiệp hội doanh nghiệp ở Việt Nam nhằm mục đích phát triển, bảo vệ và hỗ trợ cộng đồng doanh nghiệp phát triển bền vững.'}
                   </p>
 
                   <div className="pl-6 border-l-4 border-blue-500">
                     <p className="text-lg text-gray-700 leading-relaxed font-montserrat">
-                      VCCI đóng vai trò là cầu nối giữa nhà nước – doanh nghiệp để gắn kết cộng đồng doanh nghiệp và nâng cao năng lực cạnh tranh của doanh nghiệp, phát triển bền vững để tham gia vào chuỗi giá trị toàn cầu.
+                      {isEn
+                        ? 'VCCI acts as a bridge between government and enterprises, helping strengthen business competitiveness and enabling sustainable integration into global value chains.'
+                        : 'VCCI đóng vai trò là cầu nối giữa nhà nước – doanh nghiệp để gắn kết cộng đồng doanh nghiệp và nâng cao năng lực cạnh tranh của doanh nghiệp, phát triển bền vững để tham gia vào chuỗi giá trị toàn cầu.'}
                     </p>
                   </div>
                 </div>
