@@ -13,7 +13,7 @@ export default function Header() {
     { name: 'Thư viện', href: '/library' },
     { name: 'Công cụ', href: '/tools' },
     { name: 'Cộng đồng', href: '/community' },
-    { name: 'Tin tức', href: '/news' },
+    { name: 'Sự kiện', href: '/tat-ca-su-kien' },
   ];
 
   return (

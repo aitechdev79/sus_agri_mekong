@@ -16,7 +16,7 @@ export default function NavigationBar() {
 
   const homeHref = withLocalePrefix('/', locale);
   const libraryHref = withLocalePrefix('/library', locale);
-  const newsHref = withLocalePrefix('/news', locale);
+  const eventsHref = withLocalePrefix('/tat-ca-su-kien', locale);
   const exploreHref = withLocalePrefix('/vision-mission', locale);
   const signInHref = withLocalePrefix('/auth/signin', locale);
   const switchLocaleHref = withLocalePrefix(normalizedPath, otherLocale);
@@ -26,14 +26,14 @@ export default function NavigationBar() {
       ? {
           home: 'Home',
           library: 'Library',
-          news: 'News',
+          events: 'Events',
           explore: 'Explore',
           signIn: 'SIGN IN'
         }
       : {
           home: 'Trang chủ',
           library: 'Thư viện',
-          news: 'Tin tức',
+          events: 'Sự kiện',
           explore: 'Khám phá',
           signIn: 'ĐĂNG NHẬP'
         };
@@ -70,10 +70,10 @@ export default function NavigationBar() {
                 {labels.library}
               </Link>
               <Link
-                href={newsHref}
+                href={eventsHref}
                 className="font-montserrat font-normal text-base text-vn-dark uppercase tracking-wide hover:underline hover:text-vn-green transition-colors"
               >
-                {labels.news}
+                {labels.events}
               </Link>
               <Link
                 href={exploreHref}
@@ -128,11 +128,11 @@ export default function NavigationBar() {
                 {labels.library}
               </Link>
               <Link
-                href={newsHref}
+                href={eventsHref}
                 className="font-montserrat font-normal text-base text-vn-dark uppercase tracking-wide hover:text-vn-green transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
-                {labels.news}
+                {labels.events}
               </Link>
               <Link
                 href={exploreHref}
