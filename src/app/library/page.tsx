@@ -10,6 +10,8 @@ import { Search, Filter, ExternalLink, FileText, BarChart3, Globe2, ChevronLeft,
 import { Button } from '@/components/ui/button'
 import { LibraryContent } from '@/types/content'
 import { usePublicCategories } from '@/hooks/use-public-categories'
+import { usePathname } from 'next/navigation'
+import { getLocaleFromPathname, pickLocalizedText, withLocalePrefix } from '@/lib/content-locale'
 
 const quickAccessCards = [
   {
@@ -136,6 +138,9 @@ function formatDate(dateString: string) {
 }
 
 export default function LibraryPage() {
+  const pathname = usePathname()
+  const locale = getLocaleFromPathname(pathname)
+  const contentDetailPrefix = withLocalePrefix('/content', locale)
   const [contents, setContents] = useState<LibraryContent[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
@@ -251,7 +256,7 @@ export default function LibraryPage() {
                 return (
                   <Link
                     key={card.id}
-                    href={card.href}
+                    href={withLocalePrefix(card.href, locale)}
                     className="group block overflow-hidden bg-white transition-all duration-500"
                     style={{
                       boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
@@ -375,13 +380,15 @@ export default function LibraryPage() {
 
                   {contents.map((content, index) => {
                     const itemNumber = (currentPage - 1) * pagination.limit + index + 1
+                    const localizedTitle = pickLocalizedText(locale, content.title, content.titleEn)
+                    const localizedDescription = pickLocalizedText(locale, content.description, content.descriptionEn)
 
                     return (
                       <Link
                         key={content.id}
-                        href={`/content/${content.id}`}
+                        href={`${contentDetailPrefix}/${content.id}`}
                         className="group block border-b border-[#E5E7EB] px-5 py-4 last:border-b-0 hover:bg-[#FAFAF7]"
-                        aria-label={`${content.title} - ${content.description || ''}`}
+                        aria-label={`${localizedTitle} - ${localizedDescription || ''}`}
                       >
                         <div className="flex flex-col gap-3 md:grid md:grid-cols-[72px_minmax(0,1fr)_160px_140px] md:items-center md:gap-4">
                           <div className="font-montserrat text-base font-bold text-[#0A7029] md:text-lg">
@@ -390,13 +397,13 @@ export default function LibraryPage() {
 
                           <div className="min-w-0">
                             <h3 className="mb-1 font-montserrat text-lg font-bold text-[#3C3C3B] transition-colors group-hover:text-[#0A7029]">
-                              {content.title}
+                              {localizedTitle}
                             </h3>
                             <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-[#6B7280]">
                               <span>{getCategoryLabel(content.category)}</span>
-                              {content.description && (
+                              {localizedDescription && (
                                 <span className="max-w-2xl truncate">
-                                  {content.description}
+                                  {localizedDescription}
                                 </span>
                               )}
                             </div>

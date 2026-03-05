@@ -6,11 +6,15 @@ import { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
+import { usePathname } from 'next/navigation';
+import { getLocaleFromPathname, pickLocalizedText, withLocalePrefix } from '@/lib/content-locale';
 
 interface PolicyItem {
   id: string;
   title: string;
-  description?: string;
+  titleEn?: string | null;
+  description?: string | null;
+  descriptionEn?: string | null;
 }
 
 interface PolicyResponse {
@@ -24,6 +28,9 @@ interface PolicyResponse {
 }
 
 export default function PolicyPage() {
+  const pathname = usePathname();
+  const locale = getLocaleFromPathname(pathname);
+  const contentDetailPrefix = withLocalePrefix('/content', locale);
   const [policies, setPolicies] = useState<PolicyItem[]>([]);
   const [loadingPolicies, setLoadingPolicies] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -287,9 +294,13 @@ export default function PolicyPage() {
                   </div>
 
                   {policies.map((policy, index) => (
+                    (() => {
+                      const localizedTitle = pickLocalizedText(locale, policy.title, policy.titleEn);
+                      const localizedDescription = pickLocalizedText(locale, policy.description, policy.descriptionEn);
+                      return (
                     <Link
                       key={policy.id}
-                      href={`/content/${policy.id}`}
+                      href={`${contentDetailPrefix}/${policy.id}`}
                       className="grid grid-cols-[80px_minmax(0,1.1fr)_minmax(0,0.9fr)] border-b border-gray-200 transition-colors hover:bg-gray-50"
                     >
                       <div className="flex items-center justify-center p-4 font-montserrat text-sm text-gray-500">
@@ -297,15 +308,17 @@ export default function PolicyPage() {
                       </div>
                       <div className="border-l border-gray-200 p-4">
                         <h3 className="font-montserrat text-lg font-bold text-gray-900">
-                          {policy.title}
+                          {localizedTitle}
                         </h3>
                       </div>
                       <div className="border-l border-gray-200 p-4">
                         <p className="font-montserrat text-sm italic leading-relaxed text-gray-600">
-                          {policy.description || 'Chưa có mô tả ngắn.'}
+                          {localizedDescription || 'Chưa có mô tả ngắn.'}
                         </p>
                       </div>
                     </Link>
+                      );
+                    })()
                   ))}
                 </div>
 

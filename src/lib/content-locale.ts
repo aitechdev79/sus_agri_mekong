@@ -23,3 +23,16 @@ export function pickLocalizedText(
   }
   return vietnameseText || ''
 }
+
+export function stripLocalePrefix(pathname?: string | null) {
+  if (!pathname) return '/'
+  const stripped = pathname.replace(/^\/(en|vi)(?=\/|$)/, '')
+  return stripped || '/'
+}
+
+export function withLocalePrefix(path: string, locale?: string | null) {
+  if (!path.startsWith('/')) return path
+  if (locale !== 'en' && locale !== 'vi') return path
+  if (path === '/') return `/${locale}`
+  return `/${locale}${path}`
+}

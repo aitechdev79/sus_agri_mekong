@@ -54,6 +54,7 @@ export default function NewsSection() {
   const pathname = usePathname();
   const locale = getLocaleFromPathname(pathname);
   const localizedContentPrefix = locale === 'en' || locale === 'vi' ? `/${locale}` : '';
+  const allEventsHref = `${localizedContentPrefix}/tat-ca-su-kien`;
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -138,7 +139,7 @@ export default function NewsSection() {
             </p>
           </div>
           <Link
-            href="/tat-ca-su-kien"
+            href={allEventsHref}
             className="hidden md:inline-flex items-center gap-2 rounded-xl border border-[#FFC107] bg-transparent px-6 py-3 font-bold transition-all duration-300 hover:scale-105 hover:-translate-y-1"
             style={{
               color: '#3C3C3B',
@@ -264,7 +265,7 @@ export default function NewsSection() {
 
         <div className="mt-8 md:hidden text-center">
           <Link
-            href="/tat-ca-su-kien"
+            href={allEventsHref}
             className="inline-flex items-center gap-2 rounded-xl border border-[#FFC107] bg-transparent px-6 py-3 font-bold transition-all duration-300 hover:scale-105"
             style={{
               color: '#3C3C3B',

@@ -5,11 +5,15 @@ import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
+import { usePathname } from 'next/navigation';
+import { getLocaleFromPathname, pickLocalizedText, withLocalePrefix } from '@/lib/content-locale';
 
 interface StoryItem {
   id: string;
   title: string;
-  description?: string;
+  titleEn?: string | null;
+  description?: string | null;
+  descriptionEn?: string | null;
   createdAt: string;
   viewCount: number;
 }
@@ -25,6 +29,9 @@ interface PaginatedResponse {
 }
 
 export default function StoriesPage() {
+  const pathname = usePathname();
+  const locale = getLocaleFromPathname(pathname);
+  const contentDetailPrefix = withLocalePrefix('/content', locale);
   const [storyItems, setStoryItems] = useState<StoryItem[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -155,9 +162,13 @@ export default function StoriesPage() {
             <div className="bg-white rounded-lg shadow-sm">
               <ul className="divide-y divide-gray-200">
                 {storyItems.map((item, index) => (
+                  (() => {
+                    const localizedTitle = pickLocalizedText(locale, item.title, item.titleEn);
+                    const localizedDescription = pickLocalizedText(locale, item.description, item.descriptionEn);
+                    return (
                   <li key={item.id}>
                     <Link
-                      href={`/content/${item.id}`}
+                      href={`${contentDetailPrefix}/${item.id}`}
                       className="block px-6 py-4 hover:bg-gray-50 transition-colors"
                     >
                       <div className="flex items-start justify-between">
@@ -167,11 +178,11 @@ export default function StoriesPage() {
                           </span>
                           <div className="flex-1 min-w-0">
                             <h2 className="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors">
-                              {item.title}
+                              {localizedTitle}
                             </h2>
-                            {item.description && (
+                            {localizedDescription && (
                               <p className="text-sm text-gray-600 italic mt-1 line-clamp-2">
-                                {item.description}
+                                {localizedDescription}
                               </p>
                             )}
                           </div>
@@ -190,6 +201,8 @@ export default function StoriesPage() {
                       </div>
                     </Link>
                   </li>
+                    );
+                  })()
                 ))}
               </ul>
 

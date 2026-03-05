@@ -6,10 +6,15 @@ import { Calendar, ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
+import { usePathname } from 'next/navigation';
+import { getLocaleFromPathname, pickLocalizedText, withLocalePrefix } from '@/lib/content-locale';
 
 interface EventItem {
   id: string;
   title: string;
+  titleEn?: string | null;
+  description?: string | null;
+  descriptionEn?: string | null;
   thumbnailUrl?: string | null;
   imageUrl?: string | null;
   eventStartAt?: string | null;
@@ -44,6 +49,9 @@ function formatEventStart(dateString?: string | null) {
 }
 
 export default function TatCaSuKienPage() {
+  const pathname = usePathname();
+  const locale = getLocaleFromPathname(pathname);
+  const contentDetailPrefix = withLocalePrefix('/content', locale);
   const [items, setItems] = useState<EventItem[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -173,11 +181,12 @@ export default function TatCaSuKienPage() {
           <div className="space-y-6">
             {items.map((item) => {
               const imageSrc = item.thumbnailUrl || item.imageUrl || '';
+              const localizedTitle = pickLocalizedText(locale, item.title, item.titleEn);
 
               return (
                 <Link
                   key={item.id}
-                  href={`/content/${item.id}`}
+                  href={`${contentDetailPrefix}/${item.id}`}
                   className="group block overflow-hidden bg-white p-5 shadow-sm transition-shadow hover:shadow-md"
                 >
                   <div className="flex flex-col gap-5 md:flex-row">
@@ -185,7 +194,7 @@ export default function TatCaSuKienPage() {
                       {imageSrc ? (
                         <Image
                           src={imageSrc}
-                          alt={item.title}
+                          alt={localizedTitle}
                           fill
                           className="object-cover transition-transform duration-500 group-hover:scale-105"
                           sizes="(max-width: 768px) 100vw, 25vw"
@@ -198,8 +207,8 @@ export default function TatCaSuKienPage() {
                     </div>
 
                     <div className="flex flex-1 flex-col justify-center">
-                      <h2 className="mb-4 line-clamp-2 text-xl font-bold text-gray-900">
-                        {item.title}
+                        <h2 className="mb-4 line-clamp-2 text-xl font-bold text-gray-900">
+                        {localizedTitle}
                       </h2>
 
                       <div className="space-y-3 text-sm text-gray-600">

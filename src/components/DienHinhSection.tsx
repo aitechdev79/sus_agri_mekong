@@ -22,6 +22,7 @@ export default function DienHinhSection() {
   const pathname = usePathname();
   const locale = getLocaleFromPathname(pathname);
   const localizedContentPrefix = locale === 'en' || locale === 'vi' ? `/${locale}` : '';
+  const allStoriesHref = `${localizedContentPrefix}/tat-ca-dien-hinh`;
 
   useEffect(() => {
     let isMounted = true;
@@ -63,7 +64,7 @@ export default function DienHinhSection() {
           </div>
 
           <Link
-            href="/tat-ca-dien-hinh"
+            href={allStoriesHref}
             className="inline-flex items-center gap-2 self-start rounded-xl border px-6 py-3 font-bold transition-all duration-300 hover:-translate-y-1 hover:scale-105"
             style={{
               backgroundColor: 'transparent',

@@ -6,11 +6,15 @@ import { ChevronLeft, ChevronRight, Eye } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
+import { usePathname } from 'next/navigation';
+import { getLocaleFromPathname, pickLocalizedText, withLocalePrefix } from '@/lib/content-locale';
 
 interface DienHinhItem {
   id: string;
   title: string;
+  titleEn?: string | null;
   description?: string | null;
+  descriptionEn?: string | null;
   thumbnailUrl?: string | null;
   imageUrl?: string | null;
   viewCount: number;
@@ -28,6 +32,9 @@ interface PaginatedResponse {
 }
 
 export default function TatCaDienHinhPage() {
+  const pathname = usePathname();
+  const locale = getLocaleFromPathname(pathname);
+  const contentDetailPrefix = withLocalePrefix('/content', locale);
   const [items, setItems] = useState<DienHinhItem[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -156,7 +163,9 @@ export default function TatCaDienHinhPage() {
           <div className="space-y-6">
             {items.map((item) => {
               const imageSrc = item.thumbnailUrl || item.imageUrl || '';
-              const href = `/content/${item.id}`;
+              const href = `${contentDetailPrefix}/${item.id}`;
+              const localizedTitle = pickLocalizedText(locale, item.title, item.titleEn);
+              const localizedDescription = pickLocalizedText(locale, item.description, item.descriptionEn);
 
               return (
                 <Link
@@ -169,7 +178,7 @@ export default function TatCaDienHinhPage() {
                       {imageSrc ? (
                         <Image
                           src={imageSrc}
-                          alt={item.title}
+                          alt={localizedTitle}
                           fill
                           className="object-cover transition-transform duration-500 group-hover:scale-105"
                           sizes="(max-width: 768px) 100vw, 25vw"
@@ -184,11 +193,11 @@ export default function TatCaDienHinhPage() {
                     <div className="flex flex-1 flex-col justify-between">
                       <div>
                         <h2 className="mb-3 line-clamp-2 text-xl font-bold text-gray-900">
-                          {item.title}
+                          {localizedTitle}
                         </h2>
-                        {item.description && (
+                        {localizedDescription && (
                           <p className="line-clamp-4 text-sm leading-relaxed text-gray-600 md:line-clamp-5">
-                            {item.description}
+                            {localizedDescription}
                           </p>
                         )}
                       </div>

@@ -4,20 +4,45 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Menu, X, Home } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import { getLocaleFromPathname, stripLocalePrefix, withLocalePrefix } from '@/lib/content-locale';
 
 export default function NavigationBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const locale = getLocaleFromPathname(pathname);
+  const otherLocale = locale === 'en' ? 'vi' : 'en';
+  const normalizedPath = stripLocalePrefix(pathname);
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  const homeHref = withLocalePrefix('/', locale);
+  const libraryHref = withLocalePrefix('/library', locale);
+  const newsHref = withLocalePrefix('/news', locale);
+  const exploreHref = withLocalePrefix('/vision-mission', locale);
+  const signInHref = withLocalePrefix('/auth/signin', locale);
+  const switchLocaleHref = withLocalePrefix(normalizedPath, otherLocale);
+
+  const labels =
+    locale === 'en'
+      ? {
+          home: 'Home',
+          library: 'Library',
+          news: 'News',
+          explore: 'Explore',
+          signIn: 'SIGN IN'
+        }
+      : {
+          home: 'Trang chu',
+          library: 'Thu vien',
+          news: 'Tin tuc',
+          explore: 'Kham pha',
+          signIn: 'DANG NHAP'
+        };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm shadow-sm">
       <div className="max-w-screen-xl mx-auto px-6">
         <div className="flex items-center justify-between h-16">
-          {/* Logos */}
-          <Link href="/" className="flex items-center gap-3 md:gap-4">
+          <Link href={homeHref} className="flex items-center gap-3 md:gap-4">
             <Image
               src="/VCCI-HCM logo VN (blue).png"
               alt="VCCI-HCM Logo"
@@ -29,50 +54,53 @@ export default function NavigationBar() {
             />
           </Link>
 
-          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             <div className="flex items-center space-x-8">
               <Link
-                href="/"
+                href={homeHref}
                 className="font-montserrat font-normal text-base text-vn-dark hover:text-vn-green transition-colors"
-                aria-label="Trang chủ"
+                aria-label={labels.home}
               >
                 <Home className="w-5 h-5" />
               </Link>
               <Link
-                href="/library"
+                href={libraryHref}
                 className="font-montserrat font-normal text-base text-vn-dark uppercase tracking-wide hover:underline hover:text-vn-green transition-colors"
               >
-                Thư viện
+                {labels.library}
               </Link>
               <Link
-                href="/news"
+                href={newsHref}
                 className="font-montserrat font-normal text-base text-vn-dark uppercase tracking-wide hover:underline hover:text-vn-green transition-colors"
               >
-                Tin tức
+                {labels.news}
               </Link>
               <Link
-                href="/vision-mission"
+                href={exploreHref}
                 className="font-montserrat font-normal text-base text-vn-dark uppercase tracking-wide hover:underline hover:text-vn-green transition-colors"
               >
-                Khám phá
+                {labels.explore}
               </Link>
             </div>
 
-            {/* Login Button */}
-            <div className="flex items-center">
+            <div className="flex items-center gap-2">
               <Link
-                href="/auth/signin"
+                href={switchLocaleHref}
+                className="font-montserrat text-sm font-semibold text-vn-dark border border-vn-dark px-3 py-1.5 rounded-md hover:bg-gray-100 transition-colors"
+              >
+                {otherLocale.toUpperCase()}
+              </Link>
+              <Link
+                href={signInHref}
                 className="font-montserrat font-normal text-base text-vn-green border-2 border-vn-green px-4 py-2 rounded-lg hover:bg-vn-green hover:text-white transition-all duration-300"
               >
-                ĐĂNG NHẬP
+                {labels.signIn}
               </Link>
             </div>
           </div>
 
-          {/* Mobile Menu Button */}
           <button
-            onClick={toggleMenu}
+            onClick={() => setIsMenuOpen((prev) => !prev)}
             className="md:hidden p-2 text-vn-dark hover:text-vn-green transition-colors"
             aria-label="Toggle menu"
           >
@@ -80,46 +108,52 @@ export default function NavigationBar() {
           </button>
         </div>
 
-        {/* Mobile Navigation */}
         {isMenuOpen && (
           <div className="md:hidden bg-white/95 backdrop-blur-sm border-t border-white/20">
             <div className="flex flex-col space-y-4 px-6 py-6">
               <Link
-                href="/"
+                href={homeHref}
                 className="font-montserrat font-normal text-base text-vn-dark hover:text-vn-green transition-colors flex items-center gap-2"
                 onClick={() => setIsMenuOpen(false)}
-                aria-label="Trang chủ"
+                aria-label={labels.home}
               >
                 <Home className="w-5 h-5" />
-                <span className="uppercase tracking-wide">Trang chủ</span>
+                <span className="uppercase tracking-wide">{labels.home}</span>
               </Link>
               <Link
-                href="/library"
+                href={libraryHref}
                 className="font-montserrat font-normal text-base text-vn-dark uppercase tracking-wide hover:text-vn-green transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Thư viện
+                {labels.library}
               </Link>
               <Link
-                href="/news"
+                href={newsHref}
                 className="font-montserrat font-normal text-base text-vn-dark uppercase tracking-wide hover:text-vn-green transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Tin tức
+                {labels.news}
               </Link>
               <Link
-                href="/vision-mission"
+                href={exploreHref}
                 className="font-montserrat font-normal text-base text-vn-dark uppercase tracking-wide hover:text-vn-green transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Khám phá
+                {labels.explore}
               </Link>
               <Link
-                href="/auth/signin"
+                href={switchLocaleHref}
+                className="font-montserrat font-semibold text-sm text-vn-dark border border-vn-dark px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors text-center"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {otherLocale.toUpperCase()}
+              </Link>
+              <Link
+                href={signInHref}
                 className="font-montserrat font-normal text-base text-vn-green border-2 border-vn-green px-4 py-2 rounded-lg hover:bg-vn-green hover:text-white transition-all duration-300 text-center"
                 onClick={() => setIsMenuOpen(false)}
               >
-                ĐĂNG NHẬP
+                {labels.signIn}
               </Link>
             </div>
           </div>

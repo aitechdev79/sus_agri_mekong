@@ -7,17 +7,24 @@ import { ChevronLeft, ChevronRight, FileText, Search } from 'lucide-react';
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
 import { ContentListResponse } from '@/types/content';
+import { usePathname } from 'next/navigation';
+import { getLocaleFromPathname, pickLocalizedText, withLocalePrefix } from '@/lib/content-locale';
 
 interface ReportDocument {
   id: string;
   title: string;
+  titleEn?: string | null;
   description?: string | null;
+  descriptionEn?: string | null;
   thumbnailUrl?: string | null;
   imageUrl?: string | null;
   fileUrl?: string | null;
 }
 
 export default function ReportsPage() {
+  const pathname = usePathname();
+  const locale = getLocaleFromPathname(pathname);
+  const contentDetailPrefix = withLocalePrefix('/content', locale);
   const [documents, setDocuments] = useState<ReportDocument[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -196,8 +203,10 @@ export default function ReportsPage() {
               <>
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
                   {documents.map((document) => {
-                    const href = document.fileUrl || `/content/${document.id}`;
+                    const href = document.fileUrl || `${contentDetailPrefix}/${document.id}`;
                     const previewImage = document.thumbnailUrl || document.imageUrl;
+                    const localizedTitle = pickLocalizedText(locale, document.title, document.titleEn);
+                    const localizedDescription = pickLocalizedText(locale, document.description, document.descriptionEn);
 
                     return (
                       <Link
@@ -211,7 +220,7 @@ export default function ReportsPage() {
                           {previewImage ? (
                             <Image
                               src={previewImage}
-                              alt={document.title}
+                              alt={localizedTitle}
                               fill
                               className="object-cover transition-transform duration-300 group-hover:scale-105"
                             />
@@ -224,10 +233,10 @@ export default function ReportsPage() {
 
                         <div className="flex flex-1 flex-col p-5">
                           <h3 className="line-clamp-2 font-montserrat text-lg font-bold text-gray-900 transition-colors group-hover:text-indigo-700">
-                            {document.title}
+                            {localizedTitle}
                           </h3>
                           <p className="mt-3 line-clamp-3 font-montserrat text-sm leading-6 text-gray-600">
-                            {document.description?.trim() || 'Tài liệu đang được cập nhật mô tả ngắn.'}
+                            {localizedDescription?.trim() || 'Tài liệu đang được cập nhật mô tả ngắn.'}
                           </p>
                         </div>
                       </Link>
