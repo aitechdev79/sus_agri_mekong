@@ -82,9 +82,9 @@ export interface ContentWithMedia extends ContentWithRoleAuthor, MediaFields {}
 
 // ===== BILINGUAL SUPPORT =====
 export interface BilingualFields {
-  titleEn?: string;
-  descriptionEn?: string;
-  contentEn?: string;
+  titleEn?: string | null;
+  descriptionEn?: string | null;
+  contentEn?: string | null;
 }
 
 export interface ContentWithBilingual extends ContentWithRoleAuthor, BilingualFields {}
