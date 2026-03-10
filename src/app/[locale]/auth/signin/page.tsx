@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { signIn } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useLocale } from 'next-intl'
 import { Eye, EyeOff, Lock, Mail } from 'lucide-react'
@@ -17,7 +16,6 @@ export default function SignInPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
 
-  const router = useRouter()
   const locale = useLocale()
   const isEn = locale === 'en'
 
@@ -38,8 +36,7 @@ export default function SignInPage() {
       if (result?.error) {
         setError(isEn ? 'Invalid email or password.' : 'Email hoặc mật khẩu không đúng.')
       } else {
-        router.push(result?.url || callbackUrl)
-        router.refresh()
+        window.location.href = result?.url || callbackUrl
       }
     } catch {
       setError(isEn ? 'An error occurred. Please try again.' : 'Đã xảy ra lỗi. Vui lòng thử lại.')
@@ -134,3 +131,4 @@ export default function SignInPage() {
     </div>
   )
 }
+

@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { signIn } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Eye, EyeOff, Lock, Mail } from 'lucide-react'
 import NavigationBar from '@/components/NavigationBar'
@@ -14,7 +13,6 @@ export default function SignInPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
-  const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -31,10 +29,9 @@ export default function SignInPage() {
       })
 
       if (result?.error) {
-        setError('Email hoặc mật khẩu không đúng')
+        setError('Email hoặc mật khẩu không đúng.')
       } else {
-        router.push(result?.url || callbackUrl)
-        router.refresh()
+        window.location.href = result?.url || callbackUrl
       }
     } catch {
       setError('Đã xảy ra lỗi. Vui lòng thử lại.')
@@ -51,8 +48,8 @@ export default function SignInPage() {
         <div className="w-full max-w-xl overflow-hidden rounded-3xl border border-emerald-100 bg-white shadow-xl">
           <div className="p-6 md:p-10">
             <div className="mb-8">
-              <h2 className="text-3xl font-bold text-gray-900 font-montserrat">Đăng nhập</h2>
-              <p className="mt-2 text-sm text-gray-600 font-montserrat">
+              <h2 className="font-montserrat text-3xl font-bold text-gray-900">Đăng nhập</h2>
+              <p className="font-montserrat mt-2 text-sm text-gray-600">
                 Chưa có tài khoản?{' '}
                 <Link href="/auth/signup" className="font-semibold text-emerald-700 hover:text-emerald-600">
                   Tạo tài khoản mới
@@ -115,3 +112,4 @@ export default function SignInPage() {
     </div>
   )
 }
+
