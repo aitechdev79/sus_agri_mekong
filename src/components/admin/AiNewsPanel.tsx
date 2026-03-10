@@ -1,7 +1,7 @@
 "use client";
 
 import { ChangeEvent, useMemo, useState } from "react";
-import { Loader2, Sparkles, Newspaper, FileText } from "lucide-react";
+import { Download, FileText, Loader2, Newspaper, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { NewsArticle, NewsSearchEngine, NewsSearchResponse } from "@/types/ai-news";
 
@@ -15,9 +15,11 @@ interface SearchFormState {
   useAiQuery: boolean;
 }
 
+type SummarizeMode = "news" | "pdf-url" | "pdf-upload" | "url" | "text";
+
 const initialSearchForm: SearchFormState = {
-  topic: "nông nghiệp bền vững",
-  geoScope: "Việt Nam, ASEAN",
+  topic: "nong nghiep ben vung",
+  geoScope: "Viet Nam, ASEAN",
   engine: "google_news",
   lang: "vi",
   maxResults: 10,
@@ -33,23 +35,44 @@ export function AiNewsPanel() {
   const [summaryError, setSummaryError] = useState("");
   const [searchResult, setSearchResult] = useState<NewsSearchResponse | null>(null);
   const [selectedUrls, setSelectedUrls] = useState<string[]>([]);
+
+  const [fallbackEnabled, setFallbackEnabled] = useState(true);
+  const [fallbackTargetCount, setFallbackTargetCount] = useState(10);
+
   const [customPrompt, setCustomPrompt] = useState(
-    "Tóm tắt các xu hướng chính, rủi ro, cơ hội và đề xuất hành động cho đội dự án.",
+    "Tom tat xu huong chinh, rui ro, co hoi, va de xuat hanh dong cho doi du an.",
   );
   const [pdfUrl, setPdfUrl] = useState("");
+  const [sourceUrl, setSourceUrl] = useState("");
+  const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [rawText, setRawText] = useState("");
   const [summary, setSummary] = useState("");
-  const [sourceMode, setSourceMode] = useState<"news" | "pdf" | "text">("news");
+  const [sourceMode, setSourceMode] = useState<SummarizeMode>("news");
   const [outputLanguage, setOutputLanguage] = useState<"vi" | "en">("vi");
 
+  const displayArticles = useMemo(() => {
+    if (!searchResult) return [];
+    if (!fallbackEnabled || searchResult.fresh.length >= fallbackTargetCount) {
+      return searchResult.fresh;
+    }
+
+    const needed = Math.max(0, fallbackTargetCount - searchResult.fresh.length);
+    return [...searchResult.fresh, ...searchResult.old.slice(0, needed)];
+  }, [searchResult, fallbackEnabled, fallbackTargetCount]);
+
   const selectedArticles = useMemo(() => {
-    const fresh = searchResult?.fresh || [];
-    if (selectedUrls.length === 0) {
+    if (!displayArticles.length || selectedUrls.length === 0) {
       return [];
     }
     const set = new Set(selectedUrls);
-    return fresh.filter((article) => set.has(article.url));
-  }, [searchResult, selectedUrls]);
+    return displayArticles.filter((article) => set.has(article.url));
+  }, [displayArticles, selectedUrls]);
+
+  const onNumberInput =
+    (field: "maxResults" | "timeframeDays") => (event: ChangeEvent<HTMLInputElement>) => {
+      const value = Number(event.target.value);
+      setForm((prev) => ({ ...prev, [field]: value }));
+    };
 
   const onSearchNews = async () => {
     try {
@@ -69,7 +92,15 @@ export function AiNewsPanel() {
 
       const result = data as NewsSearchResponse;
       setSearchResult(result);
-      setSelectedUrls(result.fresh.map((article) => article.url).filter(Boolean));
+
+      const defaultSelection = (() => {
+        if (!fallbackEnabled || result.fresh.length >= fallbackTargetCount) {
+          return result.fresh;
+        }
+        const needed = Math.max(0, fallbackTargetCount - result.fresh.length);
+        return [...result.fresh, ...result.old.slice(0, needed)];
+      })();
+      setSelectedUrls(defaultSelection.map((item) => item.url).filter(Boolean));
     } catch (error) {
       setSearchError(error instanceof Error ? error.message : "Search failed");
     } finally {
@@ -83,24 +114,44 @@ export function AiNewsPanel() {
       setSummaryError("");
       setSummary("");
 
-      const body: Record<string, unknown> = {
-        customPrompt,
-        outputLanguage,
-      };
+      let response: Response;
 
-      if (sourceMode === "news") {
-        body.articles = selectedArticles;
-      } else if (sourceMode === "pdf") {
-        body.pdfUrl = pdfUrl;
+      if (sourceMode === "pdf-upload") {
+        if (!pdfFile) {
+          throw new Error("Please choose a PDF file first.");
+        }
+
+        const formData = new FormData();
+        formData.append("customPrompt", customPrompt);
+        formData.append("outputLanguage", outputLanguage);
+        formData.append("pdfFile", pdfFile);
+
+        response = await fetch("/api/admin/ai/summarize", {
+          method: "POST",
+          body: formData,
+        });
       } else {
-        body.rawText = rawText;
-      }
+        const body: Record<string, unknown> = {
+          customPrompt,
+          outputLanguage,
+        };
 
-      const response = await fetch("/api/admin/ai/summarize", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
+        if (sourceMode === "news") {
+          body.articles = selectedArticles;
+        } else if (sourceMode === "pdf-url") {
+          body.pdfUrl = pdfUrl;
+        } else if (sourceMode === "url") {
+          body.sourceUrl = sourceUrl;
+        } else {
+          body.rawText = rawText;
+        }
+
+        response = await fetch("/api/admin/ai/summarize", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+      }
 
       const data = await response.json();
       if (!response.ok) {
@@ -115,28 +166,55 @@ export function AiNewsPanel() {
     }
   };
 
-  const canSummarizeNews = sourceMode === "news" && selectedArticles.length > 0;
-  const canSummarizePdf = sourceMode === "pdf" && pdfUrl.trim().length > 0;
-  const canSummarizeText = sourceMode === "text" && rawText.trim().length > 0;
-  const canSummarize = canSummarizeNews || canSummarizePdf || canSummarizeText;
-
-  const onNumberInput =
-    (field: "maxResults" | "timeframeDays") => (event: ChangeEvent<HTMLInputElement>) => {
-      const value = Number(event.target.value);
-      setForm((prev) => ({ ...prev, [field]: value }));
-    };
-
   const toggleArticle = (url: string) => {
     setSelectedUrls((prev) => (prev.includes(url) ? prev.filter((item) => item !== url) : [...prev, url]));
   };
 
-  const selectAllFresh = () => {
-    setSelectedUrls((searchResult?.fresh || []).map((article) => article.url).filter(Boolean));
+  const selectAllDisplayed = () => {
+    setSelectedUrls(displayArticles.map((article) => article.url).filter(Boolean));
   };
 
   const clearSelection = () => {
     setSelectedUrls([]);
   };
+
+  const downloadCsv = () => {
+    const rows = selectedArticles.length > 0 ? selectedArticles : displayArticles;
+    if (!rows.length) return;
+
+    const escapeCell = (value: string): string => `"${value.replace(/"/g, '""')}"`;
+    const headers = ["title", "source", "publishedDate", "normalizedDate", "url", "content"];
+    const body = rows.map((item) =>
+      [
+        item.title,
+        item.source,
+        item.publishedDate,
+        item.normalizedDate || "",
+        item.url,
+        item.content,
+      ]
+        .map((cell) => escapeCell(String(cell || "")))
+        .join(","),
+    );
+
+    const csv = [headers.join(","), ...body].join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "ai-news-results.csv";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(link.href);
+  };
+
+  const canSummarizeNews = sourceMode === "news" && selectedArticles.length > 0;
+  const canSummarizePdfUrl = sourceMode === "pdf-url" && pdfUrl.trim().length > 0;
+  const canSummarizePdfUpload = sourceMode === "pdf-upload" && !!pdfFile;
+  const canSummarizeUrl = sourceMode === "url" && sourceUrl.trim().length > 0;
+  const canSummarizeText = sourceMode === "text" && rawText.trim().length > 0;
+  const canSummarize =
+    canSummarizeNews || canSummarizePdfUrl || canSummarizePdfUpload || canSummarizeUrl || canSummarizeText;
 
   return (
     <div className="mb-8 grid gap-6 lg:grid-cols-2">
@@ -146,7 +224,7 @@ export function AiNewsPanel() {
           <h2 className="text-xl font-semibold text-gray-900">AI News Finder</h2>
         </div>
         <p className="mb-4 text-sm text-gray-600">
-          Tìm tin theo chủ đề, địa lý, thời gian với SerpAPI. Có thể dùng OpenAI để tối ưu câu truy vấn.
+          Tim tin theo chu de, dia ly, va thoi gian voi SerpAPI. Co the dung OpenAI de toi uu search query.
         </p>
 
         <div className="grid gap-3">
@@ -154,13 +232,13 @@ export function AiNewsPanel() {
             value={form.topic}
             onChange={(event) => setForm((prev) => ({ ...prev, topic: event.target.value }))}
             className="rounded-md border border-gray-300 px-3 py-2 text-sm"
-            placeholder="Chủ đề"
+            placeholder="Chu de"
           />
           <input
             value={form.geoScope}
             onChange={(event) => setForm((prev) => ({ ...prev, geoScope: event.target.value }))}
             className="rounded-md border border-gray-300 px-3 py-2 text-sm"
-            placeholder="Phạm vi địa lý"
+            placeholder="Pham vi dia ly"
           />
 
           <div className="grid gap-3 md:grid-cols-2">
@@ -180,7 +258,7 @@ export function AiNewsPanel() {
               onChange={(event) => setForm((prev) => ({ ...prev, lang: event.target.value as "vi" | "en" }))}
               className="rounded-md border border-gray-300 px-3 py-2 text-sm"
             >
-              <option value="vi">Tiếng Việt</option>
+              <option value="vi">Tieng Viet</option>
               <option value="en">English</option>
             </select>
           </div>
@@ -193,7 +271,7 @@ export function AiNewsPanel() {
               value={form.maxResults}
               onChange={onNumberInput("maxResults")}
               className="rounded-md border border-gray-300 px-3 py-2 text-sm"
-              placeholder="Số lượng kết quả"
+              placeholder="So ket qua"
             />
             <input
               type="number"
@@ -202,7 +280,7 @@ export function AiNewsPanel() {
               value={form.timeframeDays}
               onChange={onNumberInput("timeframeDays")}
               className="rounded-md border border-gray-300 px-3 py-2 text-sm"
-              placeholder="Số ngày gần đây"
+              placeholder="So ngay"
             />
           </div>
 
@@ -212,13 +290,44 @@ export function AiNewsPanel() {
               checked={form.useAiQuery}
               onChange={(event) => setForm((prev) => ({ ...prev, useAiQuery: event.target.checked }))}
             />
-            Dùng OpenAI để tối ưu search query
+            Dung OpenAI de toi uu query
           </label>
 
-          <Button onClick={onSearchNews} disabled={searching}>
-            {searching ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
-            Tìm tin
-          </Button>
+          <label className="flex items-center gap-2 text-sm text-gray-700">
+            <input
+              type="checkbox"
+              checked={fallbackEnabled}
+              onChange={(event) => setFallbackEnabled(event.target.checked)}
+            />
+            Fallback: bo sung bai cu neu bai moi khong du
+          </label>
+
+          {fallbackEnabled && (
+            <input
+              type="number"
+              min={1}
+              max={20}
+              value={fallbackTargetCount}
+              onChange={(event) => setFallbackTargetCount(Number(event.target.value) || 1)}
+              className="rounded-md border border-gray-300 px-3 py-2 text-sm"
+              placeholder="Tong so bai mong muon"
+            />
+          )}
+
+          <div className="flex gap-2">
+            <Button onClick={onSearchNews} disabled={searching}>
+              {searching ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Sparkles className="mr-2 h-4 w-4" />
+              )}
+              Tim tin
+            </Button>
+            <Button type="button" variant="secondary" onClick={downloadCsv} disabled={!displayArticles.length}>
+              <Download className="mr-2 h-4 w-4" />
+              Export CSV
+            </Button>
+          </div>
           {searchError && <p className="text-sm text-red-600">{searchError}</p>}
         </div>
 
@@ -232,52 +341,57 @@ export function AiNewsPanel() {
                 <div className="mt-1 text-gray-600">Hints: {searchResult.queryHints.join(", ")}</div>
               )}
               <div className="mt-2 text-gray-600">
-                Fresh: {searchResult.fresh.length} | Old: {searchResult.old.length}
+                Fresh: {searchResult.fresh.length} | Old: {searchResult.old.length} | Displayed:{" "}
+                {displayArticles.length}
               </div>
               <div className="mt-1 text-gray-600">Selected for summary: {selectedArticles.length}</div>
             </div>
             <div className="flex gap-2">
               <button
                 type="button"
-                onClick={selectAllFresh}
+                onClick={selectAllDisplayed}
                 className="rounded-md border border-gray-300 px-3 py-1 text-xs font-medium text-gray-700 hover:bg-gray-50"
               >
-                Chọn tất cả
+                Chon tat ca
               </button>
               <button
                 type="button"
                 onClick={clearSelection}
                 className="rounded-md border border-gray-300 px-3 py-1 text-xs font-medium text-gray-700 hover:bg-gray-50"
               >
-                Bỏ chọn
+                Bo chon
               </button>
             </div>
-            <div className="max-h-64 space-y-2 overflow-auto pr-1">
-              {searchResult.fresh.map((article: NewsArticle, index: number) => (
-                <div key={`${article.url}-${index}`} className="rounded-md border border-gray-200 p-3 text-sm">
-                  <label className="flex cursor-pointer items-start gap-2">
-                    <input
-                      type="checkbox"
-                      checked={selectedUrls.includes(article.url)}
-                      onChange={() => toggleArticle(article.url)}
-                      className="mt-1"
-                    />
-                    <div className="min-w-0">
-                      <a
-                        href={article.url}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="font-medium text-gray-900 hover:underline"
-                      >
-                        {article.title}
-                      </a>
-                      <div className="mt-1 text-xs text-gray-500">
-                        {article.source} | {article.normalizedDate || article.publishedDate}
+            <div className="max-h-72 space-y-2 overflow-auto pr-1">
+              {displayArticles.map((article: NewsArticle, index: number) => {
+                const isOld = !searchResult.fresh.some((freshItem) => freshItem.url === article.url);
+                return (
+                  <div key={`${article.url}-${index}`} className="rounded-md border border-gray-200 p-3 text-sm">
+                    <label className="flex cursor-pointer items-start gap-2">
+                      <input
+                        type="checkbox"
+                        checked={selectedUrls.includes(article.url)}
+                        onChange={() => toggleArticle(article.url)}
+                        className="mt-1"
+                      />
+                      <div className="min-w-0">
+                        <a
+                          href={article.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="font-medium text-gray-900 hover:underline"
+                        >
+                          {article.title}
+                        </a>
+                        <div className="mt-1 text-xs text-gray-500">
+                          {article.source} | {article.normalizedDate || article.publishedDate}
+                          {isOld ? " | Fallback old" : ""}
+                        </div>
                       </div>
-                    </div>
-                  </label>
-                </div>
-              ))}
+                    </label>
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}
@@ -289,18 +403,20 @@ export function AiNewsPanel() {
           <h2 className="text-xl font-semibold text-gray-900">AI Summarizer</h2>
         </div>
         <p className="mb-4 text-sm text-gray-600">
-          Tóm tắt từ tin đã tìm được, văn bản tự nhập, hoặc PDF URL bằng prompt tùy chỉnh.
+          Tom tat tu news da tim, URL, PDF URL, PDF upload, hoac raw text voi prompt tuy chinh.
         </p>
 
         <div className="grid gap-3">
           <select
             value={sourceMode}
-            onChange={(event) => setSourceMode(event.target.value as "news" | "pdf" | "text")}
+            onChange={(event) => setSourceMode(event.target.value as SummarizeMode)}
             className="rounded-md border border-gray-300 px-3 py-2 text-sm"
           >
-            <option value="news">Nguồn: Fresh news từ panel bên trái</option>
-            <option value="pdf">Nguồn: PDF URL</option>
-            <option value="text">Nguồn: Raw text</option>
+            <option value="news">Nguon: News da chon</option>
+            <option value="url">Nguon: URL web</option>
+            <option value="pdf-url">Nguon: PDF URL</option>
+            <option value="pdf-upload">Nguon: Upload PDF</option>
+            <option value="text">Nguon: Raw text</option>
           </select>
 
           <select
@@ -308,11 +424,20 @@ export function AiNewsPanel() {
             onChange={(event) => setOutputLanguage(event.target.value as "vi" | "en")}
             className="rounded-md border border-gray-300 px-3 py-2 text-sm"
           >
-            <option value="vi">Đầu ra: Tiếng Việt</option>
+            <option value="vi">Dau ra: Tieng Viet</option>
             <option value="en">Output: English</option>
           </select>
 
-          {sourceMode === "pdf" && (
+          {sourceMode === "url" && (
+            <input
+              value={sourceUrl}
+              onChange={(event) => setSourceUrl(event.target.value)}
+              className="rounded-md border border-gray-300 px-3 py-2 text-sm"
+              placeholder="https://example.com/article"
+            />
+          )}
+
+          {sourceMode === "pdf-url" && (
             <input
               value={pdfUrl}
               onChange={(event) => setPdfUrl(event.target.value)}
@@ -321,12 +446,21 @@ export function AiNewsPanel() {
             />
           )}
 
+          {sourceMode === "pdf-upload" && (
+            <input
+              type="file"
+              accept="application/pdf,.pdf"
+              onChange={(event) => setPdfFile(event.target.files?.[0] || null)}
+              className="rounded-md border border-gray-300 px-3 py-2 text-sm"
+            />
+          )}
+
           {sourceMode === "text" && (
             <textarea
               value={rawText}
               onChange={(event) => setRawText(event.target.value)}
-              className="min-h-24 rounded-md border border-gray-300 px-3 py-2 text-sm"
-              placeholder="Dán nội dung cần tóm tắt..."
+              className="min-h-28 rounded-md border border-gray-300 px-3 py-2 text-sm"
+              placeholder="Dan noi dung can tom tat..."
             />
           )}
 
@@ -334,19 +468,19 @@ export function AiNewsPanel() {
             value={customPrompt}
             onChange={(event) => setCustomPrompt(event.target.value)}
             className="min-h-24 rounded-md border border-gray-300 px-3 py-2 text-sm"
-            placeholder="Prompt tùy chỉnh"
+            placeholder="Prompt tuy chinh"
           />
 
           <Button onClick={onSummarize} disabled={summarizing || !canSummarize}>
             {summarizing ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
-            Tóm tắt
+            Tom tat
           </Button>
           {summaryError && <p className="text-sm text-red-600">{summaryError}</p>}
         </div>
 
         {summary && (
           <div className="mt-6 rounded-md border border-gray-200 bg-gray-50 p-4">
-            <div className="mb-2 text-sm font-semibold text-gray-900">Kết quả tóm tắt</div>
+            <div className="mb-2 text-sm font-semibold text-gray-900">Ket qua tom tat</div>
             <pre className="whitespace-pre-wrap text-sm text-gray-800">{summary}</pre>
           </div>
         )}

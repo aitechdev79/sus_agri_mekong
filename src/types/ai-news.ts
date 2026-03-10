@@ -33,9 +33,10 @@ export interface SummarizeRequest {
   articles?: NewsArticle[];
   rawText?: string;
   pdfUrl?: string;
+  sourceUrl?: string;
 }
 
 export interface SummarizeResponse {
   summary: string;
-  sourceType: "articles" | "text" | "pdf";
+  sourceType: "articles" | "text" | "pdf" | "url";
 }

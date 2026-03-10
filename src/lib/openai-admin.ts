@@ -3,6 +3,8 @@ import { NewsArticle } from "@/types/ai-news";
 const OPENAI_API_BASE = "https://api.openai.com/v1";
 const DEFAULT_MODEL = process.env.OPENAI_MODEL || "gpt-4.1-mini";
 const MAX_PDF_SIZE_BYTES = 8 * 1024 * 1024;
+const MAX_URL_TEXT_LENGTH = 18000;
+const FETCH_TIMEOUT_MS = 15000;
 
 interface OpenAITextResponse {
   output_text?: string;
@@ -42,6 +44,41 @@ function extractOutputText(payload: OpenAITextResponse): string {
   }
 
   return chunks.join("\n").trim();
+}
+
+function isForbiddenHost(hostname: string): boolean {
+  const host = hostname.trim().toLowerCase();
+  if (!host) return true;
+  if (["localhost", "127.0.0.1", "::1"].includes(host)) return true;
+  if (host.startsWith("10.") || host.startsWith("127.") || host.startsWith("192.168.")) return true;
+  if (/^172\.(1[6-9]|2\d|3[0-1])\./.test(host)) return true;
+  if (host.endsWith(".local")) return true;
+  return false;
+}
+
+async function fetchWithTimeout(url: string): Promise<Response> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+  try {
+    return await fetch(url, {
+      method: "GET",
+      cache: "no-store",
+      signal: controller.signal,
+      redirect: "follow",
+    });
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+function stripHtmlToText(html: string): string {
+  return html
+    .replace(/<script[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style[\s\S]*?<\/style>/gi, " ")
+    .replace(/<noscript[\s\S]*?<\/noscript>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 async function callResponsesApi(body: Record<string, unknown>): Promise<OpenAITextResponse> {
@@ -233,15 +270,11 @@ export async function summarizePdfFromUrl(
     throw new Error("Only http/https PDF URLs are supported");
   }
 
-  const host = parsedUrl.hostname.toLowerCase();
-  if (host === "localhost" || host === "127.0.0.1" || host === "::1") {
-    throw new Error("Localhost URLs are not allowed");
+  if (isForbiddenHost(parsedUrl.hostname)) {
+    throw new Error("This host is not allowed");
   }
 
-  const response = await fetch(url, {
-    method: "GET",
-    cache: "no-store",
-  });
+  const response = await fetchWithTimeout(url);
 
   if (!response.ok) {
     throw new Error(`Could not fetch PDF: ${response.status}`);
@@ -253,6 +286,19 @@ export async function summarizePdfFromUrl(
   }
 
   const buffer = Buffer.from(await response.arrayBuffer());
+  return summarizePdfBuffer(buffer, customPrompt, outputLanguage, "document.pdf");
+}
+
+export async function summarizePdfBuffer(
+  buffer: Buffer,
+  customPrompt: string,
+  outputLanguage: "vi" | "en",
+  filename = "document.pdf",
+): Promise<string> {
+  if (!buffer.length) {
+    throw new Error("PDF file is empty");
+  }
+
   if (buffer.length > MAX_PDF_SIZE_BYTES) {
     throw new Error("PDF is too large. Please use a file under 8MB.");
   }
@@ -270,7 +316,7 @@ export async function summarizePdfFromUrl(
         content: [
           {
             type: "input_file",
-            filename: "document.pdf",
+            filename,
             file_data: `data:application/pdf;base64,${base64}`,
           },
           {
@@ -288,4 +334,50 @@ export async function summarizePdfFromUrl(
   }
 
   return output;
+}
+
+export async function summarizeUrlContent(
+  sourceUrl: string,
+  customPrompt: string,
+  outputLanguage: "vi" | "en",
+): Promise<string> {
+  const url = sourceUrl.trim();
+  if (!url) {
+    throw new Error("Source URL is required");
+  }
+
+  let parsedUrl: URL;
+  try {
+    parsedUrl = new URL(url);
+  } catch {
+    throw new Error("Invalid source URL");
+  }
+
+  if (!["http:", "https:"].includes(parsedUrl.protocol)) {
+    throw new Error("Only http/https URLs are supported");
+  }
+
+  if (isForbiddenHost(parsedUrl.hostname)) {
+    throw new Error("This host is not allowed");
+  }
+
+  const response = await fetchWithTimeout(url);
+  if (!response.ok) {
+    throw new Error(`Could not fetch URL content: ${response.status}`);
+  }
+
+  const contentType = (response.headers.get("content-type") || "").toLowerCase();
+
+  if (contentType.includes("pdf")) {
+    const buffer = Buffer.from(await response.arrayBuffer());
+    return summarizePdfBuffer(buffer, customPrompt, outputLanguage, "source.pdf");
+  }
+
+  const rawHtml = await response.text();
+  const extractedText = stripHtmlToText(rawHtml).slice(0, MAX_URL_TEXT_LENGTH);
+  if (!extractedText) {
+    throw new Error("Could not extract readable text from URL");
+  }
+
+  return summarizeText(extractedText, customPrompt, outputLanguage);
 }
