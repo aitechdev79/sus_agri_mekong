@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma'
 
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url)
+    const { searchParams } = request.nextUrl
     const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10))
     const limit = Math.max(1, parseInt(searchParams.get('limit') || '6', 10))
     const skip = (page - 1) * limit
@@ -57,4 +57,4 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export const revalidate = 300
+export const dynamic = 'force-dynamic'

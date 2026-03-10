@@ -14,7 +14,7 @@ function parseDateParam(value: string | null) {
 
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url)
+    const { searchParams } = request.nextUrl
     const from = parseDateParam(searchParams.get('from'))
     const to = parseDateParam(searchParams.get('to'))
 
@@ -71,4 +71,4 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
