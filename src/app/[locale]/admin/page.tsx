@@ -9,6 +9,7 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { ContentTable } from '@/components/admin/ContentTable'
 import { ContentForm } from '@/components/admin/ContentForm'
+import { AiNewsPanel } from '@/components/admin/AiNewsPanel'
 import { Plus, Tags, Users } from 'lucide-react'
 import { AdminContent } from '@/types/content'
 import { useAdminCategories } from '@/hooks/use-admin-categories'
@@ -211,6 +212,8 @@ export default function AdminPage() {
               <div className="mt-2 text-3xl font-bold text-gray-900">{categories.filter((item) => item.isActive).length}</div>
             </div>
           </div>
+
+          <AiNewsPanel />
 
           <div className="rounded-2xl bg-white p-6 shadow-sm">
             <ContentTable

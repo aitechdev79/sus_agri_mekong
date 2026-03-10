@@ -8,6 +8,7 @@ import { Header } from '@/components/layout/Header'
 import { ContentTable } from '@/components/admin/ContentTable'
 import { ContentForm } from '@/components/admin/ContentForm'
 import { StatsCards } from '@/components/admin/StatsCards'
+import { AiNewsPanel } from '@/components/admin/AiNewsPanel'
 import { Plus, Tags, Users } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { AdminContent } from '@/types/content'
@@ -182,6 +183,7 @@ export default function AdminPage() {
         </div>
 
         <StatsCards stats={stats} />
+        <AiNewsPanel />
 
         <ContentTable
           contents={contents}
