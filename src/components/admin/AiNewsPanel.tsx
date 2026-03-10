@@ -403,7 +403,6 @@ export function AiNewsPanel() {
             <option value="news">Nguồn: Tin đã chọn</option>
             <option value="url">Nguồn: URL trang web</option>
             <option value="pdf-url">Nguồn: URL PDF</option>
-            <option value="pdf-upload">Nguồn: Tải lên PDF</option>
             <option value="text">Nguồn: Văn bản thô</option>
           </select>
 
