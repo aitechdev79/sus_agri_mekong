@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { ChangeEvent, useMemo, useState } from "react";
 import { Download, FileText, Loader2, Newspaper, Sparkles } from "lucide-react";
@@ -18,8 +18,8 @@ interface SearchFormState {
 type SummarizeMode = "news" | "pdf-url" | "pdf-upload" | "url" | "text";
 
 const initialSearchForm: SearchFormState = {
-  topic: "nÃ´ng nghiá»‡p bá»n vá»¯ng",
-  geoScope: "Viá»‡t Nam, ASEAN",
+  topic: "nông nghiệp bền vững",
+  geoScope: "Việt Nam, ASEAN",
   engine: "google_news",
   lang: "vi",
   maxResults: 10,
@@ -40,7 +40,7 @@ export function AiNewsPanel() {
   const [fallbackTargetCount, setFallbackTargetCount] = useState(10);
 
   const [customPrompt, setCustomPrompt] = useState(
-    "CÃ¢u tráº£ lá»i gá»“m 2 pháº§n. [1] Ná»™i dung ngáº¯n: Tráº£ lá»i Ä‘Ãºng 1 cÃ¢u duy nháº¥t, tÃ³m táº¯t cá»‘t lÃµi cá»§a tÃ i liá»‡u. [2] Ná»™i dung dÃ i: TÃ³m táº¯t chi tiáº¿t khoáº£ng 1 trang A4, máº¡ch láº¡c, trung tÃ­nh, cÃ³ cáº¥u trÃºc vá»›i cÃ¡c Ä‘oáº¡n rÃµ rÃ ng.",
+    "Câu trả lời gồm 2 phần. [1] Nội dung ngắn: Trả lời đúng 1 câu duy nhất, tóm tắt cốt lõi của tài liệu. [2] Nội dung dài: Tóm tắt chi tiết khoảng 1 trang A4, mạch lạc, trung tính, có cấu trúc với các đoạn rõ ràng.",
   );
   const [pdfUrl, setPdfUrl] = useState("");
   const [sourceUrl, setSourceUrl] = useState("");
@@ -90,8 +90,7 @@ export function AiNewsPanel() {
         throw new Error(data.error || "Search failed");
       }
 
-      const result = data as NewsSearchResponse;
-      setSearchResult(result);
+      setSearchResult(data as NewsSearchResponse);
       setSelectedUrl(null);
     } catch (error) {
       setSearchError(error instanceof Error ? error.message : "Search failed");
@@ -110,7 +109,7 @@ export function AiNewsPanel() {
 
       if (sourceMode === "pdf-upload") {
         if (!pdfFile) {
-          throw new Error("Please choose a PDF file first.");
+          throw new Error("Vui lòng chọn tệp PDF trước.");
         }
 
         const formData = new FormData();
@@ -220,7 +219,7 @@ export function AiNewsPanel() {
           <h2 className="text-xl font-semibold text-gray-900">AI Content Finder</h2>
         </div>
         <p className="mb-4 text-sm text-gray-600">
-          TÃ¬m tin theo chá»§ Ä‘á», Ä‘á»‹a lÃ½ vÃ  thá»i gian vá»›i SerpAPI. CÃ³ thá»ƒ dÃ¹ng OpenAI Ä‘á»ƒ tá»‘i Æ°u truy váº¥n tÃ¬m kiáº¿m.
+          Tìm tin theo chủ đề, địa lý và thời gian với SerpAPI. Có thể dùng OpenAI để tối ưu truy vấn tìm kiếm.
         </p>
 
         <div className="grid gap-3">
@@ -228,13 +227,13 @@ export function AiNewsPanel() {
             value={form.topic}
             onChange={(event) => setForm((prev) => ({ ...prev, topic: event.target.value }))}
             className="rounded-md border border-gray-300 px-3 py-2 text-sm"
-            placeholder="Chá»§ Ä‘á»"
+            placeholder="Chủ đề"
           />
           <input
             value={form.geoScope}
             onChange={(event) => setForm((prev) => ({ ...prev, geoScope: event.target.value }))}
             className="rounded-md border border-gray-300 px-3 py-2 text-sm"
-            placeholder="Pháº¡m vi Ä‘á»‹a lÃ½"
+            placeholder="Phạm vi địa lý"
           />
 
           <div className="grid gap-3 md:grid-cols-2">
@@ -254,7 +253,7 @@ export function AiNewsPanel() {
               onChange={(event) => setForm((prev) => ({ ...prev, lang: event.target.value as "vi" | "en" }))}
               className="rounded-md border border-gray-300 px-3 py-2 text-sm"
             >
-              <option value="vi">Tiáº¿ng Viá»‡t</option>
+              <option value="vi">Tiếng Việt</option>
               <option value="en">English</option>
             </select>
           </div>
@@ -267,7 +266,7 @@ export function AiNewsPanel() {
               value={form.maxResults}
               onChange={onNumberInput("maxResults")}
               className="rounded-md border border-gray-300 px-3 py-2 text-sm"
-              placeholder="Sá»‘ káº¿t quáº£"
+              placeholder="Số kết quả"
             />
             <input
               type="number"
@@ -276,7 +275,7 @@ export function AiNewsPanel() {
               value={form.timeframeDays}
               onChange={onNumberInput("timeframeDays")}
               className="rounded-md border border-gray-300 px-3 py-2 text-sm"
-              placeholder="Sá»‘ ngÃ y"
+              placeholder="Số ngày"
             />
           </div>
 
@@ -286,7 +285,7 @@ export function AiNewsPanel() {
               checked={form.useAiQuery}
               onChange={(event) => setForm((prev) => ({ ...prev, useAiQuery: event.target.checked }))}
             />
-            DÃ¹ng OpenAI Ä‘á»ƒ tá»‘i Æ°u truy váº¥n
+            Dùng OpenAI để tối ưu truy vấn
           </label>
 
           <label className="flex items-center gap-2 text-sm text-gray-700">
@@ -295,7 +294,7 @@ export function AiNewsPanel() {
               checked={fallbackEnabled}
               onChange={(event) => setFallbackEnabled(event.target.checked)}
             />
-            Fallback: bá»• sung bÃ i cÅ© náº¿u bÃ i má»›i khÃ´ng Ä‘á»§
+            Fallback: bổ sung bài cũ nếu bài mới không đủ
           </label>
 
           {fallbackEnabled && (
@@ -306,7 +305,7 @@ export function AiNewsPanel() {
               value={fallbackTargetCount}
               onChange={(event) => setFallbackTargetCount(Number(event.target.value) || 1)}
               className="rounded-md border border-gray-300 px-3 py-2 text-sm"
-              placeholder="Tá»•ng sá»‘ bÃ i mong muá»‘n"
+              placeholder="Tổng số bài mong muốn"
             />
           )}
 
@@ -317,11 +316,11 @@ export function AiNewsPanel() {
               ) : (
                 <Sparkles className="mr-2 h-4 w-4" />
               )}
-              TÃ¬m tin
+              Tìm tin
             </Button>
             <Button type="button" variant="secondary" onClick={downloadCsv} disabled={!displayArticles.length}>
               <Download className="mr-2 h-4 w-4" />
-              Xuáº¥t CSV
+              Xuất CSV
             </Button>
           </div>
           {searchError && <p className="text-sm text-red-600">{searchError}</p>}
@@ -340,7 +339,7 @@ export function AiNewsPanel() {
                 Fresh: {searchResult.fresh.length} | Old: {searchResult.old.length} | Displayed:{" "}
                 {displayArticles.length}
               </div>
-              <div className="mt-1 text-gray-600">Selected for summary: {selectedArticles.length}</div>
+              <div className="mt-1 text-gray-600">Đã chọn để tóm tắt: {selectedArticles.length}</div>
             </div>
 
             <div className="max-h-72 space-y-2 overflow-auto pr-1">
@@ -367,7 +366,7 @@ export function AiNewsPanel() {
                         </a>
                         <div className="mt-1 text-xs text-gray-500">
                           {article.source} | {article.normalizedDate || article.publishedDate}
-                          {isOld ? " | BÃ i cÅ© bá»• sung" : ""}
+                          {isOld ? " | Bài cũ bổ sung" : ""}
                         </div>
                       </div>
                       <button
@@ -392,7 +391,7 @@ export function AiNewsPanel() {
           <h2 className="text-xl font-semibold text-gray-900">AI Content Summarizer</h2>
         </div>
         <p className="mb-4 text-sm text-gray-600">
-          TÃ³m táº¯t tá»« tin Ä‘Ã£ tÃ¬m, URL, PDF URL, PDF táº£i lÃªn hoáº·c vÄƒn báº£n thÃ´ vá»›i prompt tÃ¹y chá»‰nh.
+          Tóm tắt từ tin đã tìm, URL, PDF URL, PDF tải lên hoặc văn bản thô với prompt tùy chỉnh.
         </p>
 
         <div className="grid gap-3">
@@ -401,11 +400,11 @@ export function AiNewsPanel() {
             onChange={(event) => setSourceMode(event.target.value as SummarizeMode)}
             className="rounded-md border border-gray-300 px-3 py-2 text-sm"
           >
-            <option value="news">Nguá»“n: Tin Ä‘Ã£ chá»n</option>
-            <option value="url">Nguá»“n: URL trang web</option>
-            <option value="pdf-url">Nguá»“n: URL PDF</option>
-            <option value="pdf-upload">Nguá»“n: Táº£i lÃªn PDF</option>
-            <option value="text">Nguá»“n: VÄƒn báº£n thÃ´</option>
+            <option value="news">Nguồn: Tin đã chọn</option>
+            <option value="url">Nguồn: URL trang web</option>
+            <option value="pdf-url">Nguồn: URL PDF</option>
+            <option value="pdf-upload">Nguồn: Tải lên PDF</option>
+            <option value="text">Nguồn: Văn bản thô</option>
           </select>
 
           <select
@@ -413,7 +412,7 @@ export function AiNewsPanel() {
             onChange={(event) => setOutputLanguage(event.target.value as "vi" | "en")}
             className="rounded-md border border-gray-300 px-3 py-2 text-sm"
           >
-            <option value="vi">Äáº§u ra: Tiáº¿ng Viá»‡t</option>
+            <option value="vi">Đầu ra: Tiếng Việt</option>
             <option value="en">Output: English</option>
           </select>
 
@@ -449,7 +448,7 @@ export function AiNewsPanel() {
               value={rawText}
               onChange={(event) => setRawText(event.target.value)}
               className="min-h-28 rounded-md border border-gray-300 px-3 py-2 text-sm"
-              placeholder="DÃ¡n ná»™i dung cáº§n tÃ³m táº¯t..."
+              placeholder="Dán nội dung cần tóm tắt..."
             />
           )}
 
@@ -457,19 +456,19 @@ export function AiNewsPanel() {
             value={customPrompt}
             onChange={(event) => setCustomPrompt(event.target.value)}
             className="min-h-24 rounded-md border border-gray-300 px-3 py-2 text-sm"
-            placeholder="CÃ¢u tráº£ lá»i gá»“m 2 pháº§n. [1] Ná»™i dung ngáº¯n: Tráº£ lá»i Ä‘Ãºng 1 cÃ¢u duy nháº¥t, tÃ³m táº¯t cá»‘t lÃµi cá»§a tÃ i liá»‡u. [2] Ná»™i dung dÃ i: TÃ³m táº¯t chi tiáº¿t khoáº£ng 1 trang A4, máº¡ch láº¡c, trung tÃ­nh, cÃ³ cáº¥u trÃºc vá»›i cÃ¡c Ä‘oáº¡n rÃµ rÃ ng."
+            placeholder="Câu trả lời gồm 2 phần. [1] Nội dung ngắn: Trả lời đúng 1 câu duy nhất, tóm tắt cốt lõi của tài liệu. [2] Nội dung dài: Tóm tắt chi tiết khoảng 1 trang A4, mạch lạc, trung tính, có cấu trúc với các đoạn rõ ràng."
           />
 
           <Button onClick={onSummarize} disabled={summarizing || !canSummarize}>
             {summarizing ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
-            TÃ³m táº¯t
+            Tóm tắt
           </Button>
           {summaryError && <p className="text-sm text-red-600">{summaryError}</p>}
         </div>
 
         {summary && (
           <div className="mt-6 rounded-md border border-gray-200 bg-gray-50 p-4">
-            <div className="mb-2 text-sm font-semibold text-gray-900">Káº¿t quáº£ tÃ³m táº¯t</div>
+            <div className="mb-2 text-sm font-semibold text-gray-900">Kết quả tóm tắt</div>
             <pre className="whitespace-pre-wrap text-sm text-gray-800">{summary}</pre>
           </div>
         )}
@@ -477,4 +476,3 @@ export function AiNewsPanel() {
     </div>
   );
 }
-
