@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
-import { ArrowLeft, Download, Search, ShieldCheck, UserCheck, Users } from 'lucide-react'
+import { ArrowLeft, Download, PencilLine, Save, Search, ShieldCheck, UserCheck, Users, X } from 'lucide-react'
 
 interface AdminUser {
   id: string
@@ -24,6 +24,17 @@ interface AdminUser {
 
 interface UserManagerProps {
   backHref: string
+}
+
+interface EditFormState {
+  id: string
+  name: string
+  phone: string
+  role: AdminUser['role']
+  province: string
+  organization: string
+  isVerified: boolean
+  newPassword: string
 }
 
 function formatDate(dateString: string) {
@@ -85,6 +96,10 @@ export function UserManager({ backHref }: UserManagerProps) {
   const [users, setUsers] = useState<AdminUser[]>([])
   const [loading, setLoading] = useState(true)
   const [query, setQuery] = useState('')
+  const [editForm, setEditForm] = useState<EditFormState | null>(null)
+  const [savingEdit, setSavingEdit] = useState(false)
+  const [editError, setEditError] = useState('')
+  const [editSuccess, setEditSuccess] = useState('')
 
   useEffect(() => {
     const loadUsers = async () => {
@@ -240,6 +255,69 @@ export function UserManager({ backHref }: UserManagerProps) {
     )
   }
 
+  const openEditUser = (user: AdminUser) => {
+    setEditError('')
+    setEditSuccess('')
+    setEditForm({
+      id: user.id,
+      name: user.name || '',
+      phone: user.phone || '',
+      role: user.role,
+      province: user.province || '',
+      organization: user.organization || '',
+      isVerified: user.isVerified,
+      newPassword: ''
+    })
+  }
+
+  const closeEditUser = () => {
+    if (savingEdit) return
+    setEditForm(null)
+    setEditError('')
+    setEditSuccess('')
+  }
+
+  const updateEditField = <K extends keyof EditFormState>(field: K, value: EditFormState[K]) => {
+    setEditForm((prev) => (prev ? { ...prev, [field]: value } : prev))
+  }
+
+  const saveUserChanges = async () => {
+    if (!editForm) return
+
+    try {
+      setSavingEdit(true)
+      setEditError('')
+      setEditSuccess('')
+
+      const response = await fetch(`/api/admin/users/${editForm.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: editForm.name,
+          phone: editForm.phone,
+          role: editForm.role,
+          province: editForm.province,
+          organization: editForm.organization,
+          isVerified: editForm.isVerified,
+          newPassword: editForm.newPassword
+        })
+      })
+
+      const data = await response.json()
+      if (!response.ok) {
+        throw new Error(data.error || 'Không thể cập nhật người dùng')
+      }
+
+      setUsers((prev) => prev.map((user) => (user.id === data.user.id ? data.user : user)))
+      setEditForm((prev) => (prev ? { ...prev, newPassword: '' } : prev))
+      setEditSuccess('Đã cập nhật thông tin người dùng.')
+    } catch (error) {
+      setEditError(error instanceof Error ? error.message : 'Đã có lỗi xảy ra.')
+    } finally {
+      setSavingEdit(false)
+    }
+  }
+
   return (
     <div className="space-y-6">
       <div className="mb-2">
@@ -329,6 +407,7 @@ export function UserManager({ backHref }: UserManagerProps) {
                 <th className="px-5 py-3 text-left text-sm font-medium text-gray-700">Địa phương / Tổ chức</th>
                 <th className="px-5 py-3 text-left text-sm font-medium text-gray-700">Hoạt động</th>
                 <th className="px-5 py-3 text-left text-sm font-medium text-gray-700">Ngày tạo</th>
+                <th className="px-5 py-3 text-right text-sm font-medium text-gray-700">Thao tác</th>
               </tr>
             </thead>
             <tbody>
@@ -365,6 +444,16 @@ export function UserManager({ backHref }: UserManagerProps) {
                     <div className="mt-1">Lưu: {user._count.bookmarks}</div>
                   </td>
                   <td className="px-5 py-4 text-sm text-gray-700">{formatDate(user.createdAt)}</td>
+                  <td className="px-5 py-4 text-right">
+                    <button
+                      type="button"
+                      onClick={() => openEditUser(user)}
+                      className="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                    >
+                      <PencilLine className="mr-2 h-4 w-4" />
+                      Sửa
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -379,6 +468,139 @@ export function UserManager({ backHref }: UserManagerProps) {
           )}
         </div>
       </div>
+
+      {editForm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-4">
+          <div className="w-full max-w-2xl rounded-xl bg-white shadow-xl">
+            <div className="flex items-center justify-between border-b px-6 py-4">
+              <h3 className="text-lg font-semibold text-gray-900">Chỉnh sửa người dùng</h3>
+              <button
+                type="button"
+                onClick={closeEditUser}
+                className="rounded-md p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                aria-label="Đóng"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <div className="grid gap-4 px-6 py-5 md:grid-cols-2">
+              <div className="md:col-span-2">
+                <label className="mb-1 block text-sm font-medium text-gray-700">Email</label>
+                <input
+                  type="text"
+                  disabled
+                  value={users.find((item) => item.id === editForm.id)?.email || ''}
+                  className="w-full rounded-md border border-gray-200 bg-gray-100 px-3 py-2 text-sm text-gray-600"
+                />
+              </div>
+
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-700">Họ tên</label>
+                <input
+                  type="text"
+                  value={editForm.name}
+                  onChange={(event) => updateEditField('name', event.target.value)}
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-700">Số điện thoại</label>
+                <input
+                  type="text"
+                  value={editForm.phone}
+                  onChange={(event) => updateEditField('phone', event.target.value)}
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-700">Vai trò</label>
+                <select
+                  value={editForm.role}
+                  onChange={(event) => updateEditField('role', event.target.value as AdminUser['role'])}
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                >
+                  <option value="USER">User</option>
+                  <option value="MODERATOR">Moderator</option>
+                  <option value="ADMIN">Admin</option>
+                </select>
+              </div>
+
+              <div className="flex items-end">
+                <label className="inline-flex items-center gap-2 text-sm text-gray-700">
+                  <input
+                    type="checkbox"
+                    checked={editForm.isVerified}
+                    onChange={(event) => updateEditField('isVerified', event.target.checked)}
+                    className="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-500"
+                  />
+                  Đã xác minh
+                </label>
+              </div>
+
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-700">Tỉnh/Thành</label>
+                <input
+                  type="text"
+                  value={editForm.province}
+                  onChange={(event) => updateEditField('province', event.target.value)}
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-700">Tổ chức</label>
+                <input
+                  type="text"
+                  value={editForm.organization}
+                  onChange={(event) => updateEditField('organization', event.target.value)}
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+
+              <div className="md:col-span-2">
+                <label className="mb-1 block text-sm font-medium text-gray-700">Mật khẩu mới (tuỳ chọn)</label>
+                <input
+                  type="password"
+                  value={editForm.newPassword}
+                  onChange={(event) => updateEditField('newPassword', event.target.value)}
+                  placeholder="Để trống nếu không đổi mật khẩu"
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+            </div>
+
+            {(editError || editSuccess) && (
+              <div className="px-6 pb-2">
+                {editError && <p className="text-sm text-red-600">{editError}</p>}
+                {editSuccess && <p className="text-sm text-green-600">{editSuccess}</p>}
+              </div>
+            )}
+
+            <div className="flex items-center justify-end gap-2 border-t px-6 py-4">
+              <button
+                type="button"
+                onClick={closeEditUser}
+                disabled={savingEdit}
+                className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                Huỷ
+              </button>
+              <button
+                type="button"
+                onClick={saveUserChanges}
+                disabled={savingEdit}
+                className="inline-flex items-center rounded-md bg-green-600 px-3 py-2 text-sm font-medium text-white hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                <Save className="mr-2 h-4 w-4" />
+                {savingEdit ? 'Đang lưu...' : 'Lưu thay đổi'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
