@@ -3,13 +3,15 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu, X, Home } from 'lucide-react';
+import { Home, LogOut, Menu, X } from 'lucide-react';
 import { usePathname } from 'next/navigation';
+import { signOut, useSession } from 'next-auth/react';
 import { getLocaleFromPathname, stripLocalePrefix, withLocalePrefix } from '@/lib/content-locale';
 
 export default function NavigationBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
+  const { data: session, status } = useSession();
   const locale = getLocaleFromPathname(pathname);
   const otherLocale = locale === 'en' ? 'vi' : 'en';
   const normalizedPath = stripLocalePrefix(pathname);
@@ -19,6 +21,7 @@ export default function NavigationBar() {
   const eventsHref = withLocalePrefix('/tat-ca-su-kien', locale);
   const exploreHref = withLocalePrefix('/vision-mission', locale);
   const signInHref = withLocalePrefix('/auth/signin', locale);
+  const signUpHref = withLocalePrefix('/auth/signup', locale);
   const switchLocaleHref = withLocalePrefix(normalizedPath, otherLocale);
 
   const labels =
@@ -28,15 +31,23 @@ export default function NavigationBar() {
           library: 'Library',
           events: 'Events',
           explore: 'Explore',
-          signIn: 'SIGN IN'
+          signIn: 'SIGN IN',
+          signUp: 'SIGN UP',
+          signOut: 'SIGN OUT',
+          hello: 'Hello',
         }
       : {
           home: 'Trang chủ',
           library: 'Thư viện',
           events: 'Sự kiện',
           explore: 'Khám phá',
-          signIn: 'ĐĂNG NHẬP'
+          signIn: 'ĐĂNG NHẬP',
+          signUp: 'ĐĂNG KÝ',
+          signOut: 'ĐĂNG XUẤT',
+          hello: 'Xin chào',
         };
+
+  const isAuthenticated = status === 'authenticated';
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm shadow-sm">
@@ -84,18 +95,43 @@ export default function NavigationBar() {
             </div>
 
             <div className="flex items-center gap-2">
+              {isAuthenticated && session?.user?.name && (
+                <span className="hidden text-sm font-semibold text-vn-dark lg:inline">
+                  {labels.hello}, {session.user.name}
+                </span>
+              )}
               <Link
                 href={switchLocaleHref}
                 className="font-montserrat text-sm font-semibold text-vn-dark border border-vn-dark px-3 py-1.5 rounded-md hover:bg-gray-100 transition-colors"
               >
                 {otherLocale.toUpperCase()}
               </Link>
-              <Link
-                href={signInHref}
-                className="font-montserrat font-normal text-base text-vn-green border-2 border-vn-green px-4 py-2 rounded-lg hover:bg-vn-green hover:text-white transition-all duration-300"
-              >
-                {labels.signIn}
-              </Link>
+
+              {!isAuthenticated ? (
+                <>
+                  <Link
+                    href={signInHref}
+                    className="font-montserrat font-normal text-base text-vn-green border-2 border-vn-green px-4 py-2 rounded-lg hover:bg-vn-green hover:text-white transition-all duration-300"
+                  >
+                    {labels.signIn}
+                  </Link>
+                  <Link
+                    href={signUpHref}
+                    className="font-montserrat font-normal text-base text-white bg-vn-green border-2 border-vn-green px-4 py-2 rounded-lg hover:opacity-90 transition-all duration-300"
+                  >
+                    {labels.signUp}
+                  </Link>
+                </>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => signOut({ callbackUrl: homeHref })}
+                  className="inline-flex items-center gap-2 font-montserrat font-normal text-base text-vn-green border-2 border-vn-green px-4 py-2 rounded-lg hover:bg-vn-green hover:text-white transition-all duration-300"
+                >
+                  <LogOut className="h-4 w-4" />
+                  {labels.signOut}
+                </button>
+              )}
             </div>
           </div>
 
@@ -148,13 +184,40 @@ export default function NavigationBar() {
               >
                 {otherLocale.toUpperCase()}
               </Link>
-              <Link
-                href={signInHref}
-                className="font-montserrat font-normal text-base text-vn-green border-2 border-vn-green px-4 py-2 rounded-lg hover:bg-vn-green hover:text-white transition-all duration-300 text-center"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {labels.signIn}
-              </Link>
+
+              {isAuthenticated && session?.user?.name && (
+                <div className="rounded-lg border border-gray-200 bg-gray-50 px-4 py-2 text-center text-sm font-medium text-vn-dark">
+                  {labels.hello}, {session.user.name}
+                </div>
+              )}
+
+              {!isAuthenticated ? (
+                <>
+                  <Link
+                    href={signInHref}
+                    className="font-montserrat font-normal text-base text-vn-green border-2 border-vn-green px-4 py-2 rounded-lg hover:bg-vn-green hover:text-white transition-all duration-300 text-center"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {labels.signIn}
+                  </Link>
+                  <Link
+                    href={signUpHref}
+                    className="font-montserrat font-normal text-base text-white bg-vn-green border-2 border-vn-green px-4 py-2 rounded-lg hover:opacity-90 transition-all duration-300 text-center"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {labels.signUp}
+                  </Link>
+                </>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => signOut({ callbackUrl: homeHref })}
+                  className="inline-flex w-full items-center justify-center gap-2 font-montserrat font-normal text-base text-vn-green border-2 border-vn-green px-4 py-2 rounded-lg hover:bg-vn-green hover:text-white transition-all duration-300 text-center"
+                >
+                  <LogOut className="h-4 w-4" />
+                  {labels.signOut}
+                </button>
+              )}
             </div>
           </div>
         )}
@@ -162,3 +225,4 @@ export default function NavigationBar() {
     </nav>
   );
 }
+
