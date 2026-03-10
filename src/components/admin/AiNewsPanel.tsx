@@ -468,7 +468,7 @@ export function AiNewsPanel() {
             value={customPrompt}
             onChange={(event) => setCustomPrompt(event.target.value)}
             className="min-h-24 rounded-md border border-gray-300 px-3 py-2 text-sm"
-            placeholder="Prompt tùy chỉnh"
+            placeholder="Câu trả lời gồm 2 phần. [1] Nội dung ngắn: Trả lời đúng 1 câu duy nhất, tóm tắt cốt lõi của tài liệu. [2] Nội dung dài: Tóm tắt chi tiết khoảng 1 trang A4, mạch lạc, trung tính, có cấu trúc với các đoạn rõ ràng."
           />
 
           <Button onClick={onSummarize} disabled={summarizing || !canSummarize}>
