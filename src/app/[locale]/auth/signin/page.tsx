@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { signIn, getSession } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useLocale } from 'next-intl';
@@ -27,21 +27,19 @@ export default function SignInPage() {
     setError('');
 
     try {
+      const callbackUrl = `/${locale}/admin`;
       const result = await signIn('credentials', {
         email,
         password,
+        callbackUrl,
         redirect: false,
       });
 
       if (result?.error) {
         setError(isEn ? 'Invalid email or password.' : 'Email hoặc mật khẩu không đúng.');
       } else {
-        const session = await getSession();
-        if (session?.user?.role === 'ADMIN' || session?.user?.role === 'MODERATOR') {
-          router.push(`/${locale}/admin`);
-        } else {
-          router.push(`/${locale}`);
-        }
+        router.push(result?.url || callbackUrl);
+        router.refresh();
       }
     } catch {
       setError(isEn ? 'An error occurred. Please try again.' : 'Đã xảy ra lỗi. Vui lòng thử lại.');
@@ -106,7 +104,7 @@ export default function SignInPage() {
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div>
                   <label htmlFor="email" className="mb-2 block text-sm font-medium text-gray-700">
-                    {isEn ? 'Email' : 'Email'}
+                    Email
                   </label>
                   <div className="relative">
                     <Mail className="pointer-events-none absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
