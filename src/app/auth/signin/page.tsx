@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Eye, EyeOff, Lock, Mail, ShieldCheck } from 'lucide-react'
+import { Eye, EyeOff, Lock, Mail } from 'lucide-react'
 import NavigationBar from '@/components/NavigationBar'
 import { Button } from '@/components/ui/button'
 
@@ -48,25 +48,7 @@ export default function SignInPage() {
       <NavigationBar />
 
       <div className="container mx-auto flex items-center justify-center px-4 py-14 md:py-20">
-        <div className="grid w-full max-w-5xl overflow-hidden rounded-3xl border border-emerald-100 bg-white shadow-xl md:grid-cols-2">
-          <div className="relative hidden bg-emerald-700 p-10 text-emerald-50 md:block">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.22),transparent_42%)]" />
-            <div className="relative">
-              <div className="mb-8 inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide">
-                <ShieldCheck className="h-4 w-4" />
-                Bảo mật tài khoản
-              </div>
-              <h1 className="text-3xl font-bold leading-tight font-montserrat">
-                Đăng nhập để quản lý nội dung và theo dõi hoạt động dự án
-              </h1>
-              <ul className="mt-8 space-y-3 text-sm text-emerald-100">
-                <li>Quản trị bài viết và dữ liệu trong cùng một dashboard.</li>
-                <li>Theo dõi nhanh thống kê nội dung và lượt xem.</li>
-                <li>Sử dụng công cụ AI hỗ trợ tìm kiếm và tóm tắt thông tin.</li>
-              </ul>
-            </div>
-          </div>
-
+        <div className="w-full max-w-xl overflow-hidden rounded-3xl border border-emerald-100 bg-white shadow-xl">
           <div className="p-6 md:p-10">
             <div className="mb-8">
               <h2 className="text-3xl font-bold text-gray-900 font-montserrat">Đăng nhập</h2>
