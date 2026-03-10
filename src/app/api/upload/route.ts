@@ -1,16 +1,16 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { requireAuth } from '@/lib/auth-middleware'
+﻿import { NextRequest, NextResponse } from 'next/server'
+import { requireModerator } from '@/lib/auth-middleware'
 import { saveFile } from '@/lib/file-upload'
 import { prisma } from '@/lib/prisma'
 
 export async function POST(request: NextRequest) {
   try {
-    const user = await requireAuth(request)
+    const user = await requireModerator(request)
 
     if (!user) {
       return NextResponse.json(
-        { error: 'Cần đăng nhập để tải file' },
-        { status: 401 }
+        { error: 'Cáº§n Ä‘Äƒng nháº­p Ä‘á»ƒ táº£i file' },
+        { status: 403 }
       )
     }
 
@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
 
     if (!file) {
       return NextResponse.json(
-        { error: 'Không có file được tải lên' },
+        { error: 'KhÃ´ng cÃ³ file Ä‘Æ°á»£c táº£i lÃªn' },
         { status: 400 }
       )
     }
@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Upload error:', error)
     return NextResponse.json(
-      { error: 'Lỗi khi tải file' },
+      { error: 'Lá»—i khi táº£i file' },
       { status: 500 }
     )
   }
@@ -96,3 +96,4 @@ function getContentType(mimeType: string): 'INFOGRAPHIC' | 'VIDEO' | 'DOCUMENT' 
   if (mimeType.includes('presentation') || mimeType.includes('powerpoint')) return 'DOCUMENT'
   return 'DOCUMENT'
 }
+

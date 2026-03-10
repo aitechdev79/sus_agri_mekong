@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { requireAuth } from '@/lib/auth-middleware'
+﻿import { NextRequest, NextResponse } from 'next/server'
+import { requireModerator } from '@/lib/auth-middleware'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 
@@ -8,12 +8,12 @@ type ContentWhereInput = Prisma.ContentWhereInput
 
 export async function GET(request: NextRequest) {
   try {
-    const user = await requireAuth(request)
+    const user = await requireModerator(request)
 
     if (!user) {
       return NextResponse.json(
-        { error: 'Cần đăng nhập để xem file' },
-        { status: 401 }
+        { error: 'Cáº§n Ä‘Äƒng nháº­p Ä‘á»ƒ xem file' },
+        { status: 403 }
       )
     }
 
@@ -74,7 +74,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('Files fetch error:', error)
     return NextResponse.json(
-      { error: 'Không thể tải danh sách file' },
+      { error: 'KhÃ´ng thá»ƒ táº£i danh sÃ¡ch file' },
       { status: 500 }
     )
   }
