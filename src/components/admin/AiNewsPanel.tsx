@@ -40,7 +40,7 @@ export function AiNewsPanel() {
   const [fallbackTargetCount, setFallbackTargetCount] = useState(10);
 
   const [customPrompt, setCustomPrompt] = useState(
-    "Tóm tắt xu hướng chính, rủi ro, cơ hội và đề xuất hành động cho đội dự án.",
+    "Câu trả lời gồm 2 phần. [1] Nội dung ngắn: Trả lời đúng 1 câu duy nhất, tóm tắt cốt lõi của tài liệu. [2] Nội dung dài: Tóm tắt chi tiết khoảng 1 trang A4, mạch lạc, trung tính, có cấu trúc với các đoạn rõ ràng.",
   );
   const [pdfUrl, setPdfUrl] = useState("");
   const [sourceUrl, setSourceUrl] = useState("");
