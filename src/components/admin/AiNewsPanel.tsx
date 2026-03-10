@@ -126,6 +126,18 @@ export function AiNewsPanel() {
       setForm((prev) => ({ ...prev, [field]: value }));
     };
 
+  const toggleArticle = (url: string) => {
+    setSelectedUrls((prev) => (prev.includes(url) ? prev.filter((item) => item !== url) : [...prev, url]));
+  };
+
+  const selectAllFresh = () => {
+    setSelectedUrls((searchResult?.fresh || []).map((article) => article.url).filter(Boolean));
+  };
+
+  const clearSelection = () => {
+    setSelectedUrls([]);
+  };
+
   return (
     <div className="mb-8 grid gap-6 lg:grid-cols-2">
       <section className="rounded-2xl bg-white p-6 shadow-sm">
@@ -342,14 +354,3 @@ export function AiNewsPanel() {
     </div>
   );
 }
-  const toggleArticle = (url: string) => {
-    setSelectedUrls((prev) => (prev.includes(url) ? prev.filter((item) => item !== url) : [...prev, url]));
-  };
-
-  const selectAllFresh = () => {
-    setSelectedUrls((searchResult?.fresh || []).map((article) => article.url).filter(Boolean));
-  };
-
-  const clearSelection = () => {
-    setSelectedUrls([]);
-  };
