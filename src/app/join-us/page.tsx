@@ -71,7 +71,7 @@ export default function JoinUsPage() {
   }, [partners])
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-emerald-50">
+    <div className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-emerald-50 font-montserrat">
       <NavigationBar />
 
       <main className="pt-24">
@@ -80,7 +80,7 @@ export default function JoinUsPage() {
             <div className="grid gap-0 md:grid-cols-[1.1fr_1fr]">
               <div className="px-7 py-9 md:px-10 md:py-12">
                 <h1 className="text-3xl font-bold text-slate-900 md:text-4xl">
-                  {isEn ? 'Join Our Collaboration Network' : 'Tham gia Mạng lưới Hợp tác của Chúng tôi'}
+                  {isEn ? 'Join the Partner Network' : 'Tham gia mạng lưới đối tác'}
                 </h1>
 
                 <p className="mt-5 text-base leading-relaxed text-slate-700">
@@ -110,7 +110,7 @@ export default function JoinUsPage() {
                 <div className="mb-3 inline-flex rounded-lg bg-amber-100 p-2 text-amber-700">
                   <Network className="h-5 w-5" />
                 </div>
-                <h2 className="text-lg font-semibold text-slate-900">{isEn ? 'Networking' : 'Mạng lưới Kết nối'}</h2>
+                <h2 className="text-lg font-semibold text-slate-900">{isEn ? 'Connect' : 'Kết nối'}</h2>
                 <p className="mt-2 text-sm leading-relaxed text-slate-600">
                   {isEn
                     ? 'Connect with leading businesses and experts in the industry.'
@@ -122,7 +122,7 @@ export default function JoinUsPage() {
                 <div className="mb-3 inline-flex rounded-lg bg-amber-100 p-2 text-amber-700">
                   <BookOpen className="h-5 w-5" />
                 </div>
-                <h2 className="text-lg font-semibold text-slate-900">{isEn ? 'Knowledge Sharing' : 'Chia sẻ Kiến thức'}</h2>
+                <h2 className="text-lg font-semibold text-slate-900">{isEn ? 'Share' : 'Chia sẻ'}</h2>
                 <p className="mt-2 text-sm leading-relaxed text-slate-600">
                   {isEn
                     ? 'Access research, reports, and best-practice toolkits.'
@@ -134,7 +134,7 @@ export default function JoinUsPage() {
                 <div className="mb-3 inline-flex rounded-lg bg-amber-100 p-2 text-amber-700">
                   <Handshake className="h-5 w-5" />
                 </div>
-                <h2 className="text-lg font-semibold text-slate-900">{isEn ? 'Collaboration Opportunities' : 'Cơ hội Hợp tác'}</h2>
+                <h2 className="text-lg font-semibold text-slate-900">{isEn ? 'Collaborate' : 'Hợp tác'}</h2>
                 <p className="mt-2 text-sm leading-relaxed text-slate-600">
                   {isEn
                     ? 'Join collaborative projects and sustainable development initiatives.'
@@ -144,9 +144,6 @@ export default function JoinUsPage() {
             </div>
 
             <div className="px-7 py-8 text-center md:px-10">
-              <p className="mb-4 text-sm text-emerald-800">
-                {isEn ? 'Ready to join as a business member?' : 'Sẵn sàng tham gia với vai trò doanh nghiệp?'}
-              </p>
               <Link
                 href={signUpBusinessHref}
                 className="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
@@ -155,9 +152,9 @@ export default function JoinUsPage() {
               </Link>
             </div>
 
-            <div className="border-t border-slate-200 bg-white px-7 py-8 md:px-10">
+            <div className="border-t border-slate-200 bg-vn-rice-white px-7 py-8 md:px-10">
               <h3 className="mb-5 text-center text-lg font-semibold text-slate-900">
-                {isEn ? 'Partner Network' : 'Mạng lưới đối tác'}
+                {isEn ? 'Platform Partners' : 'Đối tác của nền tảng'}
               </h3>
 
               {loadingPartners && partners.length === 0 ? (
