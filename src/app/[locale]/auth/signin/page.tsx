@@ -25,18 +25,27 @@ export default function SignInPage() {
     setError('')
 
     try {
-      const callbackUrl = `/${locale}/admin`
       const result = await signIn('credentials', {
         email,
         password,
-        callbackUrl,
         redirect: false,
       })
 
       if (result?.error) {
         setError(isEn ? 'Invalid email or password.' : 'Email hoặc mật khẩu không đúng.')
       } else {
-        window.location.href = result?.url || callbackUrl
+        const sessionResponse = await fetch('/api/auth/session')
+        const sessionData = await sessionResponse.json()
+        const role = sessionData?.user?.role as 'USER' | 'BUSINESS' | 'MODERATOR' | 'ADMIN' | undefined
+
+        let nextPath = `/${locale}`
+        if (role === 'ADMIN' || role === 'MODERATOR') {
+          nextPath = `/${locale}/admin`
+        } else if (role === 'BUSINESS') {
+          nextPath = `/${locale}/business/profile?init=1`
+        }
+
+        window.location.href = nextPath
       }
     } catch {
       setError(isEn ? 'An error occurred. Please try again.' : 'Đã xảy ra lỗi. Vui lòng thử lại.')
@@ -131,4 +140,3 @@ export default function SignInPage() {
     </div>
   )
 }
-

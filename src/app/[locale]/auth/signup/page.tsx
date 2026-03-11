@@ -163,8 +163,11 @@ export default function SignUpPage() {
 
       setSuccess(accountType === 'BUSINESS' ? text.successBusiness : text.successUser)
       setTimeout(() => {
-        const roleParam = accountType === 'BUSINESS' ? 'business' : 'user'
-        router.push(`/${locale}/welcome?role=${roleParam}`)
+        if (accountType === 'BUSINESS') {
+          router.push(`/${locale}/auth/signin`)
+          return
+        }
+        router.push(`/${locale}/welcome?role=user`)
       }, 1200)
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : 'Registration failed')
