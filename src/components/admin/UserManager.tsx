@@ -9,7 +9,7 @@ interface AdminUser {
   name: string | null
   email: string
   phone: string | null
-  role: 'USER' | 'MODERATOR' | 'ADMIN'
+  role: 'USER' | 'BUSINESS' | 'MODERATOR' | 'ADMIN'
   province: string | null
   organization: string | null
   isVerified: boolean
@@ -48,6 +48,7 @@ function formatDate(dateString: string) {
 function getRoleLabel(role: AdminUser['role']) {
   const labels = {
     ADMIN: 'Admin',
+    BUSINESS: 'Business',
     MODERATOR: 'Moderator',
     USER: 'User'
   }
@@ -58,6 +59,7 @@ function getRoleLabel(role: AdminUser['role']) {
 function getRoleBadge(role: AdminUser['role']) {
   const styles = {
     ADMIN: 'bg-red-100 text-red-700',
+    BUSINESS: 'bg-cyan-100 text-cyan-700',
     MODERATOR: 'bg-amber-100 text-amber-700',
     USER: 'bg-slate-100 text-slate-700'
   }
@@ -523,6 +525,7 @@ export function UserManager({ backHref }: UserManagerProps) {
                   className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
                 >
                   <option value="USER">User</option>
+                  <option value="BUSINESS">Business</option>
                   <option value="MODERATOR">Moderator</option>
                   <option value="ADMIN">Admin</option>
                 </select>

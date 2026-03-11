@@ -57,6 +57,39 @@ model User {
   submissions   UserSubmission[]
   notifications Notification[]
   categoryAuditLogs CategoryAuditLog[] @relation("CategoryAuditPerformedBy")
+  businessProfiles BusinessProfile[] @relation("BusinessProfileOwner")
+  reviewedBusinessProfiles BusinessProfile[] @relation("BusinessProfileReviewedBy")
+}
+
+model BusinessProfile {
+  id            String                @id @default(cuid())
+  ownerUserId   String?
+  companyName   String
+  slug          String                @unique
+  logoUrl       String?
+  coverUrl      String?
+  website       String?
+  contactEmail  String?
+  phone         String?
+  province      String?
+  description   String?
+  status        BusinessProfileStatus @default(DRAFT)
+  isPublic      Boolean               @default(false)
+  isVerified    Boolean               @default(false)
+  displayOrder  Int                   @default(0)
+  reviewedById  String?
+  reviewNotes   String?
+  reviewedAt    DateTime?
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
+
+  owner         User?                 @relation("BusinessProfileOwner", fields: [ownerUserId], references: [id], onDelete: SetNull)
+  reviewedBy    User?                 @relation("BusinessProfileReviewedBy", fields: [reviewedById], references: [id], onDelete: SetNull)
+
+  @@index([ownerUserId])
+  @@index([status])
+  @@index([isPublic])
+  @@index([displayOrder])
 }
 
 model Category {
@@ -247,8 +280,17 @@ model Analytics {
 
 enum UserRole {
   USER
+  BUSINESS
   MODERATOR
   ADMIN
+}
+
+enum BusinessProfileStatus {
+  DRAFT
+  PENDING
+  APPROVED
+  REJECTED
+  SUSPENDED
 }
 
 enum ContentType {

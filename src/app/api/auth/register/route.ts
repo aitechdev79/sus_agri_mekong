@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma'
 
 export async function POST(request: NextRequest) {
   try {
-    const { name, email, phone, password, province, organization } = await request.json()
+    const { name, email, phone, password, province, organization, role } = await request.json()
 
     const existingUser = await prisma.user.findUnique({
       where: { email }
@@ -32,6 +32,9 @@ export async function POST(request: NextRequest) {
 
     const hashedPassword = await bcrypt.hash(password, 12)
 
+    const requestedRole = String(role || '').toUpperCase()
+    const normalizedRole = requestedRole === 'BUSINESS' ? 'BUSINESS' : 'USER'
+
     await prisma.user.create({
       data: {
         name,
@@ -40,6 +43,7 @@ export async function POST(request: NextRequest) {
         password: hashedPassword,
         province,
         organization,
+        role: normalizedRole,
         isVerified: true,
       }
     })

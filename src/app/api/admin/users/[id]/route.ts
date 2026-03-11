@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth-middleware";
 
-const VALID_ROLES = new Set(["USER", "MODERATOR", "ADMIN"] as const);
+const VALID_ROLES = new Set(["USER", "BUSINESS", "MODERATOR", "ADMIN"] as const);
 
 function normalizeOptional(value: unknown): string | null {
   const text = String(value ?? "").trim();
@@ -41,7 +41,7 @@ export async function PATCH(
       return NextResponse.json({ error: "Name is required" }, { status: 400 });
     }
 
-    if (!VALID_ROLES.has(role as "USER" | "MODERATOR" | "ADMIN")) {
+    if (!VALID_ROLES.has(role as "USER" | "BUSINESS" | "MODERATOR" | "ADMIN")) {
       return NextResponse.json({ error: "Invalid role" }, { status: 400 });
     }
 
@@ -90,7 +90,7 @@ export async function PATCH(
       phone: string | null;
       province: string | null;
       organization: string | null;
-      role: "USER" | "MODERATOR" | "ADMIN";
+      role: "USER" | "BUSINESS" | "MODERATOR" | "ADMIN";
       isVerified: boolean;
       password?: string;
     } = {
@@ -98,7 +98,7 @@ export async function PATCH(
       phone,
       province,
       organization,
-      role: role as "USER" | "MODERATOR" | "ADMIN",
+      role: role as "USER" | "BUSINESS" | "MODERATOR" | "ADMIN",
       isVerified,
     };
 
@@ -136,4 +136,3 @@ export async function PATCH(
     return NextResponse.json({ error: "Failed to update user" }, { status: 500 });
   }
 }
-

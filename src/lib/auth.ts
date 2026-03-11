@@ -73,7 +73,7 @@ export const authOptions: NextAuthOptions = {
       }
 
       if (token?.role) {
-        session.user.role = token.role as "USER" | "MODERATOR" | "ADMIN";
+        session.user.role = token.role as "USER" | "BUSINESS" | "MODERATOR" | "ADMIN";
       } else if (token?.sub) {
         const dbUser = await prisma.user.findUnique({
           where: { id: token.sub },

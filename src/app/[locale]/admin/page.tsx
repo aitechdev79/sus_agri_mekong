@@ -208,6 +208,15 @@ export default function AdminPage() {
                     Quản lý danh mục
                   </Link>
                 )}
+                {session.user.role === 'ADMIN' && (
+                  <Link
+                    href={`/${locale}/admin/partners`}
+                    className="inline-flex h-11 items-center justify-center rounded-xl border border-slate-200 px-4 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                  >
+                    <Users className="mr-2 h-4 w-4" />
+                    Quản lý đối tác
+                  </Link>
+                )}
               </div>
             </div>
           </section>

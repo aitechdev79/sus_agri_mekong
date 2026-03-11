@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
@@ -28,6 +28,14 @@ export default function SignUpPage() {
   const router = useRouter();
   const t = useTranslations('Auth');
   const locale = useLocale();
+  const [isBusinessSignUp, setIsBusinessSignUp] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const role = new URLSearchParams(window.location.search).get('role')?.toLowerCase();
+      setIsBusinessSignUp(role === 'business');
+    }
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -59,6 +67,7 @@ export default function SignUpPage() {
           password: formData.password,
           province: formData.province,
           organization: formData.organization,
+          role: isBusinessSignUp ? 'BUSINESS' : 'USER',
         }),
       });
 
