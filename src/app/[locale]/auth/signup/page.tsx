@@ -21,7 +21,6 @@ export default function SignUpPage() {
     password: '',
     confirmPassword: '',
     province: '',
-    organization: '',
   })
   const [accountType, setAccountType] = useState<AccountType>('USER')
   const [isLoading, setIsLoading] = useState(false)
@@ -50,11 +49,9 @@ export default function SignUpPage() {
             email: 'Email',
             phone: 'Phone',
             province: 'Province/City',
-            organization: 'Organization',
             password: 'Password',
             confirmPassword: 'Confirm password',
             selectProvince: 'Select province/city',
-            orgPlaceholder: 'Organization/Company (optional)',
             passwordMismatch: 'Password confirmation does not match.',
             signUp: 'Sign up',
             signingUp: 'Signing up...',
@@ -74,11 +71,9 @@ export default function SignUpPage() {
             email: 'Email',
             phone: 'Số điện thoại',
             province: 'Tỉnh/Thành phố',
-            organization: 'Tổ chức',
             password: 'Mật khẩu',
             confirmPassword: 'Xác nhận mật khẩu',
             selectProvince: 'Chọn tỉnh/thành phố',
-            orgPlaceholder: 'Tổ chức/Doanh nghiệp (không bắt buộc)',
             passwordMismatch: 'Mật khẩu xác nhận không khớp.',
             signUp: 'Đăng ký',
             signingUp: 'Đang đăng ký...',
@@ -155,7 +150,6 @@ export default function SignUpPage() {
           phone: formData.phone,
           password: formData.password,
           province: formData.province,
-          organization: formData.organization,
           role: accountType,
         }),
       })
@@ -254,14 +248,6 @@ export default function SignUpPage() {
                   ))}
                 </select>
               </div>
-
-              <input
-                name="organization"
-                value={formData.organization}
-                onChange={handleInputChange}
-                placeholder={text.orgPlaceholder}
-                className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
 
               <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
                 <input

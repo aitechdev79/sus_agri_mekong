@@ -50,17 +50,12 @@ export default function WelcomePage() {
                   <li>
                     {isEn
                       ? 'Explore practical resources: policy updates, good practices, stories, and events.'
-                      : 'Khám phá tài liệu thực tiễn: chính sách, điển hình, câu chuyện và sự kiện.'}
+                      : 'Khám phá tài liệu, chính sách, điển hình, câu chuyện thành công và sự kiện về phát triển bền vững do nền tảng tổ chức.'}
                   </li>
                   <li>
                     {isEn
                       ? 'Receive platform emails for onboarding guidance and new content updates.'
-                      : 'Nhận email từ nền tảng để được hướng dẫn sử dụng và cập nhật nội dung mới.'}
-                  </li>
-                  <li>
-                    {isEn
-                      ? 'Advanced features are being designed: AI content finder/summarizer, personalized dashboard, and topic alerts.'
-                      : 'Các tính năng cao cấp đang thiết kế: AI tìm/tóm tắt nội dung, dashboard cá nhân hoá và cảnh báo theo chủ đề.'}
+                      : 'Nhận email từ nền tảng để cập nhật nội dung mới.'}
                   </li>
                   <li>
                     {isEn
@@ -112,4 +107,3 @@ export default function WelcomePage() {
     </div>
   )
 }
-

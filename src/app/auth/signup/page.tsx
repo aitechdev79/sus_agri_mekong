@@ -16,7 +16,6 @@ export default function SignUpPage() {
     password: '',
     confirmPassword: '',
     province: '',
-    organization: '',
   })
   const [accountType, setAccountType] = useState<AccountType>('USER')
   const [isLoading, setIsLoading] = useState(false)
@@ -181,18 +180,6 @@ export default function SignUpPage() {
                   </option>
                 ))}
               </select>
-
-              <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700">Tổ chức/Doanh nghiệp (không bắt buộc)</label>
-                <input
-                  type="text"
-                  name="organization"
-                  value={formData.organization}
-                  onChange={handleChange}
-                  className="w-full rounded-md border border-gray-300 px-3 py-2 font-montserrat text-gray-900 placeholder-gray-500 focus:border-green-500 focus:outline-none focus:ring-green-500"
-                  placeholder="Nhập tổ chức/doanh nghiệp"
-                />
-              </div>
 
               <input
                 type="password"
