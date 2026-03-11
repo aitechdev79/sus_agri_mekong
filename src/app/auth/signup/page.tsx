@@ -141,20 +141,15 @@ export default function SignUpPage() {
                 </select>
               </div>
 
-              <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700">
-                  {accountType === 'BUSINESS' ? 'Tên doanh nghiệp' : 'Họ và tên'}
-                </label>
-                <input
-                  type="text"
-                  name="name"
-                  required
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="w-full rounded-md border border-gray-300 px-3 py-2 font-montserrat text-gray-900 placeholder-gray-500 focus:border-green-500 focus:outline-none focus:ring-green-500"
-                  placeholder={accountType === 'BUSINESS' ? 'Nhập tên doanh nghiệp' : 'Nhập họ và tên'}
-                />
-              </div>
+              <input
+                type="text"
+                name="name"
+                required
+                value={formData.name}
+                onChange={handleChange}
+                className="w-full rounded-md border border-gray-300 px-3 py-2 font-montserrat text-gray-900 placeholder-gray-500 focus:border-green-500 focus:outline-none focus:ring-green-500"
+                placeholder={accountType === 'BUSINESS' ? 'Tên doanh nghiệp' : 'Họ và tên'}
+              />
 
               <input
                 type="email"

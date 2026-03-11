@@ -215,19 +215,14 @@ export default function SignUpPage() {
               </div>
 
               <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-gray-700">
-                    {accountType === 'BUSINESS' ? text.businessName : text.fullName}
-                  </label>
-                  <input
-                    name="name"
-                    required
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    placeholder={accountType === 'BUSINESS' ? text.businessName : text.fullName}
-                    className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
+                <input
+                  name="name"
+                  required
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  placeholder={accountType === 'BUSINESS' ? text.businessName : text.fullName}
+                  className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
                 <input
                   type="email"
                   name="email"
