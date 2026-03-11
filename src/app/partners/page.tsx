@@ -1,8 +1,10 @@
-'use client';
+﻿'use client';
 
+import type { ReactNode } from 'react';
 import Image from 'next/image';
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
+import { Building2, Factory, Globe2, Handshake } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { getLocaleFromPathname } from '@/lib/content-locale';
 
@@ -16,6 +18,7 @@ type LinkCard = {
 type TextCard = {
   title: string;
   items: string[];
+  icon: ReactNode;
 };
 
 function ProjectLinkCard({ card }: { card: LinkCard }) {
@@ -51,7 +54,10 @@ function ProjectLinkCard({ card }: { card: LinkCard }) {
 function PartnerGroupCard({ card }: { card: TextCard }) {
   return (
     <article className="rounded-2xl bg-white/90 p-6 shadow-sm ring-1 ring-[#E8F5E9] backdrop-blur">
-      <h3 className="mb-3 font-montserrat text-xl font-bold text-[#1F2937]">{card.title}</h3>
+      <div className="mb-3 flex items-center gap-3">
+        <span className="inline-flex items-center justify-center text-[#FFB81C]">{card.icon}</span>
+        <h3 className="font-montserrat text-xl font-bold text-[#1F2937]">{card.title}</h3>
+      </div>
       <ul className="space-y-2 font-montserrat text-sm leading-relaxed text-[#4B5563] md:text-base">
         {card.items.map((item) => (
           <li key={item} className="flex items-start gap-2">
@@ -81,6 +87,7 @@ export default function PartnersPage() {
     ? [
         {
           title: 'Government and institutions',
+          icon: <Building2 className="h-6 w-6" />,
           items: [
             'Ministry of Labour (now under Ministry of Home Affairs)',
             'Vietnam General Confederation of Labour',
@@ -89,10 +96,12 @@ export default function PartnersPage() {
         },
         {
           title: 'International NGO partners',
+          icon: <Globe2 className="h-6 w-6" />,
           items: ['Oxfam', 'ILO (International Labour Organization)', 'DI (Development International)', 'NHO'],
         },
         {
           title: 'Domestic industry associations',
+          icon: <Factory className="h-6 w-6" />,
           items: [
             'VASEP, VFA, and fisheries associations in Can Tho, An Giang, Ca Mau, Soc Trang',
             'HAWA, BIFA, DOWA',
@@ -101,20 +110,24 @@ export default function PartnersPage() {
         },
         {
           title: 'Core partner network',
+          icon: <Handshake className="h-6 w-6" />,
           items: ['VCCI, Oxfam, DGD, Vietnam Farmers Union, VASEP, VFA, and local associations'],
         },
       ]
     : [
         {
           title: 'Cơ quan quản lý và tổ chức',
+          icon: <Building2 className="h-6 w-6" />,
           items: ['Bộ Lao động (nay thuộc Bộ Nội vụ)', 'Tổng Liên đoàn Lao động Việt Nam', 'Hội Nông dân Việt Nam'],
         },
         {
           title: 'Đối tác NGO quốc tế',
+          icon: <Globe2 className="h-6 w-6" />,
           items: ['Oxfam', 'ILO (Tổ chức Lao động Quốc tế)', 'DI (Development International)', 'NHO'],
         },
         {
           title: 'Hiệp hội ngành nghề trong nước',
+          icon: <Factory className="h-6 w-6" />,
           items: [
             'VASEP, VFA và các hiệp hội thủy sản tại Cần Thơ, An Giang, Cà Mau, Sóc Trăng',
             'HAWA, BIFA, DOWA',
@@ -123,6 +136,7 @@ export default function PartnersPage() {
         },
         {
           title: 'Mạng lưới đối tác nòng cốt',
+          icon: <Handshake className="h-6 w-6" />,
           items: ['VCCI, Oxfam, DGD, Hội Nông dân Việt Nam, VASEP, VFA và các hiệp hội địa phương'],
         },
       ];
@@ -227,12 +241,8 @@ export default function PartnersPage() {
               <p className="mb-4 inline-flex rounded-full bg-[#0A7029]/10 px-4 py-1 font-montserrat text-xs font-bold uppercase tracking-[0.14em] text-[#0A7029]">
                 {hero.label}
               </p>
-              <h1 className="font-montserrat text-4xl font-black tracking-tight text-[#1F2937] md:text-5xl">
-                {hero.title}
-              </h1>
-              <p className="mt-5 max-w-3xl font-montserrat text-base leading-relaxed text-[#4B5563] md:text-lg">
-                {hero.description}
-              </p>
+              <h1 className="font-montserrat text-4xl font-black tracking-tight text-[#1F2937] md:text-5xl">{hero.title}</h1>
+              <p className="mt-5 max-w-3xl font-montserrat text-base leading-relaxed text-[#4B5563] md:text-lg">{hero.description}</p>
             </div>
             <div className="relative mx-auto h-[260px] w-full max-w-md md:h-[320px]">
               <Image
@@ -260,14 +270,9 @@ export default function PartnersPage() {
         <section className="pb-8">
           <div className="container mx-auto max-w-6xl px-6">
             <div className="rounded-3xl bg-white p-6 shadow-sm md:p-8">
-              <div className="mb-8 grid gap-6 md:grid-cols-[220px_1fr] md:items-center">
+              <div className="mb-8 flex justify-center">
                 <div className="relative mx-auto h-28 w-44 md:h-32 md:w-48">
                   <Image src="/OX_HL_C_RGB.png" alt="Oxfam Logo" fill className="object-contain" sizes="220px" />
-                </div>
-                <div>
-                  <h2 className="font-montserrat text-3xl font-bold text-[#1F2937]">
-                    Oxfam
-                  </h2>
                 </div>
               </div>
               <div className="grid gap-5 md:grid-cols-3">
@@ -282,14 +287,9 @@ export default function PartnersPage() {
         <section className="pb-16">
           <div className="container mx-auto max-w-6xl px-6">
             <div className="rounded-3xl bg-white p-6 shadow-sm md:p-8">
-              <div className="mb-8 grid gap-6 md:grid-cols-[220px_1fr] md:items-center">
+              <div className="mb-8 flex justify-center">
                 <div className="relative mx-auto h-24 w-36 md:h-28 md:w-44">
                   <Image src="/ILOlogo.png" alt="ILO Logo" fill className="object-contain" sizes="200px" />
-                </div>
-                <div>
-                  <h2 className="font-montserrat text-3xl font-bold text-[#1F2937]">
-                    ILO
-                  </h2>
                 </div>
               </div>
               <div className="grid gap-5 md:grid-cols-3">
