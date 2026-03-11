@@ -266,7 +266,7 @@ export default function PartnersPage() {
                 </div>
                 <div>
                   <h2 className="font-montserrat text-3xl font-bold text-[#1F2937]">
-                    {isEn ? 'Projects with Oxfam' : 'Dự án cùng Oxfam'}
+                    Oxfam
                   </h2>
                 </div>
               </div>
@@ -288,7 +288,7 @@ export default function PartnersPage() {
                 </div>
                 <div>
                   <h2 className="font-montserrat text-3xl font-bold text-[#1F2937]">
-                    {isEn ? 'Projects with ILO' : 'Dự án cùng ILO'}
+                    ILO
                   </h2>
                 </div>
               </div>
