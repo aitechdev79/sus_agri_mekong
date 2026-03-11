@@ -1,309 +1,294 @@
-'use client';
+﻿'use client';
 
+import Image from 'next/image';
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
-import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { getLocaleFromPathname } from '@/lib/content-locale';
+
+type LinkCard = {
+  title: string;
+  description: string;
+  note: string;
+  href: string;
+};
+
+type TextCard = {
+  title: string;
+  items: string[];
+};
+
+function ProjectLinkCard({ card }: { card: LinkCard }) {
+  return (
+    <a
+      href={card.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group block flex h-full w-full flex-col border bg-white p-5"
+      style={{ borderColor: '#FFB81C' }}
+    >
+      <div className="relative flex min-h-[170px] flex-1 flex-col pb-4">
+        <div className="absolute bottom-0 left-0 h-0.5 w-full" style={{ backgroundColor: '#E8F5E9' }}></div>
+        <div
+          className="absolute bottom-0 left-0 h-0.5 w-0 transition-all duration-500 ease-out group-hover:w-full"
+          style={{ backgroundColor: '#0A7029' }}
+        ></div>
+
+        <h3 className="mb-2 font-montserrat text-lg font-bold md:text-xl" style={{ color: '#3C3C3B' }}>
+          {card.title}
+        </h3>
+        <p className="mb-2 font-montserrat text-sm md:text-base" style={{ color: '#6B7280' }}>
+          {card.description}
+        </p>
+        <p className="font-montserrat text-sm italic" style={{ color: '#6B7280' }}>
+          {card.note}
+        </p>
+      </div>
+    </a>
+  );
+}
+
+function PartnerGroupCard({ card }: { card: TextCard }) {
+  return (
+    <article className="rounded-2xl bg-white/90 p-6 shadow-sm ring-1 ring-[#E8F5E9] backdrop-blur">
+      <h3 className="mb-3 font-montserrat text-xl font-bold text-[#1F2937]">{card.title}</h3>
+      <ul className="space-y-2 font-montserrat text-sm leading-relaxed text-[#4B5563] md:text-base">
+        {card.items.map((item) => (
+          <li key={item} className="flex items-start gap-2">
+            <span className="mt-2 h-1.5 w-1.5 rounded-full bg-[#0A7029]" aria-hidden="true" />
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </article>
+  );
+}
 
 export default function PartnersPage() {
   const pathname = usePathname();
   const locale = getLocaleFromPathname(pathname);
   const isEn = locale === 'en';
 
+  const hero = {
+    label: isEn ? 'Sustainable Collaboration' : 'H?p tác b?n v?ng',
+    title: isEn ? 'Strategic Partners' : 'Ð?i tác chi?n lu?c',
+    description: isEn
+      ? 'Our platform grows through long-term collaboration with domestic and international partners, combining expertise, resources, and shared commitments to improve responsible business practices in Vietnam.'
+      : 'C?ng thông tin phát tri?n nh? s? d?ng hành dài h?n c?a các d?i tác trong và ngoài nu?c, k?t n?i ngu?n l?c, chuyên môn và cam k?t chung d? thúc d?y th?c hành kinh doanh có trách nhi?m t?i Vi?t Nam.',
+  };
+
+  const partnerGroups: TextCard[] = isEn
+    ? [
+        {
+          title: 'Government and institutions',
+          items: [
+            'Ministry of Labour (now under Ministry of Home Affairs)',
+            'Vietnam General Confederation of Labour',
+            'Vietnam Farmers Union',
+          ],
+        },
+        {
+          title: 'International NGO partners',
+          items: ['Oxfam', 'ILO (International Labour Organization)', 'DI (Development International)', 'NHO'],
+        },
+        {
+          title: 'Domestic industry associations',
+          items: [
+            'VASEP, VFA, and fisheries associations in Can Tho, An Giang, Ca Mau, Soc Trang',
+            'HAWA, BIFA, DOWA',
+            'CSID, VITAS',
+          ],
+        },
+        {
+          title: 'Core partner network',
+          items: ['VCCI, Oxfam, DGD, Vietnam Farmers Union, VASEP, VFA, and local associations'],
+        },
+      ]
+    : [
+        {
+          title: 'Co quan qu?n lý và t? ch?c',
+          items: ['B? Lao d?ng (nay thu?c B? N?i v?)', 'T?ng Liên doàn Lao d?ng Vi?t Nam', 'H?i Nông dân Vi?t Nam'],
+        },
+        {
+          title: 'Ð?i tác NGO qu?c t?',
+          items: ['Oxfam', 'ILO (T? ch?c Lao d?ng Qu?c t?)', 'DI (Development International)', 'NHO'],
+        },
+        {
+          title: 'Hi?p h?i ngành ngh? trong nu?c',
+          items: [
+            'VASEP, VFA và các hi?p h?i th?y s?n t?i C?n Tho, An Giang, Cà Mau, Sóc Trang',
+            'HAWA, BIFA, DOWA',
+            'CSID, VITAS',
+          ],
+        },
+        {
+          title: 'M?ng lu?i d?i tác nòng c?t',
+          items: ['VCCI, Oxfam, DGD, H?i Nông dân Vi?t Nam, VASEP, VFA và các hi?p h?i d?a phuong'],
+        },
+      ];
+
+  const oxfamCards: LinkCard[] = isEn
+    ? [
+        {
+          title: 'GRAISEA Project',
+          description: 'Gender-transformative and responsible agricultural investment in Southeast Asia.',
+          note: '? Supporting business capacity building in shrimp and rice value chains.',
+          href: 'https://graisea.github.io/',
+        },
+        {
+          title: 'Right To Food Project',
+          description:
+            'Promoting private-sector cooperation to develop inclusive business and responsible investment in Vietnam’s rice value chain.',
+          note: '? Supporting businesses in the rice value chain.',
+          href: 'https://policy-practice.oxfam.org/resources/a-common-sense-approach-to-the-right-to-food-558742/',
+        },
+        {
+          title: 'DGD Project',
+          description:
+            'Improving international market access for shrimp and rice enterprises through better workplace skills and occupational safety.',
+          note: '? Supporting enterprises in shrimp and rice processing value chains.',
+          href: 'https://vietnam.oxfam.org/kick-project-component-supporting-female-farmers-and-informal-workers',
+        },
+      ]
+    : [
+        {
+          title: 'D? án GRAISEA',
+          description: 'Tang cu?ng bình d?ng gi?i và d?u tu kinh doanh nông nghi?p có trách nhi?m t?i Ðông Nam Á.',
+          note: '? H? tr? nâng cao nang l?c doanh nghi?p trong chu?i ch? bi?n tôm và lúa g?o.',
+          href: 'https://graisea.github.io/',
+        },
+        {
+          title: 'D? án Right To Food',
+          description:
+            'Thúc d?y h?p tác khu v?c tu nhân nh?m phát tri?n mô hình kinh doanh toàn di?n và d?u tu có trách nhi?m trong chu?i giá tr? lúa g?o t?i Vi?t Nam.',
+          note: '? H? tr? doanh nghi?p trong chu?i lúa g?o.',
+          href: 'https://policy-practice.oxfam.org/resources/a-common-sense-approach-to-the-right-to-food-558742/',
+        },
+        {
+          title: 'D? án DGD',
+          description:
+            'C?i thi?n kh? nang ti?p c?n th? tru?ng qu?c t? c?a doanh nghi?p tôm và lúa thông qua nâng cao k? nang làm vi?c và an toàn v? sinh lao d?ng.',
+          note: '? H? tr? doanh nghi?p trong chu?i ch? bi?n tôm và lúa g?o.',
+          href: 'https://vietnam.oxfam.org/kick-project-component-supporting-female-farmers-and-informal-workers',
+        },
+      ];
+
+  const iloCards: LinkCard[] = isEn
+    ? [
+        {
+          title: 'SCORE Project',
+          description: 'Sustainable enterprise development project.',
+          note: '? Supporting competitiveness in wood processing, textiles, and supporting industries.',
+          href: 'https://www.ilo.org/projects-and-partnerships/projects/sustaining-competitive-and-responsible-enterprises-score',
+        },
+        {
+          title: 'PE4DW Project',
+          description: 'Productivity ecosystems for decent work project.',
+          note: '? Supporting productivity and sustainability standards for supporting-industry enterprises.',
+          href: 'https://www.ilo.org/projects-and-partnerships/projects/productivity-ecosystems-decent-work',
+        },
+        {
+          title: 'RSCA Project',
+          description: 'Social responsibility in Asian supply chains project.',
+          note: '? Building capacity for seafood enterprises in social responsibility and sustainability practices.',
+          href: 'https://www.ilo.org/projects-and-partnerships/projects/responsible-supply-chains-asia',
+        },
+      ]
+    : [
+        {
+          title: 'D? án SCORE',
+          description: 'D? án phát tri?n doanh nghi?p b?n v?ng.',
+          note: '? H? tr? nâng cao nang l?c c?nh tranh cho doanh nghi?p ngành ch? bi?n g?, d?t may và công nghi?p h? tr?.',
+          href: 'https://www.ilo.org/projects-and-partnerships/projects/sustaining-competitive-and-responsible-enterprises-score',
+        },
+        {
+          title: 'D? án PE4DW',
+          description: 'D? án H? sinh thái nang su?t vì vi?c làm b?n v?ng.',
+          note: '? H? tr? nâng cao nang su?t và tiêu chu?n b?n v?ng cho doanh nghi?p ngành công nghi?p h? tr?.',
+          href: 'https://www.ilo.org/projects-and-partnerships/projects/productivity-ecosystems-decent-work',
+        },
+        {
+          title: 'D? án RSCA',
+          description: 'D? án Trách nhi?m xã h?i trong chu?i cung ?ng t?i châu Á.',
+          note: '? H? tr? nâng cao nang l?c cho doanh nghi?p th?y s?n v? th?c hành trách nhi?m xã h?i và b?n v?ng.',
+          href: 'https://www.ilo.org/projects-and-partnerships/projects/responsible-supply-chains-asia',
+        },
+      ];
+
   return (
-    <div className="min-h-screen">
-      {/* Navigation Bar */}
-      <div className="relative z-50">
-        <NavigationBar />
-      </div>
+    <div className="min-h-screen bg-[#F6F3EA]">
+      <NavigationBar />
 
-      {/* Main Content */}
-      <main className="pt-16">
-        {/* Hero Section - Full Width Banner */}
-        <section className="relative w-full h-[400px] md:h-[500px]">
-          <Image
-            src="/hero-main.jpg"
-            alt="Partners Hero Banner"
-            fill
-            className="object-cover"
-            priority
-            sizes="100vw"
-          />
+      <main className="pt-20">
+        <section className="relative overflow-hidden bg-white">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#EAF7EF] via-white to-[#FFF7E0]" aria-hidden="true" />
+          <div className="container relative mx-auto grid max-w-6xl gap-8 px-6 py-14 md:grid-cols-[1.1fr_0.9fr] md:items-center md:py-20">
+            <div>
+              <p className="mb-4 inline-flex rounded-full bg-[#0A7029]/10 px-4 py-1 font-montserrat text-xs font-bold uppercase tracking-[0.14em] text-[#0A7029]">
+                {hero.label}
+              </p>
+              <h1 className="font-montserrat text-4xl font-black tracking-tight text-[#1F2937] md:text-5xl">
+                {hero.title}
+              </h1>
+              <p className="mt-5 max-w-3xl font-montserrat text-base leading-relaxed text-[#4B5563] md:text-lg">
+                {hero.description}
+              </p>
+            </div>
+            <div className="relative mx-auto h-[260px] w-full max-w-md md:h-[320px]">
+              <Image src="/art_members.png" alt="Partners illustration" fill className="object-contain" sizes="(max-width: 768px) 90vw, 40vw" priority />
+            </div>
+          </div>
         </section>
 
-        {/* Strategic Partners Introduction */}
-        <section className="py-16 bg-white">
-          <div className="container mx-auto px-6 max-w-6xl">
-            <h1 className="font-montserrat font-bold text-4xl md:text-5xl text-gray-800 mb-6">
-              {isEn ? 'Strategic Partners' : 'Đối tác chiến lược'}
-            </h1>
-            <p className="text-lg text-gray-700 leading-relaxed font-montserrat mb-8">
-              {isEn
-                ? 'The platform’s sustainable growth is built through collaboration with strategic partners in Vietnam and internationally. From global organizations and industry associations to local authorities, each partner contributes resources, expertise, and commitment to improve competitiveness, labor conditions, and responsible business practices in Vietnam.'
-                : 'Sự phát triển bền vững của cổng thông tin được xây dựng từ sự đồng hành của nhiều đối tác chiến lược trong và ngoài nước. Từ các tổ chức quốc tế, hiệp hội ngành hàng đến chính quyền địa phương, mỗi đối tác đều mang đến nguồn lực, kinh nghiệm và cam kết cùng chung tay nâng cao năng lực cạnh tranh, cải thiện điều kiện lao động và thúc đẩy kinh doanh có trách nhiệm cho doanh nghiệp Việt Nam.'}
-            </p>
+        <section className="py-14">
+          <div className="container mx-auto max-w-6xl px-6">
+            <div className="grid gap-5 md:grid-cols-2">
+              {partnerGroups.map((card) => (
+                <PartnerGroupCard key={card.title} card={card} />
+              ))}
+            </div>
+          </div>
+        </section>
 
-            {/* Partner Categories */}
-            <div className="space-y-8">
-              {/* Government Ministries */}
-              <div className="bg-blue-50 p-6 rounded-lg">
-                <h3 className="font-montserrat font-bold text-2xl text-blue-800 mb-4">
-                  {isEn ? 'Government Ministries and Institutions' : 'Các bộ ngành'}
-                </h3>
-                <ul className="space-y-2 text-gray-700 font-montserrat">
-                  <li className="flex items-start">
-                    <span className="text-blue-600 mr-2">•</span>
-                    <span>{isEn ? 'Ministry of Labour (now under Ministry of Home Affairs)' : 'Bộ Lao động (nay là Bộ Nội vụ)'}</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-blue-600 mr-2">•</span>
-                    <span>{isEn ? 'Vietnam General Confederation of Labour' : 'Tổng Liên đoàn'}</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-blue-600 mr-2">•</span>
-                    <span>{isEn ? 'Vietnam Farmers Union' : 'Hội Nông dân Việt Nam'}</span>
-                  </li>
-                </ul>
+        <section className="pb-8">
+          <div className="container mx-auto max-w-6xl px-6">
+            <div className="rounded-3xl bg-white p-6 shadow-sm md:p-8">
+              <div className="mb-8 grid gap-6 md:grid-cols-[220px_1fr] md:items-center">
+                <div className="relative mx-auto h-28 w-44 md:h-32 md:w-48">
+                  <Image src="/OX_HL_C_RGB.png" alt="Oxfam Logo" fill className="object-contain" sizes="220px" />
+                </div>
+                <div>
+                  <h2 className="font-montserrat text-3xl font-bold text-[#1F2937]">
+                    {isEn ? 'Projects with Oxfam' : 'D? án cùng Oxfam'}
+                  </h2>
+                </div>
               </div>
-
-              {/* International NGO Partners */}
-              <div className="bg-green-50 p-6 rounded-lg">
-                <h3 className="font-montserrat font-bold text-2xl text-green-800 mb-4">
-                  {isEn ? 'International NGO Partners' : 'Đối tác NGO quốc tế'}
-                </h3>
-                <ul className="space-y-2 text-gray-700 font-montserrat">
-                  <li className="flex items-start">
-                    <span className="text-green-600 mr-2">•</span>
-                    <span>Oxfam</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-green-600 mr-2">•</span>
-                    <span>{isEn ? 'ILO (International Labour Organization)' : 'ILO (Tổ chức Lao động Quốc tế)'}</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-green-600 mr-2">•</span>
-                    <span>DI (Development International)</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-green-600 mr-2">•</span>
-                    <span>NHO</span>
-                  </li>
-                </ul>
-              </div>
-
-              {/* Industry Associations */}
-              <div className="bg-orange-50 p-6 rounded-lg">
-                <h3 className="font-montserrat font-bold text-2xl text-orange-800 mb-4">
-                  {isEn ? 'Domestic Industry Associations' : 'Hiệp hội ngành nghề trong nước'}
-                </h3>
-                <ul className="space-y-2 text-gray-700 font-montserrat">
-                  <li className="flex items-start">
-                    <span className="text-orange-600 mr-2">•</span>
-                    <span>{isEn ? 'VASEP - Vietnam Association of Seafood Exporters and Producers' : 'VASEP - Hiệp hội Chế biến và Xuất khẩu Thủy sản Việt Nam'}</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-orange-600 mr-2">•</span>
-                    <span>{isEn ? 'VFA - Vietnam Fisheries Association' : 'VFA - Hiệp hội Thủy sản Việt Nam'}</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-orange-600 mr-2">•</span>
-                    <span>{isEn ? 'Fisheries associations in Can Tho, An Giang, Ca Mau, and Soc Trang' : 'Hiệp hội Thủy sản Cần Thơ, An Giang, Cà Mau, Sóc Trăng'}</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-orange-600 mr-2">•</span>
-                    <span>{isEn ? 'HAWA - Handicraft and Wood Industry Association' : 'HAWA - Hiệp hội Gỗ và Lâm sản Việt Nam'}</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-orange-600 mr-2">•</span>
-                    <span>{isEn ? 'BIFA - Binh Duong Furniture Association' : 'BIFA - Hiệp hội Gỗ Bình Dương'}</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-orange-600 mr-2">•</span>
-                    <span>{isEn ? 'DOWA - Dong Nai Wood Association' : 'DOWA - Hiệp hội Gỗ Đồng Nai'}</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-orange-600 mr-2">•</span>
-                    <span>{isEn ? 'CSID - Center for Supporting Industries Development' : 'CSID - Trung tâm Phát triển Công nghiệp Hỗ trợ'}</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-orange-600 mr-2">•</span>
-                    <span>{isEn ? 'VITAS - Vietnam Textile and Apparel Association' : 'VITAS - Hiệp hội Dệt May Việt Nam'}</span>
-                  </li>
-                </ul>
-              </div>
-
-              {/* Partner Organizations */}
-              <div className="bg-purple-50 p-6 rounded-lg">
-                <h3 className="font-montserrat font-bold text-2xl text-purple-800 mb-4">
-                  {isEn ? 'Partner Organizations' : 'Các tổ chức đối tác'}
-                </h3>
-                <p className="text-gray-700 font-montserrat leading-relaxed">
-                  {isEn
-                    ? 'VCCI, Oxfam, DGD, Vietnam Farmers Union, VASEP, VFA, and local associations in An Giang, Ca Mau, and Soc Trang.'
-                    : 'VCCI, Oxfam, DGD, Hội Nông dân Việt Nam, VASEP, VFA, và các hiệp hội địa phương tại An Giang, Cà Mau, Sóc Trăng.'}
-                </p>
+              <div className="grid gap-5 md:grid-cols-3">
+                {oxfamCards.map((card) => (
+                  <ProjectLinkCard key={card.title} card={card} />
+                ))}
               </div>
             </div>
           </div>
         </section>
 
-        {/* Oxfam Section */}
-        <section className="py-16 bg-gray-50">
-          <div className="container mx-auto px-6 max-w-6xl">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-start">
-              {/* Content Column (2/3 width) - Left side */}
-              <div className="md:col-span-2">
-                <h2 className="font-montserrat font-bold text-3xl md:text-4xl text-gray-800 mb-6">
-                  {isEn ? 'Oxfam in Vietnam' : 'Tổ chức Oxfam tại Việt Nam'}
-                </h2>
-
-                <div className="space-y-6">
-                  {/* Project 1 - Graisea */}
-                  <a
-                    href="https://graisea.github.io/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block bg-white p-6 rounded-lg shadow-md border-l-4 border-green-500 hover:shadow-xl transition-shadow duration-300"
-                  >
-                    <h3 className="font-montserrat font-bold text-xl text-green-700 mb-3 hover:text-green-800">
-                      {isEn ? 'GRAISEA Project' : 'Dự án Graisea'}
-                    </h3>
-                    <p className="text-base text-gray-700 leading-relaxed font-montserrat mb-2">
-                      {isEn ? 'Gender-transformative and responsible agricultural investment in Southeast Asia' : 'Tăng cường bình đẳng giới và đầu tư kinh doanh nông nghiệp có trách nhiệm tại Đông Nam Á'}
-                    </p>
-                    <p className="text-sm text-gray-600 italic font-montserrat">
-                      {isEn ? '→ Supporting business capacity building in shrimp and rice value chains' : '→ Hỗ trợ nâng cao năng lực cho doanh nghiệp trong chuỗi chế biến tôm và lúa gạo'}
-                    </p>
-                  </a>
-
-                  {/* Project 2 - Right To Food */}
-                  <a
-                    href="https://policy-practice.oxfam.org/resources/a-common-sense-approach-to-the-right-to-food-558742/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500 hover:shadow-xl transition-shadow duration-300"
-                  >
-                    <h3 className="font-montserrat font-bold text-xl text-blue-700 mb-3 hover:text-blue-800">
-                      {isEn ? 'Right To Food Project' : 'Dự án Right To Food'}
-                    </h3>
-                    <p className="text-base text-gray-700 leading-relaxed font-montserrat mb-2">
-                      {isEn ? 'Promoting private-sector cooperation to develop inclusive business (IB) and responsible investment (RI) models in Vietnam’s rice value chain' : 'Thúc đẩy hợp tác khu vực tư nhân nhằm phát triển mô hình kinh doanh toàn diện (IB) và đầu tư có trách nhiệm (RI) trong chuỗi giá trị lúa gạo tại Việt Nam'}
-                    </p>
-                    <p className="text-sm text-gray-600 italic font-montserrat">
-                      {isEn ? '→ Supporting businesses in the rice value chain' : '→ Hỗ trợ doanh nghiệp trong chuỗi lúa gạo'}
-                    </p>
-                  </a>
-
-                  {/* Project 3 - DGD */}
-                  <a
-                    href="https://vietnam.oxfam.org/kick-project-component-supporting-female-farmers-and-informal-workers"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block bg-white p-6 rounded-lg shadow-md border-l-4 border-orange-500 hover:shadow-xl transition-shadow duration-300"
-                  >
-                    <h3 className="font-montserrat font-bold text-xl text-orange-700 mb-3 hover:text-orange-800">
-                      {isEn ? 'DGD Project' : 'Dự án DGD'}
-                    </h3>
-                    <p className="text-base text-gray-700 leading-relaxed font-montserrat mb-2">
-                      {isEn ? 'Improving international market access for shrimp and rice enterprises through better workplace skills and occupational safety' : 'Cải thiện khả năng tiếp cận thị trường quốc tế của Doanh nghiệp tôm và lúa thông qua nâng cao kỹ năng làm việc và an toàn vệ sinh lao động tại Doanh nghiệp'}
-                    </p>
-                    <p className="text-sm text-gray-600 italic font-montserrat">
-                      {isEn ? '→ Supporting enterprises in shrimp and rice processing value chains' : '→ Hỗ trợ doanh nghiệp trong chuỗi chế biến tôm và lúa gạo'}
-                    </p>
-                  </a>
+        <section className="pb-16">
+          <div className="container mx-auto max-w-6xl px-6">
+            <div className="rounded-3xl bg-white p-6 shadow-sm md:p-8">
+              <div className="mb-8 grid gap-6 md:grid-cols-[220px_1fr] md:items-center">
+                <div className="relative mx-auto h-24 w-36 md:h-28 md:w-44">
+                  <Image src="/ILOlogo.png" alt="ILO Logo" fill className="object-contain" sizes="200px" />
+                </div>
+                <div>
+                  <h2 className="font-montserrat text-3xl font-bold text-[#1F2937]">
+                    {isEn ? 'Projects with ILO' : 'D? án cùng ILO'}
+                  </h2>
                 </div>
               </div>
-
-              {/* Logo Column (1/3 width) - Right side */}
-              <div className="md:col-span-1 flex justify-center items-start">
-                <div className="relative w-full max-w-xs">
-                  <Image
-                    src="/OX_HL_C_RGB.png"
-                    alt="Oxfam Logo"
-                    width={300}
-                    height={300}
-                    className="object-contain"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ILO Section */}
-        <section className="py-16 bg-white">
-          <div className="container mx-auto px-6 max-w-6xl">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-start">
-              {/* Logo Column (1/3 width) - Left side */}
-              <div className="md:col-span-1 flex justify-center items-start">
-                <div className="relative w-full max-w-xs">
-                  <Image
-                    src="/ILOlogo.png"
-                    alt="ILO Logo"
-                    width={300}
-                    height={300}
-                    className="object-contain"
-                  />
-                </div>
-              </div>
-
-              {/* Content Column (2/3 width) - Right side */}
-              <div className="md:col-span-2">
-                <h2 className="font-montserrat font-bold text-3xl md:text-4xl text-gray-800 mb-6">
-                  {isEn ? 'ILO (International Labour Organization)' : 'Tổ chức ILO (Tổ chức lao động Quốc tế)'}
-                </h2>
-
-                <div className="space-y-6">
-                  {/* Project 1 - SCORE */}
-                  <div className="bg-gray-50 p-6 rounded-lg shadow-md border-l-4 border-purple-500">
-                    <h3 className="font-montserrat font-bold text-xl text-purple-700 mb-3">
-                      {isEn ? 'SCORE Project' : 'Dự án SCORE'}
-                    </h3>
-                    <p className="text-base text-gray-700 leading-relaxed font-montserrat mb-2">
-                      {isEn ? 'Sustainable enterprise development project' : 'Dự án phát triển doanh nghiệp bền vững'}
-                    </p>
-                    <p className="text-sm text-gray-600 italic font-montserrat">
-                      {isEn ? '→ Supporting competitiveness in wood processing, textiles, and supporting industries' : '→ Hỗ trợ nâng cao năng lực cạnh tranh cho doanh nghiệp trong ngành chế biến gỗ, dệt may và công nghiệp hỗ trợ'}
-                    </p>
-                  </div>
-
-                  {/* Project 2 - PE4DW */}
-                  <div className="bg-gray-50 p-6 rounded-lg shadow-md border-l-4 border-indigo-500">
-                    <h3 className="font-montserrat font-bold text-xl text-indigo-700 mb-3">
-                      {isEn ? 'PE4DW Project' : 'Dự án PE4DW'}
-                    </h3>
-                    <p className="text-base text-gray-700 leading-relaxed font-montserrat mb-2">
-                      {isEn ? 'Productivity ecosystems for decent work project' : 'Dự án Hệ sinh thái năng suất vì việc làm bền vững'}
-                    </p>
-                    <p className="text-sm text-gray-600 italic font-montserrat">
-                      {isEn ? '→ Supporting productivity and sustainability standards for supporting-industry enterprises' : '→ Hỗ trợ nâng cao năng suất và tiêu chuẩn bền vững cho doanh nghiệp ngành công nghiệp hỗ trợ'}
-                    </p>
-                  </div>
-
-                  {/* Project 3 - RSCA */}
-                  <div className="bg-gray-50 p-6 rounded-lg shadow-md border-l-4 border-cyan-500">
-                    <h3 className="font-montserrat font-bold text-xl text-cyan-700 mb-3">
-                      {isEn ? 'RSCA Project' : 'Dự án RSCA'}
-                    </h3>
-                    <p className="text-base text-gray-700 leading-relaxed font-montserrat mb-2">
-                      {isEn ? 'Social responsibility in Asian supply chains project' : 'Dự án Trách nhiệm xã hội trong chuỗi cung ứng tại châu Á'}
-                    </p>
-                    <p className="text-sm text-gray-600 italic font-montserrat">
-                      {isEn ? '→ Building capacity for seafood enterprises in social responsibility and sustainability practices' : '→ Hỗ trợ nâng cao năng lực cho Doanh nghiệp thủy sản về thực hành trách nhiệm xã hội và bền vững'}
-                    </p>
-                  </div>
-
-                  {/* Project 4 - Electronics Supply Chain */}
-                  <div className="bg-gray-50 p-6 rounded-lg shadow-md border-l-4 border-teal-500">
-                    <h3 className="font-montserrat font-bold text-xl text-teal-700 mb-3">
-                      {isEn ? 'Vietnam Electronics Supply Chain Connectivity Project' : 'Dự án Tăng cường kết nối chuỗi cung ứng ngành điện tử tại Việt Nam'}
-                    </h3>
-                    <p className="text-sm text-gray-600 italic font-montserrat">
-                      {isEn ? '→ Supporting supply chain development and linkages in the electronics industry' : '→ Hỗ trợ phát triển và kết nối chuỗi cung ứng trong ngành công nghiệp điện tử'}
-                    </p>
-                  </div>
-                </div>
+              <div className="grid gap-5 md:grid-cols-3">
+                {iloCards.map((card) => (
+                  <ProjectLinkCard key={card.title} card={card} />
+                ))}
               </div>
             </div>
           </div>
@@ -314,3 +299,4 @@ export default function PartnersPage() {
     </div>
   );
 }
+
