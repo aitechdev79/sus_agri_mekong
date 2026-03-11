@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import Image from 'next/image';
 import NavigationBar from '@/components/NavigationBar';
@@ -70,11 +70,11 @@ export default function PartnersPage() {
   const isEn = locale === 'en';
 
   const hero = {
-    label: isEn ? 'Sustainable Collaboration' : 'H?p tác b?n v?ng',
-    title: isEn ? 'Strategic Partners' : 'Ð?i tác chi?n lu?c',
+    label: isEn ? 'Sustainable Collaboration' : 'Hợp tác bền vững',
+    title: isEn ? 'Strategic Partners' : 'Đối tác chiến lược',
     description: isEn
       ? 'Our platform grows through long-term collaboration with domestic and international partners, combining expertise, resources, and shared commitments to improve responsible business practices in Vietnam.'
-      : 'C?ng thông tin phát tri?n nh? s? d?ng hành dài h?n c?a các d?i tác trong và ngoài nu?c, k?t n?i ngu?n l?c, chuyên môn và cam k?t chung d? thúc d?y th?c hành kinh doanh có trách nhi?m t?i Vi?t Nam.',
+      : 'Cổng thông tin phát triển nhờ sự đồng hành dài hạn của các đối tác trong và ngoài nước, kết nối nguồn lực, chuyên môn và cam kết chung để thúc đẩy thực hành kinh doanh có trách nhiệm tại Việt Nam.',
   };
 
   const partnerGroups: TextCard[] = isEn
@@ -106,24 +106,24 @@ export default function PartnersPage() {
       ]
     : [
         {
-          title: 'Co quan qu?n lý và t? ch?c',
-          items: ['B? Lao d?ng (nay thu?c B? N?i v?)', 'T?ng Liên doàn Lao d?ng Vi?t Nam', 'H?i Nông dân Vi?t Nam'],
+          title: 'Cơ quan quản lý và tổ chức',
+          items: ['Bộ Lao động (nay thuộc Bộ Nội vụ)', 'Tổng Liên đoàn Lao động Việt Nam', 'Hội Nông dân Việt Nam'],
         },
         {
-          title: 'Ð?i tác NGO qu?c t?',
-          items: ['Oxfam', 'ILO (T? ch?c Lao d?ng Qu?c t?)', 'DI (Development International)', 'NHO'],
+          title: 'Đối tác NGO quốc tế',
+          items: ['Oxfam', 'ILO (Tổ chức Lao động Quốc tế)', 'DI (Development International)', 'NHO'],
         },
         {
-          title: 'Hi?p h?i ngành ngh? trong nu?c',
+          title: 'Hiệp hội ngành nghề trong nước',
           items: [
-            'VASEP, VFA và các hi?p h?i th?y s?n t?i C?n Tho, An Giang, Cà Mau, Sóc Trang',
+            'VASEP, VFA và các hiệp hội thủy sản tại Cần Thơ, An Giang, Cà Mau, Sóc Trăng',
             'HAWA, BIFA, DOWA',
             'CSID, VITAS',
           ],
         },
         {
-          title: 'M?ng lu?i d?i tác nòng c?t',
-          items: ['VCCI, Oxfam, DGD, H?i Nông dân Vi?t Nam, VASEP, VFA và các hi?p h?i d?a phuong'],
+          title: 'Mạng lưới đối tác nòng cốt',
+          items: ['VCCI, Oxfam, DGD, Hội Nông dân Việt Nam, VASEP, VFA và các hiệp hội địa phương'],
         },
       ];
 
@@ -132,43 +132,43 @@ export default function PartnersPage() {
         {
           title: 'GRAISEA Project',
           description: 'Gender-transformative and responsible agricultural investment in Southeast Asia.',
-          note: '? Supporting business capacity building in shrimp and rice value chains.',
+          note: '-> Supporting business capacity building in shrimp and rice value chains.',
           href: 'https://graisea.github.io/',
         },
         {
           title: 'Right To Food Project',
           description:
             'Promoting private-sector cooperation to develop inclusive business and responsible investment in Vietnam’s rice value chain.',
-          note: '? Supporting businesses in the rice value chain.',
+          note: '-> Supporting businesses in the rice value chain.',
           href: 'https://policy-practice.oxfam.org/resources/a-common-sense-approach-to-the-right-to-food-558742/',
         },
         {
           title: 'DGD Project',
           description:
             'Improving international market access for shrimp and rice enterprises through better workplace skills and occupational safety.',
-          note: '? Supporting enterprises in shrimp and rice processing value chains.',
+          note: '-> Supporting enterprises in shrimp and rice processing value chains.',
           href: 'https://vietnam.oxfam.org/kick-project-component-supporting-female-farmers-and-informal-workers',
         },
       ]
     : [
         {
-          title: 'D? án GRAISEA',
-          description: 'Tang cu?ng bình d?ng gi?i và d?u tu kinh doanh nông nghi?p có trách nhi?m t?i Ðông Nam Á.',
-          note: '? H? tr? nâng cao nang l?c doanh nghi?p trong chu?i ch? bi?n tôm và lúa g?o.',
+          title: 'Dự án GRAISEA',
+          description: 'Tăng cường bình đẳng giới và đầu tư kinh doanh nông nghiệp có trách nhiệm tại Đông Nam Á.',
+          note: '-> Hỗ trợ nâng cao năng lực doanh nghiệp trong chuỗi chế biến tôm và lúa gạo.',
           href: 'https://graisea.github.io/',
         },
         {
-          title: 'D? án Right To Food',
+          title: 'Dự án Right To Food',
           description:
-            'Thúc d?y h?p tác khu v?c tu nhân nh?m phát tri?n mô hình kinh doanh toàn di?n và d?u tu có trách nhi?m trong chu?i giá tr? lúa g?o t?i Vi?t Nam.',
-          note: '? H? tr? doanh nghi?p trong chu?i lúa g?o.',
+            'Thúc đẩy hợp tác khu vực tư nhân nhằm phát triển mô hình kinh doanh toàn diện và đầu tư có trách nhiệm trong chuỗi giá trị lúa gạo tại Việt Nam.',
+          note: '-> Hỗ trợ doanh nghiệp trong chuỗi lúa gạo.',
           href: 'https://policy-practice.oxfam.org/resources/a-common-sense-approach-to-the-right-to-food-558742/',
         },
         {
-          title: 'D? án DGD',
+          title: 'Dự án DGD',
           description:
-            'C?i thi?n kh? nang ti?p c?n th? tru?ng qu?c t? c?a doanh nghi?p tôm và lúa thông qua nâng cao k? nang làm vi?c và an toàn v? sinh lao d?ng.',
-          note: '? H? tr? doanh nghi?p trong chu?i ch? bi?n tôm và lúa g?o.',
+            'Cải thiện khả năng tiếp cận thị trường quốc tế của doanh nghiệp tôm và lúa thông qua nâng cao kỹ năng làm việc và an toàn vệ sinh lao động.',
+          note: '-> Hỗ trợ doanh nghiệp trong chuỗi chế biến tôm và lúa gạo.',
           href: 'https://vietnam.oxfam.org/kick-project-component-supporting-female-farmers-and-informal-workers',
         },
       ];
@@ -178,39 +178,39 @@ export default function PartnersPage() {
         {
           title: 'SCORE Project',
           description: 'Sustainable enterprise development project.',
-          note: '? Supporting competitiveness in wood processing, textiles, and supporting industries.',
+          note: '-> Supporting competitiveness in wood processing, textiles, and supporting industries.',
           href: 'https://www.ilo.org/projects-and-partnerships/projects/sustaining-competitive-and-responsible-enterprises-score',
         },
         {
           title: 'PE4DW Project',
           description: 'Productivity ecosystems for decent work project.',
-          note: '? Supporting productivity and sustainability standards for supporting-industry enterprises.',
+          note: '-> Supporting productivity and sustainability standards for supporting-industry enterprises.',
           href: 'https://www.ilo.org/projects-and-partnerships/projects/productivity-ecosystems-decent-work',
         },
         {
           title: 'RSCA Project',
           description: 'Social responsibility in Asian supply chains project.',
-          note: '? Building capacity for seafood enterprises in social responsibility and sustainability practices.',
+          note: '-> Building capacity for seafood enterprises in social responsibility and sustainability practices.',
           href: 'https://www.ilo.org/projects-and-partnerships/projects/responsible-supply-chains-asia',
         },
       ]
     : [
         {
-          title: 'D? án SCORE',
-          description: 'D? án phát tri?n doanh nghi?p b?n v?ng.',
-          note: '? H? tr? nâng cao nang l?c c?nh tranh cho doanh nghi?p ngành ch? bi?n g?, d?t may và công nghi?p h? tr?.',
+          title: 'Dự án SCORE',
+          description: 'Dự án phát triển doanh nghiệp bền vững.',
+          note: '-> Hỗ trợ nâng cao năng lực cạnh tranh cho doanh nghiệp ngành chế biến gỗ, dệt may và công nghiệp hỗ trợ.',
           href: 'https://www.ilo.org/projects-and-partnerships/projects/sustaining-competitive-and-responsible-enterprises-score',
         },
         {
-          title: 'D? án PE4DW',
-          description: 'D? án H? sinh thái nang su?t vì vi?c làm b?n v?ng.',
-          note: '? H? tr? nâng cao nang su?t và tiêu chu?n b?n v?ng cho doanh nghi?p ngành công nghi?p h? tr?.',
+          title: 'Dự án PE4DW',
+          description: 'Dự án Hệ sinh thái năng suất vì việc làm bền vững.',
+          note: '-> Hỗ trợ nâng cao năng suất và tiêu chuẩn bền vững cho doanh nghiệp ngành công nghiệp hỗ trợ.',
           href: 'https://www.ilo.org/projects-and-partnerships/projects/productivity-ecosystems-decent-work',
         },
         {
-          title: 'D? án RSCA',
-          description: 'D? án Trách nhi?m xã h?i trong chu?i cung ?ng t?i châu Á.',
-          note: '? H? tr? nâng cao nang l?c cho doanh nghi?p th?y s?n v? th?c hành trách nhi?m xã h?i và b?n v?ng.',
+          title: 'Dự án RSCA',
+          description: 'Dự án Trách nhiệm xã hội trong chuỗi cung ứng tại châu Á.',
+          note: '-> Hỗ trợ nâng cao năng lực cho doanh nghiệp thủy sản về thực hành trách nhiệm xã hội và bền vững.',
           href: 'https://www.ilo.org/projects-and-partnerships/projects/responsible-supply-chains-asia',
         },
       ];
@@ -235,7 +235,14 @@ export default function PartnersPage() {
               </p>
             </div>
             <div className="relative mx-auto h-[260px] w-full max-w-md md:h-[320px]">
-              <Image src="/art_members.png" alt="Partners illustration" fill className="object-contain" sizes="(max-width: 768px) 90vw, 40vw" priority />
+              <Image
+                src="/art_members.png"
+                alt="Partners illustration"
+                fill
+                className="object-contain"
+                sizes="(max-width: 768px) 90vw, 40vw"
+                priority
+              />
             </div>
           </div>
         </section>
@@ -259,7 +266,7 @@ export default function PartnersPage() {
                 </div>
                 <div>
                   <h2 className="font-montserrat text-3xl font-bold text-[#1F2937]">
-                    {isEn ? 'Projects with Oxfam' : 'D? án cùng Oxfam'}
+                    {isEn ? 'Projects with Oxfam' : 'Dự án cùng Oxfam'}
                   </h2>
                 </div>
               </div>
@@ -281,7 +288,7 @@ export default function PartnersPage() {
                 </div>
                 <div>
                   <h2 className="font-montserrat text-3xl font-bold text-[#1F2937]">
-                    {isEn ? 'Projects with ILO' : 'D? án cùng ILO'}
+                    {isEn ? 'Projects with ILO' : 'Dự án cùng ILO'}
                   </h2>
                 </div>
               </div>
@@ -299,4 +306,3 @@ export default function PartnersPage() {
     </div>
   );
 }
-
