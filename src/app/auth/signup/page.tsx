@@ -32,7 +32,42 @@ export default function SignUpPage() {
     }
   }, [])
 
-  const provinces = ['An Giang', 'Sóc Trăng', 'Bạc Liêu', 'Cà Mau', 'TP. Hồ Chí Minh', 'Cần Thơ']
+  const provinces = [
+    'An Giang',
+    'Bắc Ninh',
+    'Cà Mau',
+    'Cao Bằng',
+    'Cần Thơ',
+    'Đà Nẵng',
+    'Đắk Lắk',
+    'Điện Biên',
+    'Đồng Nai',
+    'Đồng Tháp',
+    'Gia Lai',
+    'Hà Nội',
+    'Hà Tĩnh',
+    'Hải Phòng',
+    'Hưng Yên',
+    'Huế',
+    'Khánh Hòa',
+    'Lai Châu',
+    'Lâm Đồng',
+    'Lạng Sơn',
+    'Lào Cai',
+    'Nghệ An',
+    'Ninh Bình',
+    'Phú Thọ',
+    'Quảng Ngãi',
+    'Quảng Ninh',
+    'Quảng Trị',
+    'Sơn La',
+    'Tây Ninh',
+    'Thanh Hóa',
+    'Thái Nguyên',
+    'Thành phố Hồ Chí Minh',
+    'Tuyên Quang',
+    'Vĩnh Long',
+  ]
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }))
@@ -106,15 +141,20 @@ export default function SignUpPage() {
                 </select>
               </div>
 
-              <input
-                type="text"
-                name="name"
-                required
-                value={formData.name}
-                onChange={handleChange}
-                className="w-full rounded-md border border-gray-300 px-3 py-2 font-montserrat text-gray-900 placeholder-gray-500 focus:border-green-500 focus:outline-none focus:ring-green-500"
-                placeholder="Họ và tên"
-              />
+              <div>
+                <label className="mb-2 block text-sm font-medium text-gray-700">
+                  {accountType === 'BUSINESS' ? 'Tên doanh nghiệp' : 'Họ và tên'}
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  required
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 font-montserrat text-gray-900 placeholder-gray-500 focus:border-green-500 focus:outline-none focus:ring-green-500"
+                  placeholder={accountType === 'BUSINESS' ? 'Nhập tên doanh nghiệp' : 'Nhập họ và tên'}
+                />
+              </div>
 
               <input
                 type="email"
@@ -151,14 +191,17 @@ export default function SignUpPage() {
                 ))}
               </select>
 
-              <input
-                type="text"
-                name="organization"
-                value={formData.organization}
-                onChange={handleChange}
-                className="w-full rounded-md border border-gray-300 px-3 py-2 font-montserrat text-gray-900 placeholder-gray-500 focus:border-green-500 focus:outline-none focus:ring-green-500"
-                placeholder="Tổ chức/Doanh nghiệp (không bắt buộc)"
-              />
+              <div>
+                <label className="mb-2 block text-sm font-medium text-gray-700">Tổ chức/Doanh nghiệp (không bắt buộc)</label>
+                <input
+                  type="text"
+                  name="organization"
+                  value={formData.organization}
+                  onChange={handleChange}
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 font-montserrat text-gray-900 placeholder-gray-500 focus:border-green-500 focus:outline-none focus:ring-green-500"
+                  placeholder="Nhập tổ chức/doanh nghiệp"
+                />
+              </div>
 
               <input
                 type="password"
@@ -196,4 +239,3 @@ export default function SignUpPage() {
     </div>
   )
 }
-

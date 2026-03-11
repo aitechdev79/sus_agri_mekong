@@ -70,6 +70,7 @@ export default function SignUpPage() {
             userLabel: 'Cá nhân',
             businessLabel: 'Doanh nghiệp',
             fullName: 'Họ và tên',
+            businessName: 'Tên doanh nghiệp',
             email: 'Email',
             phone: 'Số điện thoại',
             province: 'Tỉnh/Thành phố',
@@ -91,18 +92,40 @@ export default function SignUpPage() {
 
   const provinces = [
     'An Giang',
-    'Cà Mau',
-    'Kiên Giang',
-    'Đồng Tháp',
-    'Long An',
-    'Tiền Giang',
-    'Bến Tre',
-    'Vĩnh Long',
-    'Trà Vinh',
-    'Sóc Trăng',
+    'Bắc Ninh',
     'Bạc Liêu',
+    'Cà Mau',
+    'Cao Bằng',
     'Cần Thơ',
-    'Hậu Giang',
+    'Đà Nẵng',
+    'Đắk Lắk',
+    'Điện Biên',
+    'Đồng Nai',
+    'Đồng Tháp',
+    'Gia Lai',
+    'Hà Nội',
+    'Hà Tĩnh',
+    'Hải Phòng',
+    'Hưng Yên',
+    'Huế',
+    'Khánh Hòa',
+    'Lai Châu',
+    'Lâm Đồng',
+    'Lạng Sơn',
+    'Lào Cai',
+    'Nghệ An',
+    'Ninh Bình',
+    'Phú Thọ',
+    'Quảng Ngãi',
+    'Quảng Ninh',
+    'Quảng Trị',
+    'Sơn La',
+    'Tây Ninh',
+    'Thanh Hóa',
+    'Thái Nguyên',
+    'Thành phố Hồ Chí Minh',
+    'Tuyên Quang',
+    'Vĩnh Long',
   ]
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -192,14 +215,19 @@ export default function SignUpPage() {
               </div>
 
               <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-                <input
-                  name="name"
-                  required
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  placeholder={text.fullName}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-gray-700">
+                    {accountType === 'BUSINESS' ? text.businessName : text.fullName}
+                  </label>
+                  <input
+                    name="name"
+                    required
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    placeholder={accountType === 'BUSINESS' ? text.businessName : text.fullName}
+                    className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
                 <input
                   type="email"
                   name="email"
@@ -283,4 +311,3 @@ export default function SignUpPage() {
     </div>
   )
 }
-
