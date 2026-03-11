@@ -40,8 +40,8 @@ export default function JoinUsPage() {
             </div>
 
             <div className="grid gap-4 bg-slate-50 px-7 py-7 md:grid-cols-3 md:px-10 md:py-8">
-              <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-                <div className="mb-3 inline-flex rounded-lg bg-emerald-100 p-2 text-emerald-700">
+              <article className="rounded-2xl p-6">
+                <div className="mb-3 inline-flex rounded-lg bg-amber-100 p-2 text-amber-700">
                   <Network className="h-5 w-5" />
                 </div>
                 <h2 className="text-lg font-semibold text-slate-900">Mạng lưới Kết nối</h2>
@@ -50,8 +50,8 @@ export default function JoinUsPage() {
                 </p>
               </article>
 
-              <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-                <div className="mb-3 inline-flex rounded-lg bg-sky-100 p-2 text-sky-700">
+              <article className="rounded-2xl p-6">
+                <div className="mb-3 inline-flex rounded-lg bg-amber-100 p-2 text-amber-700">
                   <BookOpen className="h-5 w-5" />
                 </div>
                 <h2 className="text-lg font-semibold text-slate-900">Chia sẻ Kiến thức</h2>
@@ -60,7 +60,7 @@ export default function JoinUsPage() {
                 </p>
               </article>
 
-              <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+              <article className="rounded-2xl p-6">
                 <div className="mb-3 inline-flex rounded-lg bg-amber-100 p-2 text-amber-700">
                   <Handshake className="h-5 w-5" />
                 </div>
