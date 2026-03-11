@@ -11,6 +11,7 @@ import { getLocaleFromPathname, withLocalePrefix } from '@/lib/content-locale'
 export default function JoinUsPage() {
   const pathname = usePathname()
   const locale = getLocaleFromPathname(pathname)
+  const isEn = locale === 'en'
   const signUpBusinessHref = `${withLocalePrefix('/auth/signup', locale)}?role=business`
 
   return (
@@ -23,19 +24,28 @@ export default function JoinUsPage() {
             <div className="grid gap-0 md:grid-cols-[1.1fr_1fr]">
               <div className="px-7 py-9 md:px-10 md:py-12">
                 <h1 className="text-3xl font-bold text-slate-900 md:text-4xl">
-                  Tham gia Mạng lưới Hợp tác của Chúng tôi
+                  {isEn ? 'Join Our Collaboration Network' : 'Tham gia Mạng lưới Hợp tác của Chúng tôi'}
                 </h1>
 
                 <p className="mt-5 text-base leading-relaxed text-slate-700">
-                  Trở thành thành viên của mạng lưới hợp tác để thúc đẩy các mục tiêu kinh doanh trong lĩnh vực đổi mới và phát triển bền vững. Chúng tôi kết nối các nhà lãnh đạo ngành để tạo ra những giải pháp tích cực cho cộng đồng nông nghiệp Việt Nam.
+                  {isEn
+                    ? 'Become a member of our collaboration network to advance business goals in innovation and sustainable development. We connect industry leaders to create positive solutions for Vietnam’s agricultural community.'
+                    : 'Trở thành thành viên của mạng lưới hợp tác để thúc đẩy các mục tiêu kinh doanh trong lĩnh vực đổi mới và phát triển bền vững. Chúng tôi kết nối các nhà lãnh đạo ngành để tạo ra những giải pháp tích cực cho cộng đồng nông nghiệp Việt Nam.'}
                 </p>
                 <p className="mt-4 text-base leading-relaxed text-slate-700">
-                  Bằng cách tham gia vào sáng kiến toàn cầu này, bạn sẽ có cơ hội hợp tác với các tổ chức hàng đầu, chia sẻ kiến thức và cùng nhau xây dựng một chuỗi cung ứng nông nghiệp bền vững.
+                  {isEn
+                    ? 'By joining this global initiative, you can collaborate with leading organizations, share knowledge, and help build a more sustainable agricultural value chain.'
+                    : 'Bằng cách tham gia vào sáng kiến toàn cầu này, bạn sẽ có cơ hội hợp tác với các tổ chức hàng đầu, chia sẻ kiến thức và cùng nhau xây dựng một chuỗi cung ứng nông nghiệp bền vững.'}
                 </p>
               </div>
 
               <div className="relative min-h-72">
-                <Image src="/hero_members.jpg" alt="Tham gia mạng lưới hợp tác" fill className="object-cover" />
+                <Image
+                  src="/hero_members.jpg"
+                  alt={isEn ? 'Join the collaboration network' : 'Tham gia mạng lưới hợp tác'}
+                  fill
+                  className="object-cover"
+                />
               </div>
             </div>
 
@@ -44,9 +54,11 @@ export default function JoinUsPage() {
                 <div className="mb-3 inline-flex rounded-lg bg-amber-100 p-2 text-amber-700">
                   <Network className="h-5 w-5" />
                 </div>
-                <h2 className="text-lg font-semibold text-slate-900">Mạng lưới Kết nối</h2>
+                <h2 className="text-lg font-semibold text-slate-900">{isEn ? 'Networking' : 'Mạng lưới Kết nối'}</h2>
                 <p className="mt-2 text-sm leading-relaxed text-slate-600">
-                  Kết nối với các doanh nghiệp và chuyên gia hàng đầu trong ngành.
+                  {isEn
+                    ? 'Connect with leading businesses and experts in the industry.'
+                    : 'Kết nối với các doanh nghiệp và chuyên gia hàng đầu trong ngành.'}
                 </p>
               </article>
 
@@ -54,9 +66,11 @@ export default function JoinUsPage() {
                 <div className="mb-3 inline-flex rounded-lg bg-amber-100 p-2 text-amber-700">
                   <BookOpen className="h-5 w-5" />
                 </div>
-                <h2 className="text-lg font-semibold text-slate-900">Chia sẻ Kiến thức</h2>
+                <h2 className="text-lg font-semibold text-slate-900">{isEn ? 'Knowledge Sharing' : 'Chia sẻ Kiến thức'}</h2>
                 <p className="mt-2 text-sm leading-relaxed text-slate-600">
-                  Tiếp cận các nghiên cứu, báo cáo và công cụ thực hành tốt nhất.
+                  {isEn
+                    ? 'Access research, reports, and best-practice toolkits.'
+                    : 'Tiếp cận các nghiên cứu, báo cáo và công cụ thực hành tốt nhất.'}
                 </p>
               </article>
 
@@ -64,20 +78,24 @@ export default function JoinUsPage() {
                 <div className="mb-3 inline-flex rounded-lg bg-amber-100 p-2 text-amber-700">
                   <Handshake className="h-5 w-5" />
                 </div>
-                <h2 className="text-lg font-semibold text-slate-900">Cơ hội Hợp tác</h2>
+                <h2 className="text-lg font-semibold text-slate-900">{isEn ? 'Collaboration Opportunities' : 'Cơ hội Hợp tác'}</h2>
                 <p className="mt-2 text-sm leading-relaxed text-slate-600">
-                  Tham gia các dự án hợp tác và sáng kiến phát triển bền vững.
+                  {isEn
+                    ? 'Join collaborative projects and sustainable development initiatives.'
+                    : 'Tham gia các dự án hợp tác và sáng kiến phát triển bền vững.'}
                 </p>
               </article>
             </div>
 
             <div className="px-7 py-8 text-center md:px-10">
-              <p className="mb-4 text-sm text-emerald-800">Sẵn sàng tham gia với vai trò doanh nghiệp?</p>
+              <p className="mb-4 text-sm text-emerald-800">
+                {isEn ? 'Ready to join as a business member?' : 'Sẵn sàng tham gia với vai trò doanh nghiệp?'}
+              </p>
               <Link
                 href={signUpBusinessHref}
                 className="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
               >
-                Đăng ký doanh nghiệp
+                {isEn ? 'Register business account' : 'Đăng ký doanh nghiệp'}
               </Link>
             </div>
           </div>

@@ -4,8 +4,10 @@ import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { getLocaleFromPathname, withLocalePrefix } from '@/lib/content-locale';
 
 interface ProjectActivityItem {
   id: string;
@@ -28,6 +30,9 @@ interface PaginatedResponse {
 }
 
 export default function HoatDongDuAnPage() {
+  const pathname = usePathname();
+  const locale = getLocaleFromPathname(pathname);
+  const isEn = locale === 'en';
   const [items, setItems] = useState<ProjectActivityItem[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -110,7 +115,7 @@ export default function HoatDongDuAnPage() {
           onClick={() => goToPage(totalPages)}
           className="rounded border px-3 py-1 hover:bg-gray-100"
         >
-          Trang cuối
+          {isEn ? 'Last page' : 'Trang cuối'}
         </button>
       );
     }
@@ -129,10 +134,12 @@ export default function HoatDongDuAnPage() {
           <div className="container mx-auto max-w-6xl px-6">
             <div className="mb-10">
               <h1 className="text-3xl font-bold font-montserrat text-gray-800 md:text-4xl">
-                Hoạt động dự án
+                {isEn ? 'Project Activities' : 'Hoạt động dự án'}
               </h1>
               <p className="mt-3 max-w-3xl text-lg font-montserrat leading-relaxed text-gray-600">
-                Tìm hiểu thêm về các dự án đã và đang thực hiện của chúng tôi với các đối tác quốc tế.
+                {isEn
+                  ? 'Explore projects we have implemented and are currently delivering with international partners.'
+                  : 'Tìm hiểu thêm về các dự án đã và đang thực hiện của chúng tôi với các đối tác quốc tế.'}
               </p>
             </div>
 
@@ -149,13 +156,13 @@ export default function HoatDongDuAnPage() {
               </div>
             ) : items.length === 0 ? (
               <div className="bg-white p-12 text-center text-gray-500 shadow-sm">
-                Chưa có hoạt động dự án.
+                {isEn ? 'No project activities yet.' : 'Chưa có hoạt động dự án.'}
               </div>
             ) : (
               <div className="grid grid-cols-1 items-stretch gap-8 md:grid-cols-3">
                 {items.map((item) => {
                   const imageSrc = item.thumbnailUrl || item.imageUrl || '';
-                  const href = item.projectUrl || `/content/${item.id}`;
+                  const href = item.projectUrl || withLocalePrefix(`/content/${item.id}`, locale);
                   const isExternal = Boolean(item.projectUrl);
 
                   return (

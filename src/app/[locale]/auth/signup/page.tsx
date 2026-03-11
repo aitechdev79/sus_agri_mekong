@@ -46,6 +46,7 @@ export default function SignUpPage() {
             userLabel: 'Personal',
             businessLabel: 'Business',
             fullName: 'Full name',
+            businessName: 'Business name',
             email: 'Email',
             phone: 'Phone',
             province: 'Province/City',
