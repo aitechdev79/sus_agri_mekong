@@ -3,26 +3,33 @@
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
+import { getLocaleFromPathname, withLocalePrefix } from '@/lib/content-locale';
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { data: session, status } = useSession();
+  const pathname = usePathname();
+  const locale = getLocaleFromPathname(pathname);
+  const homeHref = withLocalePrefix('/', locale);
+  const signInHref = withLocalePrefix('/auth/signin', locale);
+  const signUpHref = withLocalePrefix('/auth/signup', locale);
 
   const navigation = [
-    { name: 'Trang chủ', href: '/' },
-    { name: 'Giới thiệu', href: '/about' },
-    { name: 'Thư viện', href: '/library' },
-    { name: 'Công cụ', href: '/tools' },
-    { name: 'Cộng đồng', href: '/community' },
-    { name: 'Sự kiện', href: '/tat-ca-su-kien' },
+    { name: 'Trang chủ', href: withLocalePrefix('/', locale) },
+    { name: 'Giới thiệu', href: withLocalePrefix('/about', locale) },
+    { name: 'Thư viện', href: withLocalePrefix('/library', locale) },
+    { name: 'Công cụ', href: withLocalePrefix('/tools', locale) },
+    { name: 'Cộng đồng', href: withLocalePrefix('/community', locale) },
+    { name: 'Sự kiện', href: withLocalePrefix('/tat-ca-su-kien', locale) },
   ];
 
   return (
     <header className="sticky top-0 z-50 bg-blue-600 shadow-lg">
       <div className="container mx-auto px-6">
         <div className="flex items-center justify-between h-16">
-          <Link href="/" className="flex items-center space-x-3">
+          <Link href={homeHref} className="flex items-center space-x-3">
             <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
               <span className="text-blue-600 font-bold text-sm">GP</span>
             </div>
@@ -50,7 +57,7 @@ export default function Header() {
                   <span className="text-white font-medium">{session.user?.name || session.user?.email}</span>
                   <button
                     type="button"
-                    onClick={() => signOut({ callbackUrl: '/' })}
+                    onClick={() => signOut({ callbackUrl: homeHref })}
                     className="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors"
                   >
                     Đăng xuất
@@ -59,13 +66,13 @@ export default function Header() {
               ) : (
                 <>
                   <Link
-                    href="/auth/signin"
+                    href={signInHref}
                     className="text-white hover:text-blue-200 transition-colors font-medium"
                   >
                     Đăng nhập
                   </Link>
                   <Link
-                    href="/auth/signup"
+                    href={signUpHref}
                     className="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors"
                   >
                     Đăng ký
@@ -112,7 +119,7 @@ export default function Header() {
                         type="button"
                         onClick={() => {
                           setIsMobileMenuOpen(false);
-                          signOut({ callbackUrl: '/' });
+                          signOut({ callbackUrl: homeHref });
                         }}
                         className="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors text-center"
                       >
@@ -122,13 +129,13 @@ export default function Header() {
                   ) : (
                     <>
                       <Link
-                        href="/auth/signin"
+                        href={signInHref}
                         className="text-white hover:text-blue-200 transition-colors font-medium"
                       >
                         Đăng nhập
                       </Link>
                       <Link
-                        href="/auth/signup"
+                        href={signUpHref}
                         className="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors text-center"
                       >
                         Đăng ký
@@ -144,4 +151,3 @@ export default function Header() {
     </header>
   );
 }
-
