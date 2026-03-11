@@ -41,6 +41,7 @@ export async function GET(request: NextRequest) {
         contactEmail: true,
         phone: true,
         province: true,
+        description: true,
         status: true,
         isPublic: true,
         isVerified: true,
@@ -112,4 +113,3 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Failed to create partner" }, { status: 500 });
   }
 }
-

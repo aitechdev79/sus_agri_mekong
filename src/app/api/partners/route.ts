@@ -5,8 +5,6 @@ export async function GET() {
   try {
     const partners = await prisma.businessProfile.findMany({
       where: {
-        status: "APPROVED",
-        isPublic: true,
         displayOrder: {
           gte: 0,
         },

@@ -1,21 +1,26 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { CheckCircle2, Search, ShieldX, Trash2 } from 'lucide-react'
+import { Search, Trash2, X } from 'lucide-react'
 
 type PartnerStatus = 'DRAFT' | 'PENDING' | 'APPROVED' | 'REJECTED' | 'SUSPENDED'
 
 interface PartnerItem {
   id: string
+  ownerUserId: string | null
   companyName: string
   slug: string
   logoUrl: string | null
   contactEmail: string | null
   website: string | null
+  phone: string | null
   province: string | null
+  description?: string | null
   status: PartnerStatus
   isPublic: boolean
   isVerified: boolean
+  reviewedAt?: string | null
+  createdAt: string
   displayOrder: number
   updatedAt: string
 }
@@ -50,6 +55,7 @@ export function PartnerManager() {
   const [uploadingId, setUploadingId] = useState('')
   const [deletingId, setDeletingId] = useState('')
   const [orderDrafts, setOrderDrafts] = useState<Record<string, string>>({})
+  const [selectedPartner, setSelectedPartner] = useState<PartnerItem | null>(null)
   const [error, setError] = useState('')
 
   const loadPartners = async () => {
@@ -181,7 +187,7 @@ export function PartnerManager() {
         <div>
           <h2 className="text-xl font-semibold text-slate-900">Quản lý đối tác doanh nghiệp</h2>
           <p className="text-sm text-slate-600">
-            Duyệt hồ sơ doanh nghiệp để hiển thị ở phần Trở thành đối tác. Quy ước hiển thị: `displayOrder` &gt;= 0 là hiển thị, &lt; 0 là ẩn.
+            Quy ước hiển thị trang chủ: `displayOrder` &gt;= 0 là hiển thị, &lt; 0 là ẩn.
           </p>
         </div>
       </div>
@@ -242,7 +248,13 @@ export function PartnerManager() {
                   </div>
                 </td>
                 <td className="px-4 py-3">
-                  <div className="font-medium text-slate-900">{item.companyName}</div>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedPartner(item)}
+                    className="font-medium text-slate-900 hover:text-emerald-700 hover:underline"
+                  >
+                    {item.companyName}
+                  </button>
                   <div className="text-xs text-slate-500">{item.slug}</div>
                 </td>
                 <td className="px-4 py-3 text-sm text-slate-700">
@@ -293,21 +305,10 @@ export function PartnerManager() {
                     </div>
                     <button
                       type="button"
-                      disabled={savingId === item.id}
-                      onClick={() => updatePartner(item.id, { status: 'APPROVED', isPublic: true, isVerified: true })}
-                      className="inline-flex items-center rounded-md border border-emerald-300 bg-emerald-50 px-3 py-1.5 text-xs font-medium text-emerald-700 hover:bg-emerald-100 disabled:opacity-60"
+                      onClick={() => setSelectedPartner(item)}
+                      className="inline-flex items-center rounded-md border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50"
                     >
-                      <CheckCircle2 className="mr-1 h-3.5 w-3.5" />
-                      Duyệt
-                    </button>
-                    <button
-                      type="button"
-                      disabled={savingId === item.id}
-                      onClick={() => updatePartner(item.id, { status: 'REJECTED', isPublic: false })}
-                      className="inline-flex items-center rounded-md border border-rose-300 bg-rose-50 px-3 py-1.5 text-xs font-medium text-rose-700 hover:bg-rose-100 disabled:opacity-60"
-                    >
-                      <ShieldX className="mr-1 h-3.5 w-3.5" />
-                      Từ chối
+                      Chi tiết
                     </button>
                     <button
                       type="button"
@@ -329,6 +330,93 @@ export function PartnerManager() {
       {loading && <p className="py-6 text-center text-sm text-slate-500">Đang tải danh sách đối tác...</p>}
       {!loading && filteredPartners.length === 0 && (
         <p className="py-6 text-center text-sm text-slate-500">Chưa có hồ sơ đối tác nào.</p>
+      )}
+
+      {selectedPartner && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-4">
+          <div className="w-full max-w-2xl rounded-xl bg-white shadow-xl">
+            <div className="flex items-center justify-between border-b px-6 py-4">
+              <h3 className="text-lg font-semibold text-gray-900">Chi tiết đối tác</h3>
+              <button
+                type="button"
+                onClick={() => setSelectedPartner(null)}
+                className="rounded-md p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                aria-label="Đóng"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <div className="grid gap-3 px-6 py-5 text-sm text-slate-700 md:grid-cols-2">
+              <div className="md:col-span-2">
+                <span className="font-medium text-slate-900">Tên doanh nghiệp: </span>
+                {selectedPartner.companyName}
+              </div>
+              <div>
+                <span className="font-medium text-slate-900">Slug: </span>
+                {selectedPartner.slug}
+              </div>
+              <div>
+                <span className="font-medium text-slate-900">Owner user ID: </span>
+                {selectedPartner.ownerUserId || '—'}
+              </div>
+              <div>
+                <span className="font-medium text-slate-900">Email: </span>
+                {selectedPartner.contactEmail || '—'}
+              </div>
+              <div>
+                <span className="font-medium text-slate-900">Điện thoại: </span>
+                {selectedPartner.phone || '—'}
+              </div>
+              <div>
+                <span className="font-medium text-slate-900">Website: </span>
+                {selectedPartner.website || '—'}
+              </div>
+              <div>
+                <span className="font-medium text-slate-900">Tỉnh/Thành: </span>
+                {selectedPartner.province || '—'}
+              </div>
+              <div>
+                <span className="font-medium text-slate-900">Trạng thái: </span>
+                {statusLabel(selectedPartner.status)}
+              </div>
+              <div>
+                <span className="font-medium text-slate-900">Hiển thị: </span>
+                {selectedPartner.displayOrder >= 0 ? 'Hiển thị' : 'Ẩn'}
+              </div>
+              <div>
+                <span className="font-medium text-slate-900">Thứ tự: </span>
+                {selectedPartner.displayOrder}
+              </div>
+              <div>
+                <span className="font-medium text-slate-900">Đã xác minh: </span>
+                {selectedPartner.isVerified ? 'Có' : 'Không'}
+              </div>
+              <div>
+                <span className="font-medium text-slate-900">Ngày tạo: </span>
+                {new Date(selectedPartner.createdAt).toLocaleString('vi-VN')}
+              </div>
+              <div>
+                <span className="font-medium text-slate-900">Cập nhật: </span>
+                {new Date(selectedPartner.updatedAt).toLocaleString('vi-VN')}
+              </div>
+              <div className="md:col-span-2">
+                <span className="font-medium text-slate-900">Mô tả: </span>
+                {selectedPartner.description || '—'}
+              </div>
+            </div>
+
+            <div className="flex justify-end border-t px-6 py-4">
+              <button
+                type="button"
+                onClick={() => setSelectedPartner(null)}
+                className="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+              >
+                Đóng
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   )
