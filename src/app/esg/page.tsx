@@ -67,26 +67,6 @@ export default function ESGPage() {
       : 'Phát triển bền vững không còn là lựa chọn mà đã trở thành một định hướng chiến lược để vừa tối ưu hiệu quả hoạt động, vừa bảo tồn tài nguyên và nâng cao khả năng thích ứng trước những biến động toàn cầu.',
     frameworkTitle: isEn ? 'International assessment frameworks' : 'Các khung đánh giá quốc tế',
     learnMore: isEn ? 'Learn more →' : 'Tìm hiểu thêm →',
-    joinTitle: isEn ? 'Join us' : 'Tham gia (Join us)',
-    joinDesc: isEn ? 'You can start in just a few steps:' : 'Bạn có thể bắt đầu hành trình chỉ với vài bước:',
-    joinSteps: isEn
-      ? [
-          ['Create an account', 'Register a free account to get started'],
-          ['Complete profile', 'Add organization or business information'],
-          ['Run assessment', 'Answer the guided ESG questionnaire'],
-          ['Get report', 'Receive results and improvement roadmap'],
-        ]
-      : [
-          ['Đăng ký tài khoản', 'Tạo tài khoản miễn phí để bắt đầu'],
-          ['Hoàn thiện hồ sơ', 'Cung cấp thông tin tổ chức/doanh nghiệp'],
-          ['Thực hiện đánh giá', 'Trả lời bộ câu hỏi theo hướng dẫn'],
-          ['Nhận báo cáo & gợi ý', 'Xem kết quả và lộ trình cải tiến'],
-        ],
-    privacyTitle: isEn ? 'Data privacy commitment' : 'Cam kết bảo mật',
-    privacyText: isEn
-      ? 'All submitted information is kept confidential and used only for self-assessment and support purposes. No data is shared with third parties without explicit consent.'
-      : 'Mọi dữ liệu đều được bảo mật tuyệt đối và chỉ sử dụng cho mục đích tự đánh giá. Thông tin sẽ không được chia sẻ với bên thứ ba nếu không có sự đồng thuận của người dùng.',
-    cta: isEn ? 'Start assessment now' : 'Bắt đầu đánh giá ngay',
   };
 
   const tools = [
@@ -225,33 +205,6 @@ export default function ESGPage() {
               ))}
             </div>
 
-            <div className="mt-12 bg-gradient-to-r from-green-600 to-emerald-600 rounded-lg p-8 shadow-lg">
-              <h3 className="font-montserrat font-bold text-2xl md:text-3xl text-white mb-6">{content.joinTitle}</h3>
-              <p className="text-white font-montserrat leading-relaxed mb-6 text-lg">{content.joinDesc}</p>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                {content.joinSteps.map((step, index) => (
-                  <div key={step[0]} className="flex items-start gap-3 bg-white/10 backdrop-blur-sm rounded-lg p-4">
-                    <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-green-600 font-bold">{index + 1}</span>
-                    </div>
-                    <div>
-                      <p className="text-white font-montserrat font-semibold">{step[0]}</p>
-                      <p className="text-green-100 font-montserrat text-sm">{step[1]}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 mb-6 border-2 border-white/20">
-                <h4 className="font-montserrat font-bold text-xl text-white mb-2">{content.privacyTitle}</h4>
-                <p className="text-green-100 font-montserrat leading-relaxed">{content.privacyText}</p>
-              </div>
-
-              <button className="px-8 py-3 bg-white text-green-600 font-montserrat font-bold rounded-lg hover:bg-green-50 transition-colors duration-200 shadow-lg">
-                {content.cta}
-              </button>
-            </div>
           </div>
         </section>
       </main>
