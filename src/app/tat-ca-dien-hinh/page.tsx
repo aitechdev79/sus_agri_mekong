@@ -175,7 +175,7 @@ export default function TatCaDienHinhPage() {
                         {localizedDescription && <p className="line-clamp-4 text-sm leading-relaxed text-gray-600 md:line-clamp-5">{localizedDescription}</p>}
                       </div>
 
-                      <div className="mt-5 flex items-center justify-between border-t border-gray-100 pt-4 text-sm text-gray-500">
+                      <div className="mt-5 flex items-center justify-between pt-4 text-sm text-gray-500">
                         <span>{new Date(item.createdAt).toLocaleDateString(isEn ? 'en-US' : 'vi-VN')}</span>
                         <span className="flex items-center gap-1">
                           <Eye className="h-4 w-4" />

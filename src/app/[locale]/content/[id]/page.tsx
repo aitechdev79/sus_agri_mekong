@@ -191,7 +191,7 @@ export default async function LocaleContentDetailPage({
       <main className="container mx-auto px-6 py-20">
         <div className="mx-auto max-w-4xl">
           <article className="overflow-hidden rounded-lg bg-white shadow-sm">
-            <div className="border-b p-8">
+            <div className="p-8">
               <div className="mb-4">
                 <span className="inline-block rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800">
                   {getContentTypeLabel(content.type, locale)}
