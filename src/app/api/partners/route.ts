@@ -7,6 +7,9 @@ export async function GET() {
       where: {
         status: "APPROVED",
         isPublic: true,
+        displayOrder: {
+          gte: 0,
+        },
       },
       select: {
         id: true,

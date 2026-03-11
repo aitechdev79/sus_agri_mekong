@@ -48,6 +48,7 @@ export function PartnerManager() {
   const [query, setQuery] = useState('')
   const [savingId, setSavingId] = useState('')
   const [uploadingId, setUploadingId] = useState('')
+  const [orderDrafts, setOrderDrafts] = useState<Record<string, string>>({})
   const [error, setError] = useState('')
 
   const loadPartners = async () => {
@@ -59,7 +60,14 @@ export function PartnerManager() {
       if (!response.ok) {
         throw new Error(data.error || 'Không thể tải danh sách đối tác')
       }
-      setPartners(data.partners || [])
+      const list: PartnerItem[] = data.partners || []
+      setPartners(list)
+      setOrderDrafts(
+        list.reduce<Record<string, string>>((acc, item) => {
+          acc[item.id] = String(item.displayOrder)
+          return acc
+        }, {}),
+      )
     } catch (fetchError) {
       setError(fetchError instanceof Error ? fetchError.message : 'Đã có lỗi xảy ra')
       setPartners([])
@@ -92,6 +100,12 @@ export function PartnerManager() {
       }
 
       setPartners((prev) => prev.map((item) => (item.id === id ? { ...item, ...data.partner } : item)))
+      if (data.partner?.displayOrder !== undefined) {
+        setOrderDrafts((prev) => ({
+          ...prev,
+          [id]: String(data.partner.displayOrder),
+        }))
+      }
     } catch (updateError) {
       alert(updateError instanceof Error ? updateError.message : 'Đã có lỗi xảy ra')
     } finally {
@@ -137,7 +151,9 @@ export function PartnerManager() {
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div>
           <h2 className="text-xl font-semibold text-slate-900">Quản lý đối tác doanh nghiệp</h2>
-          <p className="text-sm text-slate-600">Duyệt hồ sơ doanh nghiệp để hiển thị ở phần Trở thành đối tác.</p>
+          <p className="text-sm text-slate-600">
+            Duyệt hồ sơ doanh nghiệp để hiển thị ở phần Trở thành đối tác. Quy ước hiển thị: `displayOrder` &gt;= 0 là hiển thị, &lt; 0 là ẩn.
+          </p>
         </div>
       </div>
 
@@ -216,7 +232,36 @@ export function PartnerManager() {
                 </td>
                 <td className="px-4 py-3 text-sm text-slate-700">{item.displayOrder}</td>
                 <td className="px-4 py-3 text-right">
-                  <div className="flex justify-end gap-2">
+                  <div className="flex flex-wrap justify-end gap-2">
+                    <div className="inline-flex items-center gap-2 rounded-md border border-slate-200 px-2 py-1">
+                      <input
+                        type="number"
+                        value={orderDrafts[item.id] ?? String(item.displayOrder)}
+                        onChange={(event) =>
+                          setOrderDrafts((prev) => ({
+                            ...prev,
+                            [item.id]: event.target.value,
+                          }))
+                        }
+                        className="w-20 rounded border border-slate-300 px-2 py-1 text-xs"
+                        title="displayOrder: >=0 hiện trang chủ, <0 ẩn"
+                      />
+                      <button
+                        type="button"
+                        disabled={savingId === item.id}
+                        onClick={() => {
+                          const parsed = Number(orderDrafts[item.id] ?? item.displayOrder)
+                          if (!Number.isFinite(parsed)) {
+                            alert('Thứ tự không hợp lệ')
+                            return
+                          }
+                          void updatePartner(item.id, { displayOrder: Math.trunc(parsed) })
+                        }}
+                        className="rounded border border-slate-300 px-2 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-60"
+                      >
+                        Lưu thứ tự
+                      </button>
+                    </div>
                     <button
                       type="button"
                       disabled={savingId === item.id}
