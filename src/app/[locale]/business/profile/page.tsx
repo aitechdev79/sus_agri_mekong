@@ -4,7 +4,7 @@ import { FormEvent, useEffect, useMemo, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useLocale } from 'next-intl'
-import Header from '@/components/Header'
+import NavigationBar from '@/components/NavigationBar'
 import Footer from '@/components/Footer'
 import { Button } from '@/components/ui/button'
 
@@ -228,8 +228,8 @@ export default function BusinessProfilePage() {
   if (status === 'loading' || loading) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <Header />
-        <main className="container mx-auto max-w-3xl px-6 py-16">
+        <NavigationBar />
+        <main className="container mx-auto max-w-3xl px-6 pb-16 pt-24">
           <div className="rounded-xl bg-white p-8 text-center shadow">Loading...</div>
         </main>
         <Footer />
@@ -240,8 +240,8 @@ export default function BusinessProfilePage() {
   if (!session || session.user.role !== 'BUSINESS') {
     return (
       <div className="min-h-screen bg-gray-50">
-        <Header />
-        <main className="container mx-auto max-w-3xl px-6 py-16">
+        <NavigationBar />
+        <main className="container mx-auto max-w-3xl px-6 pb-16 pt-24">
           <div className="rounded-xl border border-rose-200 bg-rose-50 p-6 text-rose-700">{text.unauthorized}</div>
         </main>
         <Footer />
@@ -251,9 +251,9 @@ export default function BusinessProfilePage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
+      <NavigationBar />
 
-      <main className="container mx-auto max-w-3xl px-6 py-12">
+      <main className="container mx-auto max-w-3xl px-6 pb-12 pt-24">
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
           <h1 className="text-2xl font-bold text-slate-900">{text.title}</h1>
           <p className="mt-2 text-sm text-slate-600">{text.subtitle}</p>

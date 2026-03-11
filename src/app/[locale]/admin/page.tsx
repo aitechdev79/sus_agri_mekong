@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useLocale } from 'next-intl'
 import { BarChart3, FileCheck2, FileText, FolderTree, Plus, Tags, Users } from 'lucide-react'
-import Header from '@/components/Header'
+import NavigationBar from '@/components/NavigationBar'
 import Footer from '@/components/Footer'
 import { ContentTable } from '@/components/admin/ContentTable'
 import { ContentForm } from '@/components/admin/ContentForm'
@@ -143,7 +143,7 @@ export default function AdminPage() {
   if (status === 'loading' || isLoading) {
     return (
       <div className="min-h-screen flex flex-col bg-gradient-to-b from-sky-50 via-white to-emerald-50">
-        <Header />
+        <NavigationBar />
         <main className="flex flex-grow items-center justify-center">
           <div className="h-24 w-24 animate-spin rounded-full border-b-2 border-sky-600"></div>
         </main>
@@ -158,9 +158,9 @@ export default function AdminPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-sky-50 via-white to-emerald-50">
-      <Header />
+      <NavigationBar />
 
-      <main className="flex-grow py-8 md:py-10">
+      <main className="flex-grow pb-8 pt-24 md:pb-10">
         <div className="container mx-auto px-6">
           <section className="mb-8 overflow-hidden rounded-3xl border border-sky-100 bg-white shadow-xl">
             <div className="grid md:grid-cols-[1.2fr_1fr]">

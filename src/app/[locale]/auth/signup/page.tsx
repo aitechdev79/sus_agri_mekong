@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useLocale } from 'next-intl'
-import Header from '@/components/Header'
+import NavigationBar from '@/components/NavigationBar'
 import Footer from '@/components/Footer'
 
 type AccountType = 'USER' | 'BUSINESS'
@@ -178,9 +178,9 @@ export default function SignUpPage() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
+      <NavigationBar />
 
-      <main className="flex-grow bg-gray-50 py-12">
+      <main className="flex-grow bg-gray-50 pb-12 pt-24">
         <div className="container mx-auto max-w-2xl px-6">
           <div className="rounded-lg bg-white p-8 shadow-md">
             <div className="mb-8 text-center">

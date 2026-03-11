@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useLocale } from 'next-intl'
-import Header from '@/components/Header'
+import NavigationBar from '@/components/NavigationBar'
 import Footer from '@/components/Footer'
 import { PartnerManager } from '@/components/admin/PartnerManager'
 
@@ -29,7 +29,7 @@ export default function LocalizedAdminPartnersPage() {
   if (status === 'loading') {
     return (
       <div className="min-h-screen flex flex-col">
-        <Header />
+        <NavigationBar />
         <main className="flex flex-grow items-center justify-center">
           <div className="h-24 w-24 animate-spin rounded-full border-b-2 border-blue-600"></div>
         </main>
@@ -44,8 +44,8 @@ export default function LocalizedAdminPartnersPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
-      <Header />
-      <main className="flex-grow py-8">
+      <NavigationBar />
+      <main className="flex-grow pb-8 pt-24">
         <div className="container mx-auto px-6">
           <PartnerManager />
         </div>
@@ -54,4 +54,3 @@ export default function LocalizedAdminPartnersPage() {
     </div>
   )
 }
-

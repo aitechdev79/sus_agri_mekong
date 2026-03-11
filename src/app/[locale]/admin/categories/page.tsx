@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useLocale } from 'next-intl'
 import { ArrowLeft } from 'lucide-react'
-import Header from '@/components/Header'
+import NavigationBar from '@/components/NavigationBar'
 import Footer from '@/components/Footer'
 import { CategoryManager } from '@/components/admin/CategoryManager'
 import { useAdminCategories } from '@/hooks/use-admin-categories'
@@ -28,7 +28,7 @@ export default function LocalizedAdminCategoriesPage() {
   if (status === 'loading') {
     return (
       <div className="min-h-screen flex flex-col">
-        <Header />
+        <NavigationBar />
         <main className="flex flex-grow items-center justify-center">
           <div className="h-24 w-24 animate-spin rounded-full border-b-2 border-blue-600"></div>
         </main>
@@ -43,8 +43,8 @@ export default function LocalizedAdminCategoriesPage() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
-      <main className="flex-grow bg-gray-50 py-8">
+      <NavigationBar />
+      <main className="flex-grow bg-gray-50 pb-8 pt-24">
         <div className="container mx-auto px-6">
           <div className="mb-6">
             <Link
