@@ -64,9 +64,9 @@ export default function SignUpSection() {
 
   const displayPartners = useMemo(() => {
     if (partners.length > 0) {
-      return partners.slice(0, 8);
+      return partners;
     }
-    return FALLBACK_PARTNERS;
+    return FALLBACK_PARTNERS.slice(0, 4);
   }, [partners]);
 
   return (
@@ -117,37 +117,19 @@ export default function SignUpSection() {
             {isEn ? 'Loading partners...' : 'Đang tải đối tác...'}
           </div>
         ) : (
-          <div className="space-y-8">
-            <div className="grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-4">
-              {displayPartners.slice(0, 4).map((partner) => (
-                <div
-                  key={partner.id}
-                  className="bg-white rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-105"
-                  style={{ border: '1px solid rgba(0, 0, 0, 0.1)', padding: '24px', maxHeight: '120px' }}
-                >
-                  <div className="relative flex h-20 w-full items-center justify-center">
-                    <Image src={partner.logoUrl || '/Logo_Vinamilk_(2023).png'} alt={partner.companyName} fill className="object-contain" />
-                  </div>
+          <div className="grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-4">
+            {displayPartners.map((partner) => (
+              <div
+                key={partner.id}
+                className="bg-white rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-105"
+                style={{ border: '1px solid rgba(0, 0, 0, 0.1)', padding: '24px', maxHeight: '120px' }}
+              >
+                <div className="relative flex h-20 w-full items-center justify-center">
+                  <Image src={partner.logoUrl || '/Logo_Vinamilk_(2023).png'} alt={partner.companyName} fill className="object-contain" />
                 </div>
-              ))}
+              </div>
+            ))}
             </div>
-
-            <div className="border-t border-gray-200" style={{ borderColor: 'rgba(0, 0, 0, 0.1)' }} />
-
-            <div className="grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-4">
-              {displayPartners.slice(4, 8).map((partner) => (
-                <div
-                  key={partner.id}
-                  className="bg-white rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-105"
-                  style={{ border: '1px solid rgba(0, 0, 0, 0.1)', padding: '24px', maxHeight: '120px' }}
-                >
-                  <div className="relative flex h-20 w-full items-center justify-center">
-                    <Image src={partner.logoUrl || '/Logo_Vinamilk_(2023).png'} alt={partner.companyName} fill className="object-contain" />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
         )}
       </div>
     </section>

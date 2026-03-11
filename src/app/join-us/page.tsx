@@ -2,17 +2,73 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
+import { useEffect, useMemo, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { Handshake, Network, BookOpen } from 'lucide-react'
 import NavigationBar from '@/components/NavigationBar'
 import Footer from '@/components/Footer'
 import { getLocaleFromPathname, withLocalePrefix } from '@/lib/content-locale'
 
+interface PartnerItem {
+  id: string
+  companyName: string
+  logoUrl: string | null
+  website: string | null
+}
+
+const FALLBACK_PARTNERS: PartnerItem[] = [
+  { id: 'vinamilk', companyName: 'Vinamilk', logoUrl: '/Logo_Vinamilk_(2023).png', website: null },
+  { id: 'john-deere', companyName: 'John Deere', logoUrl: '/John_Deere_logo.svg.png', website: null },
+  { id: 'loctroi', companyName: 'Loc Troi', logoUrl: '/06-loctroi.png', website: null },
+  { id: 'binhdien', companyName: 'Binh Dien', logoUrl: '/03-binhdien.jpg', website: null },
+  { id: 'cp', companyName: 'CP', logoUrl: '/02-CP.jpg', website: null },
+]
+
 export default function JoinUsPage() {
   const pathname = usePathname()
   const locale = getLocaleFromPathname(pathname)
   const isEn = locale === 'en'
   const signUpBusinessHref = `${withLocalePrefix('/auth/signup', locale)}?role=business`
+  const [partners, setPartners] = useState<PartnerItem[]>([])
+  const [loadingPartners, setLoadingPartners] = useState(true)
+
+  useEffect(() => {
+    const loadPartners = async () => {
+      try {
+        setLoadingPartners(true)
+        const response = await fetch('/api/partners?all=1')
+        const data = await response.json()
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Failed to load partners')
+        }
+
+        const list = Array.isArray(data.partners) ? data.partners : []
+        setPartners(
+          list
+            .filter((item: PartnerItem) => item.logoUrl)
+            .map((item: PartnerItem) => ({
+              id: item.id,
+              companyName: item.companyName,
+              logoUrl: item.logoUrl,
+              website: item.website ?? null,
+            })),
+        )
+      } catch (error) {
+        console.error('Join-us partners fetch error:', error)
+        setPartners([])
+      } finally {
+        setLoadingPartners(false)
+      }
+    }
+
+    void loadPartners()
+  }, [])
+
+  const displayPartners = useMemo(() => {
+    if (partners.length > 0) return partners
+    return FALLBACK_PARTNERS
+  }, [partners])
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-emerald-50">
@@ -97,6 +153,37 @@ export default function JoinUsPage() {
               >
                 {isEn ? 'Register business account' : 'Đăng ký doanh nghiệp'}
               </Link>
+            </div>
+
+            <div className="border-t border-slate-200 bg-white px-7 py-8 md:px-10">
+              <h3 className="mb-5 text-center text-lg font-semibold text-slate-900">
+                {isEn ? 'Partner Network' : 'Mạng lưới đối tác'}
+              </h3>
+
+              {loadingPartners && partners.length === 0 ? (
+                <div className="rounded-xl border border-gray-200 bg-white px-6 py-8 text-center text-sm text-gray-500">
+                  {isEn ? 'Loading partners...' : 'Đang tải đối tác...'}
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+                  {displayPartners.map((partner) => (
+                    <div
+                      key={partner.id}
+                      className="flex items-center justify-center rounded-lg bg-white p-4 transition-all duration-300 hover:scale-105"
+                      style={{ border: '1px solid rgba(0, 0, 0, 0.1)', minHeight: '92px' }}
+                    >
+                      <div className="relative flex h-14 w-full items-center justify-center">
+                        <Image
+                          src={partner.logoUrl || '/Logo_Vinamilk_(2023).png'}
+                          alt={partner.companyName}
+                          fill
+                          className="object-contain"
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </section>

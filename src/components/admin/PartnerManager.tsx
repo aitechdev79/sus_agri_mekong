@@ -50,6 +50,8 @@ function statusClass(status: PartnerStatus) {
 export function PartnerManager() {
   const [partners, setPartners] = useState<PartnerItem[]>([])
   const [loading, setLoading] = useState(true)
+  const [homeDisplayLimit, setHomeDisplayLimit] = useState('4')
+  const [savingHomeDisplayLimit, setSavingHomeDisplayLimit] = useState(false)
   const [query, setQuery] = useState('')
   const [savingId, setSavingId] = useState('')
   const [uploadingId, setUploadingId] = useState('')
@@ -85,6 +87,24 @@ export function PartnerManager() {
 
   useEffect(() => {
     loadPartners()
+  }, [])
+
+  useEffect(() => {
+    const loadHomeSettings = async () => {
+      try {
+        const response = await fetch('/api/admin/partners/home-settings')
+        const data = await response.json()
+        if (!response.ok) {
+          throw new Error(data.error || 'Không thể tải cấu hình hiển thị trang chủ')
+        }
+        setHomeDisplayLimit(String(data.homeDisplayLimit || 4))
+      } catch (settingsError) {
+        console.error('Partner home settings fetch error:', settingsError)
+        setHomeDisplayLimit('4')
+      }
+    }
+
+    void loadHomeSettings()
   }, [])
 
   const filteredPartners = partners.filter((item) => {
@@ -181,6 +201,34 @@ export function PartnerManager() {
     }
   }
 
+  const saveHomeDisplayLimit = async () => {
+    const parsed = Number(homeDisplayLimit)
+    if (!Number.isFinite(parsed) || parsed < 1) {
+      alert('Số lượng hiển thị phải là số nguyên dương')
+      return
+    }
+
+    try {
+      setSavingHomeDisplayLimit(true)
+      const response = await fetch('/api/admin/partners/home-settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ homeDisplayLimit: Math.trunc(parsed) }),
+      })
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Không thể lưu cấu hình hiển thị')
+      }
+
+      setHomeDisplayLimit(String(data.homeDisplayLimit))
+    } catch (saveError) {
+      alert(saveError instanceof Error ? saveError.message : 'Đã có lỗi xảy ra khi lưu cấu hình')
+    } finally {
+      setSavingHomeDisplayLimit(false)
+    }
+  }
+
   return (
     <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm md:p-6">
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
@@ -201,6 +249,32 @@ export function PartnerManager() {
           placeholder="Tìm theo tên công ty, slug, email..."
           className="w-full rounded-lg border border-gray-300 py-2 pl-9 pr-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
         />
+      </div>
+
+      <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <div>
+            <p className="text-sm font-semibold text-slate-900">Số lượng logo đối tác hiển thị trên trang chủ</p>
+            <p className="text-xs text-slate-600">Mặc định: 4. Trang chủ sẽ lấy theo số lượng này và thứ tự ưu tiên (`displayOrder`).</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <input
+              type="number"
+              min={1}
+              value={homeDisplayLimit}
+              onChange={(event) => setHomeDisplayLimit(event.target.value)}
+              className="w-24 rounded border border-slate-300 px-2 py-1.5 text-sm"
+            />
+            <button
+              type="button"
+              disabled={savingHomeDisplayLimit}
+              onClick={() => void saveHomeDisplayLimit()}
+              className="rounded border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-60"
+            >
+              {savingHomeDisplayLimit ? 'Đang lưu...' : 'Lưu'}
+            </button>
+          </div>
+        </div>
       </div>
 
       {error && <div className="rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">{error}</div>}
