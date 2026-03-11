@@ -1,8 +1,9 @@
-'use client'
+﻿'use client'
 
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
+import { Handshake, Network, BookOpen } from 'lucide-react'
 import NavigationBar from '@/components/NavigationBar'
 import Footer from '@/components/Footer'
 import { getLocaleFromPathname, withLocalePrefix } from '@/lib/content-locale'
@@ -17,7 +18,7 @@ export default function JoinUsPage() {
       <NavigationBar />
 
       <main className="pt-24">
-        <section className="container mx-auto max-w-5xl px-6 py-10">
+        <section className="container mx-auto max-w-5xl px-6 py-10 pb-16">
           <div className="overflow-hidden rounded-3xl border border-sky-100 bg-white shadow-xl">
             <div className="grid gap-0 md:grid-cols-[1.1fr_1fr]">
               <div className="px-7 py-9 md:px-10 md:py-12">
@@ -37,41 +38,48 @@ export default function JoinUsPage() {
                 <Image src="/hero_members.jpg" alt="Tham gia mạng lưới hợp tác" fill className="object-cover" />
               </div>
             </div>
-          </div>
-        </section>
 
-        <section className="container mx-auto max-w-5xl px-6 pb-16">
-          <div className="grid gap-4 md:grid-cols-3">
-            <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-              <h2 className="text-lg font-semibold text-slate-900">Mạng lưới Kết nối</h2>
-              <p className="mt-2 text-sm leading-relaxed text-slate-600">
-                Kết nối với các doanh nghiệp và chuyên gia hàng đầu trong ngành.
-              </p>
-            </article>
+            <div className="grid gap-4 bg-slate-50 px-7 py-7 md:grid-cols-3 md:px-10 md:py-8">
+              <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                <div className="mb-3 inline-flex rounded-lg bg-emerald-100 p-2 text-emerald-700">
+                  <Network className="h-5 w-5" />
+                </div>
+                <h2 className="text-lg font-semibold text-slate-900">Mạng lưới Kết nối</h2>
+                <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                  Kết nối với các doanh nghiệp và chuyên gia hàng đầu trong ngành.
+                </p>
+              </article>
 
-            <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-              <h2 className="text-lg font-semibold text-slate-900">Chia sẻ Kiến thức</h2>
-              <p className="mt-2 text-sm leading-relaxed text-slate-600">
-                Tiếp cận các nghiên cứu, báo cáo và công cụ thực hành tốt nhất.
-              </p>
-            </article>
+              <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                <div className="mb-3 inline-flex rounded-lg bg-sky-100 p-2 text-sky-700">
+                  <BookOpen className="h-5 w-5" />
+                </div>
+                <h2 className="text-lg font-semibold text-slate-900">Chia sẻ Kiến thức</h2>
+                <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                  Tiếp cận các nghiên cứu, báo cáo và công cụ thực hành tốt nhất.
+                </p>
+              </article>
 
-            <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-              <h2 className="text-lg font-semibold text-slate-900">Cơ hội Hợp tác</h2>
-              <p className="mt-2 text-sm leading-relaxed text-slate-600">
-                Tham gia các dự án hợp tác và sáng kiến phát triển bền vững.
-              </p>
-            </article>
-          </div>
+              <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                <div className="mb-3 inline-flex rounded-lg bg-amber-100 p-2 text-amber-700">
+                  <Handshake className="h-5 w-5" />
+                </div>
+                <h2 className="text-lg font-semibold text-slate-900">Cơ hội Hợp tác</h2>
+                <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                  Tham gia các dự án hợp tác và sáng kiến phát triển bền vững.
+                </p>
+              </article>
+            </div>
 
-          <div className="mt-8 rounded-2xl border border-emerald-200 bg-emerald-50 p-6 text-center">
-            <p className="mb-4 text-sm text-emerald-800">Sẵn sàng tham gia với vai trò doanh nghiệp?</p>
-            <Link
-              href={signUpBusinessHref}
-              className="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
-            >
-              Đăng ký doanh nghiệp
-            </Link>
+            <div className="px-7 py-8 text-center md:px-10">
+              <p className="mb-4 text-sm text-emerald-800">Sẵn sàng tham gia với vai trò doanh nghiệp?</p>
+              <Link
+                href={signUpBusinessHref}
+                className="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
+              >
+                Đăng ký doanh nghiệp
+              </Link>
+            </div>
           </div>
         </section>
       </main>
@@ -80,4 +88,3 @@ export default function JoinUsPage() {
     </div>
   )
 }
-
