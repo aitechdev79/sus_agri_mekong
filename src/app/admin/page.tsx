@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { BarChart3, FileCheck2, FileText, FolderTree, Plus, Tags, Users } from 'lucide-react'
-import { Header } from '@/components/layout/Header'
+import NavigationBar from '@/components/NavigationBar'
 import { ContentTable } from '@/components/admin/ContentTable'
 import { ContentForm } from '@/components/admin/ContentForm'
 import { AiNewsPanel } from '@/components/admin/AiNewsPanel'
@@ -131,8 +131,8 @@ export default function AdminPage() {
   if (status === 'loading' || loading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-emerald-50">
-        <Header currentPath="/admin" />
-        <div className="container mx-auto px-4 py-12">
+        <NavigationBar />
+        <div className="container mx-auto px-4 pb-12 pt-24">
           <div className="flex h-64 items-center justify-center">
             <div className="h-24 w-24 animate-spin rounded-full border-b-2 border-sky-600"></div>
           </div>
@@ -147,9 +147,9 @@ export default function AdminPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-emerald-50">
-      <Header currentPath="/admin" />
+      <NavigationBar />
 
-      <div className="container mx-auto px-4 py-8 md:py-10">
+      <div className="container mx-auto px-4 pb-8 pt-24 md:pb-10">
         <section className="mb-8 overflow-hidden rounded-3xl border border-sky-100 bg-white shadow-xl">
           <div className="grid md:grid-cols-[1.2fr_1fr]">
             <div className="bg-sky-700 px-6 py-8 text-sky-50 md:px-8">

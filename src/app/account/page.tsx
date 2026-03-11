@@ -3,7 +3,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { Header } from "@/components/layout/Header";
+import NavigationBar from "@/components/NavigationBar";
 import { Button } from "@/components/ui/button";
 
 interface Profile {
@@ -112,8 +112,8 @@ export default function AccountPage() {
   if (status === "loading" || loading) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <Header currentPath="/account" />
-        <div className="container mx-auto px-4 py-8">
+        <NavigationBar />
+        <div className="container mx-auto px-4 pb-8 pt-24">
           <div className="flex h-64 items-center justify-center">
             <div className="h-24 w-24 animate-spin rounded-full border-b-2 border-green-600"></div>
           </div>
@@ -128,8 +128,8 @@ export default function AccountPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header currentPath="/account" />
-      <div className="container mx-auto max-w-3xl px-4 py-8">
+      <NavigationBar />
+      <div className="container mx-auto max-w-3xl px-4 pb-8 pt-24">
         <h1 className="mb-6 text-3xl font-bold text-gray-900">Tài khoản cá nhân</h1>
 
         <section className="mb-6 rounded-2xl bg-white p-6 shadow-sm">

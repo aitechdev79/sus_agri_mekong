@@ -3,7 +3,7 @@
 import { useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { Header } from '@/components/layout/Header'
+import NavigationBar from '@/components/NavigationBar'
 import { UserManager } from '@/components/admin/UserManager'
 
 export default function AdminUsersPage() {
@@ -21,8 +21,8 @@ export default function AdminUsersPage() {
   if (status === 'loading') {
     return (
       <div className="min-h-screen bg-gray-50">
-        <Header currentPath="/admin/users" />
-        <div className="container mx-auto px-4 py-8">
+        <NavigationBar />
+        <div className="container mx-auto px-4 pb-8 pt-24">
           <div className="flex h-64 items-center justify-center">
             <div className="h-24 w-24 animate-spin rounded-full border-b-2 border-green-600"></div>
           </div>
@@ -37,8 +37,8 @@ export default function AdminUsersPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header currentPath="/admin/users" />
-      <div className="container mx-auto px-4 py-8">
+      <NavigationBar />
+      <div className="container mx-auto px-4 pb-8 pt-24">
         <UserManager backHref="/admin" />
       </div>
     </div>

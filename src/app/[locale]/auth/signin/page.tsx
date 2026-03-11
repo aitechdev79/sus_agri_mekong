@@ -5,7 +5,7 @@ import { signIn } from 'next-auth/react'
 import Link from 'next/link'
 import { useLocale } from 'next-intl'
 import { Eye, EyeOff, Lock, Mail } from 'lucide-react'
-import Header from '@/components/Header'
+import NavigationBar from '@/components/NavigationBar'
 import Footer from '@/components/Footer'
 import { Button } from '@/components/ui/button'
 
@@ -56,9 +56,9 @@ export default function SignInPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-sky-50 via-white to-emerald-50">
-      <Header />
+      <NavigationBar />
 
-      <main className="flex-grow">
+      <main className="flex-grow pt-24">
         <div className="container mx-auto flex items-center justify-center px-6 py-12 md:py-16">
           <div className="w-full max-w-xl overflow-hidden rounded-3xl border border-sky-100 bg-white shadow-xl">
             <div className="p-6 md:p-10">
