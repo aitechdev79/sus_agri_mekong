@@ -105,57 +105,56 @@ export default function JoinUsPage() {
               </div>
             </div>
 
-            <div className="grid gap-4 bg-slate-50 px-7 py-7 md:grid-cols-3 md:px-10 md:py-8">
-              <article className="rounded-2xl p-6">
-                <div className="mb-3 inline-flex rounded-lg bg-amber-100 p-2 text-amber-700">
-                  <Network className="h-5 w-5" />
-                </div>
-                <h2 className="text-lg font-semibold text-slate-900">{isEn ? 'Connect' : 'Kết nối'}</h2>
-                <p className="mt-2 text-sm leading-relaxed text-slate-600">
-                  {isEn
-                    ? 'Connect with leading businesses and experts in the industry.'
-                    : 'Kết nối với các doanh nghiệp và chuyên gia hàng đầu trong ngành.'}
-                </p>
-              </article>
-
-              <article className="rounded-2xl p-6">
-                <div className="mb-3 inline-flex rounded-lg bg-amber-100 p-2 text-amber-700">
-                  <BookOpen className="h-5 w-5" />
-                </div>
-                <h2 className="text-lg font-semibold text-slate-900">{isEn ? 'Share' : 'Chia sẻ'}</h2>
-                <p className="mt-2 text-sm leading-relaxed text-slate-600">
-                  {isEn
-                    ? 'Access research, reports, and best-practice toolkits.'
-                    : 'Tiếp cận các nghiên cứu, báo cáo và công cụ thực hành tốt nhất.'}
-                </p>
-              </article>
-
-              <article className="rounded-2xl p-6">
-                <div className="mb-3 inline-flex rounded-lg bg-amber-100 p-2 text-amber-700">
-                  <Handshake className="h-5 w-5" />
-                </div>
-                <h2 className="text-lg font-semibold text-slate-900">{isEn ? 'Collaborate' : 'Hợp tác'}</h2>
-                <p className="mt-2 text-sm leading-relaxed text-slate-600">
-                  {isEn
-                    ? 'Join collaborative projects and sustainable development initiatives.'
-                    : 'Tham gia các dự án hợp tác và sáng kiến phát triển bền vững.'}
-                </p>
-              </article>
-            </div>
-
-            <div className="px-7 py-8 text-center md:px-10">
-              <Link
-                href={signUpBusinessHref}
-                className="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
-              >
-                {isEn ? 'Register business account' : 'Đăng ký doanh nghiệp'}
-              </Link>
-            </div>
-
             <div className="border-t border-slate-200 bg-vn-rice-white px-7 py-8 md:px-10">
-              <h3 className="mb-5 text-center text-lg font-semibold text-slate-900">
-                {isEn ? 'Platform Partners' : 'Đối tác của nền tảng'}
-              </h3>
+              <div className="mb-7 grid gap-4 md:grid-cols-3">
+                <article className="rounded-2xl p-6">
+                  <div className="mb-3 inline-flex rounded-lg bg-amber-100 p-2 text-amber-700">
+                    <Network className="h-5 w-5" />
+                  </div>
+                  <h2 className="text-lg font-semibold text-slate-900">{isEn ? 'Connect' : 'Kết nối'}</h2>
+                  <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                    {isEn
+                      ? 'Connect with leading businesses and experts in the industry.'
+                      : 'Kết nối với các doanh nghiệp và chuyên gia hàng đầu trong ngành.'}
+                  </p>
+                </article>
+
+                <article className="rounded-2xl p-6">
+                  <div className="mb-3 inline-flex rounded-lg bg-amber-100 p-2 text-amber-700">
+                    <BookOpen className="h-5 w-5" />
+                  </div>
+                  <h2 className="text-lg font-semibold text-slate-900">{isEn ? 'Share' : 'Chia sẻ'}</h2>
+                  <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                    {isEn
+                      ? 'Access research, reports, and best-practice toolkits.'
+                      : 'Tiếp cận các nghiên cứu, báo cáo và công cụ thực hành tốt nhất.'}
+                  </p>
+                </article>
+
+                <article className="rounded-2xl p-6">
+                  <div className="mb-3 inline-flex rounded-lg bg-amber-100 p-2 text-amber-700">
+                    <Handshake className="h-5 w-5" />
+                  </div>
+                  <h2 className="text-lg font-semibold text-slate-900">{isEn ? 'Collaborate' : 'Hợp tác'}</h2>
+                  <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                    {isEn
+                      ? 'Join collaborative projects and sustainable development initiatives.'
+                      : 'Tham gia các dự án hợp tác và sáng kiến phát triển bền vững.'}
+                  </p>
+                </article>
+              </div>
+
+              <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                <h3 className="text-lg font-semibold text-slate-900">
+                  {isEn ? 'Platform Partners' : 'Đối tác của nền tảng'}
+                </h3>
+                <Link
+                  href={signUpBusinessHref}
+                  className="inline-flex items-center justify-center self-start rounded-xl bg-emerald-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700 md:self-auto"
+                >
+                  {isEn ? 'Register business account' : 'Đăng ký doanh nghiệp'}
+                </Link>
+              </div>
 
               {loadingPartners && partners.length === 0 ? (
                 <div className="rounded-xl border border-gray-200 bg-white px-6 py-8 text-center text-sm text-gray-500">
