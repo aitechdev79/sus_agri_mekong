@@ -136,3 +136,75 @@ export async function PATCH(
     return NextResponse.json({ error: "Failed to update user" }, { status: 500 });
   }
 }
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  try {
+    const admin = await requireAdmin(request);
+    if (!admin) {
+      return NextResponse.json(
+        { error: "Only admin can delete users" },
+        { status: 403 },
+      );
+    }
+
+    const { id } = await params;
+    if (!id) {
+      return NextResponse.json({ error: "User id is required" }, { status: 400 });
+    }
+
+    if (admin.id === id) {
+      return NextResponse.json(
+        { error: "Admin cannot delete own account" },
+        { status: 400 },
+      );
+    }
+
+    const existing = await prisma.user.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        _count: {
+          select: {
+            contents: true,
+            comments: true,
+            submissions: true,
+            bookmarks: true,
+          },
+        },
+      },
+    });
+
+    if (!existing) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    const hasRelatedData =
+      existing._count.contents > 0 ||
+      existing._count.comments > 0 ||
+      existing._count.submissions > 0 ||
+      existing._count.bookmarks > 0;
+
+    if (hasRelatedData) {
+      return NextResponse.json(
+        {
+          error:
+            "Cannot delete this user because related data exists (content/comments/submissions/bookmarks).",
+          counts: existing._count,
+        },
+        { status: 409 },
+      );
+    }
+
+    await prisma.user.delete({
+      where: { id },
+    });
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Admin user delete error:", error);
+    return NextResponse.json({ error: "Failed to delete user" }, { status: 500 });
+  }
+}

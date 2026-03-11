@@ -77,3 +77,37 @@ export async function PATCH(
   }
 }
 
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  try {
+    const admin = await requireAdmin(request);
+    if (!admin) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const { id } = await params;
+    if (!id) {
+      return NextResponse.json({ error: "Partner id is required" }, { status: 400 });
+    }
+
+    const existing = await prisma.businessProfile.findUnique({
+      where: { id },
+      select: { id: true },
+    });
+
+    if (!existing) {
+      return NextResponse.json({ error: "Partner not found" }, { status: 404 });
+    }
+
+    await prisma.businessProfile.delete({
+      where: { id },
+    });
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Admin partner delete error:", error);
+    return NextResponse.json({ error: "Failed to delete partner" }, { status: 500 });
+  }
+}

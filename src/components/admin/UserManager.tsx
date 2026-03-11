@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
-import { ArrowLeft, Download, PencilLine, Save, Search, ShieldCheck, UserCheck, Users, X } from 'lucide-react'
+import { ArrowLeft, Download, PencilLine, Save, Search, ShieldCheck, Trash2, UserCheck, Users, X } from 'lucide-react'
 
 interface AdminUser {
   id: string
@@ -100,6 +100,7 @@ export function UserManager({ backHref }: UserManagerProps) {
   const [query, setQuery] = useState('')
   const [editForm, setEditForm] = useState<EditFormState | null>(null)
   const [savingEdit, setSavingEdit] = useState(false)
+  const [deletingUserId, setDeletingUserId] = useState('')
   const [editError, setEditError] = useState('')
   const [editSuccess, setEditSuccess] = useState('')
 
@@ -320,6 +321,32 @@ export function UserManager({ backHref }: UserManagerProps) {
     }
   }
 
+  const deleteUser = async (user: AdminUser) => {
+    const confirmed = confirm(`Bạn có chắc chắn muốn xóa người dùng "${user.name || user.email}"?`)
+    if (!confirmed) return
+
+    try {
+      setDeletingUserId(user.id)
+      const response = await fetch(`/api/admin/users/${user.id}`, {
+        method: 'DELETE'
+      })
+
+      const data = await response.json()
+      if (!response.ok) {
+        throw new Error(data.error || 'Không thể xóa người dùng')
+      }
+
+      setUsers((prev) => prev.filter((item) => item.id !== user.id))
+      if (editForm?.id === user.id) {
+        closeEditUser()
+      }
+    } catch (error) {
+      alert(error instanceof Error ? error.message : 'Đã có lỗi xảy ra khi xóa người dùng')
+    } finally {
+      setDeletingUserId('')
+    }
+  }
+
   return (
     <div className="space-y-6">
       <div className="mb-2">
@@ -447,14 +474,25 @@ export function UserManager({ backHref }: UserManagerProps) {
                   </td>
                   <td className="px-5 py-4 text-sm text-gray-700">{formatDate(user.createdAt)}</td>
                   <td className="px-5 py-4 text-right">
-                    <button
-                      type="button"
-                      onClick={() => openEditUser(user)}
-                      className="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
-                    >
-                      <PencilLine className="mr-2 h-4 w-4" />
-                      Sửa
-                    </button>
+                    <div className="inline-flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => openEditUser(user)}
+                        className="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                      >
+                        <PencilLine className="mr-2 h-4 w-4" />
+                        Sửa
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => void deleteUser(user)}
+                        disabled={deletingUserId === user.id}
+                        className="inline-flex items-center rounded-md border border-rose-300 bg-rose-50 px-3 py-1.5 text-sm font-medium text-rose-700 hover:bg-rose-100 disabled:cursor-not-allowed disabled:opacity-60"
+                      >
+                        <Trash2 className="mr-2 h-4 w-4" />
+                        {deletingUserId === user.id ? 'Đang xóa...' : 'Xóa'}
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
