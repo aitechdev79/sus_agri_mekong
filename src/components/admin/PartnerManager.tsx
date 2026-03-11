@@ -9,6 +9,7 @@ interface PartnerItem {
   id: string
   companyName: string
   slug: string
+  logoUrl: string | null
   contactEmail: string | null
   website: string | null
   province: string | null
@@ -46,6 +47,7 @@ export function PartnerManager() {
   const [loading, setLoading] = useState(true)
   const [query, setQuery] = useState('')
   const [savingId, setSavingId] = useState('')
+  const [uploadingId, setUploadingId] = useState('')
   const [error, setError] = useState('')
 
   const loadPartners = async () => {
@@ -97,6 +99,39 @@ export function PartnerManager() {
     }
   }
 
+  const handleLogoFileChange = async (id: string, file: File | null) => {
+    if (!file) return
+
+    if (!file.type.startsWith('image/')) {
+      alert('Vui lòng chọn file ảnh.')
+      return
+    }
+
+    try {
+      setUploadingId(id)
+
+      const formData = new FormData()
+      formData.append('file', file)
+
+      const uploadResponse = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      })
+
+      const uploadData = await uploadResponse.json()
+      if (!uploadResponse.ok || !uploadData?.file?.url) {
+        throw new Error(uploadData?.error || 'Không thể tải ảnh lên')
+      }
+
+      const logoUrl = String(uploadData.file.url)
+      await updatePartner(id, { logoUrl })
+    } catch (uploadError) {
+      alert(uploadError instanceof Error ? uploadError.message : 'Đã có lỗi xảy ra khi tải ảnh')
+    } finally {
+      setUploadingId('')
+    }
+  }
+
   return (
     <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm md:p-6">
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
@@ -123,6 +158,7 @@ export function PartnerManager() {
         <table className="w-full min-w-[920px]">
           <thead className="border-b bg-slate-50">
             <tr>
+              <th className="px-4 py-3 text-left text-sm font-medium text-slate-700">Logo</th>
               <th className="px-4 py-3 text-left text-sm font-medium text-slate-700">Doanh nghiệp</th>
               <th className="px-4 py-3 text-left text-sm font-medium text-slate-700">Liên hệ</th>
               <th className="px-4 py-3 text-left text-sm font-medium text-slate-700">Trạng thái</th>
@@ -134,6 +170,32 @@ export function PartnerManager() {
           <tbody>
             {filteredPartners.map((item) => (
               <tr key={item.id} className="border-b align-top">
+                <td className="px-4 py-3">
+                  <div className="flex items-start gap-3">
+                    <div className="h-12 w-12 overflow-hidden rounded border border-slate-200 bg-slate-50">
+                      {item.logoUrl ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={item.logoUrl} alt={item.companyName} className="h-full w-full object-contain" />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center text-[10px] text-slate-400">No logo</div>
+                      )}
+                    </div>
+                    <label className="inline-flex cursor-pointer items-center rounded-md border border-slate-300 px-2.5 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50">
+                      {uploadingId === item.id ? 'Đang tải...' : 'Upload logo'}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        disabled={uploadingId === item.id || savingId === item.id}
+                        className="hidden"
+                        onChange={(event) => {
+                          const selectedFile = event.target.files?.[0] || null
+                          void handleLogoFileChange(item.id, selectedFile)
+                          event.currentTarget.value = ''
+                        }}
+                      />
+                    </label>
+                  </div>
+                </td>
                 <td className="px-4 py-3">
                   <div className="font-medium text-slate-900">{item.companyName}</div>
                   <div className="text-xs text-slate-500">{item.slug}</div>
@@ -188,4 +250,3 @@ export function PartnerManager() {
     </div>
   )
 }
-

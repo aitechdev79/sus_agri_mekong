@@ -17,6 +17,54 @@ const DEFAULT_CATEGORIES = [
   { slug: 'success_stories', nameVi: 'Câu chuyện thành công', nameEn: 'Success Stories', displayOrder: 120 }
 ]
 
+const DEFAULT_BUSINESS_PROFILES = [
+  {
+    companyName: 'Vinamilk',
+    slug: 'vinamilk',
+    logoUrl: '/Logo_Vinamilk_(2023).png',
+    website: 'https://www.vinamilk.com.vn',
+    province: 'Thành phố Hồ Chí Minh',
+    description: 'Doanh nghiệp hàng đầu trong lĩnh vực thực phẩm và đồ uống tại Việt Nam.',
+    displayOrder: 10,
+  },
+  {
+    companyName: 'John Deere',
+    slug: 'john-deere',
+    logoUrl: '/John_Deere_logo.svg.png',
+    website: 'https://www.deere.com',
+    province: null,
+    description: 'Đối tác quốc tế về giải pháp máy móc và công nghệ nông nghiệp.',
+    displayOrder: 20,
+  },
+  {
+    companyName: 'Lộc Trời',
+    slug: 'loc-troi',
+    logoUrl: '/06-loctroi.png',
+    website: 'https://www.loctroi.vn',
+    province: 'An Giang',
+    description: 'Doanh nghiệp nông nghiệp với chuỗi giá trị lúa gạo và giải pháp canh tác bền vững.',
+    displayOrder: 30,
+  },
+  {
+    companyName: 'CP Việt Nam',
+    slug: 'cp-viet-nam',
+    logoUrl: '/02-CP.jpg',
+    website: 'https://www.cp.com.vn',
+    province: null,
+    description: 'Doanh nghiệp hoạt động trong lĩnh vực nông nghiệp và thực phẩm.',
+    displayOrder: 40,
+  },
+  {
+    companyName: 'Bình Điền',
+    slug: 'binh-dien',
+    logoUrl: '/03-binhdien.jpg',
+    website: 'https://www.binhdien.com',
+    province: 'Thành phố Hồ Chí Minh',
+    description: 'Đơn vị cung cấp phân bón và giải pháp dinh dưỡng cây trồng tại Việt Nam.',
+    displayOrder: 50,
+  },
+]
+
 async function syncCategories() {
   for (const category of DEFAULT_CATEGORIES) {
     await prisma.category.upsert({
@@ -34,10 +82,42 @@ async function syncCategories() {
   }
 }
 
+async function syncBusinessProfiles() {
+  for (const profile of DEFAULT_BUSINESS_PROFILES) {
+    await prisma.businessProfile.upsert({
+      where: { slug: profile.slug },
+      update: {
+        companyName: profile.companyName,
+        logoUrl: profile.logoUrl,
+        website: profile.website,
+        province: profile.province,
+        description: profile.description,
+        status: 'APPROVED',
+        isPublic: true,
+        isVerified: true,
+        displayOrder: profile.displayOrder,
+      },
+      create: {
+        companyName: profile.companyName,
+        slug: profile.slug,
+        logoUrl: profile.logoUrl,
+        website: profile.website,
+        province: profile.province,
+        description: profile.description,
+        status: 'APPROVED',
+        isPublic: true,
+        isVerified: true,
+        displayOrder: profile.displayOrder,
+      },
+    })
+  }
+}
+
 async function main() {
   console.log('Seeding database...')
 
   await syncCategories()
+  await syncBusinessProfiles()
 
   const existingContent = await prisma.content.count()
   if (existingContent > 0) {
