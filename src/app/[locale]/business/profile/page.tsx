@@ -30,10 +30,12 @@ export default function BusinessProfilePage() {
 
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [uploadingLogo, setUploadingLogo] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const [formData, setFormData] = useState({
     companyName: '',
+    logoUrl: '',
     website: '',
     contactEmail: '',
     phone: '',
@@ -53,6 +55,10 @@ export default function BusinessProfilePage() {
             phone: 'Phone',
             province: 'Province/City',
             description: 'Description',
+            logo: 'Business logo',
+            uploadLogo: 'Upload logo',
+            uploadingLogo: 'Uploading...',
+            noLogo: 'No logo uploaded',
             save: 'Save profile',
             saving: 'Saving...',
             unauthorized: 'Only business accounts can access this page.',
@@ -67,6 +73,10 @@ export default function BusinessProfilePage() {
             phone: 'Số điện thoại',
             province: 'Tỉnh/Thành phố',
             description: 'Mô tả',
+            logo: 'Logo doanh nghiệp',
+            uploadLogo: 'Tải logo',
+            uploadingLogo: 'Đang tải...',
+            noLogo: 'Chưa có logo',
             save: 'Lưu hồ sơ',
             saving: 'Đang lưu...',
             unauthorized: 'Chỉ tài khoản doanh nghiệp mới truy cập được trang này.',
@@ -143,6 +153,7 @@ export default function BusinessProfilePage() {
   const fillForm = (profile: BusinessProfile) => {
     setFormData({
       companyName: profile.companyName || '',
+      logoUrl: profile.logoUrl || '',
       website: profile.website || '',
       contactEmail: profile.contactEmail || '',
       phone: profile.phone || '',
@@ -180,6 +191,40 @@ export default function BusinessProfilePage() {
     }
   }
 
+  const handleLogoChange = async (file: File | null) => {
+    if (!file) return
+
+    if (!file.type.startsWith('image/')) {
+      setError(isEn ? 'Please select an image file.' : 'Vui lòng chọn file ảnh.')
+      return
+    }
+
+    try {
+      setUploadingLogo(true)
+      setError('')
+      setSuccess('')
+
+      const uploadForm = new FormData()
+      uploadForm.append('file', file)
+
+      const response = await fetch('/api/business/profile/logo', {
+        method: 'POST',
+        body: uploadForm,
+      })
+      const data = await response.json()
+
+      if (!response.ok || !data?.file?.url) {
+        throw new Error(data?.error || (isEn ? 'Failed to upload logo' : 'Không thể tải logo'))
+      }
+
+      setFormData((prev) => ({ ...prev, logoUrl: String(data.file.url) }))
+    } catch (uploadError) {
+      setError(uploadError instanceof Error ? uploadError.message : isEn ? 'Upload failed' : 'Tải logo thất bại')
+    } finally {
+      setUploadingLogo(false)
+    }
+  }
+
   if (status === 'loading' || loading) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -214,6 +259,36 @@ export default function BusinessProfilePage() {
           <p className="mt-2 text-sm text-slate-600">{text.subtitle}</p>
 
           <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+            <div>
+              <p className="mb-2 text-sm font-medium text-slate-700">{text.logo}</p>
+              <div className="flex items-center gap-4">
+                <div className="h-16 w-16 overflow-hidden rounded-lg border border-slate-200 bg-slate-50">
+                  {formData.logoUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={formData.logoUrl} alt={formData.companyName || 'Logo'} className="h-full w-full object-contain" />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center px-1 text-center text-[10px] text-slate-400">
+                      {text.noLogo}
+                    </div>
+                  )}
+                </div>
+                <label className="inline-flex cursor-pointer items-center rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50">
+                  {uploadingLogo ? text.uploadingLogo : text.uploadLogo}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    disabled={uploadingLogo || saving}
+                    className="hidden"
+                    onChange={(event) => {
+                      const selected = event.target.files?.[0] || null
+                      void handleLogoChange(selected)
+                      event.currentTarget.value = ''
+                    }}
+                  />
+                </label>
+              </div>
+            </div>
+
             <input
               required
               value={formData.companyName}
