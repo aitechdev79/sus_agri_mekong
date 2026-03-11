@@ -202,7 +202,7 @@ export default function NewsSection() {
           </div>
 
           <div className="lg:col-span-1 lg:sticky lg:top-6">
-            <div className="rounded-2xl overflow-hidden bg-white" style={{ boxShadow: '0 4px 16px rgba(0, 0, 0, 0.08)' }}>
+            <div className="overflow-hidden bg-[#FFF8DC]" style={{ boxShadow: '0 4px 16px rgba(0, 0, 0, 0.08)' }}>
               <MiniEventCalendar events={calendarEvents} />
             </div>
           </div>

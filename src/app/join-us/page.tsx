@@ -165,7 +165,7 @@ export default function JoinUsPage() {
                   {displayPartners.map((partner) => (
                     <div
                       key={partner.id}
-                      className="flex items-center justify-center rounded-lg bg-white p-4 transition-all duration-300 hover:scale-105"
+                      className="flex items-center justify-center bg-white p-4 transition-all duration-300 hover:scale-105"
                       style={{ border: '1px solid rgba(0, 0, 0, 0.1)', minHeight: '92px' }}
                     >
                       <div className="relative flex h-14 w-full items-center justify-center">

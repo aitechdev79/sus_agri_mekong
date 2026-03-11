@@ -74,7 +74,7 @@ export default function MiniEventCalendar({ events }: MiniEventCalendarProps) {
   const today = new Date();
 
   return (
-    <div className="bg-white rounded-lg p-4 shadow-md h-full flex flex-col">
+    <div className="bg-[#FFF8DC] p-4 shadow-md h-full flex flex-col">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-bold text-gray-800 font-montserrat">{isEn ? 'Event Calendar' : 'Lịch sự kiện'}</h3>
       </div>

@@ -121,7 +121,7 @@ export default function SignUpSection() {
             {displayPartners.map((partner) => (
               <div
                 key={partner.id}
-                className="bg-white rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-105"
+                className="bg-white flex items-center justify-center transition-all duration-300 hover:scale-105"
                 style={{ border: '1px solid rgba(0, 0, 0, 0.1)', padding: '24px', maxHeight: '120px' }}
               >
                 <div className="relative flex h-20 w-full items-center justify-center">
