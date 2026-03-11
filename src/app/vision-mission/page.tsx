@@ -95,7 +95,8 @@ export default function VisionMissionPage() {
               </div>
 
               {/* Part 2: 3 Cards Stacked Vertically (1/3 width) */}
-              <div className="md:col-span-1 flex flex-col gap-6">
+              <div className="md:col-span-1 self-start md:sticky md:top-1/2 md:-translate-y-1/2">
+                <div className="flex flex-col gap-6">
                 {/* Nhà nước */}
                 <div className="flex items-start gap-4 p-4 bg-green-50 rounded-lg">
                   {/* Icon on left */}
@@ -175,6 +176,7 @@ export default function VisionMissionPage() {
                         : 'Giám sát, đảm bảo minh bạch và lan tỏa giá trị bền vững đến cộng đồng, tạo sức ảnh hưởng tích cực cho xã hội.'}
                     </p>
                   </div>
+                </div>
                 </div>
               </div>
             </div>

@@ -99,12 +99,8 @@ export default function SignUpPage() {
         throw new Error(data.message || 'Đã xảy ra lỗi khi đăng ký')
       }
 
-      const message =
-        accountType === 'BUSINESS'
-          ? 'Đăng ký tài khoản doanh nghiệp thành công! Vui lòng đăng nhập để hoàn thiện hồ sơ.'
-          : 'Đăng ký thành công! Vui lòng đăng nhập.'
-
-      router.push(`/auth/signin?message=${encodeURIComponent(message)}`)
+      const roleParam = accountType === 'BUSINESS' ? 'business' : 'user'
+      router.push(`/welcome?role=${roleParam}`)
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : 'Đã xảy ra lỗi. Vui lòng thử lại.')
     } finally {

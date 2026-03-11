@@ -19,6 +19,7 @@ export default withAuth(
           '/',
           '/auth/signin',
           '/auth/signup',
+          '/welcome',
           '/about-vcci',
           '/vision-mission',
           '/join-us',
