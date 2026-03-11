@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAuth } from "@/lib/auth-middleware";
-import { saveFile } from "@/lib/file-upload";
 
-const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_IMAGE_SIZE = 1 * 1024 * 1024; // 1MB (data URL mode)
 
 export async function POST(request: NextRequest) {
   try {
@@ -27,22 +26,25 @@ export async function POST(request: NextRequest) {
     }
 
     if (file.size > MAX_IMAGE_SIZE) {
-      return NextResponse.json({ error: "Image is too large. Max size is 5MB" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Image is too large for direct upload. Max size is 1MB." },
+        { status: 400 },
+      );
     }
 
-    const result = await saveFile(file);
-    if (!result.success || !result.url) {
-      return NextResponse.json({ error: result.error || "Failed to upload logo" }, { status: 400 });
-    }
+    // Use data URL like file-only upload to avoid filesystem writes on Vercel.
+    const bytes = await file.arrayBuffer();
+    const base64 = Buffer.from(bytes).toString("base64");
+    const dataUrl = `data:${file.type};base64,${base64}`;
 
     return NextResponse.json({
       success: true,
       file: {
-        url: result.url,
-        fileName: result.fileName,
-        originalName: result.originalName,
-        size: result.size,
-        type: result.type,
+        url: dataUrl,
+        fileName: file.name,
+        originalName: file.name,
+        size: file.size,
+        type: file.type,
       },
     });
   } catch (error) {
@@ -50,4 +52,3 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Failed to upload logo" }, { status: 500 });
   }
 }
-
