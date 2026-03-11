@@ -86,12 +86,12 @@ export default function JoinUsPage() {
                 <p className="mt-5 text-base leading-relaxed text-slate-700">
                   {isEn
                     ? 'Become a member of our collaboration network to advance business goals in innovation and sustainable development. We connect industry leaders to create positive solutions for Vietnam’s agricultural community.'
-                    : 'Trở thành thành viên của mạng lưới hợp tác để thúc đẩy các mục tiêu kinh doanh trong lĩnh vực đổi mới và phát triển bền vững. Chúng tôi kết nối các nhà lãnh đạo ngành để tạo ra những giải pháp tích cực cho cộng đồng nông nghiệp Việt Nam.'}
+                    : 'Làm thành viên của mạng lưới đối tác để thúc đẩy các mục tiêu kinh doanh trong lĩnh vực đổi mới và phát triển bền vững. Chúng tôi kết nối các doanh nghiệp hàng đầu để tạo ra những giải pháp tích cực cho cộng đồng nông nghiệp Việt Nam.'}
                 </p>
                 <p className="mt-4 text-base leading-relaxed text-slate-700">
                   {isEn
                     ? 'By joining this global initiative, you can collaborate with leading organizations, share knowledge, and help build a more sustainable agricultural value chain.'
-                    : 'Bằng cách tham gia vào sáng kiến toàn cầu này, bạn sẽ có cơ hội hợp tác với các tổ chức hàng đầu, chia sẻ kiến thức và cùng nhau xây dựng một chuỗi cung ứng nông nghiệp bền vững.'}
+                    : 'Doanh nghiệp sẽ có cơ hội hợp tác với các tổ chức hàng đầu, chia sẻ kiến thức và cùng nhau xây dựng một chuỗi cung ứng nông nghiệp bền vững.'}
                 </p>
               </div>
 
@@ -105,7 +105,7 @@ export default function JoinUsPage() {
               </div>
             </div>
 
-            <div className="border-t border-slate-200 bg-vn-rice-white px-7 py-8 md:px-10">
+            <div className="bg-vn-rice-white px-7 py-8 md:px-10">
               <div className="mb-7 grid gap-4 md:grid-cols-3">
                 <article className="rounded-2xl p-6">
                   <div className="mb-3 inline-flex rounded-lg bg-amber-100 p-2 text-amber-700">

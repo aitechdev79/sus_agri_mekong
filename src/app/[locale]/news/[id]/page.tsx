@@ -158,7 +158,7 @@ export default async function NewsPage({ params }: { params: Promise<{ locale: s
           )}
 
           {/* Back to News Button */}
-          <div className="border-t pt-8 mt-12">
+          <div className="pt-8 mt-12">
             <div className="flex justify-between items-center">
               <Link
                 href={`/${locale}/news`}

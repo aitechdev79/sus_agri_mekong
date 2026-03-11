@@ -310,7 +310,7 @@ export default async function ContentDetailPage({
               )}
 
               {externalUrl && (
-                <div className="mt-8 border-t border-gray-100 pt-6">
+                <div className="mt-8 pt-6">
                   <p className="text-sm italic text-gray-500">
                     <span className="font-medium">{getExternalLabel(content.type)} </span>
                     <a
