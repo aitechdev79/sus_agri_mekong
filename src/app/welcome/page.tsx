@@ -1,6 +1,5 @@
-'use client'
+﻿'use client'
 
-import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
@@ -8,25 +7,13 @@ import NavigationBar from '@/components/NavigationBar'
 import Footer from '@/components/Footer'
 import { getLocaleFromPathname, withLocalePrefix } from '@/lib/content-locale'
 
-type AccountRole = 'USER' | 'BUSINESS'
-
 export default function WelcomePage() {
   const pathname = usePathname()
   const locale = getLocaleFromPathname(pathname)
   const isEn = locale === 'en'
-  const [role, setRole] = useState<AccountRole>('USER')
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    const roleParam = new URLSearchParams(window.location.search).get('role')?.toLowerCase()
-    if (roleParam === 'business') {
-      setRole('BUSINESS')
-    }
-  }, [])
 
   const homeHref = withLocalePrefix('/', locale)
   const signInHref = withLocalePrefix('/auth/signin', locale)
-  const joinUsHref = withLocalePrefix('/join-us', locale)
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-emerald-50">
@@ -71,14 +58,6 @@ export default function WelcomePage() {
                   >
                     {isEn ? 'Sign in now' : 'Đăng nhập ngay'}
                   </Link>
-                  {role === 'BUSINESS' && (
-                    <Link
-                      href={joinUsHref}
-                      className="inline-flex items-center justify-center rounded-xl border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
-                    >
-                      {isEn ? 'Complete business profile' : 'Hoàn thiện hồ sơ doanh nghiệp'}
-                    </Link>
-                  )}
                   <Link
                     href={homeHref}
                     className="inline-flex items-center justify-center rounded-xl border border-sky-300 px-4 py-2.5 text-sm font-semibold text-sky-700 transition hover:bg-sky-50"
