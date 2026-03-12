@@ -273,11 +273,11 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
     const hasStyles = Boolean(updated.fontFamily || updated.fontSize)
 
     if (!hasStyles) {
-      withSelection().unsetMark('textStyle').run()
+      withSelection()?.unsetMark('textStyle').run()
       return
     }
 
-    withSelection().setMark('textStyle', updated).run()
+    withSelection()?.setMark('textStyle', updated).run()
   }
 
   const currentTextStyle = editor?.getAttributes('textStyle') as {
