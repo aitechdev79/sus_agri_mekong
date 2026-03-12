@@ -178,7 +178,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
         const data = await response.json()
 
         if (!response.ok) {
-          throw new Error(data.error || 'KhÃ´ng thá»ƒ táº£i danh má»¥c')
+          throw new Error(data.error || 'Không thể tải danh mục')
         }
 
         const nextCategories = Array.isArray(data) ? data : data.categories || []
@@ -222,7 +222,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
 
   // Clear draft data
   const clearDraft = () => {
-    if (confirm('Báº¡n cÃ³ cháº¯c cháº¯n muá»‘n xÃ³a báº£n nhÃ¡p Ä‘Ã£ lÆ°u?')) {
+    if (confirm('Bạn có chắc chắn muốn xóa bản nháp đã lưu?')) {
       clearSavedData()
       setFormData({
         title: '',
@@ -276,20 +276,20 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
     ]
   })()
   const contentTypes = [
-    { value: 'ARTICLE', label: 'BÃ i viáº¿t' },
-    { value: 'DOCUMENT', label: 'TÃ i liá»‡u' },
-    { value: 'STORY', label: 'Äiá»ƒn hÃ¬nh' },  // Using STORY for "ï¿½i?n hï¿½nh" (exemplary cases)
-    { value: 'PROJECT_ACTIVITY', label: 'Hoáº¡t Ä‘á»™ng dá»± Ã¡n' },
-    { value: 'GUIDE', label: 'HÆ°á»›ng dáº«n' },
-    { value: 'POLICY', label: 'ChÃ­nh sÃ¡ch' },
-    { value: 'NEWS', label: 'Tin tá»©c' },
-    { value: 'EVENT', label: 'Sá»± kiá»‡n' }
+    { value: 'ARTICLE', label: 'Bài viết' },
+    { value: 'DOCUMENT', label: 'Tài liệu' },
+    { value: 'STORY', label: 'Điển hình' },
+    { value: 'PROJECT_ACTIVITY', label: 'Hoạt động dự án' },
+    { value: 'GUIDE', label: 'Hướng dẫn' },
+    { value: 'POLICY', label: 'Chính sách' },
+    { value: 'NEWS', label: 'Tin tức' },
+    { value: 'EVENT', label: 'Sự kiện' }
   ]
 
   const sectionOptions = [
-    { value: '', label: 'KhÃ´ng hiá»ƒn thá»‹ trÃªn trang chá»§' },
-    { value: 'HOME_DIEN_HINH', label: 'Thá»±c hÃ nh Ä‘iá»ƒn hÃ¬nh' },
-    { value: 'HOME_HOAT_DONG_DU_AN', label: 'Hoáº¡t Ä‘á»™ng dá»± Ã¡n' }
+    { value: '', label: 'Không hiển thị trên trang chủ' },
+    { value: 'HOME_DIEN_HINH', label: 'Thực hành điển hình' },
+    { value: 'HOME_HOAT_DONG_DU_AN', label: 'Hoạt động dự án' }
   ]
 
   const isSectionCompatibleWithType = (sectionKey: string, contentType: string) => {
@@ -381,19 +381,19 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
         .replace(/&nbsp;/g, ' ')
         .trim()
       if (!plainContent) {
-        alert('Vui lÃ²ng nháº­p ná»™i dung')
+        alert('Vui lòng nhập nội dung')
         setLoading(false)
         return
       }
 
       if (formData.type === 'EVENT' && !formData.eventStartAt) {
-        alert('Vui lÃ²ng nháº­p thá»i gian báº¯t Ä‘áº§u sá»± kiá»‡n')
+        alert('Vui lòng nhập thời gian bắt đầu sự kiện')
         setLoading(false)
         return
       }
 
       if (formData.type === 'PROJECT_ACTIVITY' && !formData.projectUrl) {
-        alert('Vui lÃ²ng nháº­p Ä‘Æ°á»ng dáº«n dá»± Ã¡n')
+        alert('Vui lòng nhập đường dẫn dự án')
         setLoading(false)
         return
       }
@@ -420,11 +420,11 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
         onClose()
       } else {
         const error = await response.json()
-        alert(error.error || 'ÄÃ£ xáº£y ra lá»—i')
+        alert(error.error || 'Đã xảy ra lỗi')
       }
     } catch (error) {
       console.error('Form submission error:', error)
-      alert('ÄÃ£ xáº£y ra lá»—i khi lÆ°u ná»™i dung')
+      alert('Đã xảy ra lỗi khi lưu nội dung')
     } finally {
       setLoading(false)
     }
@@ -437,7 +437,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-4">
               <h2 className="text-xl font-bold">
-                {content ? 'Chá»‰nh sá»­a ná»™i dung' : 'ThÃªm ná»™i dung má»›i'}
+                {content ? 'Chỉnh sửa nội dung' : 'Thêm nội dung mới'}
               </h2>
 
               {/* Auto-save indicator */}
@@ -449,7 +449,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
-                      Äang lÆ°u...
+                      Đang lưu...
                     </span>
                   )}
                   {autoSaveStatus === 'saved' && (
@@ -457,7 +457,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
                       <svg className="mr-1 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                       </svg>
-                      ÄÃ£ lÆ°u báº£n nhÃ¡p
+                      Đã lưu bản nháp
                     </span>
                   )}
                 </div>
@@ -472,7 +472,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
                   onClick={clearDraft}
                   className="text-red-600 hover:text-red-700 text-xs"
                 >
-                  XÃ³a báº£n nhÃ¡p
+                  Xóa bản nháp
                 </Button>
               )}
             </div>
@@ -481,7 +481,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
               onClick={onClose}
               className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
             >
-              Ã—
+              ×
             </button>
           </div>
         </div>
@@ -497,7 +497,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
               </div>
               <div className="ml-3">
                 <p className="text-sm text-blue-700">
-                  <strong>Báº£n nhÃ¡p Ä‘Ã£ Ä‘Æ°á»£c khÃ´i phá»¥c!</strong> Dá»¯ liá»‡u tá»« phiÃªn lÃ m viá»‡c trÆ°á»›c Ä‘Ã£ Ä‘Æ°á»£c tá»± Ä‘á»™ng khÃ´i phá»¥c.
+                  <strong>Bản nháp đã được khôi phục!</strong> Dữ liệu từ phiên làm việc trước đã được tự động khôi phục.
                 </p>
               </div>
             </div>
@@ -506,11 +506,11 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
 
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-green-600">Ná»™i dung tiáº¿ng Viá»‡t</h3>
+            <h3 className="text-lg font-semibold text-green-600">Nội dung tiếng Việt</h3>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                TiÃªu Ä‘á» (Tiáº¿ng Viá»‡t) *
+                Tiêu đề (Tiếng Việt) *
               </label>
               <input
                 type="text"
@@ -524,7 +524,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                MÃ´ táº£ ngáº¯n (Tiáº¿ng Viá»‡t)
+                Mô tả ngắn (Tiếng Việt)
               </label>
               <textarea
                 name="description"
@@ -537,7 +537,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Ná»™i dung (Tiáº¿ng Viá»‡t) *
+                Nội dung (Tiếng Việt) *
               </label>
               <RichTextEditor
                 value={formData.content}
@@ -590,7 +590,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
                         <div>
               <div className="mb-2 flex items-center justify-between gap-3">
                 <label className="block text-sm font-medium text-gray-700">
-                  Danh má»¥c *
+                  Danh mục *
                 </label>
                 {userRole === 'ADMIN' && (
                   <button
@@ -598,7 +598,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
                     onClick={() => setShowCategoryModal(true)}
                     className="text-sm font-medium text-green-700 hover:text-green-800"
                   >
-                    + Táº¡o danh má»¥c má»›i
+                    + Tạo danh mục mới
                   </button>
                 )}
               </div>
@@ -609,10 +609,10 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
                 required
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
               >
-                <option value="">Chá»n danh má»¥c</option>
+                <option value="">Chọn danh mục</option>
                 {categoryOptions.map((category) => (
                   <option key={category.slug} value={category.slug}>
-                    {category.nameVi}{category.isActive ? '' : ' (ngá»«ng hoáº¡t Ä‘á»™ng)'}
+                    {category.nameVi}{category.isActive ? '' : ' (ngừng hoạt động)'}
                   </option>
                 ))}
               </select>
@@ -620,7 +620,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Loáº¡i ná»™i dung *
+                Loại nội dung *
               </label>
               <select
                 name="type"
@@ -639,7 +639,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Hiá»ƒn thá»‹ trÃªn trang chá»§
+                Hiển thị trên trang chủ
               </label>
               <select
                 name="sectionKey"
@@ -652,13 +652,13 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
                 ))}
               </select>
               <p className="text-xs text-gray-500 mt-1">
-                Chá»‰ chá»n khi muá»‘n hiá»ƒn thá»‹ ná»™i dung trÃªn trang chá»§.
+                Chỉ chọn khi muốn hiển thị nội dung trên trang chủ.
               </p>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Thá»© tá»± hiá»ƒn thá»‹
+                Thứ tự hiển thị
               </label>
               <input
                 type="number"
@@ -669,18 +669,18 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
               />
               <p className="text-xs text-gray-500 mt-1">
-                Sá»‘ nhá» hiá»ƒn thá»‹ trÆ°á»›c. Bá» trá»‘ng thÃ¬ sáº¯p xáº¿p theo ngÃ y táº¡o.
+                Số nhỏ hiển thị trước. Bỏ trống thì sắp xếp theo ngày tạo.
               </p>
             </div>
           </div>
 
           {formData.type === 'PROJECT_ACTIVITY' && (
             <div className="space-y-4 rounded-lg border border-amber-200 bg-amber-50/60 p-4">
-              <h3 className="text-lg font-semibold text-amber-700">ThÃ´ng tin Hoáº¡t Ä‘á»™ng dá»± Ã¡n</h3>
+              <h3 className="text-lg font-semibold text-amber-700">Thông tin Hoạt động dự án</h3>
 
               <div>
                 <p className="text-sm text-amber-800">
-                  Äiá»n trÆ°á»ng Content URL bÃªn dÆ°á»›i Ä‘á»ƒ card má»Ÿ liÃªn káº¿t ngoÃ i. TrÆ°á»ng nÃ y báº¯t buá»™c vá»›i hoáº¡t Ä‘á»™ng dá»± Ã¡n.
+                  Điền trường Content URL bên dưới để card mở liên kết ngoài. Trường này bắt buộc với hoạt động dự án.
                 </p>
               </div>
             </div>
@@ -689,7 +689,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
           {formData.type === 'EVENT' && (
             <div className="space-y-4 rounded-lg border border-emerald-200 bg-emerald-50/60 p-4">
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-emerald-700">ThÃ´ng tin sá»± kiá»‡n</h3>
+                <h3 className="text-lg font-semibold text-emerald-700">Thông tin sự kiện</h3>
                 <label className="flex items-center text-sm text-gray-700">
                   <input
                     type="checkbox"
@@ -698,14 +698,14 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
                     onChange={handleChange}
                     className="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
                   />
-                  <span className="ml-2">Cáº£ ngÃ y</span>
+                  <span className="ml-2">Cả ngày</span>
                 </label>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {formData.isAllDay ? 'NgÃ y báº¯t Ä‘áº§u *' : 'Thá»i gian báº¯t Ä‘áº§u *'}
+                    {formData.isAllDay ? 'Ngày bắt đầu *' : 'Thời gian bắt đầu *'}
                   </label>
                   <input
                     type={formData.isAllDay ? 'date' : 'datetime-local'}
@@ -719,7 +719,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {formData.isAllDay ? 'NgÃ y káº¿t thÃºc' : 'Thá»i gian káº¿t thÃºc'}
+                    {formData.isAllDay ? 'Ngày kết thúc' : 'Thời gian kết thúc'}
                   </label>
                   <input
                     type={formData.isAllDay ? 'date' : 'datetime-local'}
@@ -732,7 +732,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    MÃºi giá»
+                    Múi giờ
                   </label>
                   <input
                     type="text"
@@ -746,14 +746,14 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Äá»‹a Ä‘iá»ƒm
+                    Địa điểm
                   </label>
                   <input
                     type="text"
                     name="eventLocation"
                     value={formData.eventLocation}
                     onChange={handleChange}
-                    placeholder="Cáº§n ThÆ¡, Viá»‡t Nam"
+                    placeholder="Cần Thơ, Việt Nam"
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   />
                 </div>
@@ -763,14 +763,14 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Tá»« khÃ³a (phÃ¢n cÃ¡ch báº±ng dáº¥u pháº©y)
+              Từ khóa (phân cách bằng dấu phẩy)
             </label>
             <input
               type="text"
               name="tags"
               value={formData.tags}
               onChange={handleChange}
-              placeholder="nuÃ´i tÃ´m, sinh thÃ¡i, bá»n vá»¯ng"
+              placeholder="nuôi tôm, sinh thái, bền vững"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
             />
           </div>
@@ -781,7 +781,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Thumbnail (Trang chá»§)
+                Thumbnail (Trang chủ)
               </label>
               {formData.thumbnailUrl && (
                 <div className="mb-3 flex items-center gap-4">
@@ -799,7 +799,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
                     onClick={() => setFormData((prev: typeof formData) => ({ ...prev, thumbnailUrl: '' }))}
                     className="text-red-600 hover:text-red-700"
                   >
-                    XÃ³a thumbnail
+                    Xóa thumbnail
                   </Button>
                 </div>
               )}
@@ -826,7 +826,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Content URL {formData.type === 'PROJECT_ACTIVITY' ? '*' : '(tÃ¹y chá»n)'}
+                  Content URL {formData.type === 'PROJECT_ACTIVITY' ? '*' : '(tùy chọn)'}
                 </label>
                 <input
                   type="url"
@@ -838,7 +838,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                 />
                 <p className="text-xs text-gray-500 mt-1">
-                  Náº¿u nháº­p, card sáº½ má»Ÿ liÃªn káº¿t ngoÃ i (PDF/bÃ i viáº¿t). Náº¿u bá» trá»‘ng, card sáº½ má»Ÿ trang chi tiáº¿t ná»™i dung.
+                  Nếu nhập, card sẽ mở liên kết ngoài (PDF/bài viết). Nếu bỏ trống, card sẽ mở trang chi tiết nội dung.
                 </p>
               </div>
 
@@ -872,7 +872,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
 
           {/* File Attachments */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-800">File Ä‘Ã­nh kÃ¨m</h3>
+            <h3 className="text-lg font-semibold text-gray-800">File đính kèm</h3>
 
             {/* Upload limitations notice */}
             <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
@@ -884,9 +884,9 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
                 </div>
                 <div className="ml-3">
                   <div className="space-y-1 text-sm text-amber-700">
-                    <p><strong>Thumbnail vÃ  image chá»‰ dÃ¹ng cho áº£nh hiá»ƒn thá»‹.</strong></p>
-                    <p>File Ä‘Ã­nh kÃ¨m ná»™i bá»™ hiá»‡n háº¡n cháº¿ trÃªn Vercel.</p>
-                    <p>Khuyáº¿n nghá»‹ dÃ¹ng Content URL cho PDF ngoÃ i, bÃ i viáº¿t, hoáº·c cloud link.</p>
+                    <p><strong>Thumbnail và image chỉ dùng cho ảnh hiển thị.</strong></p>
+                    <p>File đính kèm nội bộ hiện hạn chế trên Vercel.</p>
+                    <p>Khuyến nghị dùng Content URL cho PDF ngoài, bài viết, hoặc cloud link.</p>
                   </div>
                 </div>
               </div>
@@ -911,9 +911,9 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
                       )}
                     </div>
                     <div>
-                      <div className="font-medium text-gray-900">File Ä‘Ã£ Ä‘Ã­nh kÃ¨m</div>
+                      <div className="font-medium text-gray-900">File đã đính kèm</div>
                       <div className="text-sm text-gray-500">
-                        {formData.fileType} â€¢ {Math.round(formData.fileSize / 1024)} KB
+                        {formData.fileType} • {Math.round(formData.fileSize / 1024)} KB
                       </div>
                     </div>
                   </div>
@@ -932,7 +932,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
                     }}
                     className="text-red-600 hover:text-red-700"
                   >
-                    XÃ³a file
+                    Xóa file
                   </Button>
                 </div>
               </div>
@@ -960,7 +960,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
                 />
 
                 <div className="text-center">
-                  <span className="text-gray-500">hoáº·c</span>
+                  <span className="text-gray-500">hoặc</span>
                 </div>
 
                 <Button
@@ -969,7 +969,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
                   onClick={() => setShowFileManager(true)}
                   className="w-full"
                 >
-                  Chá»n tá»« thÆ° viá»‡n file
+                  Chọn từ thư viện file
                 </Button>
               </div>
             )}
@@ -986,7 +986,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
                     onChange={handleChange}
                     className="rounded border-gray-300 text-green-600 focus:ring-green-500"
                   />
-                  <span className="ml-2 text-sm text-gray-700">Ná»™i dung ná»•i báº­t</span>
+                  <span className="ml-2 text-sm text-gray-700">Nội dung nổi bật</span>
                 </label>
               )}
 
@@ -998,13 +998,13 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
                   onChange={handleChange}
                   className="rounded border-gray-300 text-green-600 focus:ring-green-500"
                 />
-                <span className="ml-2 text-sm text-gray-700">CÃ´ng khai</span>
+                <span className="ml-2 text-sm text-gray-700">Công khai</span>
               </label>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Tráº¡ng thÃ¡i
+                Trạng thái
               </label>
               <select
                 name="status"
@@ -1012,19 +1012,19 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
               >
-                <option value="DRAFT">Báº£n nhÃ¡p</option>
-                <option value="PUBLISHED">ÄÃ£ xuáº¥t báº£n</option>
-                {userRole === 'ADMIN' && <option value="ARCHIVED">LÆ°u trá»¯</option>}
+                <option value="DRAFT">Bản nháp</option>
+                <option value="PUBLISHED">Đã xuất bản</option>
+                {userRole === 'ADMIN' && <option value="ARCHIVED">Lưu trữ</option>}
               </select>
             </div>
           </div>
 
           <div className="flex justify-end space-x-4 pt-6 border-t">
             <Button type="button" variant="ghost" onClick={onClose} disabled={loading}>
-              Há»§y
+              Hủy
             </Button>
             <Button type="submit" disabled={loading}>
-              {loading ? 'Äang lÆ°u...' : (content ? 'Cáº­p nháº­t' : 'Táº¡o má»›i')}
+              {loading ? 'Đang lưu...' : (content ? 'Cập nhật' : 'Tạo mới')}
             </Button>
           </div>
         </form>
@@ -1034,7 +1034,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
         <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/50 p-4">
           <div className="w-full max-w-lg rounded-lg bg-white shadow-xl">
             <div className="flex items-center justify-between border-b px-6 py-4">
-              <h3 className="text-lg font-bold text-gray-900">Táº¡o danh má»¥c má»›i</h3>
+              <h3 className="text-lg font-bold text-gray-900">Tạo danh mục mới</h3>
               <button
                 type="button"
                 onClick={() => {
@@ -1048,7 +1048,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
             </div>
             <form onSubmit={handleQuickCategorySubmit} className="space-y-4 px-6 py-5">
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700">TÃªn danh má»¥c *</label>
+                <label className="mb-2 block text-sm font-medium text-gray-700">Tên danh mục *</label>
                 <input
                   type="text"
                   value={quickCategory.nameVi}
@@ -1067,10 +1067,10 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
                   pattern="[a-z0-9]+(?:[-_][a-z0-9]+)*"
                   className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
-                <p className="mt-1 text-xs text-gray-500">DÃ¹ng slug chá»¯ thÆ°á»ng, khÃ´ng dáº¥u. Legacy slug cÃ³ underscore váº«n Ä‘Æ°á»£c giá»¯ Ä‘á»ƒ tÆ°Æ¡ng thÃ­ch.</p>
+                <p className="mt-1 text-xs text-gray-500">Dùng slug chữ thường, không dấu. Legacy slug có underscore vẫn được giữ để tương thích.</p>
               </div>
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700">TÃªn tiáº¿ng Anh</label>
+                <label className="mb-2 block text-sm font-medium text-gray-700">Tên tiếng Anh</label>
                 <input
                   type="text"
                   value={quickCategory.nameEn}
@@ -1079,7 +1079,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
                 />
               </div>
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700">Thá»© tá»± hiá»ƒn thá»‹</label>
+                <label className="mb-2 block text-sm font-medium text-gray-700">Thứ tự hiển thị</label>
                 <input
                   type="number"
                   value={quickCategory.displayOrder}
@@ -1097,10 +1097,10 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
                   }}
                   disabled={categorySaveLoading}
                 >
-                  Há»§y
+                  Hủy
                 </Button>
                 <Button type="submit" disabled={categorySaveLoading}>
-                  {categorySaveLoading ? 'Äang táº¡o...' : 'Táº¡o danh má»¥c'}
+                  {categorySaveLoading ? 'Đang tạo...' : 'Tạo danh mục'}
                 </Button>
               </div>
             </form>
@@ -1113,12 +1113,12 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
           <div className="bg-white rounded-lg shadow-xl w-full max-w-6xl max-h-screen overflow-y-auto">
             <div className="sticky top-0 bg-white border-b px-6 py-4">
               <div className="flex justify-between items-center">
-                <h3 className="text-xl font-bold">Chá»n file tá»« thÆ° viá»‡n</h3>
+                <h3 className="text-xl font-bold">Chọn file từ thư viện</h3>
                 <button
                   onClick={() => setShowFileManager(false)}
                   className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
                 >
-                  Ã—
+                  ×
                 </button>
               </div>
             </div>
@@ -1144,6 +1144,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
     </div>
   )
 }
+
 
 
 
