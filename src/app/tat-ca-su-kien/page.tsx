@@ -177,7 +177,7 @@ export default function TatCaSuKienPage() {
                       {hasValidEventStart && (
                         <div className="mb-3">
                           <span
-                            className="inline-flex px-3 py-1 text-xs font-bold font-montserrat text-white"
+                            className="inline-flex rounded-full px-3 py-1 text-xs font-bold font-montserrat text-white"
                             style={{ backgroundColor: isUpcoming ? '#0A7029' : '#F97316' }}
                           >
                             {isUpcoming ? (isEn ? 'Upcoming' : 'Sắp diễn ra') : (isEn ? 'Completed' : 'Đã diễn ra')}
