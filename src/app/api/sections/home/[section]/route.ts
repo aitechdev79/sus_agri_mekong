@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma'
 
 const SECTION_MAP: Record<string, { sectionKey: 'HOME_DIEN_HINH' | 'HOME_HOAT_DONG_DU_AN'; type: 'STORY' | 'PROJECT_ACTIVITY'; take: number }> = {
   'dien-hinh': { sectionKey: 'HOME_DIEN_HINH', type: 'STORY', take: 3 },
-  'hoat-dong-du-an': { sectionKey: 'HOME_HOAT_DONG_DU_AN', type: 'PROJECT_ACTIVITY', take: 6 }
+  'hoat-dong-du-an': { sectionKey: 'HOME_HOAT_DONG_DU_AN', type: 'PROJECT_ACTIVITY', take: 3 }
 }
 
 export async function GET(
