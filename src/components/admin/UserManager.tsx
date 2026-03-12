@@ -37,6 +37,15 @@ interface EditFormState {
   newPassword: string
 }
 
+interface PromoteFormState {
+  ownerUserId: string
+  companyName: string
+  contactEmail: string
+  province: string
+  displayOrder: string
+  logoUrl: string
+}
+
 function formatDate(dateString: string) {
   return new Date(dateString).toLocaleDateString('vi-VN', {
     day: '2-digit',
@@ -96,11 +105,16 @@ function downloadBlob(content: BlobPart, filename: string, type: string) {
 
 export function UserManager({ backHref }: UserManagerProps) {
   const [users, setUsers] = useState<AdminUser[]>([])
+  const [partnerOwnerIds, setPartnerOwnerIds] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
   const [query, setQuery] = useState('')
   const [editForm, setEditForm] = useState<EditFormState | null>(null)
   const [savingEdit, setSavingEdit] = useState(false)
   const [deletingUserId, setDeletingUserId] = useState('')
+  const [promoteForm, setPromoteForm] = useState<PromoteFormState | null>(null)
+  const [promoting, setPromoting] = useState(false)
+  const [uploadingPartnerLogo, setUploadingPartnerLogo] = useState(false)
+  const [promoteError, setPromoteError] = useState('')
   const [editError, setEditError] = useState('')
   const [editSuccess, setEditSuccess] = useState('')
 
@@ -108,14 +122,24 @@ export function UserManager({ backHref }: UserManagerProps) {
     const loadUsers = async () => {
       try {
         setLoading(true)
-        const response = await fetch('/api/admin/users')
-        const data = await response.json()
+        const [usersResponse, partnersResponse] = await Promise.all([
+          fetch('/api/admin/users'),
+          fetch('/api/admin/partners'),
+        ])
+        const data = await usersResponse.json()
 
-        if (!response.ok) {
+        if (!usersResponse.ok) {
           throw new Error(data.error || 'Không thể tải danh sách người dùng')
         }
 
         setUsers(data.users || [])
+        if (partnersResponse.ok) {
+          const partnersData = await partnersResponse.json()
+          const ownerIds = (partnersData.partners || [])
+            .map((item: { ownerUserId?: string | null }) => item.ownerUserId || '')
+            .filter(Boolean)
+          setPartnerOwnerIds(ownerIds)
+        }
       } catch (error) {
         console.error('User manager fetch error:', error)
         setUsers([])
@@ -347,6 +371,106 @@ export function UserManager({ backHref }: UserManagerProps) {
     }
   }
 
+  const openPromoteModal = (user: AdminUser) => {
+    setPromoteError('')
+    setPromoteForm({
+      ownerUserId: user.id,
+      companyName: (user.organization || user.name || user.email).trim(),
+      contactEmail: user.email,
+      province: user.province || '',
+      displayOrder: '0',
+      logoUrl: '',
+    })
+  }
+
+  const closePromoteModal = () => {
+    if (promoting || uploadingPartnerLogo) return
+    setPromoteForm(null)
+    setPromoteError('')
+  }
+
+  const updatePromoteField = <K extends keyof PromoteFormState>(field: K, value: PromoteFormState[K]) => {
+    setPromoteForm((prev) => (prev ? { ...prev, [field]: value } : prev))
+  }
+
+  const uploadPromoteLogo = async (file: File | null) => {
+    if (!file || !promoteForm) return
+    if (!file.type.startsWith('image/')) {
+      setPromoteError('Vui long chon file anh hop le.')
+      return
+    }
+
+    try {
+      setUploadingPartnerLogo(true)
+      setPromoteError('')
+
+      const formData = new FormData()
+      formData.append('file', file)
+
+      const uploadResponse = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      })
+      const uploadData = await uploadResponse.json()
+      if (!uploadResponse.ok || !uploadData?.file?.url) {
+        throw new Error(uploadData?.error || 'Khong the tai logo len')
+      }
+
+      updatePromoteField('logoUrl', String(uploadData.file.url))
+    } catch (error) {
+      setPromoteError(error instanceof Error ? error.message : 'Khong the tai logo len')
+    } finally {
+      setUploadingPartnerLogo(false)
+    }
+  }
+
+  const submitPromoteToPartner = async () => {
+    if (!promoteForm) return
+    if (!promoteForm.companyName.trim()) {
+      setPromoteError('Vui long nhap ten doanh nghiep.')
+      return
+    }
+
+    const parsedOrder = Number(promoteForm.displayOrder)
+    if (!Number.isFinite(parsedOrder)) {
+      setPromoteError('Thu tu hien thi khong hop le.')
+      return
+    }
+
+    try {
+      setPromoting(true)
+      setPromoteError('')
+
+      const response = await fetch('/api/admin/partners', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ownerUserId: promoteForm.ownerUserId,
+          companyName: promoteForm.companyName.trim(),
+          contactEmail: promoteForm.contactEmail.trim() || null,
+          province: promoteForm.province.trim() || null,
+          logoUrl: promoteForm.logoUrl.trim() || null,
+          displayOrder: Math.trunc(parsedOrder),
+          status: 'APPROVED',
+          isPublic: true,
+          isVerified: true,
+        }),
+      })
+      const data = await response.json()
+      if (!response.ok) {
+        throw new Error(data.error || 'Khong the chuyen thanh doi tac')
+      }
+
+      setPartnerOwnerIds((prev) => (prev.includes(promoteForm.ownerUserId) ? prev : [...prev, promoteForm.ownerUserId]))
+      setEditSuccess('Da chuyen user BUSINESS thanh doi tac.')
+      closePromoteModal()
+    } catch (error) {
+      setPromoteError(error instanceof Error ? error.message : 'Khong the chuyen thanh doi tac')
+    } finally {
+      setPromoting(false)
+    }
+  }
+
   return (
     <div className="space-y-6">
       <div className="mb-2">
@@ -483,6 +607,17 @@ export function UserManager({ backHref }: UserManagerProps) {
                         <PencilLine className="mr-2 h-4 w-4" />
                         Sửa
                       </button>
+                      {user.role === 'BUSINESS' && (
+                        <button
+                          type="button"
+                          onClick={() => openPromoteModal(user)}
+                          disabled={partnerOwnerIds.includes(user.id)}
+                          className="inline-flex items-center rounded-md border border-emerald-300 bg-emerald-50 px-3 py-1.5 text-sm font-medium text-emerald-700 hover:bg-emerald-100 disabled:cursor-not-allowed disabled:opacity-60"
+                        >
+                          <UserCheck className="mr-2 h-4 w-4" />
+                          {partnerOwnerIds.includes(user.id) ? 'Da la doi tac' : 'Len doi tac'}
+                        </button>
+                      )}
                       <button
                         type="button"
                         onClick={() => void deleteUser(user)}
@@ -637,6 +772,117 @@ export function UserManager({ backHref }: UserManagerProps) {
               >
                 <Save className="mr-2 h-4 w-4" />
                 {savingEdit ? 'Đang lưu...' : 'Lưu thay đổi'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {promoteForm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-4">
+          <div className="w-full max-w-xl rounded-xl bg-white shadow-xl">
+            <div className="flex items-center justify-between border-b px-6 py-4">
+              <h3 className="text-lg font-semibold text-gray-900">Chuyen user BUSINESS thanh doi tac</h3>
+              <button
+                type="button"
+                onClick={closePromoteModal}
+                className="rounded-md p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                aria-label="Dong"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <div className="space-y-4 px-6 py-5">
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-700">Ten doanh nghiep</label>
+                <input
+                  type="text"
+                  value={promoteForm.companyName}
+                  onChange={(event) => updatePromoteField('companyName', event.target.value)}
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div>
+                  <label className="mb-1 block text-sm font-medium text-gray-700">Email lien he</label>
+                  <input
+                    type="email"
+                    value={promoteForm.contactEmail}
+                    onChange={(event) => updatePromoteField('contactEmail', event.target.value)}
+                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                </div>
+                <div>
+                  <label className="mb-1 block text-sm font-medium text-gray-700">Tinh/Thanh</label>
+                  <input
+                    type="text"
+                    value={promoteForm.province}
+                    onChange={(event) => updatePromoteField('province', event.target.value)}
+                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div>
+                  <label className="mb-1 block text-sm font-medium text-gray-700">Thu tu hien thi</label>
+                  <input
+                    type="number"
+                    value={promoteForm.displayOrder}
+                    onChange={(event) => updatePromoteField('displayOrder', event.target.value)}
+                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                </div>
+                <div>
+                  <label className="mb-1 block text-sm font-medium text-gray-700">Logo doanh nghiep</label>
+                  <div className="flex items-center gap-2">
+                    <label className="inline-flex cursor-pointer items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
+                      {uploadingPartnerLogo ? 'Dang tai...' : 'Upload logo'}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        disabled={uploadingPartnerLogo || promoting}
+                        onChange={(event) => {
+                          const file = event.target.files?.[0] || null
+                          void uploadPromoteLogo(file)
+                          event.currentTarget.value = ''
+                        }}
+                      />
+                    </label>
+                    {promoteForm.logoUrl && (
+                      <span className="truncate text-xs text-gray-500">{promoteForm.logoUrl}</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {promoteError && (
+              <div className="px-6 pb-2">
+                <p className="text-sm text-red-600">{promoteError}</p>
+              </div>
+            )}
+
+            <div className="flex items-center justify-end gap-2 border-t px-6 py-4">
+              <button
+                type="button"
+                onClick={closePromoteModal}
+                disabled={promoting || uploadingPartnerLogo}
+                className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                Huy
+              </button>
+              <button
+                type="button"
+                onClick={() => void submitPromoteToPartner()}
+                disabled={promoting || uploadingPartnerLogo}
+                className="inline-flex items-center rounded-md bg-emerald-600 px-3 py-2 text-sm font-medium text-white hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                <UserCheck className="mr-2 h-4 w-4" />
+                {promoting ? 'Dang xu ly...' : 'Chuyen thanh doi tac'}
               </button>
             </div>
           </div>

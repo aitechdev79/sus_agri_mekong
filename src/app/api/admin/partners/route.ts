@@ -80,6 +80,17 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid slug" }, { status: 400 });
     }
 
+    if (ownerUserId) {
+      const existingByOwner = await prisma.businessProfile.findFirst({
+        where: { ownerUserId },
+        select: { id: true },
+      });
+
+      if (existingByOwner) {
+        return NextResponse.json({ error: "Business user is already a partner" }, { status: 409 });
+      }
+    }
+
     const existing = await prisma.businessProfile.findUnique({
       where: { slug: baseSlug },
       select: { id: true },
