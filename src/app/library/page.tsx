@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import NavigationBar from '@/components/NavigationBar'
@@ -122,6 +122,11 @@ function getTypeLabel(type: string, isEn: boolean) {
       POLICY: 'Policy',
       ARTICLE: 'Article',
       DOCUMENT: 'Document',
+      VIDEO: 'Video',
+      INFOGRAPHIC: 'Infographic',
+      PROJECT_ACTIVITY: 'Project activity',
+      NEWS: 'News',
+      EVENT: 'Event',
     }
     : {
       STORY: 'Điển hình',
@@ -129,6 +134,11 @@ function getTypeLabel(type: string, isEn: boolean) {
       POLICY: 'Chính sách',
       ARTICLE: 'Bài viết',
       DOCUMENT: 'Tài liệu',
+      VIDEO: 'Video',
+      INFOGRAPHIC: 'Infographic',
+      PROJECT_ACTIVITY: 'Hoạt động dự án',
+      NEWS: 'Tin tức',
+      EVENT: 'Sự kiện',
     }
 
   return typeMap[type] || type
@@ -171,13 +181,14 @@ export default function LibraryPage() {
   const [selectedType, setSelectedType] = useState('')
   const [showFilters, setShowFilters] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
+  const repositorySectionRef = useRef<HTMLElement | null>(null)
   const [pagination, setPagination] = useState({
     page: 1,
     limit: 10,
     total: 0,
     pages: 0,
   })
-  const { categoryLabels } = usePublicCategories()
+  const { categories } = usePublicCategories()
 
   const loadContents = useCallback(async () => {
     try {
@@ -222,11 +233,15 @@ export default function LibraryPage() {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    repositorySectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
   const getCategoryLabel = (category?: string | null) => {
     if (!category) return isEn ? 'Uncategorized' : 'Chưa phân loại'
-    return categoryLabels[category] || category
+    const matchedCategory = categories.find((item) => item.slug === category)
+    if (!matchedCategory) return category
+    return isEn
+      ? matchedCategory.nameEn || matchedCategory.name || matchedCategory.nameVi
+      : matchedCategory.nameVi || matchedCategory.name
   }
   return (
     <div className="min-h-screen bg-vn-rice-white">
@@ -322,7 +337,7 @@ export default function LibraryPage() {
           </div>
         </section>
 
-        <section className="bg-white py-16">
+        <section ref={repositorySectionRef} className="bg-white py-16">
           <div className="container mx-auto max-w-6xl px-6">
             <div className="mb-10 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
               <div>
