@@ -315,14 +315,15 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
     const formData = new FormData()
     formData.append('file', file)
 
-    const response = await fetch('/api/upload', {
+    const response = await fetch('/api/upload/file-only', {
       method: 'POST',
       body: formData
     })
 
     const result = await response.json().catch(() => null)
     if (!response.ok || !result?.success || !result?.file?.url) {
-      throw new Error(result?.error || 'Khong the tai anh len')
+      const suggestion = result?.suggestion ? ` ${result.suggestion}` : ''
+      throw new Error((result?.error || 'Không thể tải ảnh lên.') + suggestion)
     }
 
     return String(result.file.url)
