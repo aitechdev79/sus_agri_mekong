@@ -1,9 +1,10 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
-import { Extension, Mark, mergeAttributes } from '@tiptap/core'
+import { Extension, Mark, Node, mergeAttributes } from '@tiptap/core'
+import { Plugin } from '@tiptap/pm/state'
 
 type RichTextEditorProps = {
   value: string
@@ -85,10 +86,169 @@ const ListIndentExtension = Extension.create({
   }
 })
 
+const TextAlignExtension = Extension.create({
+  name: 'textAlign',
+
+  addGlobalAttributes() {
+    return [
+      {
+        types: ['paragraph', 'heading', 'listItem'],
+        attributes: {
+          textAlign: {
+            default: null,
+            parseHTML: element => element.style.textAlign || null,
+            renderHTML: attributes => {
+              const textAlign = attributes.textAlign
+              if (!textAlign) return {}
+              return {
+                style: `text-align: ${textAlign}`
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+})
+
+const ImageNode = Node.create({
+  name: 'image',
+  group: 'block',
+  draggable: true,
+  selectable: true,
+
+  addAttributes() {
+    return {
+      src: {
+        default: null
+      },
+      alt: {
+        default: null
+      },
+      title: {
+        default: null
+      }
+    }
+  },
+
+  parseHTML() {
+    return [{ tag: 'img[src]' }]
+  },
+
+  renderHTML({ HTMLAttributes }) {
+    return [
+      'img',
+      mergeAttributes(HTMLAttributes, {
+        class: 'max-w-full h-auto rounded-md my-2'
+      })
+    ]
+  }
+})
+
+const ImagePasteExtension = Extension.create<{
+  uploadImage: (file: File) => Promise<string | null>
+  onImageUploadStart: () => void
+  onImageUploadEnd: () => void
+  onImageUploadError: (message: string) => void
+}>({
+  name: 'imagePaste',
+
+  addOptions() {
+    return {
+      uploadImage: async () => null,
+      onImageUploadStart: () => undefined,
+      onImageUploadEnd: () => undefined,
+      onImageUploadError: () => undefined
+    }
+  },
+
+  addProseMirrorPlugins() {
+    return [
+      new Plugin({
+        props: {
+          handlePaste: (_view, event) => {
+            const imageFiles = Array.from(event.clipboardData?.files || []).filter((file) => file.type.startsWith('image/'))
+
+            if (imageFiles.length === 0) {
+              return false
+            }
+
+            event.preventDefault()
+            this.options.onImageUploadStart()
+
+            void (async () => {
+              try {
+                for (const file of imageFiles) {
+                  const url = await this.options.uploadImage(file)
+                  if (!url) continue
+
+                  this.editor.chain()
+                    .focus()
+                    .insertContent([
+                      { type: 'image', attrs: { src: url, alt: file.name || 'Pasted image' } },
+                      { type: 'paragraph' }
+                    ])
+                    .run()
+                }
+              } catch (error) {
+                const message = error instanceof Error ? error.message : 'Khong the tai anh len'
+                this.options.onImageUploadError(message)
+              } finally {
+                this.options.onImageUploadEnd()
+              }
+            })()
+
+            return true
+          }
+        }
+      })
+    ]
+  }
+})
+
 export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
+  const lastSelectionRef = useRef<{ from: number; to: number } | null>(null)
+  const [isImageUploading, setIsImageUploading] = useState(false)
+
+  const uploadPastedImage = async (file: File) => {
+    const formData = new FormData()
+    formData.append('file', file)
+
+    const response = await fetch('/api/upload', {
+      method: 'POST',
+      body: formData
+    })
+
+    const result = await response.json().catch(() => null)
+    if (!response.ok || !result?.success || !result?.file?.url) {
+      throw new Error(result?.error || 'Khong the tai anh len')
+    }
+
+    return String(result.file.url)
+  }
+
   const editor = useEditor({
-    extensions: [StarterKit, TextStyleMark, ListIndentExtension] as never,
+    extensions: [
+      StarterKit,
+      TextStyleMark,
+      ListIndentExtension,
+      TextAlignExtension,
+      ImageNode,
+      ImagePasteExtension.configure({
+        uploadImage: uploadPastedImage,
+        onImageUploadStart: () => setIsImageUploading(true),
+        onImageUploadEnd: () => setIsImageUploading(false),
+        onImageUploadError: (message: string) => {
+          setIsImageUploading(false)
+          alert(message)
+        }
+      })
+    ] as never,
     content: value || '',
+    onSelectionUpdate({ editor: editorInstance }) {
+      const { from, to } = editorInstance.state.selection
+      lastSelectionRef.current = { from, to }
+    },
     onUpdate({ editor: editorInstance }) {
       onChange(editorInstance.getHTML())
     }
@@ -113,26 +273,43 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
     const hasStyles = Boolean(updated.fontFamily || updated.fontSize)
 
     if (!hasStyles) {
-      editor.chain().focus().unsetMark('textStyle').run()
+      withSelection().unsetMark('textStyle').run()
       return
     }
 
-    editor.chain().focus().setMark('textStyle', updated).run()
+    withSelection().setMark('textStyle', updated).run()
   }
 
   const currentTextStyle = editor?.getAttributes('textStyle') as {
     fontFamily?: string | null
     fontSize?: string | null
   } | null
-  const chain = editor?.chain() as unknown as {
-    focus: () => {
-      toggleBold: () => { run: () => void }
-      toggleItalic: () => { run: () => void }
-      toggleBulletList: () => { run: () => void }
-      toggleOrderedList: () => { run: () => void }
-      liftListItem: (type: string) => { run: () => void }
+
+  const withSelection = () => {
+    if (!editor) return null
+    let chain = editor.chain()
+    if (lastSelectionRef.current) {
+      chain = chain.setTextSelection(lastSelectionRef.current)
     }
-  } | undefined
+    return chain.focus()
+  }
+
+  const handleToggleBold = () => {
+    withSelection()?.toggleBold().run()
+  }
+
+  const handleToggleItalic = () => {
+    withSelection()?.toggleItalic().run()
+  }
+
+  const handleToggleBulletList = () => {
+    withSelection()?.toggleBulletList().run()
+  }
+
+  const handleToggleOrderedList = () => {
+    withSelection()?.toggleOrderedList().run()
+  }
+
   const activeFontSize = currentTextStyle?.fontSize || '12px'
   const isListActive = Boolean(editor?.isActive('bulletList') || editor?.isActive('orderedList'))
   const getIndentTargetType = () => {
@@ -150,23 +327,28 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
 
   const indentTargetType = getIndentTargetType()
   const currentIndent = Number(editor?.getAttributes(indentTargetType)?.indent || 0)
+  const currentTextAlign = (editor?.getAttributes(indentTargetType)?.textAlign as string | undefined) || 'left'
+
+  const handleSetTextAlign = (textAlign: 'left' | 'center' | 'right') => {
+    withSelection()?.updateAttributes(indentTargetType, { textAlign }).run()
+  }
 
   const handleIndent = () => {
     if (!editor) return
     const nextIndent = Math.min(currentIndent + 1, MAX_LIST_INDENT)
-    editor.chain().focus().updateAttributes(indentTargetType, { indent: nextIndent }).run()
+    withSelection()?.updateAttributes(indentTargetType, { indent: nextIndent }).run()
   }
 
   const handleOutdent = () => {
     if (!editor) return
 
     if (currentIndent > 0) {
-      editor.chain().focus().updateAttributes(indentTargetType, { indent: currentIndent - 1 }).run()
+      withSelection()?.updateAttributes(indentTargetType, { indent: currentIndent - 1 }).run()
       return
     }
 
     if (isListActive) {
-      chain?.focus().liftListItem('listItem').run()
+      withSelection()?.liftListItem('listItem').run()
     }
   }
 
@@ -175,7 +357,7 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
       <div className="flex flex-wrap items-center gap-2 border-b bg-gray-50 px-3 py-2">
         <button
           type="button"
-          onClick={() => chain?.focus().toggleBold().run()}
+          onClick={handleToggleBold}
           className={`px-2 py-1 text-sm border rounded ${editor?.isActive('bold') ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
           disabled={!editor}
         >
@@ -183,7 +365,7 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
         </button>
         <button
           type="button"
-          onClick={() => chain?.focus().toggleItalic().run()}
+          onClick={handleToggleItalic}
           className={`px-2 py-1 text-sm border rounded ${editor?.isActive('italic') ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
           disabled={!editor}
         >
@@ -191,7 +373,7 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
         </button>
         <button
           type="button"
-          onClick={() => chain?.focus().toggleBulletList().run()}
+          onClick={handleToggleBulletList}
           className={`px-2 py-1 text-sm border rounded ${editor?.isActive('bulletList') ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
           disabled={!editor}
         >
@@ -199,7 +381,7 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
         </button>
         <button
           type="button"
-          onClick={() => chain?.focus().toggleOrderedList().run()}
+          onClick={handleToggleOrderedList}
           className={`px-2 py-1 text-sm border rounded ${editor?.isActive('orderedList') ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
           disabled={!editor}
         >
@@ -220,6 +402,30 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
           disabled={!editor}
         >
           Indent
+        </button>
+        <button
+          type="button"
+          onClick={() => handleSetTextAlign('left')}
+          className={`px-2 py-1 text-sm border rounded ${currentTextAlign === 'left' ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
+          disabled={!editor}
+        >
+          Left
+        </button>
+        <button
+          type="button"
+          onClick={() => handleSetTextAlign('center')}
+          className={`px-2 py-1 text-sm border rounded ${currentTextAlign === 'center' ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
+          disabled={!editor}
+        >
+          Center
+        </button>
+        <button
+          type="button"
+          onClick={() => handleSetTextAlign('right')}
+          className={`px-2 py-1 text-sm border rounded ${currentTextAlign === 'right' ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
+          disabled={!editor}
+        >
+          Right
         </button>
 
         <select
@@ -250,6 +456,11 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
           ))}
         </select>
       </div>
+      {isImageUploading && (
+        <div className="border-b bg-amber-50 px-3 py-2 text-xs text-amber-700">
+          Dang tai anh da paste...
+        </div>
+      )}
 
       <EditorContent
         editor={editor}
