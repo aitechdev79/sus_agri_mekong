@@ -5,6 +5,7 @@ import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
 import { NewsContent } from '@/types/content';
 import { prisma } from '@/lib/prisma';
+import { renderRichTextContent } from '@/lib/rich-text';
 
 // Use dynamic rendering for Vercel deployment
 export const dynamic = 'force-dynamic';
@@ -106,10 +107,10 @@ export default async function NewsPage({ params }: { params: Promise<{ id: strin
           )}
 
           {/* Article Content */}
-          <div className="prose prose-lg max-w-none mb-8">
+          <div className="prose prose-lg max-w-none mb-8 prose-ul:list-disc prose-ul:pl-6 prose-ol:list-decimal prose-ol:pl-6 prose-li:my-1">
             <div
               className="text-gray-800 leading-relaxed"
-              dangerouslySetInnerHTML={{ __html: content.content.replace(/\n/g, '<br>') }}
+              dangerouslySetInnerHTML={{ __html: renderRichTextContent(content.content) }}
             />
           </div>
 

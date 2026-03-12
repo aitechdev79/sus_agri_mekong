@@ -6,6 +6,7 @@ import Footer from '@/components/Footer';
 import { prisma } from '@/lib/prisma';
 import { PublicContent } from '@/types/content';
 import { isEnglishLocale, pickLocalizedText } from '@/lib/content-locale';
+import { renderRichTextContent } from '@/lib/rich-text';
 
 async function getContent(contentId: string): Promise<PublicContent | null> {
   try {
@@ -119,18 +120,6 @@ function formatEventRange(content: PublicContent, locale: string) {
   });
 
   return `${startLabel} - ${endLabel}`;
-}
-
-function formatContentWithParagraphs(content: string): string {
-  if (content.includes('<p>') || content.includes('<br>') || content.includes('<div>')) {
-    return content;
-  }
-
-  return content
-    .split(/\n\s*\n/)
-    .filter((paragraph) => paragraph.trim().length > 0)
-    .map((paragraph) => `<p>${paragraph.trim().replace(/\n/g, '<br>')}</p>`)
-    .join('\n');
 }
 
 function getBestImageUrl(thumbnailUrl?: string, imageUrl?: string): string | null {
@@ -320,17 +309,17 @@ export default async function LocaleContentDetailPage({
                   <section>
                     <h2 className="mb-4 text-2xl font-semibold text-gray-900">{isEn ? 'Introduction' : 'Giới thiệu'}</h2>
                     <div
-                      className="prose prose-lg max-w-none text-justify prose-headings:text-gray-900 prose-p:leading-relaxed prose-p:text-gray-700"
+                      className="prose prose-lg max-w-none text-justify prose-headings:text-gray-900 prose-p:leading-relaxed prose-p:text-gray-700 prose-ul:list-disc prose-ul:pl-6 prose-ol:list-decimal prose-ol:pl-6 prose-li:my-1"
                       style={{ textAlign: 'justify', textAlignLast: 'left' }}
-                      dangerouslySetInnerHTML={{ __html: formatContentWithParagraphs(localizedBody) }}
+                      dangerouslySetInnerHTML={{ __html: renderRichTextContent(localizedBody) }}
                     />
                   </section>
                 )
               ) : (
                 <div
-                  className="prose prose-lg max-w-none text-justify prose-headings:text-gray-900 prose-p:leading-relaxed prose-p:text-gray-700"
+                  className="prose prose-lg max-w-none text-justify prose-headings:text-gray-900 prose-p:leading-relaxed prose-p:text-gray-700 prose-ul:list-disc prose-ul:pl-6 prose-ol:list-decimal prose-ol:pl-6 prose-li:my-1"
                   style={{ textAlign: 'justify', textAlignLast: 'left' }}
-                  dangerouslySetInnerHTML={{ __html: formatContentWithParagraphs(localizedBody) }}
+                  dangerouslySetInnerHTML={{ __html: renderRichTextContent(localizedBody) }}
                 />
               )}
 

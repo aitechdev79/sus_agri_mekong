@@ -5,6 +5,7 @@ import { Calendar, Eye, User, ArrowLeft } from 'lucide-react';
 import { NewsContent } from '@/types/content';
 import { prisma } from '@/lib/prisma';
 import { pickLocalizedText } from '@/lib/content-locale';
+import { renderRichTextContent } from '@/lib/rich-text';
 
 // Use dynamic rendering for Vercel deployment
 export const dynamic = 'force-dynamic';
@@ -122,10 +123,10 @@ export default async function NewsPage({ params }: { params: Promise<{ locale: s
           )}
 
           {/* Article Content */}
-          <div className="prose prose-lg max-w-none mb-8">
+          <div className="prose prose-lg max-w-none mb-8 prose-ul:list-disc prose-ul:pl-6 prose-ol:list-decimal prose-ol:pl-6 prose-li:my-1">
             <div
               className="text-gray-800 leading-relaxed"
-              dangerouslySetInnerHTML={{ __html: localizedBody.replace(/\n/g, '<br>') }}
+              dangerouslySetInnerHTML={{ __html: renderRichTextContent(localizedBody) }}
             />
           </div>
 
