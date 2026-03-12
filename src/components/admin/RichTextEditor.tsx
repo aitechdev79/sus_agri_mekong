@@ -310,6 +310,7 @@ const ImagePasteExtension = Extension.create<{
             const html = clipboard.getData('text/html') || ''
             const htmlImageSources = Array.from(html.matchAll(/<img[^>]+src=["']([^"']+)["'][^>]*>/gi))
               .map((match) => (match[1] || '').trim())
+              .filter((src) => /^(https?:\/\/|data:image\/|\/uploads\/|\.?\/uploads\/)/i.test(src))
               .filter(Boolean)
 
             if (htmlImageSources.length > 0) {

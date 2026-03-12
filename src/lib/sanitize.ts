@@ -7,6 +7,10 @@ const TEXT_ALIGN_PATTERN = /^(left|right|center|justify)$/
 export function sanitizeRichText(input: string) {
   return sanitizeHtml(input || '', {
     allowedTags: ['p', 'strong', 'em', 'span', 'br', 'img'],
+    allowedSchemes: ['http', 'https', 'data'],
+    allowedSchemesByTag: {
+      img: ['http', 'https', 'data']
+    },
     allowedAttributes: {
       span: ['style'],
       p: ['style'],
