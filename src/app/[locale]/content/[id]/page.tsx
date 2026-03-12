@@ -232,8 +232,14 @@ export default async function LocaleContentDetailPage({
             </div>
 
             {showMainImage && (
-              <div className="relative mx-8 h-64 overflow-hidden rounded-2xl border border-gray-200 md:h-96">
-                <Image src={bestImageUrl as string} alt={localizedTitle} fill className="rounded-2xl object-cover" priority />
+              <div className="relative mx-8 h-64 overflow-hidden border border-gray-200 md:h-96">
+                <Image
+                  src={bestImageUrl as string}
+                  alt={localizedTitle}
+                  fill
+                  className="object-cover"
+                  priority
+                />
               </div>
             )}
             {showMainImage && content.thumbnailUrl && (
@@ -302,7 +308,7 @@ export default async function LocaleContentDetailPage({
 
             {hasPdf && bestImageUrl && content.type !== 'POLICY' && (
               <div className="p-8 pb-0">
-                <div className="relative h-64 overflow-hidden rounded-2xl md:h-96">
+                <div className="relative h-64 overflow-hidden md:h-96">
                   <Image src={bestImageUrl} alt={localizedTitle} fill className="object-cover" />
                 </div>
               </div>
@@ -347,7 +353,7 @@ export default async function LocaleContentDetailPage({
 
             {youtubeVideoId && (
               <div className="p-8 pt-0">
-                <div className="relative w-full overflow-hidden rounded-2xl" style={{ paddingBottom: '56.25%' }}>
+                <div className="relative w-full overflow-hidden" style={{ paddingBottom: '56.25%' }}>
                   <iframe
                     className="absolute left-0 top-0 h-full w-full"
                     src={`https://www.youtube.com/embed/${youtubeVideoId}`}
