@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useEffect, useRef, useState } from 'react'
 import { EditorContent, NodeViewProps, NodeViewWrapper, ReactNodeViewRenderer, useEditor } from '@tiptap/react'
@@ -22,6 +22,7 @@ const FONT_SIZES = ['12px', '14px', '16px', '18px', '20px', '24px']
 const LIST_INDENT_STEP_REM = 1.5
 const MAX_LIST_INDENT = 6
 const MIN_IMAGE_WIDTH_PX = 120
+const MAX_INLINE_FALLBACK_IMAGE_SIZE = 2 * 1024 * 1024
 
 function ResizableImageNodeView({ node, selected, updateAttributes, editor }: NodeViewProps) {
   const containerRef = useRef<HTMLDivElement | null>(null)
@@ -297,7 +298,7 @@ const ImagePasteExtension = Extension.create<{
                       .run()
                   }
                 } catch (error) {
-                  const message = error instanceof Error ? error.message : 'Không thể tải ảnh lên.'
+                  const message = error instanceof Error ? error.message : 'KhÃ´ng thá»ƒ táº£i áº£nh lÃªn.'
                   this.options.onImageUploadError(message)
                 } finally {
                   this.options.onImageUploadEnd()
@@ -353,22 +354,40 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
   const lastSelectionRef = useRef<{ from: number; to: number } | null>(null)
   const [isImageUploading, setIsImageUploading] = useState(false)
 
+  const toDataUrl = (file: File) => new Promise<string>((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => resolve(String(reader.result || ''))
+    reader.onerror = () => reject(new Error('Không thể đọc ảnh từ clipboard.'))
+    reader.readAsDataURL(file)
+  })
+
   const uploadPastedImage = async (file: File) => {
-    const formData = new FormData()
-    formData.append('file', file)
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
 
-    const response = await fetch('/api/upload/file-only', {
-      method: 'POST',
-      body: formData
-    })
+      const response = await fetch('/api/upload/file-only', {
+        method: 'POST',
+        body: formData
+      })
 
-    const result = await response.json().catch(() => null)
-    if (!response.ok || !result?.success || !result?.file?.url) {
+      const result = await response.json().catch(() => null)
+      if (response.ok && result?.success && result?.file?.url) {
+        return String(result.file.url)
+      }
+
+      if (file.type.startsWith('image/') && file.size <= MAX_INLINE_FALLBACK_IMAGE_SIZE) {
+        return await toDataUrl(file)
+      }
+
       const suggestion = result?.suggestion ? ` ${result.suggestion}` : ''
       throw new Error((result?.error || 'Không thể tải ảnh lên.') + suggestion)
+    } catch {
+      if (file.type.startsWith('image/') && file.size <= MAX_INLINE_FALLBACK_IMAGE_SIZE) {
+        return await toDataUrl(file)
+      }
+      throw new Error('Không thể tải ảnh lên. Hãy thử ảnh nhỏ hơn 2MB.')
     }
-
-    return String(result.file.url)
   }
 
   const editor = useEditor({
@@ -613,3 +632,4 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
     </div>
   )
 }
+

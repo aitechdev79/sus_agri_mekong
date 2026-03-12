@@ -3,7 +3,7 @@ import { requireModerator } from '@/lib/auth-middleware'
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
 const ALLOWED_TYPES = [
-  'image/jpeg', 'image/png', 'image/webp', 'image/gif',
+  'image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif', 'image/bmp', 'image/avif',
   'application/pdf',
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
 
     if (!user) {
       return NextResponse.json(
-        { error: 'Cáº§n Ä‘Äƒng nháº­p Ä‘á»ƒ táº£i file' },
+        { error: 'Cần đăng nhập để tải file' },
         { status: 403 }
       )
     }
@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
 
     if (!file) {
       return NextResponse.json(
-        { error: 'KhÃ´ng cÃ³ file Ä‘Æ°á»£c táº£i lÃªn' },
+        { error: 'Không có file được tải lên' },
         { status: 400 }
       )
     }
@@ -35,14 +35,14 @@ export async function POST(request: NextRequest) {
     // Basic validation
     if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
-        { error: `File quÃ¡ lá»›n. KÃ­ch thÆ°á»›c tá»‘i Ä‘a: ${MAX_FILE_SIZE / 1024 / 1024}MB` },
+        { error: `File quá lớn. Kích thước tối đa: ${MAX_FILE_SIZE / 1024 / 1024}MB` },
         { status: 400 }
       )
     }
 
     if (!ALLOWED_TYPES.includes(file.type)) {
       return NextResponse.json(
-        { error: `Loáº¡i file khÃ´ng Ä‘Æ°á»£c há»— trá»£: ${file.type}` },
+        { error: `Loại file không được hỗ trợ: ${file.type}` },
         { status: 400 }
       )
     }
@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('File upload error:', error)
     return NextResponse.json(
-      { error: 'Lá»—i khi táº£i file' },
+      { error: 'Lỗi khi tải file' },
       { status: 500 }
     )
   }
