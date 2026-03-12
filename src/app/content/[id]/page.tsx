@@ -210,12 +210,12 @@ export default async function ContentDetailPage({
             </div>
 
             {showMainImage && (
-              <div className="relative mx-8 h-64 overflow-hidden rounded-2xl md:h-96">
+              <div className="relative mx-8 h-64 overflow-hidden rounded-2xl border border-gray-200 md:h-96">
                 <Image
                   src={bestImageUrl as string}
                   alt={content.title}
                   fill
-                  className="object-cover"
+                  className="rounded-2xl object-cover"
                   priority
                 />
               </div>
@@ -332,10 +332,9 @@ export default async function ContentDetailPage({
 
             {youtubeVideoId && (
               <div className="p-8 pt-0">
-                <h3 className="mb-4 text-xl font-semibold text-gray-900">Video liên quan</h3>
-                <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+                <div className="relative w-full overflow-hidden rounded-2xl" style={{ paddingBottom: '56.25%' }}>
                   <iframe
-                    className="absolute left-0 top-0 h-full w-full rounded-lg"
+                    className="absolute left-0 top-0 h-full w-full"
                     src={`https://www.youtube.com/embed/${youtubeVideoId}`}
                     title="YouTube video player"
                     frameBorder="0"

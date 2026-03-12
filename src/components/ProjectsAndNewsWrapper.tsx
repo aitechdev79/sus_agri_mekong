@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import NewsSection from '@/components/NewsSection';
 import HoatDongSection from '@/components/HoatDongSection';
 
