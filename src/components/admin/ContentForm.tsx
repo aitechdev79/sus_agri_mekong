@@ -304,7 +304,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
 
     if (name === 'type') {
       const nextType = value
-      setFormData((current) => ({
+      setFormData((current: typeof formData) => ({
         ...current,
         type: nextType,
         sectionKey: isSectionCompatibleWithType(current.sectionKey, nextType) ? current.sectionKey : ''
@@ -314,9 +314,9 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
 
     if (type === 'checkbox') {
       const checked = (e.target as HTMLInputElement).checked
-      setFormData((current) => ({ ...current, [name]: checked }))
+      setFormData((current: typeof formData) => ({ ...current, [name]: checked }))
     } else {
-      setFormData((current) => ({ ...current, [name]: value }))
+      setFormData((current: typeof formData) => ({ ...current, [name]: value }))
     }
   }
   const handleQuickCategoryNameChange = (value: string) => {
