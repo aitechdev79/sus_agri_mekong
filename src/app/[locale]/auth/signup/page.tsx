@@ -21,6 +21,7 @@ export default function SignUpPage() {
     password: '',
     confirmPassword: '',
     province: '',
+    businessSector: '',
   })
   const [accountType, setAccountType] = useState<AccountType>('USER')
   const [isLoading, setIsLoading] = useState(false)
@@ -46,7 +47,7 @@ export default function SignUpPage() {
             userLabel: 'Personal',
             businessLabel: 'Business',
             fullName: 'Full name',
-            businessName: 'Business name',
+            businessSector: 'Business sector',
             email: 'Email',
             phone: 'Phone',
             province: 'Province/City',
@@ -58,7 +59,8 @@ export default function SignUpPage() {
             signingUp: 'Signing up...',
             hasAccount: 'Already have an account?',
             signIn: 'Sign in',
-            successBusiness: 'Business account created. Please sign in to complete your company profile.',
+            businessSectorRequired: 'Business sector is required for business accounts.',
+            successBusiness: 'Business account created. Please sign in.',
             successUser: 'Registration successful. Please sign in.',
           }
         : {
@@ -68,7 +70,7 @@ export default function SignUpPage() {
             userLabel: 'Cá nhân',
             businessLabel: 'Doanh nghiệp',
             fullName: 'Họ và tên',
-            businessName: 'Tên doanh nghiệp',
+            businessSector: 'Lĩnh vực kinh doanh',
             email: 'Email',
             phone: 'Số điện thoại',
             province: 'Tỉnh/Thành phố',
@@ -80,7 +82,8 @@ export default function SignUpPage() {
             signingUp: 'Đang đăng ký...',
             hasAccount: 'Đã có tài khoản?',
             signIn: 'Đăng nhập',
-            successBusiness: 'Đăng ký tài khoản doanh nghiệp thành công. Vui lòng đăng nhập để hoàn thiện hồ sơ.',
+            businessSectorRequired: 'Vui lòng nhập lĩnh vực kinh doanh cho tài khoản doanh nghiệp.',
+            successBusiness: 'Đăng ký tài khoản doanh nghiệp thành công. Vui lòng đăng nhập.',
             successUser: 'Đăng ký thành công. Vui lòng đăng nhập.',
           },
     [isEn],
@@ -140,6 +143,11 @@ export default function SignUpPage() {
       setIsLoading(false)
       return
     }
+    if (accountType === 'BUSINESS' && !formData.businessSector.trim()) {
+      setError(text.businessSectorRequired)
+      setIsLoading(false)
+      return
+    }
 
     try {
       const response = await fetch('/api/auth/register', {
@@ -151,6 +159,7 @@ export default function SignUpPage() {
           phone: formData.phone,
           password: formData.password,
           province: formData.province,
+          organization: accountType === 'BUSINESS' ? formData.businessSector.trim() : null,
           role: accountType,
         }),
       })
@@ -219,7 +228,7 @@ export default function SignUpPage() {
                   required
                   value={formData.name}
                   onChange={handleInputChange}
-                  placeholder={accountType === 'BUSINESS' ? text.businessName : text.fullName}
+                  placeholder={text.fullName}
                   className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <input
@@ -252,6 +261,19 @@ export default function SignUpPage() {
                   ))}
                 </select>
               </div>
+
+              {accountType === 'BUSINESS' && (
+                <div>
+                  <input
+                    name="businessSector"
+                    required
+                    value={formData.businessSector}
+                    onChange={handleInputChange}
+                    placeholder={text.businessSector}
+                    className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+              )}
 
               <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
                 <input

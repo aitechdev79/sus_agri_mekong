@@ -5,6 +5,15 @@ import { prisma } from '@/lib/prisma'
 export async function POST(request: NextRequest) {
   try {
     const { name, email, phone, password, province, organization, role } = await request.json()
+    const normalizedRole = String(role || '').toUpperCase() === 'BUSINESS' ? 'BUSINESS' : 'USER'
+    const normalizedOrganization = String(organization || '').trim() || null
+
+    if (normalizedRole === 'BUSINESS' && !normalizedOrganization) {
+      return NextResponse.json(
+        { message: 'Vui lòng nhập lĩnh vực kinh doanh cho tài khoản doanh nghiệp.' },
+        { status: 400 }
+      )
+    }
 
     const existingUser = await prisma.user.findUnique({
       where: { email }
@@ -32,9 +41,6 @@ export async function POST(request: NextRequest) {
 
     const hashedPassword = await bcrypt.hash(password, 12)
 
-    const requestedRole = String(role || '').toUpperCase()
-    const normalizedRole = requestedRole === 'BUSINESS' ? 'BUSINESS' : 'USER'
-
     await prisma.user.create({
       data: {
         name,
@@ -42,7 +48,7 @@ export async function POST(request: NextRequest) {
         phone: phone || null,
         password: hashedPassword,
         province,
-        organization,
+        organization: normalizedOrganization,
         role: normalizedRole,
         isVerified: true,
       }

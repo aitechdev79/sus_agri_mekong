@@ -41,8 +41,6 @@ export default function SignInPage() {
         let nextPath = `/${locale}`
         if (role === 'ADMIN' || role === 'MODERATOR') {
           nextPath = `/${locale}/admin`
-        } else if (role === 'BUSINESS') {
-          nextPath = `/${locale}/business/profile?init=1`
         }
 
         window.location.href = nextPath
