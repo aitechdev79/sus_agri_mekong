@@ -288,7 +288,7 @@ export default async function ContentDetailPage({
                   <section>
                     <h2 className="mb-4 text-2xl font-semibold text-gray-900">Giới thiệu</h2>
                     <div
-                      className="prose prose-lg max-w-none text-justify prose-headings:text-gray-900 prose-p:leading-relaxed prose-p:text-gray-700 [&_ul]:list-disc [&_ul]:list-inside [&_ul]:pl-2 [&_ol]:list-decimal [&_ol]:list-inside [&_ol]:pl-2 [&_li]:my-1"
+                      className="prose prose-lg max-w-none text-justify prose-headings:text-gray-900 prose-p:leading-relaxed prose-p:text-gray-700 [&_ul]:list-disc [&_ul]:list-inside [&_ul]:pl-2 [&_ol]:list-decimal [&_ol]:list-inside [&_ol]:pl-2 [&_li]:my-1 [&_li>p]:inline [&_li>p]:m-0"
                       style={{ textAlign: 'justify', textAlignLast: 'left' }}
                       dangerouslySetInnerHTML={{ __html: renderRichTextContent(content.content) }}
                     />
@@ -296,7 +296,7 @@ export default async function ContentDetailPage({
                 )
               ) : (
                 <div
-                  className="prose prose-lg max-w-none text-justify prose-headings:text-gray-900 prose-p:leading-relaxed prose-p:text-gray-700 [&_ul]:list-disc [&_ul]:list-inside [&_ul]:pl-2 [&_ol]:list-decimal [&_ol]:list-inside [&_ol]:pl-2 [&_li]:my-1"
+                  className="prose prose-lg max-w-none text-justify prose-headings:text-gray-900 prose-p:leading-relaxed prose-p:text-gray-700 [&_ul]:list-disc [&_ul]:list-inside [&_ul]:pl-2 [&_ol]:list-decimal [&_ol]:list-inside [&_ol]:pl-2 [&_li]:my-1 [&_li>p]:inline [&_li>p]:m-0"
                   style={{ textAlign: 'justify', textAlignLast: 'left' }}
                   dangerouslySetInnerHTML={{ __html: renderRichTextContent(content.content) }}
                 />
