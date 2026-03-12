@@ -153,6 +153,9 @@ export default function TatCaSuKienPage() {
             {items.map((item) => {
               const imageSrc = item.thumbnailUrl || item.imageUrl || '';
               const localizedTitle = pickLocalizedText(locale, item.title, item.titleEn);
+              const eventStartTime = item.eventStartAt ? new Date(item.eventStartAt).getTime() : Number.NaN;
+              const hasValidEventStart = Number.isFinite(eventStartTime);
+              const isUpcoming = hasValidEventStart ? eventStartTime >= Date.now() : false;
               return (
                 <Link key={item.id} href={`${contentDetailPrefix}/${item.id}`} className="group block overflow-hidden bg-white p-5 shadow-sm transition-shadow hover:shadow-md">
                   <div className="flex flex-col gap-5 md:flex-row">
@@ -171,6 +174,16 @@ export default function TatCaSuKienPage() {
                     </div>
 
                     <div className="flex flex-1 flex-col justify-center">
+                      {hasValidEventStart && (
+                        <div className="mb-3">
+                          <span
+                            className="inline-flex px-3 py-1 text-xs font-bold font-montserrat text-white"
+                            style={{ backgroundColor: isUpcoming ? '#0A7029' : '#F97316' }}
+                          >
+                            {isUpcoming ? (isEn ? 'Upcoming' : 'Sắp diễn ra') : (isEn ? 'Completed' : 'Đã diễn ra')}
+                          </span>
+                        </div>
+                      )}
                       <h2 className="mb-4 line-clamp-2 text-xl font-bold text-gray-900">{localizedTitle}</h2>
 
                       <div className="space-y-3 text-sm text-gray-600">
