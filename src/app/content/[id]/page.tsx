@@ -208,7 +208,7 @@ export default async function ContentDetailPage({
               )}
             </div>
 
-            <div className="border-t border-gray-200" />
+            <div className="-mt-4 mb-4 mx-8 border-t border-gray-200" />
             {showMainImage && (
               <div className="relative h-64 overflow-hidden md:h-96">
                 <Image
