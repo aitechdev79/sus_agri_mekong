@@ -232,7 +232,7 @@ export default async function LocaleContentDetailPage({
             </div>
 
             {showMainImage && (
-              <div className="relative h-64 overflow-hidden md:h-96">
+              <div className="relative mx-8 h-64 overflow-hidden rounded-2xl md:h-96">
                 <Image src={bestImageUrl as string} alt={localizedTitle} fill className="object-cover" priority />
               </div>
             )}
