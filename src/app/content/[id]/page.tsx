@@ -56,14 +56,14 @@ function extractYouTubeVideoId(url: string): string | null {
 
 function getContentTypeLabel(type: string): string {
   const typeMap: Record<string, string> = {
-    ARTICLE: 'BÃ i viáº¿t',
-    DOCUMENT: 'TÃ i liá»‡u',
-    STORY: 'Äiá»ƒn hÃ¬nh',
-    PROJECT_ACTIVITY: 'Hoáº¡t Ä‘á»™ng dá»± Ã¡n',
-    GUIDE: 'HÆ°á»›ng dáº«n',
-    POLICY: 'ChÃ­nh sÃ¡ch',
-    NEWS: 'Tin tá»©c',
-    EVENT: 'Sá»± kiá»‡n',
+    ARTICLE: 'Bài viết',
+    DOCUMENT: 'Tài liệu',
+    STORY: 'Điển hình',
+    PROJECT_ACTIVITY: 'Hoạt động dự án',
+    GUIDE: 'Hướng dẫn',
+    POLICY: 'Chính sách',
+    NEWS: 'Tin tức',
+    EVENT: 'Sự kiện',
   };
 
   return typeMap[type] || type;
@@ -132,9 +132,9 @@ function getBestImageUrl(thumbnailUrl?: string, imageUrl?: string): string | nul
 }
 
 function getExternalLabel(type: string) {
-  if (type === 'EVENT') return 'ÄÄƒng kÃ½ táº¡i:';
-  if (type === 'POLICY') return 'Link tham kháº£o:';
-  return 'Tham kháº£o thÃªm:';
+  if (type === 'EVENT') return 'Đăng ký tại:';
+  if (type === 'POLICY') return 'Link tham khảo:';
+  return 'Tham khảo thêm:';
 }
 
 export default async function ContentDetailPage({
@@ -184,31 +184,31 @@ export default async function ContentDetailPage({
                 </p>
               )}
 
-              <div className="mb-6 flex items-center space-x-6 text-sm text-gray-500">
+              <div className="mb-2 flex items-center space-x-6 text-sm text-gray-500">
                 {content.type === 'EVENT' && eventRange && (
                   <div className="flex items-center">
                     <Calendar className="mr-2 h-4 w-4" />
-                    <span>Thá»i gian: {eventRange}</span>
+                    <span>Thời gian: {eventRange}</span>
                   </div>
                 )}
                 <div className="flex items-center">
                   <Calendar className="mr-2 h-4 w-4" />
-                  <span>NgÃ y Ä‘Äƒng: {formatDate(content.createdAt)}</span>
+                  <span>Ngày đăng: {formatDate(content.createdAt)}</span>
                 </div>
                 <div className="flex items-center">
                   <Eye className="mr-2 h-4 w-4" />
-                  <span>{content.viewCount.toLocaleString('vi-VN')} lÆ°á»£t xem</span>
+                  <span>{content.viewCount.toLocaleString('vi-VN')} lượt xem</span>
                 </div>
               </div>
 
               {content.type === 'EVENT' && content.eventLocation && (
-                <div className="mb-6 text-sm text-gray-500">
-                  Äá»‹a Ä‘iá»ƒm: {content.eventLocation}
+                <div className="mb-2 text-sm text-gray-500">
+                  Địa điểm: {content.eventLocation}
                 </div>
               )}
+              <div className="mt-2 -mb-4 border-t border-gray-200" />
             </div>
 
-            <div className="-mt-4 mb-4 mx-8 border-t border-gray-200" />
             {showMainImage && (
               <div className="relative h-64 overflow-hidden md:h-96">
                 <Image
@@ -220,15 +220,18 @@ export default async function ContentDetailPage({
                 />
               </div>
             )}
+            {showMainImage && content.thumbnailUrl && (
+              <div className="mx-8 mt-3 border-t-[1.5px] border-[#0A7029]" />
+            )}
 
             {hasPdf && pdfUrl && (
               <div className="p-8 pb-0">
                 <section className="rounded-3xl border border-gray-200 bg-gray-100 p-4 md:p-6">
                   <div className="sticky top-4 z-10 mb-4 flex flex-col gap-4 rounded-2xl border border-gray-200 bg-white/95 p-4 backdrop-blur sm:flex-row sm:items-center sm:justify-between">
                     <div>
-                      <h2 className="text-lg font-semibold text-gray-900">TÃ i liá»‡u PDF</h2>
+                      <h2 className="text-lg font-semibold text-gray-900">Tài liệu PDF</h2>
                       <p className="text-sm text-gray-500">
-                        DÃ¹ng nÃºt +/- cá»§a trÃ¬nh duyá»‡t PDF Ä‘á»ƒ phÃ³ng to.
+                        Dùng nút +/- của trình duyệt PDF để phóng to.
                       </p>
                     </div>
 
@@ -240,7 +243,7 @@ export default async function ContentDetailPage({
                         className="inline-flex items-center justify-center rounded-full bg-gray-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-gray-800"
                       >
                         <ExternalLink className="mr-2 h-4 w-4" />
-                        Má»Ÿ toÃ n mÃ n hÃ¬nh
+                        Mở toàn màn hình
                       </a>
                       <a
                         href={pdfUrl}
@@ -248,7 +251,7 @@ export default async function ContentDetailPage({
                         className="inline-flex items-center justify-center rounded-full border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:border-gray-400 hover:text-gray-900"
                       >
                         <Download className="mr-2 h-4 w-4" />
-                        Táº£i PDF
+                        Tải PDF
                       </a>
                     </div>
                   </div>
@@ -261,14 +264,14 @@ export default async function ContentDetailPage({
                       aria-label={`PDF viewer for ${content.title}`}
                     >
                       <div className="p-6 text-sm text-gray-600">
-                        <p>TrÃ¬nh duyá»‡t cá»§a báº¡n khÃ´ng há»— trá»£ hiá»ƒn thá»‹ PDF trá»±c tiáº¿p.</p>
+                        <p>Trình duyệt của bạn không hỗ trợ hiển thị PDF trực tiếp.</p>
                         <a
                           href={pdfUrl}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="mt-3 inline-flex items-center font-medium text-gray-900 underline"
                         >
-                          Má»Ÿ hoáº·c táº£i PDF
+                          Mở hoặc tải PDF
                         </a>
                       </div>
                     </object>
@@ -294,7 +297,7 @@ export default async function ContentDetailPage({
               {hasPdf ? (
                 hasRichTextContent && (
                   <section>
-                    <h2 className="mb-4 text-2xl font-semibold text-gray-900">Giá»›i thiá»‡u</h2>
+                    <h2 className="mb-4 text-2xl font-semibold text-gray-900">Giới thiệu</h2>
                     <div
                       className="prose prose-lg max-w-none text-justify prose-headings:text-gray-900 prose-p:leading-relaxed prose-p:text-gray-700"
                       style={{ textAlign: 'justify', textAlignLast: 'left' }}
@@ -329,7 +332,7 @@ export default async function ContentDetailPage({
 
             {youtubeVideoId && (
               <div className="p-8 pt-0">
-                <h3 className="mb-4 text-xl font-semibold text-gray-900">Video liÃªn quan</h3>
+                <h3 className="mb-4 text-xl font-semibold text-gray-900">Video liên quan</h3>
                 <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
                   <iframe
                     className="absolute left-0 top-0 h-full w-full rounded-lg"
