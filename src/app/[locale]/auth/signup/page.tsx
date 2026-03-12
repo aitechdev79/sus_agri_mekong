@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
@@ -47,6 +47,7 @@ export default function SignUpPage() {
             userLabel: 'Personal',
             businessLabel: 'Business',
             fullName: 'Full name',
+            businessName: 'Business name',
             businessSector: 'Business sector',
             email: 'Email',
             phone: 'Phone',
@@ -70,6 +71,7 @@ export default function SignUpPage() {
             userLabel: 'Cá nhân',
             businessLabel: 'Doanh nghiệp',
             fullName: 'Họ và tên',
+            businessName: 'Tên doanh nghiệp',
             businessSector: 'Lĩnh vực kinh doanh',
             email: 'Email',
             phone: 'Số điện thoại',
@@ -143,6 +145,7 @@ export default function SignUpPage() {
       setIsLoading(false)
       return
     }
+
     if (accountType === 'BUSINESS' && !formData.businessSector.trim()) {
       setError(text.businessSectorRequired)
       setIsLoading(false)
@@ -228,7 +231,7 @@ export default function SignUpPage() {
                   required
                   value={formData.name}
                   onChange={handleInputChange}
-                  placeholder={text.fullName}
+                  placeholder={accountType === 'BUSINESS' ? text.businessName : text.fullName}
                   className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <input

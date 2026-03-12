@@ -396,7 +396,7 @@ export function UserManager({ backHref }: UserManagerProps) {
   const uploadPromoteLogo = async (file: File | null) => {
     if (!file || !promoteForm) return
     if (!file.type.startsWith('image/')) {
-      setPromoteError('Vui long chon file anh hop le.')
+      setPromoteError('Vui lòng chọn file ảnh hợp lệ.')
       return
     }
 
@@ -413,12 +413,12 @@ export function UserManager({ backHref }: UserManagerProps) {
       })
       const uploadData = await uploadResponse.json()
       if (!uploadResponse.ok || !uploadData?.file?.url) {
-        throw new Error(uploadData?.error || 'Khong the tai logo len')
+        throw new Error(uploadData?.error || 'Không thể tải logo lên')
       }
 
       updatePromoteField('logoUrl', String(uploadData.file.url))
     } catch (error) {
-      setPromoteError(error instanceof Error ? error.message : 'Khong the tai logo len')
+      setPromoteError(error instanceof Error ? error.message : 'Không thể tải logo lên')
     } finally {
       setUploadingPartnerLogo(false)
     }
@@ -427,13 +427,13 @@ export function UserManager({ backHref }: UserManagerProps) {
   const submitPromoteToPartner = async () => {
     if (!promoteForm) return
     if (!promoteForm.companyName.trim()) {
-      setPromoteError('Vui long nhap ten doanh nghiep.')
+      setPromoteError('Vui lòng nhập tên doanh nghiệp.')
       return
     }
 
     const parsedOrder = Number(promoteForm.displayOrder)
     if (!Number.isFinite(parsedOrder)) {
-      setPromoteError('Thu tu hien thi khong hop le.')
+      setPromoteError('Thứ tự hiển thị không hợp lệ.')
       return
     }
 
@@ -451,21 +451,19 @@ export function UserManager({ backHref }: UserManagerProps) {
           province: promoteForm.province.trim() || null,
           logoUrl: promoteForm.logoUrl.trim() || null,
           displayOrder: Math.trunc(parsedOrder),
-          status: 'APPROVED',
-          isPublic: true,
           isVerified: true,
         }),
       })
       const data = await response.json()
       if (!response.ok) {
-        throw new Error(data.error || 'Khong the chuyen thanh doi tac')
+        throw new Error(data.error || 'Không thể chuyển thành đối tác')
       }
 
       setPartnerOwnerIds((prev) => (prev.includes(promoteForm.ownerUserId) ? prev : [...prev, promoteForm.ownerUserId]))
       setEditSuccess('Da chuyen user BUSINESS thanh doi tac.')
       closePromoteModal()
     } catch (error) {
-      setPromoteError(error instanceof Error ? error.message : 'Khong the chuyen thanh doi tac')
+      setPromoteError(error instanceof Error ? error.message : 'Không thể chuyển thành đối tác')
     } finally {
       setPromoting(false)
     }
@@ -615,7 +613,7 @@ export function UserManager({ backHref }: UserManagerProps) {
                           className="inline-flex items-center rounded-md border border-emerald-300 bg-emerald-50 px-3 py-1.5 text-sm font-medium text-emerald-700 hover:bg-emerald-100 disabled:cursor-not-allowed disabled:opacity-60"
                         >
                           <UserCheck className="mr-2 h-4 w-4" />
-                          {partnerOwnerIds.includes(user.id) ? 'Da la doi tac' : 'Len doi tac'}
+                          {partnerOwnerIds.includes(user.id) ? 'Đã là đối tác' : 'Lên đối tác'}
                         </button>
                       )}
                       <button
@@ -782,12 +780,12 @@ export function UserManager({ backHref }: UserManagerProps) {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-4">
           <div className="w-full max-w-xl rounded-xl bg-white shadow-xl">
             <div className="flex items-center justify-between border-b px-6 py-4">
-              <h3 className="text-lg font-semibold text-gray-900">Chuyen user BUSINESS thanh doi tac</h3>
+              <h3 className="text-lg font-semibold text-gray-900">Chuyển user BUSINESS thành đối tác</h3>
               <button
                 type="button"
                 onClick={closePromoteModal}
                 className="rounded-md p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-                aria-label="Dong"
+                aria-label="Đóng"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -795,7 +793,7 @@ export function UserManager({ backHref }: UserManagerProps) {
 
             <div className="space-y-4 px-6 py-5">
               <div>
-                <label className="mb-1 block text-sm font-medium text-gray-700">Ten doanh nghiep</label>
+                <label className="mb-1 block text-sm font-medium text-gray-700">Tên doanh nghiệp</label>
                 <input
                   type="text"
                   value={promoteForm.companyName}
@@ -806,7 +804,7 @@ export function UserManager({ backHref }: UserManagerProps) {
 
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-gray-700">Email lien he</label>
+                  <label className="mb-1 block text-sm font-medium text-gray-700">Email liên hệ</label>
                   <input
                     type="email"
                     value={promoteForm.contactEmail}
@@ -815,7 +813,7 @@ export function UserManager({ backHref }: UserManagerProps) {
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-gray-700">Tinh/Thanh</label>
+                  <label className="mb-1 block text-sm font-medium text-gray-700">Tỉnh/Thành</label>
                   <input
                     type="text"
                     value={promoteForm.province}
@@ -827,7 +825,7 @@ export function UserManager({ backHref }: UserManagerProps) {
 
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-gray-700">Thu tu hien thi</label>
+                  <label className="mb-1 block text-sm font-medium text-gray-700">Thứ tự hiển thị</label>
                   <input
                     type="number"
                     value={promoteForm.displayOrder}
@@ -836,10 +834,10 @@ export function UserManager({ backHref }: UserManagerProps) {
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-gray-700">Logo doanh nghiep</label>
+                  <label className="mb-1 block text-sm font-medium text-gray-700">Logo doanh nghiệp</label>
                   <div className="flex items-center gap-2">
                     <label className="inline-flex cursor-pointer items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
-                      {uploadingPartnerLogo ? 'Dang tai...' : 'Upload logo'}
+                      {uploadingPartnerLogo ? 'Đang tải...' : 'Upload logo'}
                       <input
                         type="file"
                         accept="image/*"
@@ -873,7 +871,7 @@ export function UserManager({ backHref }: UserManagerProps) {
                 disabled={promoting || uploadingPartnerLogo}
                 className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                Huy
+                Hủy
               </button>
               <button
                 type="button"
@@ -882,7 +880,7 @@ export function UserManager({ backHref }: UserManagerProps) {
                 className="inline-flex items-center rounded-md bg-emerald-600 px-3 py-2 text-sm font-medium text-white hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 <UserCheck className="mr-2 h-4 w-4" />
-                {promoting ? 'Dang xu ly...' : 'Chuyen thanh doi tac'}
+                {promoting ? 'Đang xử lý...' : 'Chuyển thành đối tác'}
               </button>
             </div>
           </div>
