@@ -1,4 +1,4 @@
-import Image from 'next/image';
+﻿import Image from 'next/image';
 import { Calendar, Download, Eye, ExternalLink } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import NavigationBar from '@/components/NavigationBar';
@@ -69,14 +69,14 @@ function getContentTypeLabel(type: string, locale: string): string {
         EVENT: 'Event'
       }
     : {
-        ARTICLE: 'Bài viết',
-        DOCUMENT: 'Tài liệu',
-        STORY: 'Điển hình',
-        PROJECT_ACTIVITY: 'Hoạt động dự án',
-        GUIDE: 'Hướng dẫn',
-        POLICY: 'Chính sách',
-        NEWS: 'Tin tức',
-        EVENT: 'Sự kiện'
+        ARTICLE: 'BÃ i viáº¿t',
+        DOCUMENT: 'TÃ i liá»‡u',
+        STORY: 'Äiá»ƒn hÃ¬nh',
+        PROJECT_ACTIVITY: 'Hoáº¡t Ä‘á»™ng dá»± Ã¡n',
+        GUIDE: 'HÆ°á»›ng dáº«n',
+        POLICY: 'ChÃ­nh sÃ¡ch',
+        NEWS: 'Tin tá»©c',
+        EVENT: 'Sá»± kiá»‡n'
       };
 
   return typeMap[type] || type;
@@ -152,9 +152,9 @@ function getExternalLabel(type: string, locale: string) {
     return 'Read more:';
   }
 
-  if (type === 'EVENT') return 'Đăng ký tại:';
-  if (type === 'POLICY') return 'Link tham khảo:';
-  return 'Tham khảo thêm:';
+  if (type === 'EVENT') return 'ÄÄƒng kÃ½ táº¡i:';
+  if (type === 'POLICY') return 'Link tham kháº£o:';
+  return 'Tham kháº£o thÃªm:';
 }
 
 export default async function LocaleContentDetailPage({
@@ -208,28 +208,29 @@ export default async function LocaleContentDetailPage({
                 {content.type === 'EVENT' && eventRange && (
                   <div className="flex items-center">
                     <Calendar className="mr-2 h-4 w-4" />
-                    <span>{isEn ? `Schedule: ${eventRange}` : `Thời gian: ${eventRange}`}</span>
+                    <span>{isEn ? `Schedule: ${eventRange}` : `Thá»i gian: ${eventRange}`}</span>
                   </div>
                 )}
                 <div className="flex items-center">
                   <Calendar className="mr-2 h-4 w-4" />
-                  <span>{isEn ? `Published: ${formatDate(content.createdAt, locale)}` : `Ngày đăng: ${formatDate(content.createdAt, locale)}`}</span>
+                  <span>{isEn ? `Published: ${formatDate(content.createdAt, locale)}` : `NgÃ y Ä‘Äƒng: ${formatDate(content.createdAt, locale)}`}</span>
                 </div>
                 <div className="flex items-center">
                   <Eye className="mr-2 h-4 w-4" />
                   <span>
-                    {content.viewCount.toLocaleString(isEn ? 'en-US' : 'vi-VN')} {isEn ? 'views' : 'lượt xem'}
+                    {content.viewCount.toLocaleString(isEn ? 'en-US' : 'vi-VN')} {isEn ? 'views' : 'lÆ°á»£t xem'}
                   </span>
                 </div>
               </div>
 
               {content.type === 'EVENT' && content.eventLocation && (
                 <div className="mb-6 text-sm text-gray-500">
-                  {isEn ? 'Location:' : 'Địa điểm:'} {content.eventLocation}
+                  {isEn ? 'Location:' : 'Äá»‹a Ä‘iá»ƒm:'} {content.eventLocation}
                 </div>
               )}
             </div>
 
+            <div className="border-t border-gray-200" />
             {showMainImage && (
               <div className="relative h-64 overflow-hidden md:h-96">
                 <Image src={bestImageUrl as string} alt={localizedTitle} fill className="object-cover" priority />
@@ -241,9 +242,9 @@ export default async function LocaleContentDetailPage({
                 <section className="rounded-3xl border border-gray-200 bg-gray-100 p-4 md:p-6">
                   <div className="sticky top-4 z-10 mb-4 flex flex-col gap-4 rounded-2xl border border-gray-200 bg-white/95 p-4 backdrop-blur sm:flex-row sm:items-center sm:justify-between">
                     <div>
-                      <h2 className="text-lg font-semibold text-gray-900">{isEn ? 'PDF Document' : 'Tài liệu PDF'}</h2>
+                      <h2 className="text-lg font-semibold text-gray-900">{isEn ? 'PDF Document' : 'TÃ i liá»‡u PDF'}</h2>
                       <p className="text-sm text-gray-500">
-                        {isEn ? 'Use the browser PDF zoom controls to enlarge the document.' : 'Dùng nút +/- của trình duyệt PDF để phóng to.'}
+                        {isEn ? 'Use the browser PDF zoom controls to enlarge the document.' : 'DÃ¹ng nÃºt +/- cá»§a trÃ¬nh duyá»‡t PDF Ä‘á»ƒ phÃ³ng to.'}
                       </p>
                     </div>
 
@@ -255,7 +256,7 @@ export default async function LocaleContentDetailPage({
                         className="inline-flex items-center justify-center rounded-full bg-gray-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-gray-800"
                       >
                         <ExternalLink className="mr-2 h-4 w-4" />
-                        {isEn ? 'Open full screen' : 'Mở toàn màn hình'}
+                        {isEn ? 'Open full screen' : 'Má»Ÿ toÃ n mÃ n hÃ¬nh'}
                       </a>
                       <a
                         href={pdfUrl}
@@ -263,7 +264,7 @@ export default async function LocaleContentDetailPage({
                         className="inline-flex items-center justify-center rounded-full border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:border-gray-400 hover:text-gray-900"
                       >
                         <Download className="mr-2 h-4 w-4" />
-                        {isEn ? 'Download PDF' : 'Tải PDF'}
+                        {isEn ? 'Download PDF' : 'Táº£i PDF'}
                       </a>
                     </div>
                   </div>
@@ -279,7 +280,7 @@ export default async function LocaleContentDetailPage({
                         <p>
                           {isEn
                             ? 'Your browser does not support inline PDF viewing.'
-                            : 'Trình duyệt của bạn không hỗ trợ hiển thị PDF trực tiếp.'}
+                            : 'TrÃ¬nh duyá»‡t cá»§a báº¡n khÃ´ng há»— trá»£ hiá»ƒn thá»‹ PDF trá»±c tiáº¿p.'}
                         </p>
                         <a
                           href={pdfUrl}
@@ -287,7 +288,7 @@ export default async function LocaleContentDetailPage({
                           rel="noopener noreferrer"
                           className="mt-3 inline-flex items-center font-medium text-gray-900 underline"
                         >
-                          {isEn ? 'Open or download PDF' : 'Mở hoặc tải PDF'}
+                          {isEn ? 'Open or download PDF' : 'Má»Ÿ hoáº·c táº£i PDF'}
                         </a>
                       </div>
                     </object>
@@ -308,7 +309,7 @@ export default async function LocaleContentDetailPage({
               {hasPdf ? (
                 hasRichTextContent && (
                   <section>
-                    <h2 className="mb-4 text-2xl font-semibold text-gray-900">{isEn ? 'Introduction' : 'Giới thiệu'}</h2>
+                    <h2 className="mb-4 text-2xl font-semibold text-gray-900">{isEn ? 'Introduction' : 'Giá»›i thiá»‡u'}</h2>
                     <div
                       className="prose prose-lg max-w-none text-justify prose-headings:text-gray-900 prose-p:leading-relaxed prose-p:text-gray-700"
                       style={{ textAlign: 'justify', textAlignLast: 'left' }}
@@ -343,7 +344,7 @@ export default async function LocaleContentDetailPage({
 
             {youtubeVideoId && (
               <div className="p-8 pt-0">
-                <h3 className="mb-4 text-xl font-semibold text-gray-900">{isEn ? 'Related Video' : 'Video liên quan'}</h3>
+                <h3 className="mb-4 text-xl font-semibold text-gray-900">{isEn ? 'Related Video' : 'Video liÃªn quan'}</h3>
                 <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
                   <iframe
                     className="absolute left-0 top-0 h-full w-full rounded-lg"
@@ -364,3 +365,4 @@ export default async function LocaleContentDetailPage({
     </div>
   );
 }
+
