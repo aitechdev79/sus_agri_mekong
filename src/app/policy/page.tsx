@@ -292,10 +292,10 @@ export default function PolicyPage() {
             ) : (
               <div>
                 <div className="overflow-hidden border border-gray-200 bg-white">
-                  <div className="grid grid-cols-[80px_minmax(0,1.1fr)_minmax(0,0.9fr)] border-b border-gray-200 bg-gray-50 font-montserrat text-sm font-semibold uppercase tracking-wide text-gray-600">
+                  <div className="grid grid-cols-[80px_minmax(0,0.55fr)_minmax(0,1.45fr)] border-b border-gray-200 bg-gray-50 font-montserrat text-sm font-semibold uppercase tracking-wide text-gray-600">
                     <div className="p-4 text-center">STT</div>
                     <div className="border-l border-gray-200 p-4">{isEn ? 'Title' : 'Tiêu đề'}</div>
-                    <div className="border-l border-gray-200 p-4">{isEn ? 'Short description' : 'Mô tả ngắn'}</div>
+                    <div className="border-l border-gray-200 p-4">{isEn ? 'Description' : 'Mô tả'}</div>
                   </div>
 
                   {policies.map((policy, index) => (
@@ -306,7 +306,7 @@ export default function PolicyPage() {
                     <Link
                       key={policy.id}
                       href={`${contentDetailPrefix}/${policy.id}`}
-                      className="grid grid-cols-[80px_minmax(0,1.1fr)_minmax(0,0.9fr)] border-b border-gray-200 transition-colors hover:bg-gray-50"
+                      className="grid grid-cols-[80px_minmax(0,0.55fr)_minmax(0,1.45fr)] border-b border-gray-200 transition-colors hover:bg-gray-50"
                     >
                       <div className="flex items-center justify-center p-4 font-montserrat text-sm text-gray-500">
                         {(currentPage - 1) * itemsPerPage + index + 1}

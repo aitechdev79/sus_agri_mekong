@@ -173,11 +173,11 @@ export default function ReportsPage() {
             {loading ? (
               <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
                 {Array.from({ length: itemsPerPage }).map((_, index) => (
-                  <div key={index} className="h-52 animate-pulse rounded-2xl border border-gray-200 bg-gray-100" />
+                  <div key={index} className="h-52 animate-pulse border border-gray-200 bg-gray-100" />
                 ))}
               </div>
             ) : documents.length === 0 ? (
-              <div className="rounded-2xl border border-dashed border-gray-300 bg-gray-50 px-6 py-16 text-center">
+              <div className="border border-dashed border-gray-300 bg-gray-50 px-6 py-16 text-center">
                 <h3 className="font-montserrat text-xl font-bold text-gray-700">{isEn ? 'No documents yet' : 'Chưa có tài liệu nào'}</h3>
                 <p className="mt-2 font-montserrat text-sm text-gray-500">
                   {isEn ? 'Published document contents will appear here.' : 'Khi có nội dung loại Tài liệu được xuất bản, danh sách sẽ hiển thị tại đây.'}
@@ -198,7 +198,7 @@ export default function ReportsPage() {
                         href={href}
                         target={document.fileUrl ? '_blank' : undefined}
                         rel={document.fileUrl ? 'noreferrer' : undefined}
-                        className="group flex h-full min-h-[360px] flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
+                        className="group flex h-full min-h-[360px] flex-col overflow-hidden border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
                       >
                         <div className="relative h-52 w-full overflow-hidden bg-slate-100">
                           {previewImage ? (
