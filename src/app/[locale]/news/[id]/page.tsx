@@ -123,7 +123,7 @@ export default async function NewsPage({ params }: { params: Promise<{ locale: s
           )}
 
           {/* Article Content */}
-          <div className="prose prose-lg max-w-none mb-8 prose-ul:list-disc prose-ul:pl-6 prose-ol:list-decimal prose-ol:pl-6 prose-li:my-1">
+          <div className="prose prose-lg max-w-none mb-8 [&_ul]:list-disc [&_ul]:list-inside [&_ul]:pl-2 [&_ol]:list-decimal [&_ol]:list-inside [&_ol]:pl-2 [&_li]:my-1">
             <div
               className="text-gray-800 leading-relaxed"
               dangerouslySetInnerHTML={{ __html: renderRichTextContent(localizedBody) }}
