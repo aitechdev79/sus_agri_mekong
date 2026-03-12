@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { EditorContent, useEditor } from '@tiptap/react'
+import { EditorContent, NodeViewProps, NodeViewWrapper, ReactNodeViewRenderer, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { Extension, Mark, Node, mergeAttributes } from '@tiptap/core'
 import { Plugin } from '@tiptap/pm/state'
@@ -21,6 +21,80 @@ const FONT_FAMILIES = [
 const FONT_SIZES = ['12px', '14px', '16px', '18px', '20px', '24px']
 const LIST_INDENT_STEP_REM = 1.5
 const MAX_LIST_INDENT = 6
+const MIN_IMAGE_WIDTH_PX = 120
+
+function ResizableImageNodeView({ node, selected, updateAttributes, editor }: NodeViewProps) {
+  const containerRef = useRef<HTMLDivElement | null>(null)
+  const widthRef = useRef<number | null>(typeof node.attrs.width === 'number' ? node.attrs.width : null)
+  const [displayWidth, setDisplayWidth] = useState<number | null>(widthRef.current)
+
+  useEffect(() => {
+    const nextWidth = typeof node.attrs.width === 'number' ? node.attrs.width : null
+    widthRef.current = nextWidth
+    setDisplayWidth(nextWidth)
+  }, [node.attrs.width])
+
+  const handleResizeStart = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (!editor.isEditable) return
+    event.preventDefault()
+    event.stopPropagation()
+
+    const container = containerRef.current
+    if (!container) return
+
+    const startX = event.clientX
+    const startWidth = container.getBoundingClientRect().width
+    const parentWidth = container.parentElement?.getBoundingClientRect().width || startWidth
+    const maxWidth = Math.max(MIN_IMAGE_WIDTH_PX, Math.round(parentWidth))
+
+    const onMouseMove = (moveEvent: MouseEvent) => {
+      const delta = moveEvent.clientX - startX
+      const nextWidth = Math.max(MIN_IMAGE_WIDTH_PX, Math.min(Math.round(startWidth + delta), maxWidth))
+      widthRef.current = nextWidth
+      setDisplayWidth(nextWidth)
+    }
+
+    const onMouseUp = () => {
+      window.removeEventListener('mousemove', onMouseMove)
+      window.removeEventListener('mouseup', onMouseUp)
+      updateAttributes({ width: widthRef.current })
+    }
+
+    window.addEventListener('mousemove', onMouseMove)
+    window.addEventListener('mouseup', onMouseUp)
+  }
+
+  const imageStyle = displayWidth
+    ? { width: `${displayWidth}px`, maxWidth: '100%', height: 'auto' as const }
+    : { maxWidth: '100%', height: 'auto' as const }
+
+  return (
+    <NodeViewWrapper as="div" className="my-2">
+      <div
+        ref={containerRef}
+        className={`relative inline-block max-w-full ${selected ? 'ring-2 ring-green-500 rounded-md' : ''}`}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element -- Rich text content image must render dynamic uploaded URLs */}
+        <img
+          src={String(node.attrs.src || '')}
+          alt={String(node.attrs.alt || '')}
+          title={String(node.attrs.title || '')}
+          className="block rounded-md"
+          style={imageStyle}
+          draggable={false}
+        />
+        {editor.isEditable && (
+          <div
+            role="presentation"
+            onMouseDown={handleResizeStart}
+            className="absolute -bottom-1 -right-1 h-3 w-3 cursor-se-resize rounded-sm border border-white bg-green-600 shadow"
+            title="Drag to resize"
+          />
+        )}
+      </div>
+    </NodeViewWrapper>
+  )
+}
 
 const TextStyleMark = Mark.create({
   name: 'textStyle',
@@ -127,6 +201,29 @@ const ImageNode = Node.create({
       },
       title: {
         default: null
+      },
+      width: {
+        default: null,
+        parseHTML: (element) => {
+          const widthAttr = Number.parseInt(element.getAttribute('width') || '', 10)
+          if (Number.isFinite(widthAttr) && widthAttr > 0) {
+            return widthAttr
+          }
+
+          const widthFromStyle = Number.parseInt(element.style.width || '', 10)
+          if (Number.isFinite(widthFromStyle) && widthFromStyle > 0) {
+            return widthFromStyle
+          }
+
+          return null
+        },
+        renderHTML: (attributes) => {
+          const width = Number(attributes.width)
+          if (!Number.isFinite(width) || width <= 0) {
+            return {}
+          }
+          return { width: String(Math.round(width)) }
+        }
       }
     }
   },
@@ -142,6 +239,10 @@ const ImageNode = Node.create({
         class: 'max-w-full h-auto rounded-md my-2'
       })
     ]
+  },
+
+  addNodeView() {
+    return ReactNodeViewRenderer(ResizableImageNodeView)
   }
 })
 

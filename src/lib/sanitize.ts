@@ -10,7 +10,7 @@ export function sanitizeRichText(input: string) {
     allowedAttributes: {
       span: ['style'],
       p: ['style'],
-      img: ['src', 'alt', 'title']
+      img: ['src', 'alt', 'title', 'width']
     },
     allowedStyles: {
       p: {
