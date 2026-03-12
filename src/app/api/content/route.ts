@@ -30,11 +30,11 @@ function validateSectionPlacement(type: string, sectionKey?: string | null) {
   if (!sectionKey) return { ok: true }
 
   if (sectionKey === 'HOME_DIEN_HINH' && type !== 'STORY') {
-    return { ok: false, error: 'Má»¥c "Thá»±c hÃ nh Ä‘iá»ƒn hÃ¬nh" chá»‰ nháº­n ná»™i dung loáº¡i STORY.' }
+    return { ok: false, error: 'Mục "Thực hành điển hình" chỉ nhận nội dung loại STORY.' }
   }
 
   if (sectionKey === 'HOME_HOAT_DONG_DU_AN' && type !== 'PROJECT_ACTIVITY') {
-    return { ok: false, error: 'Má»¥c "Hoáº¡t Ä‘á»™ng dá»± Ã¡n" chá»‰ nháº­n ná»™i dung loáº¡i PROJECT_ACTIVITY.' }
+    return { ok: false, error: 'Mục "Hoạt động dự án" chỉ nhận nội dung loại PROJECT_ACTIVITY.' }
   }
 
   return { ok: true }
@@ -42,7 +42,7 @@ function validateSectionPlacement(type: string, sectionKey?: string | null) {
 
 async function validateCategoryForCreate(category?: string) {
   if (!category) {
-    return { ok: false, error: 'Danh má»¥c lÃ  báº¯t buá»™c' }
+    return { ok: false, error: 'Danh mục là bắt buộc' }
   }
 
   const existingCategory = await prisma.category.findUnique({
@@ -51,11 +51,11 @@ async function validateCategoryForCreate(category?: string) {
   })
 
   if (!existingCategory) {
-    return { ok: false, error: 'Danh má»¥c khÃ´ng tá»“n táº¡i' }
+    return { ok: false, error: 'Danh mục không tồn tại' }
   }
 
   if (!existingCategory.isActive) {
-    return { ok: false, error: 'Danh má»¥c Ä‘Ã£ ngá»«ng hoáº¡t Ä‘á»™ng' }
+    return { ok: false, error: 'Danh mục đã ngừng hoạt động' }
   }
 
   return { ok: true }
@@ -153,7 +153,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('Content fetch error:', error)
     return NextResponse.json(
-      { error: 'KhÃ´ng thá»ƒ táº£i ná»™i dung' },
+      { error: 'Không thể tải nội dung' },
       { status: 500 }
     )
   }
@@ -165,7 +165,7 @@ export async function POST(request: NextRequest) {
 
     if (!user) {
       return NextResponse.json(
-        { error: 'Cáº§n Ä‘Äƒng nháº­p Ä‘á»ƒ táº¡o ná»™i dung' },
+        { error: 'Cần đăng nhập để tạo nội dung' },
         { status: 403 }
       )
     }
@@ -225,21 +225,21 @@ export async function POST(request: NextRequest) {
 
     if (type === 'PROJECT_ACTIVITY' && !projectUrl) {
       return NextResponse.json(
-        { error: 'Hoáº¡t Ä‘á»™ng dá»± Ã¡n cáº§n cÃ³ Content URL.' },
+        { error: 'Hoạt động dự án cần có Content URL.' },
         { status: 400 }
       )
     }
 
     if (type === 'EVENT' && !normalizedEventStartAt) {
       return NextResponse.json(
-        { error: 'Sá»± kiá»‡n cáº§n cÃ³ thá»i gian báº¯t Ä‘áº§u há»£p lá»‡' },
+        { error: 'Sự kiện cần có thời gian bắt đầu hợp lệ' },
         { status: 400 }
       )
     }
 
     if (normalizedEventStartAt && normalizedEventEndAt && normalizedEventEndAt < normalizedEventStartAt) {
       return NextResponse.json(
-        { error: 'Thá»i gian káº¿t thÃºc pháº£i sau thá»i gian báº¯t Ä‘áº§u' },
+        { error: 'Thời gian kết thúc phải sau thời gian bắt đầu' },
         { status: 400 }
       )
     }
@@ -294,7 +294,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Content creation error:', error)
     return NextResponse.json(
-      { error: 'KhÃ´ng thá»ƒ táº¡o ná»™i dung' },
+      { error: 'Không thể tạo nội dung' },
       { status: 500 }
     )
   }

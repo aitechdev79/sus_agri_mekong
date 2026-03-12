@@ -30,11 +30,11 @@ function validateSectionPlacement(type: string, sectionKey?: string | null) {
   if (!sectionKey) return { ok: true }
 
   if (sectionKey === 'HOME_DIEN_HINH' && type !== 'STORY') {
-    return { ok: false, error: 'Má»¥c "Thá»±c hÃ nh Ä‘iá»ƒn hÃ¬nh" chá»‰ nháº­n ná»™i dung loáº¡i STORY.' }
+    return { ok: false, error: 'Mục "Thực hành điển hình" chỉ nhận nội dung loại STORY.' }
   }
 
   if (sectionKey === 'HOME_HOAT_DONG_DU_AN' && type !== 'PROJECT_ACTIVITY') {
-    return { ok: false, error: 'Má»¥c "Hoáº¡t Ä‘á»™ng dá»± Ã¡n" chá»‰ nháº­n ná»™i dung loáº¡i PROJECT_ACTIVITY.' }
+    return { ok: false, error: 'Mục "Hoạt động dự án" chỉ nhận nội dung loại PROJECT_ACTIVITY.' }
   }
 
   return { ok: true }
@@ -42,7 +42,7 @@ function validateSectionPlacement(type: string, sectionKey?: string | null) {
 
 async function validateCategoryForUpdate(nextCategory: string | undefined, currentCategory: string) {
   if (!nextCategory) {
-    return { ok: false, error: 'Danh má»¥c lÃ  báº¯t buá»™c' }
+    return { ok: false, error: 'Danh mục là bắt buộc' }
   }
 
   const category = await prisma.category.findUnique({
@@ -51,11 +51,11 @@ async function validateCategoryForUpdate(nextCategory: string | undefined, curre
   })
 
   if (!category) {
-    return { ok: false, error: 'Danh má»¥c khÃ´ng tá»“n táº¡i' }
+    return { ok: false, error: 'Danh mục không tồn tại' }
   }
 
   if (!category.isActive && nextCategory !== currentCategory) {
-    return { ok: false, error: 'Danh má»¥c Ä‘Ã£ ngá»«ng hoáº¡t Ä‘á»™ng' }
+    return { ok: false, error: 'Danh mục đã ngừng hoạt động' }
   }
 
   return { ok: true }
@@ -112,7 +112,7 @@ export async function GET(
 
     if (!content) {
       return NextResponse.json(
-        { error: 'KhÃ´ng tÃ¬m tháº¥y ná»™i dung' },
+        { error: 'Không tìm thấy nội dung' },
         { status: 404 }
       )
     }
@@ -121,7 +121,7 @@ export async function GET(
     const user = await requireModerator(request)
     if (!content.isPublic && (!user || (user.role !== 'ADMIN' && user.role !== 'MODERATOR'))) {
       return NextResponse.json(
-        { error: 'KhÃ´ng cÃ³ quyá»n truy cáº­p ná»™i dung nÃ y' },
+        { error: 'Không có quyền truy cập nội dung này' },
         { status: 403 }
       )
     }
@@ -149,7 +149,7 @@ export async function GET(
   } catch (error) {
     console.error('Content fetch error:', error)
     return NextResponse.json(
-      { error: 'KhÃ´ng thá»ƒ táº£i ná»™i dung' },
+      { error: 'Không thể tải nội dung' },
       { status: 500 }
     )
   }
@@ -165,7 +165,7 @@ export async function PUT(
 
     if (!user) {
       return NextResponse.json(
-        { error: 'Cáº§n Ä‘Äƒng nháº­p Ä‘á»ƒ chá»‰nh sá»­a' },
+        { error: 'Cần đăng nhập để chỉnh sửa' },
         { status: 403 }
       )
     }
@@ -176,7 +176,7 @@ export async function PUT(
 
     if (!content) {
       return NextResponse.json(
-        { error: 'KhÃ´ng tÃ¬m tháº¥y ná»™i dung' },
+        { error: 'Không tìm thấy nội dung' },
         { status: 404 }
       )
     }
@@ -184,7 +184,7 @@ export async function PUT(
     // Check permissions
     if (content.authorId !== user.id && user.role !== 'ADMIN' && user.role !== 'MODERATOR') {
       return NextResponse.json(
-        { error: 'KhÃ´ng cÃ³ quyá»n chá»‰nh sá»­a ná»™i dung nÃ y' },
+        { error: 'Không có quyền chỉnh sửa nội dung này' },
         { status: 403 }
       )
     }
@@ -244,21 +244,21 @@ export async function PUT(
 
     if (type === 'PROJECT_ACTIVITY' && !projectUrl) {
       return NextResponse.json(
-        { error: 'Hoáº¡t Ä‘á»™ng dá»± Ã¡n cáº§n cÃ³ Content URL.' },
+        { error: 'Hoạt động dự án cần có Content URL.' },
         { status: 400 }
       )
     }
 
     if (type === 'EVENT' && !normalizedEventStartAt) {
       return NextResponse.json(
-        { error: 'Sá»± kiá»‡n cáº§n cÃ³ thá»i gian báº¯t Ä‘áº§u há»£p lá»‡' },
+        { error: 'Sự kiện cần có thời gian bắt đầu hợp lệ' },
         { status: 400 }
       )
     }
 
     if (normalizedEventStartAt && normalizedEventEndAt && normalizedEventEndAt < normalizedEventStartAt) {
       return NextResponse.json(
-        { error: 'Thá»i gian káº¿t thÃºc pháº£i sau thá»i gian báº¯t Ä‘áº§u' },
+        { error: 'Thời gian kết thúc phải sau thời gian bắt đầu' },
         { status: 400 }
       )
     }
@@ -325,7 +325,7 @@ export async function PUT(
   } catch (error) {
     console.error('Content update error:', error)
     return NextResponse.json(
-      { error: 'KhÃ´ng thá»ƒ cáº­p nháº­t ná»™i dung' },
+      { error: 'Không thể cập nhật nội dung' },
       { status: 500 }
     )
   }
@@ -341,7 +341,7 @@ export async function DELETE(
 
     if (!user) {
       return NextResponse.json(
-        { error: 'KhÃ´ng cÃ³ quyá»n xÃ³a ná»™i dung' },
+        { error: 'Không có quyền xóa nội dung' },
         { status: 403 }
       )
     }
@@ -352,7 +352,7 @@ export async function DELETE(
 
     if (!content) {
       return NextResponse.json(
-        { error: 'KhÃ´ng tÃ¬m tháº¥y ná»™i dung' },
+        { error: 'Không tìm thấy nội dung' },
         { status: 404 }
       )
     }
@@ -360,7 +360,7 @@ export async function DELETE(
     // Check permissions
     if (content.authorId !== user.id && user.role !== 'ADMIN' && user.role !== 'MODERATOR') {
       return NextResponse.json(
-        { error: 'KhÃ´ng cÃ³ quyá»n xÃ³a ná»™i dung nÃ y' },
+        { error: 'Không có quyền xóa nội dung này' },
         { status: 403 }
       )
     }
@@ -369,11 +369,11 @@ export async function DELETE(
       where: { id }
     })
 
-    return NextResponse.json({ message: 'ÄÃ£ xÃ³a ná»™i dung thÃ nh cÃ´ng' })
+    return NextResponse.json({ message: 'Đã xóa nội dung thành công' })
   } catch (error) {
     console.error('Content deletion error:', error)
     return NextResponse.json(
-      { error: 'KhÃ´ng thá»ƒ xÃ³a ná»™i dung' },
+      { error: 'Không thể xóa nội dung' },
       { status: 500 }
     )
   }
