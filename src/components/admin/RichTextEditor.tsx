@@ -268,38 +268,79 @@ const ImagePasteExtension = Extension.create<{
       new Plugin({
         props: {
           handlePaste: (_view, event) => {
-            const imageFiles = Array.from(event.clipboardData?.files || []).filter((file) => file.type.startsWith('image/'))
+            const clipboard = event.clipboardData
+            if (!clipboard) return false
 
-            if (imageFiles.length === 0) {
-              return false
+            const imageFilesFromFiles = Array.from(clipboard.files || []).filter((file) => file.type.startsWith('image/'))
+            const imageFilesFromItems = Array.from(clipboard.items || [])
+              .filter((item) => item.kind === 'file' && item.type.startsWith('image/'))
+              .map((item) => item.getAsFile())
+              .filter((file): file is File => Boolean(file))
+            const imageFiles = [...imageFilesFromFiles, ...imageFilesFromItems]
+
+            if (imageFiles.length > 0) {
+              event.preventDefault()
+              this.options.onImageUploadStart()
+
+              void (async () => {
+                try {
+                  for (const file of imageFiles) {
+                    const url = await this.options.uploadImage(file)
+                    if (!url) continue
+
+                    this.editor.chain()
+                      .focus()
+                      .insertContent([
+                        { type: 'image', attrs: { src: url, alt: file.name || 'Pasted image' } },
+                        { type: 'paragraph' }
+                      ])
+                      .run()
+                  }
+                } catch (error) {
+                  const message = error instanceof Error ? error.message : 'Không thể tải ảnh lên.'
+                  this.options.onImageUploadError(message)
+                } finally {
+                  this.options.onImageUploadEnd()
+                }
+              })()
+
+              return true
             }
 
-            event.preventDefault()
-            this.options.onImageUploadStart()
+            const html = clipboard.getData('text/html') || ''
+            const htmlImageSources = Array.from(html.matchAll(/<img[^>]+src=["']([^"']+)["'][^>]*>/gi))
+              .map((match) => (match[1] || '').trim())
+              .filter(Boolean)
 
-            void (async () => {
-              try {
-                for (const file of imageFiles) {
-                  const url = await this.options.uploadImage(file)
-                  if (!url) continue
-
-                  this.editor.chain()
-                    .focus()
-                    .insertContent([
-                      { type: 'image', attrs: { src: url, alt: file.name || 'Pasted image' } },
-                      { type: 'paragraph' }
-                    ])
-                    .run()
-                }
-              } catch (error) {
-                const message = error instanceof Error ? error.message : 'Khong the tai anh len'
-                this.options.onImageUploadError(message)
-              } finally {
-                this.options.onImageUploadEnd()
+            if (htmlImageSources.length > 0) {
+              event.preventDefault()
+              for (const src of htmlImageSources) {
+                this.editor.chain()
+                  .focus()
+                  .insertContent([
+                    { type: 'image', attrs: { src, alt: 'Pasted image' } },
+                    { type: 'paragraph' }
+                  ])
+                  .run()
               }
-            })()
+              return true
+            }
 
-            return true
+            const pastedText = (clipboard.getData('text/plain') || '').trim()
+            const isImageUrl = /^(https?:\/\/\S+|data:image\/\w+;base64,\S+)$/i.test(pastedText)
+            if (isImageUrl) {
+              event.preventDefault()
+              this.editor.chain()
+                .focus()
+                .insertContent([
+                  { type: 'image', attrs: { src: pastedText, alt: 'Pasted image' } },
+                  { type: 'paragraph' }
+                ])
+                .run()
+              return true
+            }
+
+            return false
           }
         }
       })
