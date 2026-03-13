@@ -61,7 +61,7 @@ export function PartnerManager() {
       const response = await fetch('/api/admin/partners')
       const data = await response.json()
       if (!response.ok) {
-        throw new Error(data.error || 'KhÃ´ng thá»ƒ táº£i danh sÃ¡ch Ä‘á»‘i tÃ¡c')
+        throw new Error(data.error || 'Không thể tải danh sách đối tác')
       }
       const list: PartnerItem[] = data.partners || []
       setPartners(list)
@@ -72,7 +72,7 @@ export function PartnerManager() {
         }, {}),
       )
     } catch (fetchError) {
-      setError(fetchError instanceof Error ? fetchError.message : 'ÄÃ£ cÃ³ lá»—i xáº£y ra')
+      setError(fetchError instanceof Error ? fetchError.message : 'Đã có lỗi xảy ra')
       setPartners([])
     } finally {
       setLoading(false)
@@ -89,7 +89,7 @@ export function PartnerManager() {
         const response = await fetch('/api/admin/partners/home-settings')
         const data = await response.json()
         if (!response.ok) {
-          throw new Error(data.error || 'KhÃ´ng thá»ƒ táº£i cáº¥u hÃ¬nh hiá»ƒn thá»‹ trang chá»§')
+          throw new Error(data.error || 'Không thể tải cấu hình hiển thị trang chủ')
         }
         setHomeDisplayLimit(String(data.homeDisplayLimit || 4))
       } catch (settingsError) {
@@ -117,7 +117,7 @@ export function PartnerManager() {
 
       const data = await response.json()
       if (!response.ok) {
-        throw new Error(data.error || 'KhÃ´ng thá»ƒ cáº­p nháº­t Ä‘á»‘i tÃ¡c')
+        throw new Error(data.error || 'Không thể cập nhật đối tác')
       }
 
       setPartners((prev) => prev.map((item) => (item.id === id ? { ...item, ...data.partner } : item)))
@@ -129,7 +129,7 @@ export function PartnerManager() {
         }))
       }
     } catch (updateError) {
-      alert(updateError instanceof Error ? updateError.message : 'ÄÃ£ cÃ³ lá»—i xáº£y ra')
+      alert(updateError instanceof Error ? updateError.message : 'Đã có lỗi xảy ra')
     } finally {
       setSavingId('')
     }
@@ -186,7 +186,7 @@ export function PartnerManager() {
     if (!file) return
 
     if (!file.type.startsWith('image/')) {
-      alert('Vui lÃ²ng chá»n file áº£nh.')
+      alert('Vui lòng chọn file ảnh.')
       return
     }
 
@@ -203,20 +203,20 @@ export function PartnerManager() {
 
       const uploadData = await uploadResponse.json()
       if (!uploadResponse.ok || !uploadData?.file?.url) {
-        throw new Error(uploadData?.error || 'KhÃ´ng thá»ƒ táº£i áº£nh lÃªn')
+        throw new Error(uploadData?.error || 'Không thể tải ảnh lên')
       }
 
       const logoUrl = String(uploadData.file.url)
       await updatePartner(id, { logoUrl })
     } catch (uploadError) {
-      alert(uploadError instanceof Error ? uploadError.message : 'ÄÃ£ cÃ³ lá»—i xáº£y ra khi táº£i áº£nh')
+      alert(uploadError instanceof Error ? uploadError.message : 'Đã có lỗi xảy ra khi tải ảnh')
     } finally {
       setUploadingId('')
     }
   }
 
   const deletePartner = async (id: string, companyName: string) => {
-    const confirmed = confirm(`Báº¡n cÃ³ cháº¯c cháº¯n muá»‘n xÃ³a Ä‘á»‘i tÃ¡c "${companyName}"?`)
+    const confirmed = confirm(`Bạn có chắc chắn muốn xóa đối tác "${companyName}"?`)
     if (!confirmed) return
 
     try {
@@ -227,7 +227,7 @@ export function PartnerManager() {
 
       const data = await response.json()
       if (!response.ok) {
-        throw new Error(data.error || 'KhÃ´ng thá»ƒ xÃ³a Ä‘á»‘i tÃ¡c')
+        throw new Error(data.error || 'Không thể xóa đối tác')
       }
 
       setPartners((prev) => prev.filter((item) => item.id !== id))
@@ -237,7 +237,7 @@ export function PartnerManager() {
         return next
       })
     } catch (deleteError) {
-      alert(deleteError instanceof Error ? deleteError.message : 'ÄÃ£ cÃ³ lá»—i xáº£y ra khi xÃ³a Ä‘á»‘i tÃ¡c')
+      alert(deleteError instanceof Error ? deleteError.message : 'Đã có lỗi xảy ra khi xóa đối tác')
     } finally {
       setDeletingId('')
     }
@@ -246,7 +246,7 @@ export function PartnerManager() {
   const saveHomeDisplayLimit = async () => {
     const parsed = Number(homeDisplayLimit)
     if (!Number.isFinite(parsed) || parsed < 1) {
-      alert('Sá»‘ lÆ°á»£ng hiá»ƒn thá»‹ pháº£i lÃ  sá»‘ nguyÃªn dÆ°Æ¡ng')
+      alert('Số lượng hiển thị phải là số nguyên dương')
       return
     }
 
@@ -260,12 +260,12 @@ export function PartnerManager() {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || 'KhÃ´ng thá»ƒ lÆ°u cáº¥u hÃ¬nh hiá»ƒn thá»‹')
+        throw new Error(data.error || 'Không thể lưu cấu hình hiển thị')
       }
 
       setHomeDisplayLimit(String(data.homeDisplayLimit))
     } catch (saveError) {
-      alert(saveError instanceof Error ? saveError.message : 'ÄÃ£ cÃ³ lá»—i xáº£y ra khi lÆ°u cáº¥u hÃ¬nh')
+      alert(saveError instanceof Error ? saveError.message : 'Đã có lỗi xảy ra khi lưu cấu hình')
     } finally {
       setSavingHomeDisplayLimit(false)
     }
@@ -275,9 +275,9 @@ export function PartnerManager() {
     <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm md:p-6">
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-slate-900">Quáº£n lÃ½ Ä‘á»‘i tÃ¡c doanh nghiá»‡p</h2>
+          <h2 className="text-xl font-semibold text-slate-900">Quản lý đối tác doanh nghiệp</h2>
           <p className="text-sm text-slate-600">
-            Quy Æ°á»›c hiá»ƒn thá»‹ trang chá»§: `displayOrder` &gt;= 0 lÃ  hiá»ƒn thá»‹, &lt; 0 lÃ  áº©n.
+            Quy ước hiển thị trang chủ: `displayOrder` &gt;= 0 là hiển thị, &lt; 0 là ẩn.
           </p>
         </div>
       </div>
@@ -288,7 +288,7 @@ export function PartnerManager() {
           type="search"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="TÃ¬m theo tÃªn cÃ´ng ty, slug, email..."
+          placeholder="Tìm theo tên công ty, slug, email..."
           className="w-full rounded-lg border border-gray-300 py-2 pl-9 pr-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
         />
       </div>
@@ -296,8 +296,8 @@ export function PartnerManager() {
       <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div>
-            <p className="text-sm font-semibold text-slate-900">Sá»‘ lÆ°á»£ng logo Ä‘á»‘i tÃ¡c hiá»ƒn thá»‹ trÃªn trang chá»§</p>
-            <p className="text-xs text-slate-600">Máº·c Ä‘á»‹nh: 4. Trang chá»§ sáº½ láº¥y theo sá»‘ lÆ°á»£ng nÃ y vÃ  thá»© tá»± Æ°u tiÃªn (`displayOrder`).</p>
+            <p className="text-sm font-semibold text-slate-900">Số lượng logo đối tác hiển thị trên trang chủ</p>
+            <p className="text-xs text-slate-600">Mặc định: 4. Trang chủ sẽ lấy theo số lượng này và thứ tự ưu tiên (`displayOrder`).</p>
           </div>
           <div className="flex items-center gap-2">
             <input
@@ -313,7 +313,7 @@ export function PartnerManager() {
               onClick={() => void saveHomeDisplayLimit()}
               className="rounded border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-60"
             >
-              {savingHomeDisplayLimit ? 'Äang lÆ°u...' : 'LÆ°u'}
+              {savingHomeDisplayLimit ? 'Đang lưu...' : 'Lưu'}
             </button>
           </div>
         </div>
@@ -326,10 +326,10 @@ export function PartnerManager() {
           <thead className="border-b bg-slate-50">
             <tr>
               <th className="px-4 py-3 text-left text-sm font-medium text-slate-700">Logo</th>
-              <th className="px-4 py-3 text-left text-sm font-medium text-slate-700">Doanh nghiá»‡p</th>
-              <th className="px-4 py-3 text-left text-sm font-medium text-slate-700">LiÃªn há»‡</th>
-              <th className="px-4 py-3 text-left text-sm font-medium text-slate-700">Thá»© tá»±</th>
-              <th className="px-4 py-3 text-right text-sm font-medium text-slate-700">Thao tÃ¡c</th>
+              <th className="px-4 py-3 text-left text-sm font-medium text-slate-700">Doanh nghiệp</th>
+              <th className="px-4 py-3 text-left text-sm font-medium text-slate-700">Liên hệ</th>
+              <th className="px-4 py-3 text-left text-sm font-medium text-slate-700">Thứ tự</th>
+              <th className="px-4 py-3 text-right text-sm font-medium text-slate-700">Thao tác</th>
             </tr>
           </thead>
           <tbody>
@@ -346,7 +346,7 @@ export function PartnerManager() {
                       )}
                     </div>
                     <label className="inline-flex cursor-pointer items-center rounded-md border border-slate-300 px-2.5 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50">
-                      {uploadingId === item.id ? 'Äang táº£i...' : 'Upload logo'}
+                      {uploadingId === item.id ? 'Đang tải...' : 'Upload logo'}
                       <input
                         type="file"
                         accept="image/*"
@@ -372,8 +372,8 @@ export function PartnerManager() {
                   <div className="text-xs text-slate-500">{item.slug}</div>
                 </td>
                 <td className="px-4 py-3 text-sm text-slate-700">
-                  <div>{item.contactEmail || 'ChÆ°a cÃ³ email'}</div>
-                  <div className="text-slate-500">{item.province || 'ChÆ°a cÃ³ tá»‰nh/thÃ nh'}</div>
+                  <div>{item.contactEmail || 'Chưa có email'}</div>
+                  <div className="text-slate-500">{item.province || 'Chưa có tỉnh/thành'}</div>
                 </td>
                 <td className="px-4 py-3 text-sm text-slate-700">{item.displayOrder}</td>
                 <td className="px-4 py-3 text-right">
@@ -389,7 +389,7 @@ export function PartnerManager() {
                           }))
                         }
                         className="w-20 rounded border border-slate-300 px-2 py-1 text-xs"
-                        title="displayOrder: >=0 hiá»‡n trang chá»§, <0 áº©n"
+                        title="displayOrder: >=0 hiện trang chủ, <0 ẩn"
                       />
                       <button
                         type="button"
@@ -397,14 +397,14 @@ export function PartnerManager() {
                         onClick={() => {
                           const parsed = Number(orderDrafts[item.id] ?? item.displayOrder)
                           if (!Number.isFinite(parsed)) {
-                            alert('Thá»© tá»± khÃ´ng há»£p lá»‡')
+                            alert('Thứ tự không hợp lệ')
                             return
                           }
                           void updatePartner(item.id, { displayOrder: Math.trunc(parsed) })
                         }}
                         className="rounded border border-slate-300 px-2 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-60"
                       >
-                        LÆ°u thá»© tá»±
+                        Lưu thứ tự
                       </button>
                     </div>
                     <button
@@ -421,7 +421,7 @@ export function PartnerManager() {
                       className="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-60"
                     >
                       <Trash2 className="mr-1 h-3.5 w-3.5" />
-                      {deletingId === item.id ? 'Äang xÃ³a...' : 'XÃ³a'}
+                      {deletingId === item.id ? 'Đang xóa...' : 'Xóa'}
                     </button>
                   </div>
                 </td>
@@ -431,9 +431,9 @@ export function PartnerManager() {
         </table>
       </div>
 
-      {loading && <p className="py-6 text-center text-sm text-slate-500">Äang táº£i danh sÃ¡ch Ä‘á»‘i tÃ¡c...</p>}
+      {loading && <p className="py-6 text-center text-sm text-slate-500">Đang tải danh sách đối tác...</p>}
       {!loading && filteredPartners.length === 0 && (
-        <p className="py-6 text-center text-sm text-slate-500">ChÆ°a cÃ³ há»“ sÆ¡ Ä‘á»‘i tÃ¡c nÃ o.</p>
+        <p className="py-6 text-center text-sm text-slate-500">Chưa có hồ sơ đối tác nào.</p>
       )}
 
       {selectedPartner && editForm && (
@@ -445,7 +445,7 @@ export function PartnerManager() {
                 type="button"
                 onClick={closePartnerEditor}
                 className="rounded-md p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-                aria-label="ÄÃ³ng"
+                aria-label="Đóng"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -470,7 +470,7 @@ export function PartnerManager() {
                   </div>
                   <div>
                     <span className="font-medium text-slate-900">Owner user ID: </span>
-                    {selectedPartner.ownerUserId || 'â€”'}
+                    {selectedPartner.ownerUserId || '—'}
                   </div>
                   <div>
                     <span className="font-medium text-slate-900">Ngày tạo: </span>
