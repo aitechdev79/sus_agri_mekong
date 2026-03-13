@@ -16,6 +16,7 @@ interface PartnerItem {
   phone: string | null
   province: string | null
   description?: string | null
+  reviewNotes?: string | null
   status: PartnerStatus
   isPublic: boolean
   isVerified: boolean
@@ -23,6 +24,20 @@ interface PartnerItem {
   createdAt: string
   displayOrder: number
   updatedAt: string
+}
+
+interface PartnerEditForm {
+  companyName: string
+  contactEmail: string
+  phone: string
+  website: string
+  province: string
+  description: string
+  reviewNotes: string
+  displayOrder: string
+  status: PartnerStatus
+  isPublic: boolean
+  isVerified: boolean
 }
 
 export function PartnerManager() {
@@ -36,6 +51,7 @@ export function PartnerManager() {
   const [deletingId, setDeletingId] = useState('')
   const [orderDrafts, setOrderDrafts] = useState<Record<string, string>>({})
   const [selectedPartner, setSelectedPartner] = useState<PartnerItem | null>(null)
+  const [editForm, setEditForm] = useState<PartnerEditForm | null>(null)
   const [error, setError] = useState('')
 
   const loadPartners = async () => {
@@ -105,6 +121,7 @@ export function PartnerManager() {
       }
 
       setPartners((prev) => prev.map((item) => (item.id === id ? { ...item, ...data.partner } : item)))
+      setSelectedPartner((prev) => (prev?.id === id ? { ...prev, ...data.partner } : prev))
       if (data.partner?.displayOrder !== undefined) {
         setOrderDrafts((prev) => ({
           ...prev,
@@ -116,6 +133,53 @@ export function PartnerManager() {
     } finally {
       setSavingId('')
     }
+  }
+
+  const openPartnerEditor = (partner: PartnerItem) => {
+    setSelectedPartner(partner)
+    setEditForm({
+      companyName: partner.companyName,
+      contactEmail: partner.contactEmail || '',
+      phone: partner.phone || '',
+      website: partner.website || '',
+      province: partner.province || '',
+      description: partner.description || '',
+      reviewNotes: partner.reviewNotes || '',
+      displayOrder: String(partner.displayOrder),
+      status: partner.status,
+      isPublic: partner.isPublic,
+      isVerified: partner.isVerified,
+    })
+  }
+
+  const closePartnerEditor = () => {
+    if (selectedPartner && savingId === selectedPartner.id) return
+    setSelectedPartner(null)
+    setEditForm(null)
+  }
+
+  const savePartnerDetails = async () => {
+    if (!selectedPartner || !editForm) return
+
+    const parsedOrder = Number(editForm.displayOrder)
+    if (!Number.isFinite(parsedOrder)) {
+      alert('Thứ tự không hợp lệ')
+      return
+    }
+
+    await updatePartner(selectedPartner.id, {
+      companyName: editForm.companyName.trim(),
+      contactEmail: editForm.contactEmail.trim() || null,
+      phone: editForm.phone.trim() || null,
+      website: editForm.website.trim() || null,
+      province: editForm.province.trim() || null,
+      description: editForm.description.trim() || null,
+      reviewNotes: editForm.reviewNotes.trim() || null,
+      displayOrder: Math.trunc(parsedOrder),
+      status: editForm.status,
+      isPublic: editForm.isPublic,
+      isVerified: editForm.isVerified,
+    })
   }
 
   const handleLogoFileChange = async (id: string, file: File | null) => {
@@ -300,7 +364,7 @@ export function PartnerManager() {
                 <td className="px-4 py-3">
                   <button
                     type="button"
-                    onClick={() => setSelectedPartner(item)}
+                    onClick={() => openPartnerEditor(item)}
                     className="font-medium text-slate-900 hover:text-emerald-700 hover:underline"
                   >
                     {item.companyName}
@@ -345,10 +409,10 @@ export function PartnerManager() {
                     </div>
                     <button
                       type="button"
-                      onClick={() => setSelectedPartner(item)}
+                      onClick={() => openPartnerEditor(item)}
                       className="inline-flex items-center rounded-md border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50"
                     >
-                      Chi tiáº¿t
+                      Sửa
                     </button>
                     <button
                       type="button"
@@ -372,14 +436,14 @@ export function PartnerManager() {
         <p className="py-6 text-center text-sm text-slate-500">ChÆ°a cÃ³ há»“ sÆ¡ Ä‘á»‘i tÃ¡c nÃ o.</p>
       )}
 
-      {selectedPartner && (
+      {selectedPartner && editForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-4">
           <div className="w-full max-w-2xl rounded-xl bg-white shadow-xl">
             <div className="flex items-center justify-between border-b px-6 py-4">
-              <h3 className="text-lg font-semibold text-gray-900">Chi tiáº¿t Ä‘á»‘i tÃ¡c</h3>
+              <h3 className="text-lg font-semibold text-gray-900">Sửa đối tác</h3>
               <button
                 type="button"
-                onClick={() => setSelectedPartner(null)}
+                onClick={closePartnerEditor}
                 className="rounded-md p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
                 aria-label="ÄÃ³ng"
               >
@@ -387,68 +451,170 @@ export function PartnerManager() {
               </button>
             </div>
 
-            <div className="grid gap-3 px-6 py-5 text-sm text-slate-700 md:grid-cols-2">
-              <div className="md:col-span-2">
-                <span className="font-medium text-slate-900">TÃªn doanh nghiá»‡p: </span>
-                {selectedPartner.companyName}
-              </div>
-              <div>
-                <span className="font-medium text-slate-900">Slug: </span>
-                {selectedPartner.slug}
-              </div>
-              <div>
-                <span className="font-medium text-slate-900">Owner user ID: </span>
-                {selectedPartner.ownerUserId || 'â€”'}
-              </div>
-              <div>
-                <span className="font-medium text-slate-900">Email: </span>
-                {selectedPartner.contactEmail || 'â€”'}
-              </div>
-              <div>
-                <span className="font-medium text-slate-900">Äiá»‡n thoáº¡i: </span>
-                {selectedPartner.phone || 'â€”'}
-              </div>
-              <div>
-                <span className="font-medium text-slate-900">Website: </span>
-                {selectedPartner.website || 'â€”'}
-              </div>
-              <div>
-                <span className="font-medium text-slate-900">Tá»‰nh/ThÃ nh: </span>
-                {selectedPartner.province || 'â€”'}
-              </div>
-              <div>
-                <span className="font-medium text-slate-900">Thá»© tá»±: </span>
-                {selectedPartner.displayOrder}
-              </div>
-              <div>
-                <span className="font-medium text-slate-900">Quy á»°á»›c hiá»ƒn thá»‹: </span>
-                {selectedPartner.displayOrder >= 0 ? 'Hien logo tren nen tang' : 'An logo tren nen tang'}
-              </div>
-              <div>
-                <span className="font-medium text-slate-900">ÄÃ£ xÃ¡c minh: </span>
-                {selectedPartner.isVerified ? 'CÃ³' : 'KhÃ´ng'}
-              </div>
-              <div>
-                <span className="font-medium text-slate-900">NgÃ y táº¡o: </span>
-                {new Date(selectedPartner.createdAt).toLocaleString('vi-VN')}
-              </div>
-              <div>
-                <span className="font-medium text-slate-900">Cáº­p nháº­t: </span>
-                {new Date(selectedPartner.updatedAt).toLocaleString('vi-VN')}
-              </div>
-              <div className="md:col-span-2">
-                <span className="font-medium text-slate-900">MÃ´ táº£: </span>
-                {selectedPartner.description || 'â€”'}
-              </div>
+            <div className="max-h-[75vh] space-y-5 overflow-y-auto px-6 py-5 text-sm text-slate-700">
+              <section className="rounded-xl border border-slate-200 bg-slate-50/70 p-4">
+                <h4 className="mb-3 text-sm font-semibold text-slate-900">Thông tin cơ bản</h4>
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="md:col-span-2">
+                    <label className="mb-1 block font-medium text-slate-900">Tên doanh nghiệp</label>
+                    <input
+                      type="text"
+                      value={editForm.companyName}
+                      onChange={(event) => setEditForm((prev) => (prev ? { ...prev, companyName: event.target.value } : prev))}
+                      className="w-full rounded-md border border-slate-300 bg-white px-3 py-2"
+                    />
+                  </div>
+                  <div>
+                    <span className="font-medium text-slate-900">Slug: </span>
+                    {selectedPartner.slug}
+                  </div>
+                  <div>
+                    <span className="font-medium text-slate-900">Owner user ID: </span>
+                    {selectedPartner.ownerUserId || 'â€”'}
+                  </div>
+                  <div>
+                    <span className="font-medium text-slate-900">Ngày tạo: </span>
+                    {new Date(selectedPartner.createdAt).toLocaleString('vi-VN')}
+                  </div>
+                  <div>
+                    <span className="font-medium text-slate-900">Cập nhật: </span>
+                    {new Date(selectedPartner.updatedAt).toLocaleString('vi-VN')}
+                  </div>
+                </div>
+              </section>
+
+              <section className="rounded-xl border border-slate-200 p-4">
+                <h4 className="mb-3 text-sm font-semibold text-slate-900">Thông tin liên hệ</h4>
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div>
+                    <label className="mb-1 block font-medium text-slate-900">Email</label>
+                    <input
+                      type="email"
+                      value={editForm.contactEmail}
+                      onChange={(event) => setEditForm((prev) => (prev ? { ...prev, contactEmail: event.target.value } : prev))}
+                      className="w-full rounded-md border border-slate-300 px-3 py-2"
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-1 block font-medium text-slate-900">Điện thoại</label>
+                    <input
+                      type="text"
+                      value={editForm.phone}
+                      onChange={(event) => setEditForm((prev) => (prev ? { ...prev, phone: event.target.value } : prev))}
+                      className="w-full rounded-md border border-slate-300 px-3 py-2"
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-1 block font-medium text-slate-900">Website</label>
+                    <input
+                      type="text"
+                      value={editForm.website}
+                      onChange={(event) => setEditForm((prev) => (prev ? { ...prev, website: event.target.value } : prev))}
+                      className="w-full rounded-md border border-slate-300 px-3 py-2"
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-1 block font-medium text-slate-900">Tỉnh/Thành</label>
+                    <input
+                      type="text"
+                      value={editForm.province}
+                      onChange={(event) => setEditForm((prev) => (prev ? { ...prev, province: event.target.value } : prev))}
+                      className="w-full rounded-md border border-slate-300 px-3 py-2"
+                    />
+                  </div>
+                </div>
+              </section>
+
+              <section className="rounded-xl border border-slate-200 p-4">
+                <h4 className="mb-3 text-sm font-semibold text-slate-900">Hiển thị trên nền tảng</h4>
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div>
+                    <label className="mb-1 block font-medium text-slate-900">Thứ tự</label>
+                    <input
+                      type="number"
+                      value={editForm.displayOrder}
+                      onChange={(event) => setEditForm((prev) => (prev ? { ...prev, displayOrder: event.target.value } : prev))}
+                      className="w-full rounded-md border border-slate-300 px-3 py-2"
+                    />
+                    <p className="mt-1 text-xs text-slate-500">
+                      {Number(editForm.displayOrder) >= 0 ? 'Đang hiển thị logo trên nền tảng' : 'Logo đang bị ẩn khỏi nền tảng'}
+                    </p>
+                  </div>
+                  <div>
+                    <label className="mb-1 block font-medium text-slate-900">Trạng thái</label>
+                    <select
+                      value={editForm.status}
+                      onChange={(event) => setEditForm((prev) => (prev ? { ...prev, status: event.target.value as PartnerStatus } : prev))}
+                      className="w-full rounded-md border border-slate-300 px-3 py-2"
+                    >
+                      <option value="DRAFT">DRAFT</option>
+                      <option value="PENDING">PENDING</option>
+                      <option value="APPROVED">APPROVED</option>
+                      <option value="REJECTED">REJECTED</option>
+                      <option value="SUSPENDED">SUSPENDED</option>
+                    </select>
+                  </div>
+                  <label className="inline-flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 font-medium text-slate-900">
+                    <input
+                      type="checkbox"
+                      checked={editForm.isVerified}
+                      onChange={(event) => setEditForm((prev) => (prev ? { ...prev, isVerified: event.target.checked } : prev))}
+                      className="h-4 w-4 rounded border-slate-300"
+                    />
+                    Đã xác minh
+                  </label>
+                  <label className="inline-flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 font-medium text-slate-900">
+                    <input
+                      type="checkbox"
+                      checked={editForm.isPublic}
+                      onChange={(event) => setEditForm((prev) => (prev ? { ...prev, isPublic: event.target.checked } : prev))}
+                      className="h-4 w-4 rounded border-slate-300"
+                    />
+                    Công khai
+                  </label>
+                </div>
+              </section>
+
+              <section className="rounded-xl border border-slate-200 p-4">
+                <h4 className="mb-3 text-sm font-semibold text-slate-900">Nội dung hồ sơ</h4>
+                <div className="space-y-4">
+                  <div>
+                    <label className="mb-1 block font-medium text-slate-900">Mô tả</label>
+                    <textarea
+                      value={editForm.description}
+                      onChange={(event) => setEditForm((prev) => (prev ? { ...prev, description: event.target.value } : prev))}
+                      rows={4}
+                      className="w-full rounded-md border border-slate-300 px-3 py-2"
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-1 block font-medium text-slate-900">Ghi chú duyệt</label>
+                    <textarea
+                      value={editForm.reviewNotes}
+                      onChange={(event) => setEditForm((prev) => (prev ? { ...prev, reviewNotes: event.target.value } : prev))}
+                      rows={3}
+                      className="w-full rounded-md border border-slate-300 px-3 py-2"
+                    />
+                  </div>
+                </div>
+              </section>
             </div>
 
-            <div className="flex justify-end border-t px-6 py-4">
+            <div className="flex justify-end gap-2 border-t px-6 py-4">
               <button
                 type="button"
-                onClick={() => setSelectedPartner(null)}
+                onClick={closePartnerEditor}
                 className="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
               >
-                ÄÃ³ng
+                Hủy
+              </button>
+              <button
+                type="button"
+                disabled={savingId === selectedPartner.id}
+                onClick={() => void savePartnerDetails()}
+                className="rounded-md bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700 disabled:opacity-60"
+              >
+                {savingId === selectedPartner.id ? 'Đang lưu...' : 'Lưu thay đổi'}
               </button>
             </div>
           </div>

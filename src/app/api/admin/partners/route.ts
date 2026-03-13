@@ -42,6 +42,7 @@ export async function GET(request: NextRequest) {
         phone: true,
         province: true,
         description: true,
+        reviewNotes: true,
         status: true,
         isPublic: true,
         isVerified: true,
