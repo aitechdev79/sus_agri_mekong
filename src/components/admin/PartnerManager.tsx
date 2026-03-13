@@ -196,7 +196,7 @@ export function PartnerManager() {
       const formData = new FormData()
       formData.append('file', file)
 
-      const uploadResponse = await fetch('/api/upload', {
+      const uploadResponse = await fetch('/api/business/profile/logo', {
         method: 'POST',
         body: formData,
       })

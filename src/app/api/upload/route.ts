@@ -1,4 +1,4 @@
-﻿import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { requireModerator } from '@/lib/auth-middleware'
 import { saveFile } from '@/lib/file-upload'
 import { prisma } from '@/lib/prisma'
@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
 
     if (!user) {
       return NextResponse.json(
-        { error: 'Cáº§n Ä‘Äƒng nháº­p Ä‘á»ƒ táº£i file' },
+        { error: 'Cần đăng nhập để tải file' },
         { status: 403 }
       )
     }
@@ -19,12 +19,11 @@ export async function POST(request: NextRequest) {
 
     if (!file) {
       return NextResponse.json(
-        { error: 'KhÃ´ng cÃ³ file Ä‘Æ°á»£c táº£i lÃªn' },
+        { error: 'Không có file được tải lên' },
         { status: 400 }
       )
     }
 
-    // Save file
     const result = await saveFile(file)
 
     if (!result.success) {
@@ -34,7 +33,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Save file metadata to database
     const fileRecord = await prisma.content.create({
       data: {
         title: result.originalName || 'Untitled',
@@ -42,17 +40,16 @@ export async function POST(request: NextRequest) {
         content: `File: ${result.originalName}`,
         type: getContentType(file.type),
         category: 'file_upload',
-        tags: '', // Add required tags field
+        tags: '',
         fileUrl: result.url,
         fileType: result.type,
         fileSize: result.size,
         thumbnailUrl: file.type.startsWith('image/') ? result.url?.replace(result.fileName!, `thumb_${result.fileName}`) : undefined,
         status: 'DRAFT',
-        authorId: user.id
-      }
+        authorId: user.id,
+      },
     })
 
-    // Track upload analytics
     await prisma.analytics.create({
       data: {
         event: 'file_upload',
@@ -61,9 +58,9 @@ export async function POST(request: NextRequest) {
         metadata: {
           fileName: result.originalName,
           fileSize: result.size,
-          fileType: result.type
-        }
-      }
+          fileType: result.type,
+        },
+      },
     })
 
     return NextResponse.json({
@@ -74,14 +71,13 @@ export async function POST(request: NextRequest) {
         fileName: result.fileName,
         originalName: result.originalName,
         size: result.size,
-        type: result.type
-      }
+        type: result.type,
+      },
     })
-
   } catch (error) {
     console.error('Upload error:', error)
     return NextResponse.json(
-      { error: 'Lá»—i khi táº£i file' },
+      { error: 'Lỗi khi tải file' },
       { status: 500 }
     )
   }
@@ -96,4 +92,3 @@ function getContentType(mimeType: string): 'INFOGRAPHIC' | 'VIDEO' | 'DOCUMENT' 
   if (mimeType.includes('presentation') || mimeType.includes('powerpoint')) return 'DOCUMENT'
   return 'DOCUMENT'
 }
-
