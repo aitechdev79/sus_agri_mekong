@@ -2,14 +2,23 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { BarChart3, FileText, Globe2 } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import { getLocaleFromPathname, withLocalePrefix } from '@/lib/content-locale';
 
 export default function ContentLibrarySection() {
+  const pathname = usePathname();
+  const locale = getLocaleFromPathname(pathname);
+  const isEn = locale === 'en';
+
   const contentCards = [
     {
       id: 'policy',
-      title: 'Chính sách và quy định',
-      description: 'Cập nhật các chính sách, quy định và văn bản pháp luật liên quan đến doanh nghiệp',
-      href: '/policy',
+      title: isEn ? 'Policies & Regulations' : 'Chính sách và quy định',
+      description: isEn
+        ? 'Latest legal updates, regulations, and compliance references for businesses'
+        : 'Cập nhật các chính sách, quy định và văn bản pháp luật liên quan đến doanh nghiệp',
+      href: withLocalePrefix('/policy', locale),
       icon: '📋',
       bgColor: 'vn-green-light',
       iconColor: 'vn-green',
@@ -17,9 +26,11 @@ export default function ContentLibrarySection() {
     },
     {
       id: 'reports',
-      title: 'Nghiên cứu và Báo cáo',
-      description: 'Khám phá các nghiên cứu, báo cáo và phân tích chuyên sâu về phát triển bền vững',
-      href: '/reports',
+      title: isEn ? 'Research & Reports' : 'Nghiên cứu và Báo cáo',
+      description: isEn
+        ? 'Explore in-depth reports and research on sustainable development'
+        : 'Khám phá các nghiên cứu, báo cáo và phân tích chuyên sâu về phát triển bền vững',
+      href: withLocalePrefix('/reports', locale),
       icon: '📊',
       bgColor: 'vn-gold-light',
       iconColor: 'vn-gold',
@@ -27,9 +38,11 @@ export default function ContentLibrarySection() {
     },
     {
       id: 'global-practices',
-      title: 'Thực hành tốt trên thế giới',
-      description: 'Học hỏi từ các mô hình phát triển bền vững thành công của doanh nghiệp toàn cầu',
-      href: '/global_best_practice',
+      title: isEn ? 'Global Good Practices' : 'Thực hành tốt trên thế giới',
+      description: isEn
+        ? 'Learn from successful sustainability models and practices worldwide'
+        : 'Học hỏi từ các mô hình phát triển bền vững thành công của doanh nghiệp toàn cầu',
+      href: withLocalePrefix('/global_best_practice', locale),
       icon: '🌍',
       bgColor: 'vn-red-light',
       iconColor: 'vn-red',
@@ -37,9 +50,11 @@ export default function ContentLibrarySection() {
     },
     {
       id: 'vietnam-practices',
-      title: 'Thực hành tốt tại Việt Nam',
-      description: 'Khám phá các điển hình ESG xuất sắc trong doanh nghiệp và cộng đồng Việt Nam',
-      href: '/VN_best_practice',
+      title: isEn ? 'Good Practices in Vietnam' : 'Thực hành tốt tại Việt Nam',
+      description: isEn
+        ? 'Discover outstanding ESG stories from businesses and communities in Vietnam'
+        : 'Khám phá các điển hình ESG xuất sắc trong doanh nghiệp và cộng đồng Việt Nam',
+      href: withLocalePrefix('/VN_best_practice', locale),
       icon: '🇻🇳',
       bgColor: 'vn-green-light',
       iconColor: 'vn-green',
@@ -53,10 +68,12 @@ export default function ContentLibrarySection() {
       <div className="container mx-auto px-6 max-w-6xl relative z-10">
         <div className="mb-12 text-left">
           <h2 className="font-bold mb-4 font-montserrat" style={{ fontSize: '40px', fontWeight: 700, color: '#3C3C3B' }}>
-            Thư viện Nội dung
+            {isEn ? 'Content Library' : 'Thư viện Nội dung'}
           </h2>
           <p className="font-montserrat text-lg max-w-3xl" style={{ color: '#6B7280' }}>
-            Truy cập kho tài liệu phong phú về chính sách, nghiên cứu và thực hành bền vững
+            {isEn
+              ? 'Access curated resources on policy, research, and sustainable practices'
+              : 'Truy cập kho tài liệu phong phú về chính sách, nghiên cứu và thực hành bền vững'}
           </p>
         </div>
 
@@ -65,11 +82,11 @@ export default function ContentLibrarySection() {
             // Determine icon based on card ID
             let iconContent;
             if (card.id === 'policy') {
-              iconContent = <span className="text-4xl">📋</span>; // Notepad
+              iconContent = <FileText className="w-10 h-10" />;
             } else if (card.id === 'reports') {
-              iconContent = <span className="text-4xl">📊</span>; // Chart
+              iconContent = <BarChart3 className="w-10 h-10" />;
             } else if (card.id === 'global-practices') {
-              iconContent = <span className="text-4xl">🌍</span>; // Globe
+              iconContent = <Globe2 className="w-10 h-10" />;
             } else if (card.id === 'vietnam-practices') {
               iconContent = (
                 <Image
@@ -100,7 +117,10 @@ export default function ContentLibrarySection() {
                 {/* Content Container - Zooms on hover */}
                 <div className="flex flex-col items-center text-center p-6 transition-transform duration-500 group-hover:scale-105">
                   {/* Icon Container - Zooms with content */}
-                  <div className="mb-4 w-16 h-16 bg-gray-100 flex items-center justify-center transition-transform duration-500">
+                  <div
+                    className="mb-4 w-16 h-16 flex items-center justify-center transition-transform duration-500"
+                    style={{ backgroundColor: '#ffb81c' }}
+                  >
                     {iconContent}
                   </div>
                   {/* Title */}

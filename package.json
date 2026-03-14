@@ -2,6 +2,7 @@
   "name": "good-practices-platform",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "npm@11.7.0",
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",
@@ -15,7 +16,11 @@
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.10.0",
+    "@mux/mux-player-react": "^3.11.5",
     "@prisma/client": "^6.16.2",
+    "@tiptap/core": "^3.5.2",
+    "@tiptap/react": "^3.5.2",
+    "@tiptap/starter-kit": "^3.5.2",
     "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/mime-types": "^3.0.1",
@@ -33,6 +38,7 @@
     "prisma": "^6.16.2",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "sanitize-html": "^2.15.0",
     "sharp": "^0.34.4",
     "tailwind-merge": "^3.3.1"
   },
@@ -42,6 +48,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/sanitize-html": "^2.11.0",
     "eslint": "^9",
     "eslint-config-next": "15.5.7",
     "tailwindcss": "^4",

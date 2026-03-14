@@ -6,7 +6,7 @@ import sharp from 'sharp'
 import mime from 'mime-types'
 
 export interface UploadConfig {
-  maxSize: number // in bytes
+  maxSize: number
   allowedTypes: string[]
   uploadDir: string
 }
@@ -22,7 +22,7 @@ export interface UploadResult {
 }
 
 const defaultConfig: UploadConfig = {
-  maxSize: 10 * 1024 * 1024, // 10MB
+  maxSize: 10 * 1024 * 1024,
   allowedTypes: [
     'image/jpeg',
     'image/png',
@@ -33,9 +33,9 @@ const defaultConfig: UploadConfig = {
     'application/vnd.openxmlformats-officedocument.presentationml.presentation',
     'video/mp4',
     'video/mpeg',
-    'video/quicktime'
+    'video/quicktime',
   ],
-  uploadDir: './uploads'
+  uploadDir: './uploads',
 }
 
 export async function validateFile(
@@ -44,19 +44,17 @@ export async function validateFile(
 ): Promise<{ valid: boolean; error?: string }> {
   const finalConfig = { ...defaultConfig, ...config }
 
-  // Check file size
   if (file.size > finalConfig.maxSize) {
     return {
       valid: false,
-      error: `File quá lớn. Kích thước tối đa: ${(finalConfig.maxSize / 1024 / 1024).toFixed(1)}MB`
+      error: `File quá lớn. Kích thước tối đa: ${(finalConfig.maxSize / 1024 / 1024).toFixed(1)}MB`,
     }
   }
 
-  // Check file type
   if (!finalConfig.allowedTypes.includes(file.type)) {
     return {
       valid: false,
-      error: `Loại file không được hỗ trợ: ${file.type}`
+      error: `Loại file không được hỗ trợ: ${file.type}`,
     }
   }
 
@@ -69,33 +67,25 @@ export async function saveFile(
 ): Promise<UploadResult> {
   try {
     const finalConfig = { ...defaultConfig, ...config }
-
-    // Validate file
     const validation = await validateFile(file, finalConfig)
     if (!validation.valid) {
       return { success: false, error: validation.error }
     }
 
-    // Create upload directory if it doesn't exist
     const uploadDir = path.join(process.cwd(), 'public', finalConfig.uploadDir)
     if (!existsSync(uploadDir)) {
       await mkdir(uploadDir, { recursive: true })
     }
 
-    // Generate unique filename
     const fileExtension = path.extname(file.name)
     const fileName = `${nanoid()}_${Date.now()}${fileExtension}`
     const filePath = path.join(uploadDir, fileName)
-
-    // Convert File to Buffer
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
 
-    // Process image files (create thumbnails)
     if (file.type.startsWith('image/')) {
       await processImage(buffer, filePath, fileName, uploadDir)
     } else {
-      // Save file directly
       await writeFile(filePath, buffer)
     }
 
@@ -107,7 +97,7 @@ export async function saveFile(
       fileName,
       originalName: file.name,
       size: file.size,
-      type: file.type
+      type: file.type,
     }
   } catch (error) {
     console.error('File upload error:', error)
@@ -122,32 +112,28 @@ async function processImage(
   uploadDir: string
 ): Promise<void> {
   try {
-    // Save original image (optimize)
     await sharp(buffer)
       .jpeg({ quality: 85 })
       .png({ compressionLevel: 8 })
       .webp({ quality: 85 })
       .resize(1920, 1080, {
         fit: 'inside',
-        withoutEnlargement: true
+        withoutEnlargement: true,
       })
       .toFile(filePath)
 
-    // Create thumbnail
     const thumbnailFileName = `thumb_${fileName}`
     const thumbnailPath = path.join(uploadDir, thumbnailFileName)
 
     await sharp(buffer)
       .resize(300, 200, {
         fit: 'cover',
-        position: 'center'
+        position: 'center',
       })
       .jpeg({ quality: 80 })
       .toFile(thumbnailPath)
-
   } catch (error) {
     console.error('Image processing error:', error)
-    // Fallback: save original file
     await writeFile(filePath, buffer)
   }
 }

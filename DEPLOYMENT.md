@@ -59,6 +59,10 @@ In your Vercel project dashboard, go to Settings → Environment Variables and a
 DATABASE_URL=postgresql://username:password@host:5432/database
 NEXTAUTH_URL=https://your-app-name.vercel.app
 NEXTAUTH_SECRET=your-production-secret-minimum-32-characters
+OPENAI_API_KEY=your-openai-api-key
+SERPAPI_KEY=your-serpapi-key
+# Optional model override (defaults to gpt-4.1-mini)
+OPENAI_MODEL=gpt-4.1-mini
 ```
 
 Optional variables:

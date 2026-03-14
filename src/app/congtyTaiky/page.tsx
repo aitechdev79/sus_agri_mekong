@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import Header from '@/components/Header';
+import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
 import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut } from 'lucide-react';
 
@@ -35,9 +35,9 @@ export default function CongtyTaiky() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
+      <NavigationBar />
 
-      <main className="flex-grow bg-gray-50">
+      <main className="flex-grow bg-gray-50 pt-24">
         <div className="container mx-auto px-6 py-12 max-w-7xl">
           <h1 className="text-4xl font-bold text-gray-800 mb-8 text-center font-montserrat">
             Công ty Tài Ký

@@ -24,16 +24,28 @@ export interface AuthorComplete extends AuthorWithRole, AuthorWithOrganization {
 export interface BaseContent {
   id: string;
   title: string;
+  titleEn?: string | null;
   description: string;
+  descriptionEn?: string | null;
   content: string;
+  contentEn?: string | null;
   type: ContentType;
   category: string;
   tags: string;
+  sectionKey?: ContentSection | null;
+  displayOrder?: number | null;
+  undertitle?: string | null;
+  projectUrl?: string | null;
   status: ContentStatus;
   isPublic: boolean;
   isFeatured: boolean;
   viewCount: number;
   downloadCount: number;
+  eventStartAt?: string | null;
+  eventEndAt?: string | null;
+  eventTimezone?: string | null;
+  eventLocation?: string | null;
+  isAllDay?: boolean;
   createdAt: string; // API returns ISO string, not Date
   updatedAt: string;
   authorId: string;
@@ -70,9 +82,9 @@ export interface ContentWithMedia extends ContentWithRoleAuthor, MediaFields {}
 
 // ===== BILINGUAL SUPPORT =====
 export interface BilingualFields {
-  titleEn?: string;
-  descriptionEn?: string;
-  contentEn?: string;
+  titleEn?: string | null;
+  descriptionEn?: string | null;
+  contentEn?: string | null;
 }
 
 export interface ContentWithBilingual extends ContentWithRoleAuthor, BilingualFields {}
@@ -91,7 +103,9 @@ export interface ContentWithCounts extends ContentWithRoleAuthor, ContentCounts 
 
 // 1. ADMIN INTERFACE - Full data for admin operations
 export interface AdminContent extends ContentWithMedia {
-  titleEn?: string;
+  titleEn?: string | null;
+  descriptionEn?: string | null;
+  contentEn?: string | null;
   updatedAt: string;
 }
 
@@ -99,7 +113,7 @@ export interface AdminContent extends ContentWithMedia {
 export interface PublicContent extends ContentWithCompleteAuthor, MediaFields {}
 
 // 3. LIBRARY INTERFACE - For library/search displays with counts
-export interface LibraryContent extends ContentWithRoleAuthor, BilingualFields, ContentCounts {
+export interface LibraryContent extends ContentWithRoleAuthor, BilingualFields, ContentCounts, MediaFields {
   downloadCount: number;
 }
 
@@ -110,11 +124,18 @@ export interface CardContent extends ContentWithRoleAuthor, MediaFields, Content
 export interface FormContent {
   id: string;
   title: string;
+  titleEn?: string | null;
   description?: string;
+  descriptionEn?: string | null;
   content?: string;
+  contentEn?: string | null;
   type: ContentType;
   category?: string;
   tags?: string;
+  sectionKey?: ContentSection | null;
+  displayOrder?: number | null;
+  undertitle?: string | null;
+  projectUrl?: string | null;
   status: ContentStatus;
   isPublic?: boolean;
   isFeatured?: boolean;
@@ -127,6 +148,11 @@ export interface FormContent {
   fileUrl?: string;
   fileType?: string;
   fileSize?: number;
+  eventStartAt?: string | null;
+  eventEndAt?: string | null;
+  eventTimezone?: string | null;
+  eventLocation?: string | null;
+  isAllDay?: boolean;
 }
 
 // 6. MINIMAL INTERFACE - For simple displays
@@ -145,6 +171,16 @@ export interface NewsContent extends ContentWithCompleteAuthor, MediaFields {
   descriptionEn?: string;
 }
 
+export interface EventContent extends ContentWithCompleteAuthor, MediaFields {
+  titleEn?: string;
+  descriptionEn?: string;
+  eventStartAt?: string | null;
+  eventEndAt?: string | null;
+  eventTimezone?: string | null;
+  eventLocation?: string | null;
+  isAllDay?: boolean;
+}
+
 // ===== ENUMS FOR CONSISTENCY =====
 export type ContentType =
   | 'ARTICLE'
@@ -152,9 +188,15 @@ export type ContentType =
   | 'INFOGRAPHIC'
   | 'DOCUMENT'
   | 'STORY'
+  | 'PROJECT_ACTIVITY'
   | 'GUIDE'
   | 'POLICY'
-  | 'NEWS';
+  | 'NEWS'
+  | 'EVENT';
+
+export type ContentSection =
+  | 'HOME_DIEN_HINH'
+  | 'HOME_HOAT_DONG_DU_AN';
 
 export type ContentStatus =
   | 'DRAFT'
@@ -211,18 +253,22 @@ export interface ContentTableProps {
   onDelete: (content: AdminContent) => void;
   onBulkAction?: (action: string, ids: string[]) => void;
   userRole: UserRole;
+  categoryLabels?: Record<string, string>;
 }
 
 export interface ContentFormProps {
   content?: FormContent | null;
   onClose: () => void;
   userRole: UserRole;
+  categories?: import('@/types/category').CategorySummary[];
+  onCategoryCreated?: (category: import('@/types/category').CategorySummary) => void;
 }
 
 export interface ContentCardProps {
   content: CardContent;
   onEdit?: (content: CardContent) => void;
   onDelete?: (content: CardContent) => void;
+  categoryLabels?: Record<string, string>;
 }
 
 // ===== UTILITY TYPES =====

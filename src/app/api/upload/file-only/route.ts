@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { requireAuth } from '@/lib/auth-middleware'
+﻿import { NextRequest, NextResponse } from 'next/server'
+import { requireModerator } from '@/lib/auth-middleware'
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
 const ALLOWED_TYPES = [
-  'image/jpeg', 'image/png', 'image/webp', 'image/gif',
+  'image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif', 'image/bmp', 'image/avif',
   'application/pdf',
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -13,12 +13,12 @@ const ALLOWED_TYPES = [
 
 export async function POST(request: NextRequest) {
   try {
-    const user = await requireAuth(request)
+    const user = await requireModerator(request)
 
     if (!user) {
       return NextResponse.json(
         { error: 'Cần đăng nhập để tải file' },
-        { status: 401 }
+        { status: 403 }
       )
     }
 

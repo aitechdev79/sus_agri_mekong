@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
     const newsItems = await prisma.content.findMany({
       where: {
@@ -12,7 +12,9 @@ export async function GET(request: Request) {
       select: {
         id: true,
         title: true,
+        titleEn: true,
         description: true,
+        descriptionEn: true,
         thumbnailUrl: true,
         imageUrl: true,
         viewCount: true,

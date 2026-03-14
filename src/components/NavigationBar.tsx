@@ -3,21 +3,57 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu, X, Home } from 'lucide-react';
+import { Home, LogOut, Menu, X } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import { signOut, useSession } from 'next-auth/react';
+import { getLocaleFromPathname, stripLocalePrefix, withLocalePrefix } from '@/lib/content-locale';
 
 export default function NavigationBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const { data: session, status } = useSession();
+  const locale = getLocaleFromPathname(pathname);
+  const otherLocale = locale === 'en' ? 'vi' : 'en';
+  const normalizedPath = stripLocalePrefix(pathname);
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  const homeHref = withLocalePrefix('/', locale);
+  const libraryHref = withLocalePrefix('/library', locale);
+  const eventsHref = withLocalePrefix('/tat-ca-su-kien', locale);
+  const exploreHref = withLocalePrefix('/vision-mission', locale);
+  const signInHref = withLocalePrefix('/auth/signin', locale);
+  const signUpHref = withLocalePrefix('/auth/signup', locale);
+  const switchLocaleHref = withLocalePrefix(normalizedPath, otherLocale);
+
+  const labels =
+    locale === 'en'
+      ? {
+          home: 'Home',
+          library: 'Library',
+          events: 'Events',
+          explore: 'Explore',
+          signIn: 'SIGN IN',
+          signUp: 'SIGN UP',
+          signOut: 'SIGN OUT',
+          hello: 'Hello',
+        }
+      : {
+          home: 'Trang chủ',
+          library: 'Thư viện',
+          events: 'Sự kiện',
+          explore: 'Khám phá',
+          signIn: 'ĐĂNG NHẬP',
+          signUp: 'ĐĂNG KÝ',
+          signOut: 'ĐĂNG XUẤT',
+          hello: 'Xin chào',
+        };
+
+  const isAuthenticated = status === 'authenticated';
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm shadow-sm">
       <div className="max-w-screen-xl mx-auto px-6">
         <div className="flex items-center justify-between h-16">
-          {/* Logos */}
-          <Link href="/" className="flex items-center gap-3 md:gap-4">
+          <Link href={homeHref} className="flex items-center gap-3 md:gap-4">
             <Image
               src="/VCCI-HCM logo VN (blue).png"
               alt="VCCI-HCM Logo"
@@ -29,50 +65,78 @@ export default function NavigationBar() {
             />
           </Link>
 
-          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             <div className="flex items-center space-x-8">
               <Link
-                href="/"
+                href={homeHref}
                 className="font-montserrat font-normal text-base text-vn-dark hover:text-vn-green transition-colors"
-                aria-label="Trang chủ"
+                aria-label={labels.home}
               >
                 <Home className="w-5 h-5" />
               </Link>
               <Link
-                href="/library"
+                href={libraryHref}
                 className="font-montserrat font-normal text-base text-vn-dark uppercase tracking-wide hover:underline hover:text-vn-green transition-colors"
               >
-                Thư viện
+                {labels.library}
               </Link>
               <Link
-                href="/news"
+                href={eventsHref}
                 className="font-montserrat font-normal text-base text-vn-dark uppercase tracking-wide hover:underline hover:text-vn-green transition-colors"
               >
-                Tin tức
+                {labels.events}
               </Link>
               <Link
-                href="/vision-mission"
+                href={exploreHref}
                 className="font-montserrat font-normal text-base text-vn-dark uppercase tracking-wide hover:underline hover:text-vn-green transition-colors"
               >
-                Khám phá
+                {labels.explore}
               </Link>
             </div>
 
-            {/* Login Button */}
-            <div className="flex items-center">
+            <div className="flex items-center gap-2">
+              {isAuthenticated && session?.user?.name && (
+                <span className="hidden text-sm font-semibold text-vn-dark lg:inline">
+                  {labels.hello}, {session.user.name}
+                </span>
+              )}
               <Link
-                href="/auth/signin"
-                className="font-montserrat font-normal text-base text-vn-green border-2 border-vn-green px-4 py-2 rounded-lg hover:bg-vn-green hover:text-white transition-all duration-300"
+                href={switchLocaleHref}
+                className="font-montserrat text-sm font-semibold text-vn-dark border border-vn-dark px-3 py-1.5 rounded-md hover:bg-gray-100 transition-colors"
               >
-                ĐĂNG NHẬP
+                {otherLocale.toUpperCase()}
               </Link>
+
+              {!isAuthenticated ? (
+                <>
+                  <Link
+                    href={signInHref}
+                    className="font-montserrat font-normal text-base text-vn-green border-2 border-vn-green px-4 py-2 rounded-lg hover:bg-vn-green hover:text-white transition-all duration-300"
+                  >
+                    {labels.signIn}
+                  </Link>
+                  <Link
+                    href={signUpHref}
+                    className="font-montserrat font-normal text-base text-white bg-vn-green border-2 border-vn-green px-4 py-2 rounded-lg hover:opacity-90 transition-all duration-300"
+                  >
+                    {labels.signUp}
+                  </Link>
+                </>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => signOut({ callbackUrl: homeHref })}
+                  className="inline-flex items-center gap-2 font-montserrat font-normal text-base text-vn-green border-2 border-vn-green px-4 py-2 rounded-lg hover:bg-vn-green hover:text-white transition-all duration-300"
+                >
+                  <LogOut className="h-4 w-4" />
+                  {labels.signOut}
+                </button>
+              )}
             </div>
           </div>
 
-          {/* Mobile Menu Button */}
           <button
-            onClick={toggleMenu}
+            onClick={() => setIsMenuOpen((prev) => !prev)}
             className="md:hidden p-2 text-vn-dark hover:text-vn-green transition-colors"
             aria-label="Toggle menu"
           >
@@ -80,47 +144,80 @@ export default function NavigationBar() {
           </button>
         </div>
 
-        {/* Mobile Navigation */}
         {isMenuOpen && (
           <div className="md:hidden bg-white/95 backdrop-blur-sm border-t border-white/20">
             <div className="flex flex-col space-y-4 px-6 py-6">
               <Link
-                href="/"
+                href={homeHref}
                 className="font-montserrat font-normal text-base text-vn-dark hover:text-vn-green transition-colors flex items-center gap-2"
                 onClick={() => setIsMenuOpen(false)}
-                aria-label="Trang chủ"
+                aria-label={labels.home}
               >
                 <Home className="w-5 h-5" />
-                <span className="uppercase tracking-wide">Trang chủ</span>
+                <span className="uppercase tracking-wide">{labels.home}</span>
               </Link>
               <Link
-                href="/library"
+                href={libraryHref}
                 className="font-montserrat font-normal text-base text-vn-dark uppercase tracking-wide hover:text-vn-green transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Thư viện
+                {labels.library}
               </Link>
               <Link
-                href="/news"
+                href={eventsHref}
                 className="font-montserrat font-normal text-base text-vn-dark uppercase tracking-wide hover:text-vn-green transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Tin tức
+                {labels.events}
               </Link>
               <Link
-                href="/vision-mission"
+                href={exploreHref}
                 className="font-montserrat font-normal text-base text-vn-dark uppercase tracking-wide hover:text-vn-green transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Khám phá
+                {labels.explore}
               </Link>
               <Link
-                href="/auth/signin"
-                className="font-montserrat font-normal text-base text-vn-green border-2 border-vn-green px-4 py-2 rounded-lg hover:bg-vn-green hover:text-white transition-all duration-300 text-center"
+                href={switchLocaleHref}
+                className="font-montserrat font-semibold text-sm text-vn-dark border border-vn-dark px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors text-center"
                 onClick={() => setIsMenuOpen(false)}
               >
-                ĐĂNG NHẬP
+                {otherLocale.toUpperCase()}
               </Link>
+
+              {isAuthenticated && session?.user?.name && (
+                <div className="rounded-lg border border-gray-200 bg-gray-50 px-4 py-2 text-center text-sm font-medium text-vn-dark">
+                  {labels.hello}, {session.user.name}
+                </div>
+              )}
+
+              {!isAuthenticated ? (
+                <>
+                  <Link
+                    href={signInHref}
+                    className="font-montserrat font-normal text-base text-vn-green border-2 border-vn-green px-4 py-2 rounded-lg hover:bg-vn-green hover:text-white transition-all duration-300 text-center"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {labels.signIn}
+                  </Link>
+                  <Link
+                    href={signUpHref}
+                    className="font-montserrat font-normal text-base text-white bg-vn-green border-2 border-vn-green px-4 py-2 rounded-lg hover:opacity-90 transition-all duration-300 text-center"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {labels.signUp}
+                  </Link>
+                </>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => signOut({ callbackUrl: homeHref })}
+                  className="inline-flex w-full items-center justify-center gap-2 font-montserrat font-normal text-base text-vn-green border-2 border-vn-green px-4 py-2 rounded-lg hover:bg-vn-green hover:text-white transition-all duration-300 text-center"
+                >
+                  <LogOut className="h-4 w-4" />
+                  {labels.signOut}
+                </button>
+              )}
             </div>
           </div>
         )}
@@ -128,3 +225,4 @@ export default function NavigationBar() {
     </nav>
   );
 }
+

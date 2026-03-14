@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect, useCallback } from 'react'
 import { Button } from '@/components/ui/button'
@@ -6,15 +6,45 @@ import { FileUploadZone } from '@/components/upload/FileUploadZone'
 import { FileManager } from '@/components/upload/FileManager'
 import Image from 'next/image'
 import { ContentFormProps } from '@/types/content'
+import { RichTextEditor } from '@/components/admin/RichTextEditor'
+import type { CategorySummary } from '@/types/category'
+import { normalizeCategorySlug } from '@/lib/category-utils'
 
-export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
+function toDateTimeLocalValue(value?: string | null) {
+  if (!value) return ''
+
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return ''
+
+  const offset = date.getTimezoneOffset()
+  const localDate = new Date(date.getTime() - offset * 60 * 1000)
+  return localDate.toISOString().slice(0, 16)
+}
+
+function toDateValue(value?: string | null) {
+  if (!value) return ''
+
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return ''
+
+  const offset = date.getTimezoneOffset()
+  const localDate = new Date(date.getTime() - offset * 60 * 1000)
+  return localDate.toISOString().slice(0, 10)
+}
+
+export function ContentForm({ content, onClose, userRole, categories = [], onCategoryCreated }: ContentFormProps) {
   const [loading, setLoading] = useState(false)
   const [showFileManager, setShowFileManager] = useState(false)
+  const [showCategoryModal, setShowCategoryModal] = useState(false)
+  const [categorySaveLoading, setCategorySaveLoading] = useState(false)
   const [autoSaveStatus, setAutoSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle')
   const [showRestoredNotice, setShowRestoredNotice] = useState(false)
+  const [fallbackCategories, setFallbackCategories] = useState<CategorySummary[]>([])
 
   // Generate a unique key for this form session
   const formStorageKey = `content-form-${content?.id || 'new'}`
+  const getNextCategoryOrder = (source: CategorySummary[]) =>
+    source.length > 0 ? Math.max(...source.map((item) => item.displayOrder), 0) + 10 : 10
 
   // Initialize form data with content or from localStorage
   const getInitialFormData = () => {
@@ -22,11 +52,18 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
       // If editing existing content, use content data
       return {
         title: content.title || '',
+        titleEn: content.titleEn || '',
         description: content.description || '',
+        descriptionEn: content.descriptionEn || '',
         content: content.content || '',
+        contentEn: content.contentEn || '',
         category: content.category || '',
         type: content.type || 'ARTICLE',
         tags: content.tags || '',
+        sectionKey: content.sectionKey || '',
+        displayOrder: content.displayOrder ?? '',
+        undertitle: content.undertitle || '',
+        projectUrl: content.projectUrl || '',
         isFeatured: content.isFeatured || false,
         isPublic: content.isPublic !== false,
         status: content.status || 'DRAFT',
@@ -35,7 +72,12 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
         fileSize: content.fileSize || 0,
         thumbnailUrl: content.thumbnailUrl || '',
         imageUrl: content.imageUrl || '',
-        videoUrl: content.videoUrl || ''
+        videoUrl: content.videoUrl || '',
+        eventStartAt: content.isAllDay ? toDateValue(content.eventStartAt) : toDateTimeLocalValue(content.eventStartAt),
+        eventEndAt: content.isAllDay ? toDateValue(content.eventEndAt) : toDateTimeLocalValue(content.eventEndAt),
+        eventTimezone: content.eventTimezone || 'Asia/Ho_Chi_Minh',
+        eventLocation: content.eventLocation || '',
+        isAllDay: content.isAllDay || false
       }
     } else {
       // If creating new content, try to restore from localStorage
@@ -57,11 +99,18 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
       // Default values for new content
       return {
         title: '',
+        titleEn: '',
         description: '',
+        descriptionEn: '',
         content: '',
+        contentEn: '',
         category: '',
         type: 'ARTICLE',
         tags: '',
+        sectionKey: '',
+        displayOrder: '',
+        undertitle: '',
+        projectUrl: '',
         isFeatured: false,
         isPublic: true,
         status: 'DRAFT',
@@ -70,12 +119,24 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
         fileSize: 0,
         thumbnailUrl: '',
         imageUrl: '',
-        videoUrl: ''
+        videoUrl: '',
+        eventStartAt: '',
+        eventEndAt: '',
+        eventTimezone: 'Asia/Ho_Chi_Minh',
+        eventLocation: '',
+        isAllDay: false
       }
     }
   }
 
   const [formData, setFormData] = useState(getInitialFormData)
+  const [quickCategory, setQuickCategory] = useState({
+    slug: '',
+    nameVi: '',
+    nameEn: '',
+    displayOrder: getNextCategoryOrder(categories)
+  })
+  const availableCategories = categories.length > 0 ? categories : fallbackCategories
 
   // Auto-save to localStorage when form data changes (debounced)
   const saveToLocalStorage = useCallback(() => {
@@ -97,6 +158,47 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
     const timer = setTimeout(saveToLocalStorage, 1000) // Save after 1 second of inactivity
     return () => clearTimeout(timer)
   }, [saveToLocalStorage])
+
+  useEffect(() => {
+    if (categories.length > 0) {
+      setFallbackCategories([])
+      return
+    }
+
+    let isMounted = true
+
+    const loadFallbackCategories = async () => {
+      try {
+        const endpoint =
+          userRole === 'ADMIN' || userRole === 'MODERATOR'
+            ? '/api/admin/categories'
+            : '/api/categories'
+
+        const response = await fetch(endpoint)
+        const data = await response.json()
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Không thể tải danh mục')
+        }
+
+        const nextCategories = Array.isArray(data) ? data : data.categories || []
+        if (isMounted) {
+          setFallbackCategories(nextCategories)
+        }
+      } catch (error) {
+        console.error('ContentForm category fallback load error:', error)
+        if (isMounted) {
+          setFallbackCategories([])
+        }
+      }
+    }
+
+    loadFallbackCategories()
+
+    return () => {
+      isMounted = false
+    }
+  }, [categories, userRole])
 
   // Clear saved data when form is successfully submitted
   const clearSavedData = () => {
@@ -124,11 +226,18 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
       clearSavedData()
       setFormData({
         title: '',
+        titleEn: '',
         description: '',
+        descriptionEn: '',
         content: '',
+        contentEn: '',
         category: '',
         type: 'ARTICLE',
         tags: '',
+        sectionKey: '',
+        displayOrder: '',
+        undertitle: '',
+        projectUrl: '',
         isFeatured: false,
         isPublic: true,
         status: 'DRAFT',
@@ -137,52 +246,161 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
         fileSize: 0,
         thumbnailUrl: '',
         imageUrl: '',
-        videoUrl: ''
+        videoUrl: '',
+        eventStartAt: '',
+        eventEndAt: '',
+        eventTimezone: 'Asia/Ho_Chi_Minh',
+        eventLocation: '',
+        isAllDay: false
       })
     }
   }
 
-  const categories = [
-    { value: 'shrimp_farming', label: 'Nuôi tôm' },
-    { value: 'shrimp_processing', label: 'Chế biến tôm' },
-    { value: 'shrimp_export', label: 'Xuất khẩu tôm' },
-    { value: 'rice_cultivation', label: 'Trồng lúa' },
-    { value: 'rice_processing', label: 'Chế biến lúa' },
-    { value: 'rice_marketing', label: 'Tiếp thị lúa' },
-    { value: 'sustainable_practices', label: 'Thực hành bền vững' },
-    { value: 'technology_innovation', label: 'Công nghệ và đổi mới' },
-    { value: 'financial_support', label: 'Hỗ trợ tài chính' },
-    { value: 'market_access', label: 'Tiếp cận thị trường' },
-    { value: 'policy_guidelines', label: 'Chính sách và hướng dẫn' },
-    { value: 'success_stories', label: 'Câu chuyện thành công' }
-  ]
-
+  const categoryOptions: CategorySummary[] = (() => {
+    const activeCategories = availableCategories.filter((category) => category.isActive)
+    if (!formData.category || activeCategories.some((category) => category.slug === formData.category)) {
+      return activeCategories
+    }
+    return [
+      ...activeCategories,
+      {
+        id: `legacy-${formData.category}`,
+        slug: formData.category,
+        name: formData.category,
+        nameVi: formData.category,
+        nameEn: null,
+        isActive: false,
+        displayOrder: Number.MAX_SAFE_INTEGER,
+        count: 0
+      }
+    ]
+  })()
   const contentTypes = [
     { value: 'ARTICLE', label: 'Bài viết' },
     { value: 'DOCUMENT', label: 'Tài liệu' },
-    { value: 'STORY', label: 'Điển hình' },  // Using STORY for "Điển hình" (exemplary cases)
+    { value: 'STORY', label: 'Điển hình' },
+    { value: 'PROJECT_ACTIVITY', label: 'Hoạt động dự án' },
     { value: 'GUIDE', label: 'Hướng dẫn' },
     { value: 'POLICY', label: 'Chính sách' },
-    { value: 'NEWS', label: 'Tin tức' }
+    { value: 'NEWS', label: 'Tin tức' },
+    { value: 'EVENT', label: 'Sự kiện' }
   ]
+
+  const sectionOptions = [
+    { value: '', label: 'Không hiển thị trên trang chủ' },
+    { value: 'HOME_DIEN_HINH', label: 'Thực hành điển hình' },
+    { value: 'HOME_HOAT_DONG_DU_AN', label: 'Hoạt động dự án' }
+  ]
+
+  const isSectionCompatibleWithType = (sectionKey: string, contentType: string) => {
+    if (!sectionKey) return true
+    if (sectionKey === 'HOME_DIEN_HINH') return contentType === 'STORY'
+    if (sectionKey === 'HOME_HOAT_DONG_DU_AN') return contentType === 'PROJECT_ACTIVITY'
+    return true
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target
+
+    if (name === 'type') {
+      const nextType = value
+      setFormData((current: typeof formData) => ({
+        ...current,
+        type: nextType,
+        sectionKey: isSectionCompatibleWithType(current.sectionKey, nextType) ? current.sectionKey : ''
+      }))
+      return
+    }
+
     if (type === 'checkbox') {
       const checked = (e.target as HTMLInputElement).checked
-      setFormData({ ...formData, [name]: checked })
+      setFormData((current: typeof formData) => ({ ...current, [name]: checked }))
     } else {
-      setFormData({ ...formData, [name]: value })
+      setFormData((current: typeof formData) => ({ ...current, [name]: value }))
     }
   }
-
+  const handleQuickCategoryNameChange = (value: string) => {
+    setQuickCategory((current) => {
+      const nextNameVi = value
+      const shouldSyncSlug = !current.slug || current.slug === normalizeCategorySlug(current.nameVi)
+      return {
+        ...current,
+        nameVi: nextNameVi,
+        slug: shouldSyncSlug ? normalizeCategorySlug(nextNameVi) : current.slug
+      }
+    })
+  }
+  const resetQuickCategory = () => {
+    setQuickCategory({
+      slug: '',
+      nameVi: '',
+      nameEn: '',
+      displayOrder: getNextCategoryOrder(availableCategories)
+    })
+  }
+  const handleQuickCategorySubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setCategorySaveLoading(true)
+    try {
+      const response = await fetch('/api/admin/categories', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          slug: normalizeCategorySlug(quickCategory.slug),
+          nameVi: quickCategory.nameVi,
+          nameEn: quickCategory.nameEn,
+          displayOrder: quickCategory.displayOrder
+        })
+      })
+      const data = await response.json().catch(() => null)
+      if (!response.ok) {
+        alert(data?.error || ('Khong the tao danh muc (HTTP ' + response.status + ')'))
+        return
+      }
+      const createdCategory = data?.category as CategorySummary
+      onCategoryCreated?.(createdCategory)
+      setFormData((current: typeof formData) => ({ ...current, category: createdCategory.slug }))
+      setShowCategoryModal(false)
+      resetQuickCategory()
+    } catch (error) {
+      console.error('Quick category create error:', error)
+      alert('Khong the tao danh muc')
+    } finally {
+      setCategorySaveLoading(false)
+    }
+  }
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
 
     try {
+      const plainContent = (formData.content || '')
+        .replace(/<[^>]*>/g, ' ')
+        .replace(/&nbsp;/g, ' ')
+        .trim()
+      if (!plainContent) {
+        alert('Vui lòng nhập nội dung')
+        setLoading(false)
+        return
+      }
+
+      if (formData.type === 'EVENT' && !formData.eventStartAt) {
+        alert('Vui lòng nhập thời gian bắt đầu sự kiện')
+        setLoading(false)
+        return
+      }
+
+      if (formData.type === 'PROJECT_ACTIVITY' && !formData.projectUrl) {
+        alert('Vui lòng nhập đường dẫn dự án')
+        setLoading(false)
+        return
+      }
+
       const submitData = {
         ...formData,
+        sectionKey: isSectionCompatibleWithType(formData.sectionKey, formData.type) ? formData.sectionKey : '',
         tags: formData.tags
       }
 
@@ -321,13 +539,9 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Nội dung (Tiếng Việt) *
               </label>
-              <textarea
-                name="content"
+              <RichTextEditor
                 value={formData.content}
-                onChange={handleChange}
-                required
-                rows={8}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                onChange={(nextValue) => setFormData({ ...formData, content: nextValue })}
               />
             </div>
           </div>
@@ -341,7 +555,22 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
               </label>
               <input
                 type="text"
+                name="titleEn"
+                value={formData.titleEn}
                 onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Short Description (English)
+              </label>
+              <textarea
+                name="descriptionEn"
+                value={formData.descriptionEn}
+                onChange={handleChange}
+                rows={3}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -350,19 +579,29 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Content (English)
               </label>
-              <textarea
-                onChange={handleChange}
-                rows={8}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              <RichTextEditor
+                value={formData.contentEn}
+                onChange={(nextValue) => setFormData({ ...formData, contentEn: nextValue })}
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Danh mục *
-              </label>
+                        <div>
+              <div className="mb-2 flex items-center justify-between gap-3">
+                <label className="block text-sm font-medium text-gray-700">
+                  Danh mục *
+                </label>
+                {userRole === 'ADMIN' && (
+                  <button
+                    type="button"
+                    onClick={() => setShowCategoryModal(true)}
+                    className="text-sm font-medium text-green-700 hover:text-green-800"
+                  >
+                    + Tạo danh mục mới
+                  </button>
+                )}
+              </div>
               <select
                 name="category"
                 value={formData.category}
@@ -371,8 +610,10 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
               >
                 <option value="">Chọn danh mục</option>
-                {categories.map(cat => (
-                  <option key={cat.value} value={cat.value}>{cat.label}</option>
+                {categoryOptions.map((category) => (
+                  <option key={category.slug} value={category.slug}>
+                    {category.nameVi}{category.isActive ? '' : ' (ngừng hoạt động)'}
+                  </option>
                 ))}
               </select>
             </div>
@@ -395,6 +636,131 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
             </div>
           </div>
 
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Hiển thị trên trang chủ
+              </label>
+              <select
+                name="sectionKey"
+                value={formData.sectionKey}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+              >
+                {sectionOptions.map(option => (
+                  <option key={option.value} value={option.value}>{option.label}</option>
+                ))}
+              </select>
+              <p className="text-xs text-gray-500 mt-1">
+                Chỉ chọn khi muốn hiển thị nội dung trên trang chủ.
+              </p>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Thứ tự hiển thị
+              </label>
+              <input
+                type="number"
+                name="displayOrder"
+                value={formData.displayOrder}
+                onChange={handleChange}
+                placeholder="0"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Số nhỏ hiển thị trước. Bỏ trống thì sắp xếp theo ngày tạo.
+              </p>
+            </div>
+          </div>
+
+          {formData.type === 'PROJECT_ACTIVITY' && (
+            <div className="space-y-4 rounded-lg border border-amber-200 bg-amber-50/60 p-4">
+              <h3 className="text-lg font-semibold text-amber-700">Thông tin Hoạt động dự án</h3>
+
+              <div>
+                <p className="text-sm text-amber-800">
+                  Điền trường Content URL bên dưới để card mở liên kết ngoài. Trường này bắt buộc với hoạt động dự án.
+                </p>
+              </div>
+            </div>
+          )}
+
+          {formData.type === 'EVENT' && (
+            <div className="space-y-4 rounded-lg border border-emerald-200 bg-emerald-50/60 p-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-emerald-700">Thông tin sự kiện</h3>
+                <label className="flex items-center text-sm text-gray-700">
+                  <input
+                    type="checkbox"
+                    name="isAllDay"
+                    checked={formData.isAllDay}
+                    onChange={handleChange}
+                    className="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                  />
+                  <span className="ml-2">Cả ngày</span>
+                </label>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    {formData.isAllDay ? 'Ngày bắt đầu *' : 'Thời gian bắt đầu *'}
+                  </label>
+                  <input
+                    type={formData.isAllDay ? 'date' : 'datetime-local'}
+                    name="eventStartAt"
+                    value={formData.eventStartAt}
+                    onChange={handleChange}
+                    required={formData.type === 'EVENT'}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    {formData.isAllDay ? 'Ngày kết thúc' : 'Thời gian kết thúc'}
+                  </label>
+                  <input
+                    type={formData.isAllDay ? 'date' : 'datetime-local'}
+                    name="eventEndAt"
+                    value={formData.eventEndAt}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Múi giờ
+                  </label>
+                  <input
+                    type="text"
+                    name="eventTimezone"
+                    value={formData.eventTimezone}
+                    onChange={handleChange}
+                    placeholder="Asia/Ho_Chi_Minh"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Địa điểm
+                  </label>
+                  <input
+                    type="text"
+                    name="eventLocation"
+                    value={formData.eventLocation}
+                    onChange={handleChange}
+                    placeholder="Cần Thơ, Việt Nam"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Từ khóa (phân cách bằng dấu phẩy)
@@ -413,21 +779,66 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-purple-600">Media Content</h3>
 
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Thumbnail (Trang chủ)
+              </label>
+              {formData.thumbnailUrl && (
+                <div className="mb-3 flex items-center gap-4">
+                  <Image
+                    src={formData.thumbnailUrl}
+                    alt="Thumbnail preview"
+                    width={120}
+                    height={80}
+                    className="rounded-md object-cover border"
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setFormData((prev: typeof formData) => ({ ...prev, thumbnailUrl: '' }))}
+                    className="text-red-600 hover:text-red-700"
+                  >
+                    Xóa thumbnail
+                  </Button>
+                </div>
+              )}
+
+              {!formData.thumbnailUrl && (
+                <FileUploadZone
+                  multiple={false}
+                  fileOnly={true}
+                  accept="image/*"
+                  maxSize={1}
+                  onUploadComplete={(files) => {
+                    if (files.length > 0) {
+                      const file = files[0]
+                      setFormData((prev: typeof formData) => ({
+                        ...prev,
+                        thumbnailUrl: file.url || ''
+                      }))
+                    }
+                  }}
+                  onUploadError={(error) => alert(error)}
+                />
+              )}
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  News URL
+                  Content URL {formData.type === 'PROJECT_ACTIVITY' ? '*' : '(tùy chọn)'}
                 </label>
                 <input
                   type="url"
-                  name="imageUrl"
-                  value={formData.imageUrl}
+                  name="projectUrl"
+                  value={formData.projectUrl}
                   onChange={handleChange}
-                  placeholder="https://example.com/news-article"
+                  required={formData.type === 'PROJECT_ACTIVITY'}
+                  placeholder="https://example.com/article-or-pdf"
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                 />
                 <p className="text-xs text-gray-500 mt-1">
-                  Link to news article or external source
+                  Nếu nhập, card sẽ mở liên kết ngoài (PDF/bài viết). Nếu bỏ trống, card sẽ mở trang chi tiết nội dung.
                 </p>
               </div>
 
@@ -472,10 +883,11 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
                   </svg>
                 </div>
                 <div className="ml-3">
-                  <p className="text-sm text-amber-700">
-                    <strong>Hình ảnh hiển thị:</strong> Chỉ những hình ảnh được tải lên thủ công sẽ hiển thị trong carousel tin tức.
-                    Hiện tại chỉ hỗ trợ hình ảnh dưới 1MB. Trường &ldquo;News URL&rdquo; dùng để liên kết đến bài báo gốc.
-                  </p>
+                  <div className="space-y-1 text-sm text-amber-700">
+                    <p><strong>Thumbnail và image chỉ dùng cho ảnh hiển thị.</strong></p>
+                    <p>File đính kèm nội bộ hiện hạn chế trên Vercel.</p>
+                    <p>Khuyến nghị dùng Content URL cho PDF ngoài, bài viết, hoặc cloud link.</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -495,7 +907,7 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
                           className="w-full h-full object-cover rounded"
                         />
                       ) : (
-                        <span className="text-xl">📄</span>
+                        <span className="text-xl">ðŸ“„</span>
                       )}
                     </div>
                     <div>
@@ -618,6 +1030,83 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
         </form>
       </div>
 
+      {showCategoryModal && (
+        <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/50 p-4">
+          <div className="w-full max-w-lg rounded-lg bg-white shadow-xl">
+            <div className="flex items-center justify-between border-b px-6 py-4">
+              <h3 className="text-lg font-bold text-gray-900">Tạo danh mục mới</h3>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowCategoryModal(false)
+                  resetQuickCategory()
+                }}
+                className="text-2xl font-bold text-gray-500 hover:text-gray-700"
+              >
+                x
+              </button>
+            </div>
+            <form onSubmit={handleQuickCategorySubmit} className="space-y-4 px-6 py-5">
+              <div>
+                <label className="mb-2 block text-sm font-medium text-gray-700">Tên danh mục *</label>
+                <input
+                  type="text"
+                  value={quickCategory.nameVi}
+                  onChange={(event) => handleQuickCategoryNameChange(event.target.value)}
+                  required
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+              <div>
+                <label className="mb-2 block text-sm font-medium text-gray-700">Slug *</label>
+                <input
+                  type="text"
+                  value={quickCategory.slug}
+                  onChange={(event) => setQuickCategory((current) => ({ ...current, slug: normalizeCategorySlug(event.target.value) }))}
+                  required
+                  pattern="[a-z0-9]+(?:[-_][a-z0-9]+)*"
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+                <p className="mt-1 text-xs text-gray-500">Dùng slug chữ thường, không dấu. Legacy slug có underscore vẫn được giữ để tương thích.</p>
+              </div>
+              <div>
+                <label className="mb-2 block text-sm font-medium text-gray-700">Tên tiếng Anh</label>
+                <input
+                  type="text"
+                  value={quickCategory.nameEn}
+                  onChange={(event) => setQuickCategory((current) => ({ ...current, nameEn: event.target.value }))}
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+              <div>
+                <label className="mb-2 block text-sm font-medium text-gray-700">Thứ tự hiển thị</label>
+                <input
+                  type="number"
+                  value={quickCategory.displayOrder}
+                  onChange={(event) => setQuickCategory((current) => ({ ...current, displayOrder: Number(event.target.value || 0) }))}
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+              <div className="flex justify-end gap-3 border-t pt-4">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={() => {
+                    setShowCategoryModal(false)
+                    resetQuickCategory()
+                  }}
+                  disabled={categorySaveLoading}
+                >
+                  Hủy
+                </Button>
+                <Button type="submit" disabled={categorySaveLoading}>
+                  {categorySaveLoading ? 'Đang tạo...' : 'Tạo danh mục'}
+                </Button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
       {/* File Manager Modal */}
       {showFileManager && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-60 p-4">
@@ -655,3 +1144,9 @@ export function ContentForm({ content, onClose, userRole }: ContentFormProps) {
     </div>
   )
 }
+
+
+
+
+
+

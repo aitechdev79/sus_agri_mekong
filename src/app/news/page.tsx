@@ -6,6 +6,7 @@ import { Calendar, ChevronLeft, ChevronRight, Eye } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import NavigationBar from '@/components/NavigationBar';
 import EventCalendar from '@/components/EventCalendar';
+import { usePublicCategories } from '@/hooks/use-public-categories';
 
 interface NewsItem {
   id: string;
@@ -30,23 +31,21 @@ interface PaginatedResponse {
 
 export default function NewsPage() {
   const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const itemsPerPage = 5; // 5 items per page for better pagination demonstration
+  const { categoryLabels } = usePublicCategories();
 
   useEffect(() => {
-    fetchNews(currentPage);
-  }, [currentPage]);
+    fetchNews();
+  }, []);
 
-  const fetchNews = async (page: number) => {
+  const fetchNews = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/content?type=NEWS,ARTICLE&page=${page}&limit=${itemsPerPage}`);
+      const response = await fetch(`/api/content?type=NEWS,ARTICLE&page=1&limit=${itemsPerPage}`);
       if (response.ok) {
         const data: PaginatedResponse = await response.json();
         setNewsItems(data.contents);
-        setTotalPages(data.pagination.pages);
       }
     } catch (error) {
       console.error('Error fetching news:', error);
@@ -64,75 +63,9 @@ export default function NewsPage() {
     });
   };
 
-  const goToPage = (page: number) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  };
-
-  const renderPaginationButtons = () => {
-    const buttons = [];
-    const maxButtons = 5; // Maximum number of page buttons to show
-
-    let startPage = Math.max(1, currentPage - Math.floor(maxButtons / 2));
-    const endPage = Math.min(totalPages, startPage + maxButtons - 1);
-
-    // Adjust if we're near the end
-    if (endPage - startPage + 1 < maxButtons) {
-      startPage = Math.max(1, endPage - maxButtons + 1);
-    }
-
-    // First page
-    if (startPage > 1) {
-      buttons.push(
-        <button
-          key="1"
-          onClick={() => goToPage(1)}
-          className="px-3 py-1 rounded border hover:bg-gray-100"
-        >
-          1
-        </button>
-      );
-      if (startPage > 2) {
-        buttons.push(<span key="dots1" className="px-2">...</span>);
-      }
-    }
-
-    // Page numbers
-    for (let i = startPage; i <= endPage; i++) {
-      buttons.push(
-        <button
-          key={i}
-          onClick={() => goToPage(i)}
-          className={`px-3 py-1 rounded border ${
-            i === currentPage
-              ? 'bg-blue-600 text-white border-blue-600'
-              : 'hover:bg-gray-100'
-          }`}
-        >
-          {i}
-        </button>
-      );
-    }
-
-    // Last page
-    if (endPage < totalPages) {
-      if (endPage < totalPages - 1) {
-        buttons.push(<span key="dots2" className="px-2">...</span>);
-      }
-      buttons.push(
-        <button
-          key="last"
-          onClick={() => goToPage(totalPages)}
-          className="px-3 py-1 rounded border hover:bg-gray-100"
-        >
-          Trang cuối
-        </button>
-      );
-    }
-
-    return buttons;
+  const getCategoryLabel = (category?: string) => {
+    if (!category) return '';
+    return categoryLabels[category] || category;
   };
 
   // Carousel state for upcoming events
@@ -165,18 +98,18 @@ export default function NewsPage() {
   useEffect(() => {
     if (carouselItems.length > 1) {
       const interval = setInterval(() => {
-        nextSlide();
+        setCurrentSlide((prev) => (prev + 1) % carouselItems.length);
       }, 5000);
       return () => clearInterval(interval);
     }
-  }, [carouselItems.length, currentSlide]);
+  }, [carouselItems.length]);
 
   // Prepare events for calendar
   const calendarEvents = newsItems.map(item => ({
     id: item.id,
     title: item.title,
     date: new Date(item.createdAt),
-    type: (item.category?.toLowerCase().includes('đào tạo') || item.category?.toLowerCase().includes('training')) ? 'training' as const : 'event' as const,
+    type: (getCategoryLabel(item.category).toLowerCase().includes('dao tao') || getCategoryLabel(item.category).toLowerCase().includes('training')) ? 'training' as const : 'event' as const,
   }));
 
   return (
@@ -251,7 +184,7 @@ export default function NewsPage() {
                                 </div>
                                 {item.category && (
                                   <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold">
-                                    {item.category}
+                                    {getCategoryLabel(item.category)}
                                   </span>
                                 )}
                               </div>
@@ -389,7 +322,7 @@ export default function NewsPage() {
                         </div>
                         {item.category && (
                           <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold">
-                            {item.category}
+                            {getCategoryLabel(item.category)}
                           </span>
                         )}
                       </div>
@@ -408,3 +341,4 @@ export default function NewsPage() {
     </div>
   );
 }
+

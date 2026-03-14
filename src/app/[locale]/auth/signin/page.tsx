@@ -1,156 +1,134 @@
-'use client';
+'use client'
 
-import { useState } from 'react';
-import { signIn, getSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
-import Link from 'next/link';
-import { useLocale } from 'next-intl';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
+import { useState } from 'react'
+import { signIn } from 'next-auth/react'
+import Link from 'next/link'
+import { useLocale } from 'next-intl'
+import { Eye, EyeOff, Lock, Mail } from 'lucide-react'
+import NavigationBar from '@/components/NavigationBar'
+import Footer from '@/components/Footer'
+import { Button } from '@/components/ui/button'
 
 export default function SignInPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
 
-  const router = useRouter();
-  const t = useTranslations('Auth');
-  const locale = useLocale();
+  const locale = useLocale()
+  const isEn = locale === 'en'
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError('');
+    e.preventDefault()
+    setIsLoading(true)
+    setError('')
 
     try {
-      // Try using redirect: true for better session handling
       const result = await signIn('credentials', {
         email,
         password,
-        callbackUrl: `/${locale}/admin`, // Always redirect to admin for testing
-        redirect: true,
-      });
+        redirect: false,
+      })
 
-      // This code will only run if redirect: false
       if (result?.error) {
-        setError(t('invalidCredentials'));
+        setError(isEn ? 'Invalid email or password.' : 'Email hoặc mật khẩu không đúng.')
+      } else {
+        const sessionResponse = await fetch('/api/auth/session')
+        const sessionData = await sessionResponse.json()
+        const role = sessionData?.user?.role as 'USER' | 'BUSINESS' | 'MODERATOR' | 'ADMIN' | undefined
+
+        let nextPath = `/${locale}`
+        if (role === 'ADMIN' || role === 'MODERATOR') {
+          nextPath = `/${locale}/admin`
+        }
+
+        window.location.href = nextPath
       }
-    } catch (error) {
-      setError(t('loginError'));
+    } catch {
+      setError(isEn ? 'An error occurred. Please try again.' : 'Đã xảy ra lỗi. Vui lòng thử lại.')
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-sky-50 via-white to-emerald-50">
+      <NavigationBar />
 
-      <main className="flex-grow bg-gray-50 py-12">
-        <div className="container mx-auto px-6 max-w-md">
-          <div className="bg-white rounded-lg shadow-md p-8">
-            {/* Header */}
-            <div className="text-center mb-8">
-              <h1 className="text-2xl font-bold text-gray-800 mb-2">
-                {t('signIn.title')}
-              </h1>
-              <p className="text-gray-600">
-                {t('signIn.subtitle')}
-              </p>
-            </div>
-
-            {/* Error Message */}
-            {error && (
-              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-                <p className="text-red-600 text-sm">{error}</p>
+      <main className="flex-grow pt-24">
+        <div className="container mx-auto flex items-center justify-center px-6 py-12 md:py-16">
+          <div className="w-full max-w-xl overflow-hidden rounded-3xl border border-sky-100 bg-white shadow-xl">
+            <div className="p-6 md:p-10">
+              <div className="mb-8">
+                <h1 className="text-3xl font-bold text-gray-900">{isEn ? 'Sign in' : 'Đăng nhập'}</h1>
+                <p className="mt-2 text-sm text-gray-600">
+                  {isEn ? 'Access your account to continue.' : 'Truy cập tài khoản của bạn để tiếp tục.'}
+                </p>
               </div>
-            )}
 
-            {/* Sign In Form */}
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Email Field */}
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                  {t('email')}
-                </label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
-                  <input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder={t('emailPlaceholder')}
-                  />
+              {error && (
+                <div className="mb-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                  {error}
                 </div>
-              </div>
+              )}
 
-              {/* Password Field */}
-              <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                  {t('password')}
-                </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
-                  <input
-                    id="password"
-                    type={showPassword ? 'text' : 'password'}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder={t('passwordPlaceholder')}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
-                  >
-                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                  </button>
-                </div>
-              </div>
-
-              {/* Submit Button */}
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                {isLoading ? t('signingIn') : t('signIn.button')}
-              </button>
-            </form>
-
-            {/* Demo Accounts */}
-            <div className="mt-8 p-4 bg-blue-50 rounded-lg">
-              <h3 className="text-sm font-medium text-blue-800 mb-2">{t('demoAccounts')}</h3>
-              <div className="space-y-2 text-xs text-blue-700">
+              <form onSubmit={handleSubmit} className="space-y-5">
                 <div>
-                  <strong>{t('admin')}:</strong> an.nguyen@example.com / password123
+                  <label htmlFor="email" className="mb-2 block text-sm font-medium text-gray-700">
+                    Email
+                  </label>
+                  <div className="relative">
+                    <Mail className="pointer-events-none absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
+                    <input
+                      id="email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      className="w-full rounded-xl border border-gray-300 py-3 pl-11 pr-4 text-gray-900 outline-none ring-sky-500 transition focus:border-sky-500 focus:ring-2"
+                      placeholder={isEn ? 'Enter your email' : 'Nhập địa chỉ email'}
+                    />
+                  </div>
                 </div>
-                <div>
-                  <strong>{t('user')}:</strong> binh.tran@example.com / password123
-                </div>
-              </div>
-            </div>
 
-            {/* Sign Up Link */}
-            <div className="mt-6 text-center">
-              <p className="text-gray-600">
-                {t('noAccount')}{' '}
-                <Link
-                  href={`/${locale}/auth/signup`}
-                  className="text-blue-600 hover:text-blue-700 font-medium"
-                >
-                  {t('signUp.button')}
+                <div>
+                  <label htmlFor="password" className="mb-2 block text-sm font-medium text-gray-700">
+                    {isEn ? 'Password' : 'Mật khẩu'}
+                  </label>
+                  <div className="relative">
+                    <Lock className="pointer-events-none absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
+                    <input
+                      id="password"
+                      type={showPassword ? 'text' : 'password'}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      className="w-full rounded-xl border border-gray-300 py-3 pl-11 pr-12 text-gray-900 outline-none ring-sky-500 transition focus:border-sky-500 focus:ring-2"
+                      placeholder={isEn ? 'Enter your password' : 'Nhập mật khẩu'}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                      aria-label={showPassword ? (isEn ? 'Hide password' : 'Ẩn mật khẩu') : (isEn ? 'Show password' : 'Hiện mật khẩu')}
+                    >
+                      {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                    </button>
+                  </div>
+                </div>
+
+                <Button type="submit" disabled={isLoading} className="w-full rounded-xl bg-sky-600 py-3 text-sm font-semibold hover:bg-sky-700">
+                  {isLoading ? (isEn ? 'Signing in...' : 'Đang đăng nhập...') : (isEn ? 'Sign in' : 'Đăng nhập')}
+                </Button>
+              </form>
+
+              <div className="mt-6 text-center text-sm text-gray-600">
+                {isEn ? "Don't have an account?" : 'Chưa có tài khoản?'}{' '}
+                <Link href={`/${locale}/auth/signup`} className="font-semibold text-sky-700 hover:text-sky-600">
+                  {isEn ? 'Sign up' : 'Đăng ký'}
                 </Link>
-              </p>
+              </div>
             </div>
           </div>
         </div>
@@ -158,5 +136,5 @@ export default function SignInPage() {
 
       <Footer />
     </div>
-  );
+  )
 }

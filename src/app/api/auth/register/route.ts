@@ -1,11 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
 import { prisma } from '@/lib/prisma'
-import { generateOTP, sendSMS } from '@/lib/otp'
 
 export async function POST(request: NextRequest) {
   try {
-    const { name, email, phone, password, province, organization } = await request.json()
+    const { name, email, phone, password, province, organization, role } = await request.json()
+    const normalizedRole = String(role || '').toUpperCase() === 'BUSINESS' ? 'BUSINESS' : 'USER'
+    const normalizedOrganization = String(organization || '').trim() || null
+
+    if (normalizedRole === 'BUSINESS' && !normalizedOrganization) {
+      return NextResponse.json(
+        { message: 'Vui lòng nhập lĩnh vực kinh doanh cho tài khoản doanh nghiệp.' },
+        { status: 400 }
+      )
+    }
 
     const existingUser = await prisma.user.findUnique({
       where: { email }
@@ -18,34 +26,36 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    if (phone) {
+      const existingPhone = await prisma.user.findUnique({
+        where: { phone }
+      })
+
+      if (existingPhone) {
+        return NextResponse.json(
+          { message: 'Số điện thoại đã được sử dụng' },
+          { status: 400 }
+        )
+      }
+    }
+
     const hashedPassword = await bcrypt.hash(password, 12)
 
-    const user = await prisma.user.create({
+    await prisma.user.create({
       data: {
         name,
         email,
-        phone,
+        phone: phone || null,
         password: hashedPassword,
         province,
-        organization,
+        organization: normalizedOrganization,
+        role: normalizedRole,
+        isVerified: true,
       }
     })
-
-    const otpCode = generateOTP()
-    const expiresAt = new Date(Date.now() + 10 * 60 * 1000) // 10 minutes
-
-    await prisma.oTPVerification.create({
-      data: {
-        phone,
-        code: otpCode,
-        expires: expiresAt,
-      }
-    })
-
-    await sendSMS(phone, `Mã xác thực của bạn là: ${otpCode}. Mã này có hiệu lực trong 10 phút.`)
 
     return NextResponse.json(
-      { message: 'Đăng ký thành công. Vui lòng kiểm tra tin nhắn để xác thực số điện thoại.' },
+      { message: 'Đăng ký thành công. Vui lòng đăng nhập.' },
       { status: 200 }
     )
   } catch (error) {

@@ -1,82 +1,86 @@
 'use client';
 
 import Link from 'next/link';
+import MuxPlayer from '@mux/mux-player-react/lazy';
+import { usePathname } from 'next/navigation';
 import NavigationBar from './NavigationBar';
+import { getLocaleFromPathname, withLocalePrefix } from '@/lib/content-locale';
+
+const heroPlaybackId = process.env.NEXT_PUBLIC_MUX_HERO_PLAYBACK_ID;
 
 export default function HeroSection() {
+  const pathname = usePathname();
+  const locale = getLocaleFromPathname(pathname);
+  const isEn = locale === 'en';
+  const exploreHref = withLocalePrefix('/vision-mission', locale);
 
   return (
-    <section
-      className="relative overflow-hidden w-screen min-h-[75vh]"
-      style={{
-        marginLeft: 'calc(50% - 50vw)',
-        marginRight: 'calc(50% - 50vw)',
-      }}
-    >
-      {/* Navigation Bar */}
+    <section className="relative left-1/2 min-h-[75vh] w-screen -translate-x-1/2 overflow-hidden md:min-h-0 md:aspect-[5/2]">
       <NavigationBar />
 
-      {/* Background Image */}
       <div
         className="absolute inset-0"
-        style={{
-          width: '100vw',
-          height: '100%',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0
-        }}
+        style={{ width: '100vw', height: '100%', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
       >
-        <div
-          className="w-full h-full bg-cover"
-          style={{
-            backgroundImage: 'url(/hero-main.jpg)',
-            backgroundSize: '120%',
-            backgroundPosition: 'center center'
-          }}
-        />
-        {/* Dark Overlay */}
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundColor: 'rgba(0, 0, 0, 0.4)'
-          }}
-        />
+        {heroPlaybackId ? (
+          <MuxPlayer
+            playbackId={heroPlaybackId}
+            streamType="on-demand"
+            autoPlay="muted"
+            muted
+            loop
+            playsInline
+            preload="auto"
+            nohotkeys
+            aria-hidden="true"
+            className="pointer-events-none block h-full w-full"
+            style={{
+              '--controls': 'none',
+              '--media-object-fit': 'cover',
+              '--media-object-position': 'center',
+              width: '100%',
+              height: '100%',
+              display: 'block'
+            }}
+          />
+        ) : (
+          <div
+            className="h-full w-full bg-cover"
+            style={{ backgroundImage: 'url(/hero-main.jpg)', backgroundSize: 'cover', backgroundPosition: 'center center' }}
+          />
+        )}
+
+        <div className="absolute inset-0" style={{ backgroundColor: 'rgba(0, 0, 0, 0.4)' }} />
       </div>
 
-      {/* Main Hero Content */}
-      <div className="relative flex h-full min-h-[75vh] items-center pt-16" style={{ zIndex: 10 }}>
-        <div className="max-w-6xl px-6 w-full mx-auto">
+      <div className="relative flex min-h-[75vh] h-full items-center pt-16 md:min-h-0" style={{ zIndex: 10 }}>
+        <div className="mx-auto w-full max-w-6xl px-6">
           <div className="max-w-2xl">
-            {/* Main Headline - Left aligned */}
             <div className="mb-6">
-              <h1 className="font-montserrat font-bold text-white text-left" style={{ lineHeight: '1.1', letterSpacing: '0.5px' }}>
-                {/* 24px mobile, 32px tablet, 48px desktop */}
+              <h1 className="font-montserrat font-bold text-left text-white" style={{ lineHeight: '1.1', letterSpacing: '0.5px' }}>
                 <div className="text-2xl md:text-3xl lg:text-5xl">
-                  Thông tin bền vững - Nền móng cho tương lai phát triển bền vững của Việt Nam.
+                  {isEn
+                    ? 'Sustainability information as the foundation for Viet Nam\'s sustainable future.'
+                    : 'Thông tin bền vững - Nền móng cho tương lai phát triển bền vững của Việt Nam.'}
                 </div>
               </h1>
             </div>
 
-            {/* Subheadline */}
             <div className="mb-8">
-              <p className="font-montserrat font-bold text-lg md:text-xl text-white leading-relaxed">
-                Cung cấp thông tin minh bạch, chính xác và đáng tin cậy cho sự phát triển bền vững
+              <p className="font-montserrat text-lg font-bold leading-relaxed text-white md:text-xl">
+                {isEn
+                  ? 'Delivering transparent, accurate and reliable information for sustainable development.'
+                  : 'Cung cấp thông tin minh bạch, chính xác và đáng tin cậy cho sự phát triển bền vững'}
               </p>
             </div>
 
-            {/* CTA Button */}
             <div>
               <Link
-                href="/vision-mission"
-                className="inline-block font-montserrat font-semibold text-base md:text-lg text-vn-dark bg-vn-gold px-8 py-4 rounded-lg transition-all duration-300 hover:shadow-lg"
-                style={{
-                  boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                }}
+                href={exploreHref}
+                className="inline-block rounded-lg bg-vn-gold px-8 py-4 font-montserrat text-base font-semibold text-vn-dark transition-all duration-300 hover:shadow-lg md:text-lg"
+                style={{ boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#FFD84D'; // Lighten gold
+                  e.currentTarget.style.backgroundColor = '#FFD84D';
                   e.currentTarget.style.boxShadow = '0 6px 12px rgba(255, 184, 28, 0.3)';
                 }}
                 onMouseLeave={(e) => {
@@ -84,18 +88,9 @@ export default function HeroSection() {
                   e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
                 }}
               >
-                Khám phá →
+                {isEn ? 'Explore →' : 'Khám phá →'}
               </Link>
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
-        <div className="animate-bounce">
-          <div className="w-6 h-10 border-2 border-white rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-white rounded-full mt-2 animate-pulse"></div>
           </div>
         </div>
       </div>

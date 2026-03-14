@@ -19,6 +19,7 @@ export default withAuth(
           '/',
           '/auth/signin',
           '/auth/signup',
+          '/welcome',
           '/about-vcci',
           '/vision-mission',
           '/join-us',
@@ -28,6 +29,7 @@ export default withAuth(
           '/library',
           '/content',
           '/guidance-policy',
+          '/policy_circular_economy',
           '/esg',
           '/policy',
           '/reports',
@@ -35,9 +37,16 @@ export default withAuth(
           '/commitment',
           '/global_best_practice',
           '/VN_best_practice',
+          '/unilever',
+          '/tomcamau',
+          '/daotaokiemkeKNK',
+          '/hoat-dong-du-an',
+          '/tat-ca-dien-hinh',
+          '/tat-ca-su-kien',
           '/congtyMinhphu',
           '/congtyTaiky',
           '/congtyVinhhien',
+          '/AgeCareReport',
           '/vi', // Internationalized routes
           '/en'
         ];
@@ -64,5 +73,5 @@ export default withAuth(
 
 export const config = {
   // Match only internationalized pathnames and protected routes, exclude static assets
-  matcher: ['/((?!_next|favicon.ico|uploads|hero|images|.*\\.jpg|.*\\.jpeg|.*\\.png|.*\\.gif|.*\\.svg|.*\\.webp).*)']
+  matcher: ['/((?!_next|favicon.ico|uploads|hero|images|policy_circular_economy|.*\\.jpg|.*\\.jpeg|.*\\.png|.*\\.gif|.*\\.svg|.*\\.webp|.*\\.pdf).*)']
 };

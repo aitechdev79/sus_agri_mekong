@@ -2,51 +2,100 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { useEffect, useMemo, useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { getLocaleFromPathname, withLocalePrefix } from '@/lib/content-locale';
+
+interface PartnerItem {
+  id: string;
+  companyName: string;
+  logoUrl: string | null;
+  website: string | null;
+}
+
+const FALLBACK_PARTNERS: PartnerItem[] = [
+  { id: 'vinamilk', companyName: 'Vinamilk', logoUrl: '/Logo_Vinamilk_(2023).png', website: null },
+  { id: 'john-deere', companyName: 'John Deere', logoUrl: '/John_Deere_logo.svg.png', website: null },
+  { id: 'loctroi', companyName: 'Loc Troi', logoUrl: '/06-loctroi.png', website: null },
+  { id: 'binhdien', companyName: 'Binh Dien', logoUrl: '/03-binhdien.jpg', website: null },
+  { id: 'cp', companyName: 'CP', logoUrl: '/02-CP.jpg', website: null },
+  { id: 'vietfood', companyName: 'Vietfood', logoUrl: '/vietfood.png', website: null },
+  { id: 'agribank', companyName: 'Agribank', logoUrl: '/Agribank.png', website: null },
+  { id: 'phan-bon-ca-mau', companyName: 'Phân bón Cà Mau', logoUrl: '/phan bon ca mau.png', website: null },
+];
 
 export default function SignUpSection() {
-  const partnerLogos = [
-    // Row 1
-    { id: 'vinamilk', name: 'Vinamilk', logo: '/Logo_Vinamilk_(2023).png' },
-    { id: 'john-deere', name: 'John Deere', logo: '/John_Deere_logo.svg.png' },
-    { id: 'loctroi', name: 'Lộc Trời', logo: '/06-loctroi.png' },
-    { id: 'binhdien', name: 'Bình Điền', logo: '/03-binhdien.jpg' },
-    // Row 2
-    { id: 'cp', name: 'CP', logo: '/02-CP.jpg' },
-    { id: 'vietfood', name: 'Vietfood', logo: '/vietfood.png' },
-    { id: 'agribank', name: 'Agribank', logo: '/Agribank.png' },
-    { id: 'phan-bon-ca-mau', name: 'Phân bón Cà Mau', logo: '/phan bon ca mau.png' },
-  ];
+  const pathname = usePathname();
+  const locale = getLocaleFromPathname(pathname);
+  const isEn = locale === 'en';
+  const [partners, setPartners] = useState<PartnerItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadPartners = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/partners');
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Failed to load partners');
+        }
+
+        const list = Array.isArray(data.partners) ? data.partners : [];
+        setPartners(
+          list.filter((item: PartnerItem) => item.logoUrl).map((item: PartnerItem) => ({
+            id: item.id,
+            companyName: item.companyName,
+            logoUrl: item.logoUrl,
+            website: item.website ?? null,
+          })),
+        );
+      } catch (error) {
+        console.error('Partners section fetch error:', error);
+        setPartners([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadPartners();
+  }, []);
+
+  const displayPartners = useMemo(() => {
+    if (partners.length > 0) {
+      return partners;
+    }
+    return FALLBACK_PARTNERS.slice(0, 4);
+  }, [partners]);
 
   return (
-    <section className="py-20 bg-vn-rice-white">
-      <div className="container mx-auto px-6 max-w-6xl">
-        {/* Header Section */}
-        <div className="mb-16 relative">
+    <section className="bg-vn-rice-white py-20">
+      <div className="container mx-auto max-w-6xl px-6">
+        <div className="relative mb-16">
           <div className="flex items-start justify-between">
-            {/* Left Side - Headlines */}
             <div style={{ maxWidth: '60%' }}>
-              {/* Section Identifier */}
-              <p className="uppercase font-montserrat font-semibold tracking-wider mb-4" style={{ fontSize: '18px', color: 'rgba(60, 60, 59, 0.6)' }}>
-                Trở thành đối tác
+              <p
+                className="mb-4 font-montserrat text-[18px] font-semibold uppercase tracking-wider"
+                style={{ color: 'rgba(60, 60, 59, 0.6)' }}
+              >
+                {isEn ? 'Become a partner' : 'Trở thành đối tác'}
               </p>
 
-              {/* Main Headline */}
-              <h2 className="text-vn-dark font-montserrat font-bold leading-tight" style={{ fontSize: '38.4px', fontWeight: 700 }}>
-                Đối tác doanh nghiệp được cập nhật các chương trình và nội dung mới nhất. Được kết nối với cộng đồng doanh nghiệp, chuyên gia và nông dân.
+              <h2
+                className="font-montserrat text-vn-dark font-bold leading-tight"
+                style={{ fontSize: '38.4px', fontWeight: 700 }}
+              >
+                {isEn
+                  ? 'Partners receive updates on new programs and content. Connect with businesses, experts and farmers in the ecosystem.'
+                  : 'Đối tác doanh nghiệp được cập nhật các chương trình và nội dung mới nhất. Được kết nối với cộng đồng doanh nghiệp, chuyên gia và nông dân.'}
               </h2>
             </div>
 
-            {/* Right Side - CTA Button */}
             <Link
-              href="/join-us"
-              className="flex-shrink-0 inline-flex items-center gap-2 font-montserrat font-bold transition-all duration-300 hover:scale-105"
-              style={{
-                border: '2px solid #0A7029',
-                color: '#0A7029',
-                padding: '16px 32px',
-                borderRadius: '8px',
-                backgroundColor: 'transparent'
-              }}
+              href={withLocalePrefix('/join-us', locale)}
+              className="inline-flex flex-shrink-0 items-center gap-2 font-montserrat font-bold transition-all duration-300 hover:scale-105"
+              style={{ border: '2px solid #0A7029', color: '#0A7029', padding: '16px 32px', borderRadius: '8px', backgroundColor: 'transparent' }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = '#0A7029';
                 e.currentTarget.style.color = 'white';
@@ -55,81 +104,33 @@ export default function SignUpSection() {
                 e.currentTarget.style.backgroundColor = 'transparent';
                 e.currentTarget.style.color = '#0A7029';
               }}
-              aria-label="Trở thành đối tác"
+              aria-label={isEn ? 'Become a partner' : 'Trở thành đối tác'}
             >
-              Trở thành đối tác
+              {isEn ? 'Become a partner' : 'Trở thành đối tác'}
               <span className="text-xl">→</span>
             </Link>
           </div>
         </div>
 
-        {/* Partner Logos Grid */}
-        <div className="space-y-8">
-          {/* Row 1 */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-            {partnerLogos.slice(0, 4).map((partner) => (
+        {loading && partners.length === 0 ? (
+          <div className="rounded-xl border border-gray-200 bg-white px-6 py-10 text-center text-sm text-gray-500">
+            {isEn ? 'Loading partners...' : 'Đang tải đối tác...'}
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-4">
+            {displayPartners.map((partner) => (
               <div
                 key={partner.id}
-                className="bg-white rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-105"
-                style={{
-                  border: '1px solid rgba(0, 0, 0, 0.1)',
-                  padding: '24px',
-                  maxHeight: '120px',
-                  filter: 'grayscale(100%) opacity(0.7)',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.filter = 'grayscale(0%) opacity(1)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.filter = 'grayscale(100%) opacity(0.7)';
-                }}
+                className="bg-white flex items-center justify-center transition-all duration-300 hover:scale-105"
+                style={{ border: '1px solid rgba(0, 0, 0, 0.1)', padding: '24px', maxHeight: '120px' }}
               >
-                <div className="relative w-full h-20 flex items-center justify-center">
-                  <Image
-                    src={partner.logo}
-                    alt={partner.name}
-                    fill
-                    className="object-contain"
-                  />
+                <div className="relative flex h-20 w-full items-center justify-center">
+                  <Image src={partner.logoUrl || '/Logo_Vinamilk_(2023).png'} alt={partner.companyName} fill className="object-contain" />
                 </div>
               </div>
             ))}
-          </div>
-
-          {/* Divider */}
-          <div className="border-t border-gray-200" style={{ borderColor: 'rgba(0, 0, 0, 0.1)' }}></div>
-
-          {/* Row 2 */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-            {partnerLogos.slice(4, 8).map((partner) => (
-              <div
-                key={partner.id}
-                className="bg-white rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-105"
-                style={{
-                  border: '1px solid rgba(0, 0, 0, 0.1)',
-                  padding: '24px',
-                  maxHeight: '120px',
-                  filter: 'grayscale(100%) opacity(0.7)',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.filter = 'grayscale(0%) opacity(1)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.filter = 'grayscale(100%) opacity(0.7)';
-                }}
-              >
-                <div className="relative w-full h-20 flex items-center justify-center">
-                  <Image
-                    src={partner.logo}
-                    alt={partner.name}
-                    fill
-                    className="object-contain"
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+            </div>
+        )}
       </div>
     </section>
   );

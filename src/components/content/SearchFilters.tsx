@@ -1,6 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { usePathname } from 'next/navigation'
+import { getLocaleFromPathname } from '@/lib/content-locale'
 
 interface SearchFiltersProps {
   selectedCategory: string
@@ -9,19 +11,24 @@ interface SearchFiltersProps {
 }
 
 export function SearchFilters({ selectedCategory, selectedType, onFilterChange }: SearchFiltersProps) {
-  const [categories, setCategories] = useState<{ name: string; nameVi: string; count: number }[]>([])
+  const pathname = usePathname()
+  const locale = getLocaleFromPathname(pathname)
+  const isEn = locale === 'en'
+  const [categories, setCategories] = useState<{ slug: string; name: string; nameVi: string; nameEn?: string | null; count: number }[]>([])
   const [loading, setLoading] = useState(true)
 
   const contentTypes = [
-    { value: '', label: 'Tất cả loại' },
-    { value: 'ARTICLE', label: 'Bài viết' },
+    { value: '', label: isEn ? 'All types' : 'Tất cả loại' },
+    { value: 'ARTICLE', label: isEn ? 'Article' : 'Bài viết' },
     { value: 'VIDEO', label: 'Video' },
-    { value: 'DOCUMENT', label: 'Tài liệu' },
-    { value: 'STORY', label: 'Điển hình' },
-    { value: 'GUIDE', label: 'Hướng dẫn' },
-    { value: 'POLICY', label: 'Chính sách' },
+    { value: 'DOCUMENT', label: isEn ? 'Document' : 'Tài liệu' },
+    { value: 'STORY', label: isEn ? 'Story' : 'Điển hình' },
+    { value: 'PROJECT_ACTIVITY', label: isEn ? 'Project activity' : 'Hoạt động dự án' },
+    { value: 'GUIDE', label: isEn ? 'Guide' : 'Hướng dẫn' },
+    { value: 'POLICY', label: isEn ? 'Policy' : 'Chính sách' },
     { value: 'INFOGRAPHIC', label: 'Infographic' },
-    { value: 'NEWS', label: 'Tin tức' }
+    { value: 'NEWS', label: isEn ? 'News' : 'Tin tức' },
+    { value: 'EVENT', label: isEn ? 'Event' : 'Sự kiện' }
   ]
 
   useEffect(() => {
@@ -60,7 +67,7 @@ export function SearchFilters({ selectedCategory, selectedType, onFilterChange }
         {/* Category Filter */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Danh mục
+            {isEn ? 'Category' : 'Danh mục'}
           </label>
           <select
             value={selectedCategory}
@@ -68,10 +75,10 @@ export function SearchFilters({ selectedCategory, selectedType, onFilterChange }
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
             disabled={loading}
           >
-            <option value="">Tất cả danh mục</option>
+            <option value="">{isEn ? 'All categories' : 'Tất cả danh mục'}</option>
             {categories.map((category) => (
-              <option key={category.name} value={category.name}>
-                {category.nameVi} ({category.count})
+              <option key={category.slug} value={category.slug}>
+                {(isEn ? category.nameEn || category.name || category.nameVi : category.nameVi || category.name)} ({category.count})
               </option>
             ))}
           </select>
@@ -80,7 +87,7 @@ export function SearchFilters({ selectedCategory, selectedType, onFilterChange }
         {/* Type Filter */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Loại nội dung
+            {isEn ? 'Content type' : 'Loại nội dung'}
           </label>
           <select
             value={selectedType}
@@ -101,7 +108,7 @@ export function SearchFilters({ selectedCategory, selectedType, onFilterChange }
             onClick={clearFilters}
             className="w-full px-4 py-2 text-sm text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-500"
           >
-            Xóa bộ lọc
+            {isEn ? 'Clear filters' : 'Xóa bộ lọc'}
           </button>
         </div>
       </div>
@@ -109,10 +116,14 @@ export function SearchFilters({ selectedCategory, selectedType, onFilterChange }
       {/* Active Filters */}
       {(selectedCategory || selectedType) && (
         <div className="flex flex-wrap gap-2 pt-2 border-t">
-          <span className="text-sm text-gray-600">Bộ lọc đang áp dụng:</span>
+          <span className="text-sm text-gray-600">{isEn ? 'Active filters:' : 'Bộ lọc đang áp dụng:'}</span>
           {selectedCategory && (
             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-              {categories.find(c => c.name === selectedCategory)?.nameVi}
+              {(() => {
+                const category = categories.find(c => c.slug === selectedCategory)
+                if (!category) return selectedCategory
+                return isEn ? category.nameEn || category.name || category.nameVi : category.nameVi || category.name
+              })()}
               <button
                 onClick={() => handleCategoryChange('')}
                 className="ml-1 text-green-600 hover:text-green-800"

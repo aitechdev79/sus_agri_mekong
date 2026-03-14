@@ -1,17 +1,16 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { requireAuth } from '@/lib/auth-middleware'
+﻿import { NextRequest, NextResponse } from 'next/server'
+import { requireModerator } from '@/lib/auth-middleware'
 import { saveFile } from '@/lib/file-upload'
 import { prisma } from '@/lib/prisma'
-import { ContentType } from '@/types/content'
 
 export async function POST(request: NextRequest) {
   try {
-    const user = await requireAuth(request)
+    const user = await requireModerator(request)
 
     if (!user) {
       return NextResponse.json(
-        { error: 'Cần đăng nhập để tải file' },
-        { status: 401 }
+        { error: 'Cáº§n Ä‘Äƒng nháº­p Ä‘á»ƒ táº£i file' },
+        { status: 403 }
       )
     }
 
@@ -20,7 +19,7 @@ export async function POST(request: NextRequest) {
 
     if (!files || files.length === 0) {
       return NextResponse.json(
-        { error: 'Không có file được tải lên' },
+        { error: 'KhÃ´ng cÃ³ file Ä‘Æ°á»£c táº£i lÃªn' },
         { status: 400 }
       )
     }
@@ -81,7 +80,7 @@ export async function POST(request: NextRequest) {
 
       } catch (error) {
         console.error(`Error processing file ${file.name}:`, error)
-        errors.push({ fileName: file.name, error: 'Lỗi xử lý file' })
+        errors.push({ fileName: file.name, error: 'Lá»—i xá»­ lÃ½ file' })
       }
     }
 
@@ -99,13 +98,13 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Multiple upload error:', error)
     return NextResponse.json(
-      { error: 'Lỗi khi tải nhiều file' },
+      { error: 'Lá»—i khi táº£i nhiá»u file' },
       { status: 500 }
     )
   }
 }
 
-function getContentType(mimeType: string): ContentType {
+function getContentType(mimeType: string): 'INFOGRAPHIC' | 'VIDEO' | 'DOCUMENT' {
   if (mimeType.startsWith('image/')) return 'INFOGRAPHIC'
   if (mimeType.startsWith('video/')) return 'VIDEO'
   if (mimeType === 'application/pdf') return 'DOCUMENT'
@@ -114,3 +113,4 @@ function getContentType(mimeType: string): ContentType {
   if (mimeType.includes('presentation') || mimeType.includes('powerpoint')) return 'DOCUMENT'
   return 'DOCUMENT'
 }
+

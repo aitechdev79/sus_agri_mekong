@@ -1,178 +1,220 @@
 'use client';
 
-import { useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
-import Image from 'next/image';
+import { usePathname } from 'next/navigation';
+import { getLocaleFromPathname, pickLocalizedText, withLocalePrefix } from '@/lib/content-locale';
 
-type PolicyCategory = 'all' | 'esg' | 'agriculture' | 'labor' | 'environment' | 'trade';
-
-interface Policy {
+interface PolicyItem {
   id: string;
   title: string;
-  category: PolicyCategory;
-  status: 'new' | 'updated' | 'urgent';
-  date: string;
-  summary: string;
-  source: string;
+  titleEn?: string | null;
+  description?: string | null;
+  descriptionEn?: string | null;
+}
+
+interface PolicyResponse {
+  contents: PolicyItem[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    pages: number;
+  };
 }
 
 export default function PolicyPage() {
-  const [selectedCategory, setSelectedCategory] = useState<PolicyCategory>('all');
+  const pathname = usePathname();
+  const locale = getLocaleFromPathname(pathname);
+  const isEn = locale === 'en';
+  const contentDetailPrefix = withLocalePrefix('/content', locale);
+  const [policies, setPolicies] = useState<PolicyItem[]>([]);
+  const [loadingPolicies, setLoadingPolicies] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalPolicies, setTotalPolicies] = useState(0);
+  const [searchInput, setSearchInput] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const itemsPerPage = 10;
 
-  const categories = [
-    { id: 'all' as PolicyCategory, name: 'Tất cả', icon: '📋' },
-    { id: 'esg' as PolicyCategory, name: 'ESG & Bền vững', icon: '🌱' },
-    { id: 'agriculture' as PolicyCategory, name: 'Nông nghiệp', icon: '🌾' },
-    { id: 'labor' as PolicyCategory, name: 'Lao động', icon: '👥' },
-    { id: 'environment' as PolicyCategory, name: 'Môi trường', icon: '🌍' },
-    { id: 'trade' as PolicyCategory, name: 'Thương mại', icon: '📊' },
-  ];
+  useEffect(() => {
+    const fetchPolicies = async () => {
+      setLoadingPolicies(true);
 
-  const policies: Policy[] = [
-    {
-      id: '1',
-      title: 'Nghị định về Báo cáo Phát triển Bền vững cho Doanh nghiệp',
-      category: 'esg',
-      status: 'new',
-      date: '15/11/2025',
-      summary: 'Nghị định mới quy định báo cáo bền vững bắt buộc cho doanh nghiệp niêm yết từ năm 2026, bao gồm tiêu chí ESG và tuân thủ tiêu chuẩn quốc tế.',
-      source: 'Chính phủ Việt Nam',
-    },
-    {
-      id: '2',
-      title: 'Thông tư hướng dẫn VietGAP cho nuôi trồng thủy sản',
-      category: 'agriculture',
-      status: 'updated',
-      date: '10/11/2025',
-      summary: 'Cập nhật quy trình chứng nhận VietGAP cho tôm và cá, tăng cường yêu cầu về an toàn sinh học và truy xuất nguồn gốc.',
-      source: 'Bộ Nông nghiệp và Phát triển Nông thôn',
-    },
-    {
-      id: '3',
-      title: 'Quy định mới về Lương tối thiểu vùng năm 2026',
-      category: 'labor',
-      status: 'urgent',
-      date: '05/11/2025',
-      summary: 'Tăng lương tối thiểu vùng trung bình 6% từ tháng 7/2026, ảnh hưởng trực tiếp đến chi phí lao động trong doanh nghiệp.',
-      source: 'Bộ Lao động - Thương binh và Xã hội',
-    },
-    {
-      id: '4',
-      title: 'Chiến lược Kinh tế Tuần hoàn và Phát triển Xanh',
-      category: 'environment',
-      status: 'new',
-      date: '01/11/2025',
-      summary: 'Chiến lược quốc gia đến 2030, tầm nhìn 2050 về kinh tế tuần hoàn, giảm phát thải ròng bằng 0 và chuyển đổi xanh.',
-      source: 'Thủ tướng Chính phủ',
-    },
-    {
-      id: '5',
-      title: 'Quy định xuất khẩu thủy sản theo tiêu chuẩn EU',
-      category: 'trade',
-      status: 'updated',
-      date: '28/10/2025',
-      summary: 'Cập nhật yêu cầu truy xuất nguồn gốc và an toàn thực phẩm cho thủy sản xuất khẩu vào thị trường EU từ Q1/2026.',
-      source: 'Bộ Công Thương',
-    },
-    {
-      id: '6',
-      title: 'Nghị định về Quản lý Chất thải Rắn trong Sản xuất',
-      category: 'environment',
-      status: 'new',
-      date: '20/10/2025',
-      summary: 'Quy định mới về phân loại, thu gom và xử lý chất thải rắn công nghiệp, yêu cầu doanh nghiệp báo cáo định kỳ.',
-      source: 'Bộ Tài nguyên và Môi trường',
-    },
-  ];
+      try {
+        const params = new URLSearchParams({
+          type: 'POLICY',
+          page: currentPage.toString(),
+          limit: itemsPerPage.toString(),
+        });
+
+        if (searchTerm) {
+          params.append('search', searchTerm);
+        }
+
+        const response = await fetch(`/api/content?${params.toString()}`);
+        if (!response.ok) return;
+
+        const data: PolicyResponse = await response.json();
+        setPolicies(data.contents);
+        setTotalPages(data.pagination.pages);
+        setTotalPolicies(data.pagination.total);
+      } catch (error) {
+        console.error('Failed to load policies:', error);
+      } finally {
+        setLoadingPolicies(false);
+      }
+    };
+
+    fetchPolicies();
+  }, [currentPage, searchTerm]);
 
   const internationalStandards = [
     {
       code: 'SA8000',
       name: 'Social Accountability International',
-      description: 'Tiêu chuẩn quốc tế về trách nhiệm xã hội trong môi trường làm việc',
-      areas: ['Lao động', 'Nhân quyền', 'An toàn'],
+      description: locale === 'en' ? 'International social accountability standard for workplaces' : 'Tiêu chuẩn quốc tế về trách nhiệm xã hội trong môi trường làm việc',
+      areas: locale === 'en' ? ['Labor', 'Human rights', 'Safety'] : ['Lao động', 'Nhân quyền', 'An toàn'],
+      href: 'https://sa-intl.org/wp-content/uploads/2020/01/SA8000Standard2014-VietnameseFinal1.pdf',
     },
     {
       code: 'BSCI',
       name: 'Business Social Compliance Initiative',
-      description: 'Sáng kiến tuân thủ xã hội doanh nghiệp châu Âu',
-      areas: ['Chuỗi cung ứng', 'Lao động', 'Đạo đức'],
+      description: locale === 'en' ? 'European social compliance initiative for business supply chains' : 'Sáng kiến tuân thủ xã hội doanh nghiệp châu Âu',
+      areas: locale === 'en' ? ['Supply chain', 'Labor', 'Ethics'] : ['Chuỗi cung ứng', 'Lao động', 'Đạo đức'],
+      href: 'https://clv.vn/tieu-chuan-bsci-la-gi/',
     },
     {
       code: 'ASC',
       name: 'Aquaculture Stewardship Council',
-      description: 'Tiêu chuẩn nuôi trồng thủy sản có trách nhiệm',
-      areas: ['Thủy sản', 'Môi trường', 'Bền vững'],
+      description: locale === 'en' ? 'Responsible aquaculture standard' : 'Tiêu chuẩn nuôi trồng thủy sản có trách nhiệm',
+      areas: locale === 'en' ? ['Aquaculture', 'Environment', 'Sustainability'] : ['Thủy sản', 'Môi trường', 'Bền vững'],
+      href: 'https://times.seafoodlegacy.com/vi/words/asc/',
     },
     {
       code: 'SRP',
       name: 'Sustainable Rice Platform',
-      description: 'Nền tảng lúa gạo bền vững toàn cầu',
-      areas: ['Nông nghiệp', 'Lúa gạo', 'Bền vững'],
+      description: locale === 'en' ? 'Global platform for sustainable rice production' : 'Nền tảng lúa gạo bền vững toàn cầu',
+      areas: locale === 'en' ? ['Agriculture', 'Rice', 'Sustainability'] : ['Nông nghiệp', 'Lúa gạo', 'Bền vững'],
+      href: 'https://tiasang.com.vn/srp-bo-tieu-chuan-san-xuat-lua-gao-ben-vung-4967298.html',
     },
     {
       code: 'ISO 22000',
       name: 'Food Safety Management',
-      description: 'Hệ thống quản lý an toàn thực phẩm',
-      areas: ['An toàn thực phẩm', 'Chất lượng', 'Quản lý'],
+      description: locale === 'en' ? 'Food safety management system standard' : 'Hệ thống quản lý an toàn thực phẩm',
+      areas: locale === 'en' ? ['Food safety', 'Quality', 'Management'] : ['An toàn thực phẩm', 'Chất lượng', 'Quản lý'],
+      href: 'https://tqc.vn/iso-22000-la-gi-cac-yeu-cau-va-loi-ich-khi-chung-nhan-iso-22000-2018.htm',
     },
     {
       code: 'GRS',
       name: 'Global Reporting Initiative',
-      description: 'Tiêu chuẩn báo cáo bền vững toàn cầu',
-      areas: ['ESG', 'Báo cáo', 'Minh bạch'],
+      description: locale === 'en' ? 'Global sustainability reporting framework' : 'Tiêu chuẩn báo cáo bền vững toàn cầu',
+      areas: locale === 'en' ? ['ESG', 'Reporting', 'Transparency'] : ['ESG', 'Báo cáo', 'Minh bạch'],
+      href: 'https://tqc.vn/grs-la-gi.htm',
     },
   ];
 
   const expertQuotes = [
     {
-      quote: 'Việc cập nhật và tuân thủ các quy định pháp lý về ESG không chỉ là nghĩa vụ mà còn là cơ hội để doanh nghiệp nâng cao năng lực cạnh tranh và tiếp cận thị trường quốc tế.',
-      author: 'TS. Nguyễn Văn Minh',
-      position: 'Chuyên gia Chính sách Phát triển Bền vững',
+      quote: locale === 'en'
+        ? 'Keeping up with ESG regulations is not only a compliance duty but also a strategic opportunity to improve competitiveness and reach international markets.'
+        : 'Việc cập nhật và tuân thủ các quy định pháp lý về ESG không chỉ là nghĩa vụ mà còn là cơ hội để doanh nghiệp nâng cao năng lực cạnh tranh và tiếp cận thị trường quốc tế.',
+      author: locale === 'en' ? 'Dr. Nguyen Van Minh' : 'TS. Nguyễn Văn Minh',
+      position: locale === 'en' ? 'Sustainable Development Policy Expert' : 'Chuyên gia Chính sách Phát triển Bền vững',
       organization: 'Viện Chiến lược và Chính sách Tài nguyên Môi trường',
     },
     {
-      quote: 'Doanh nghiệp cần chủ động theo dõi và điều chỉnh hoạt động kinh doanh phù hợp với các tiêu chuẩn quốc tế như SA8000, BSCI để đảm bảo vị thế trong chuỗi giá trị toàn cầu.',
-      author: 'Luật sư Trần Thị Hương',
-      position: 'Giám đốc Pháp chế',
+      quote: locale === 'en'
+        ? 'Businesses should proactively align their operations with international standards such as SA8000 and BSCI to stay competitive in global value chains.'
+        : 'Doanh nghiệp cần chủ động theo dõi và điều chỉnh hoạt động kinh doanh phù hợp với các tiêu chuẩn quốc tế như SA8000, BSCI để đảm bảo vị thế trong chuỗi giá trị toàn cầu.',
+      author: locale === 'en' ? 'Lawyer Tran Thi Huong' : 'Luật sư Trần Thị Hương',
+      position: locale === 'en' ? 'Legal Director' : 'Giám đốc Pháp chế',
       organization: 'Phòng Thương mại và Công nghiệp Việt Nam (VCCI)',
     },
   ];
 
-  const filteredPolicies = selectedCategory === 'all'
-    ? policies
-    : policies.filter(p => p.category === selectedCategory);
+  const goToPage = (page: number) => {
+    if (page < 1 || page > totalPages) return;
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
-  const getStatusBadge = (status: string) => {
-    const styles = {
-      new: 'bg-blue-100 text-blue-800 border-blue-300',
-      updated: 'bg-green-100 text-green-800 border-green-300',
-      urgent: 'bg-red-100 text-red-800 border-red-300',
-    };
-    const labels = {
-      new: 'Mới',
-      updated: 'Cập nhật',
-      urgent: 'Khẩn cấp',
-    };
-    return (
-      <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${styles[status as keyof typeof styles]}`}>
-        {labels[status as keyof typeof labels]}
-      </span>
-    );
+  const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setCurrentPage(1);
+    setSearchTerm(searchInput.trim());
+  };
+
+  const renderPaginationButtons = () => {
+    const buttons = [];
+    const maxButtons = 5;
+
+    let startPage = Math.max(1, currentPage - Math.floor(maxButtons / 2));
+    const endPage = Math.min(totalPages, startPage + maxButtons - 1);
+
+    if (endPage - startPage + 1 < maxButtons) {
+      startPage = Math.max(1, endPage - maxButtons + 1);
+    }
+
+    if (startPage > 1) {
+      buttons.push(
+        <button
+          key="1"
+          onClick={() => goToPage(1)}
+          className="rounded border px-3 py-1 hover:bg-gray-100"
+        >
+          1
+        </button>
+      );
+      if (startPage > 2) {
+        buttons.push(<span key="dots-1" className="px-2">...</span>);
+      }
+    }
+
+    for (let page = startPage; page <= endPage; page += 1) {
+      buttons.push(
+        <button
+          key={page}
+          onClick={() => goToPage(page)}
+          className={`rounded border px-3 py-1 ${
+            page === currentPage ? 'border-blue-600 bg-blue-600 text-white' : 'hover:bg-gray-100'
+          }`}
+        >
+          {page}
+        </button>
+      );
+    }
+
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) {
+        buttons.push(<span key="dots-2" className="px-2">...</span>);
+      }
+      buttons.push(
+        <button
+          key="last"
+          onClick={() => goToPage(totalPages)}
+          className="rounded border px-3 py-1 hover:bg-gray-100"
+        >
+          {isEn ? 'Last page' : 'Trang cuối'}
+        </button>
+      );
+    }
+
+    return buttons;
   };
 
   return (
     <div className="min-h-screen">
-      {/* Navigation Bar */}
       <div className="relative z-50">
         <NavigationBar />
       </div>
 
-      {/* Main Content */}
       <main className="pt-16">
-        {/* Hero Section */}
-        <section className="relative w-full bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 text-white py-20">
+        <section className="relative w-full bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 py-20 text-white">
           <div className="absolute inset-0 opacity-10">
             <Image
               src="/vecteezy_topo_34242655.svg"
@@ -182,143 +224,196 @@ export default function PolicyPage() {
               priority={false}
             />
           </div>
-          <div className="container mx-auto px-6 max-w-6xl relative z-10">
-            <h1 className="font-montserrat font-bold text-4xl md:text-5xl mb-6">
-              Theo dõi Chính sách & Quy định
+          <div className="container relative z-10 mx-auto max-w-6xl px-6">
+          <h1 className="mb-6 font-montserrat text-4xl font-bold md:text-5xl">
+              {isEn ? 'Policy & Regulation Watch' : 'Theo dõi Chính sách & Quy định'}
             </h1>
-            <p className="text-lg md:text-xl text-blue-100 leading-relaxed max-w-4xl font-montserrat">
-              Khám phá chuyên mục Theo dõi chính sách & quy định – nơi cập nhật những thay đổi pháp lý quan trọng
-              trong lĩnh vực phát triển bền vững, báo cáo bền vững ESG, chuyển đổi xanh. Với tóm tắt ngắn gọn,
-              công cụ lọc thông minh và bảng điều khiển trực quan, bạn dễ dàng nắm bắt tác động chính sách và
-              tiếp cận bối cảnh thực tiễn từ các nghiên cứu, tiêu chuẩn quốc tế.
+            <p className="max-w-4xl font-montserrat text-lg leading-relaxed text-blue-100 md:text-xl">
+              {isEn
+                ? 'Track key legal and compliance updates across sustainability, ESG reporting, and green transition with practical summaries and reference context.'
+                : 'Khám phá chuyên mục Theo dõi chính sách & quy định, nơi cập nhật những thay đổi pháp lý quan trọng trong lĩnh vực phát triển bền vững, báo cáo bền vững ESG, chuyển đổi xanh. Với tóm tắt ngắn gọn, bạn dễ dàng nắm bắt tác động chính sách và tiếp cận bối cảnh thực tiễn từ các nghiên cứu, tiêu chuẩn quốc tế.'}
             </p>
           </div>
         </section>
 
-        {/* Filter Section */}
-        <section className="py-8 bg-gray-50 sticky top-16 z-40 shadow-sm">
-          <div className="container mx-auto px-6 max-w-6xl">
-            <div className="flex flex-wrap gap-3">
-              {categories.map((category) => (
-                <button
-                  key={category.id}
-                  onClick={() => setSelectedCategory(category.id)}
-                  className={`px-4 py-2 rounded-lg font-montserrat font-semibold transition-all duration-200 flex items-center gap-2 ${
-                    selectedCategory === category.id
-                      ? 'bg-blue-600 text-white shadow-md scale-105'
-                      : 'bg-white text-gray-700 hover:bg-blue-50 border border-gray-200'
-                  }`}
-                >
-                  <span>{category.icon}</span>
-                  <span>{category.name}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-        </section>
+        <section className="bg-white py-12">
+          <div className="container mx-auto max-w-6xl px-6">
+            <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+              <div>
+                <h2 className="font-montserrat text-3xl font-bold text-gray-800">
+              {isEn ? 'Featured Policies & Regulations' : 'Chính sách & Quy định nổi bật'}
+                </h2>
+                {!loadingPolicies && (
+                  <p className="mt-2 font-montserrat text-sm text-gray-500">
+                    {isEn ? `Found ${totalPolicies} policy items` : `Tìm thấy ${totalPolicies} nội dung chính sách`}
+                    {searchTerm ? (isEn ? ` for "${searchTerm}"` : ` cho "${searchTerm}"`) : ''}
+                  </p>
+                )}
+              </div>
 
-        {/* Policies List */}
-        <section className="py-12 bg-white">
-          <div className="container mx-auto px-6 max-w-6xl">
-            <h2 className="font-montserrat font-bold text-3xl text-gray-800 mb-8">
-              Chính sách & Quy định nổi bật
-            </h2>
-            <div className="grid gap-6">
-              {filteredPolicies.map((policy) => (
-                <div
-                  key={policy.id}
-                  className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow duration-200"
-                >
-                  <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-4">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        {getStatusBadge(policy.status)}
-                        <span className="text-sm text-gray-500 font-montserrat">{policy.date}</span>
-                      </div>
-                      <h3 className="font-montserrat font-bold text-xl text-gray-800 mb-2">
-                        {policy.title}
-                      </h3>
-                      <p className="text-gray-600 font-montserrat leading-relaxed mb-3">
-                        {policy.summary}
-                      </p>
-                      <p className="text-sm text-gray-500 font-montserrat">
-                        <span className="font-semibold">Nguồn:</span> {policy.source}
-                      </p>
+              <form onSubmit={handleSearchSubmit} className="w-full md:w-[380px]">
+                <div className="flex items-center justify-end gap-2">
+                  <div className="relative w-full">
+                    <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                    <input
+                      type="text"
+                      value={searchInput}
+                      onChange={(event) => setSearchInput(event.target.value)}
+                      placeholder={isEn ? 'Search policy...' : 'Tìm kiếm policy...'}
+                      className="w-full rounded-md border border-gray-300 py-2.5 pl-10 pr-4 font-montserrat text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="rounded-md bg-blue-600 px-4 py-2.5 font-montserrat text-sm font-semibold text-white hover:bg-blue-700"
+                  >
+                    {isEn ? 'Search' : 'Tìm'}
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            {loadingPolicies ? (
+              <div className="overflow-hidden border border-gray-200">
+                {[...Array(4)].map((_, index) => (
+                  <div key={index} className="grid animate-pulse grid-cols-[80px_minmax(0,1fr)] border-b border-gray-200">
+                    <div className="bg-gray-100 p-4" />
+                    <div className="space-y-3 p-4">
+                      <div className="h-5 bg-gray-200" />
+                      <div className="h-4 w-5/6 bg-gray-100" />
                     </div>
                   </div>
+                ))}
+              </div>
+            ) : policies.length === 0 ? (
+              <div className="border border-gray-200 bg-gray-50 p-12 text-center text-gray-500">
+                {isEn ? 'No policy content available yet.' : 'Chưa có nội dung chính sách nào.'}
+              </div>
+            ) : (
+              <div>
+                <div className="overflow-hidden border border-gray-200 bg-white">
+                  <div className="grid grid-cols-[80px_minmax(0,0.55fr)_minmax(0,1.45fr)] border-b border-gray-200 bg-gray-50 font-montserrat text-sm font-semibold uppercase tracking-wide text-gray-600">
+                    <div className="p-4 text-center">STT</div>
+                    <div className="border-l border-gray-200 p-4">{isEn ? 'Title' : 'Tiêu đề'}</div>
+                    <div className="border-l border-gray-200 p-4">{isEn ? 'Description' : 'Mô tả'}</div>
+                  </div>
+
+                  {policies.map((policy, index) => (
+                    (() => {
+                      const localizedTitle = pickLocalizedText(locale, policy.title, policy.titleEn);
+                      const localizedDescription = pickLocalizedText(locale, policy.description, policy.descriptionEn);
+                      return (
+                    <Link
+                      key={policy.id}
+                      href={`${contentDetailPrefix}/${policy.id}`}
+                      className="grid grid-cols-[80px_minmax(0,0.55fr)_minmax(0,1.45fr)] border-b border-gray-200 transition-colors hover:bg-gray-50"
+                    >
+                      <div className="flex items-center justify-center p-4 font-montserrat text-sm text-gray-500">
+                        {(currentPage - 1) * itemsPerPage + index + 1}
+                      </div>
+                      <div className="border-l border-gray-200 p-4">
+                        <h3 className="font-montserrat text-lg font-bold text-gray-900">
+                          {localizedTitle}
+                        </h3>
+                      </div>
+                      <div className="border-l border-gray-200 p-4">
+                        <p className="font-montserrat text-sm italic leading-relaxed text-gray-600">
+                          {localizedDescription || (isEn ? 'No short description.' : 'Chưa có mô tả ngắn.')}
+                        </p>
+                      </div>
+                    </Link>
+                      );
+                    })()
+                  ))}
                 </div>
-              ))}
-            </div>
+
+                {totalPages > 1 && (
+                  <div className="mt-8 flex justify-center">
+                    <div className="flex items-center space-x-2">
+                      <button
+                        onClick={() => goToPage(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        className={`rounded border p-2 ${
+                          currentPage === 1 ? 'cursor-not-allowed text-gray-400' : 'hover:bg-gray-100'
+                        }`}
+                      >
+                        <ChevronLeft className="h-5 w-5" />
+                      </button>
+
+                      {renderPaginationButtons()}
+
+                      <button
+                        onClick={() => goToPage(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        className={`rounded border p-2 ${
+                          currentPage === totalPages ? 'cursor-not-allowed text-gray-400' : 'hover:bg-gray-100'
+                        }`}
+                      >
+                        <ChevronRight className="h-5 w-5" />
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </section>
 
-        {/* International Standards Section */}
-        <section className="py-16 bg-gray-50">
-          <div className="container mx-auto px-6 max-w-6xl">
-            <h2 className="font-montserrat font-bold text-3xl text-gray-800 mb-4">
-              Tiêu chuẩn Quốc tế
+        <section className="bg-gray-50 py-16">
+          <div className="container mx-auto max-w-6xl px-6">
+            <h2 className="mb-4 font-montserrat text-3xl font-bold text-gray-800">
+              {isEn ? 'International Standards' : 'Tiêu chuẩn Quốc tế'}
             </h2>
-            <p className="text-gray-600 font-montserrat mb-8 text-lg">
-              Các tiêu chuẩn quốc tế được áp dụng rộng rãi trong chuỗi giá trị bền vững
+            <p className="mb-8 font-montserrat text-lg text-gray-600">
+              {isEn ? 'International standards widely applied in sustainable value chains' : 'Các tiêu chuẩn quốc tế được áp dụng rộng rãi trong chuỗi giá trị bền vững'}
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
               {internationalStandards.map((standard) => (
-                <div
+                <a
                   key={standard.code}
-                  className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-all duration-200 hover:-translate-y-1"
+                  href={standard.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-lg border border-gray-200 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
                 >
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-montserrat font-bold text-2xl text-blue-600">
+                  <div className="mb-4 flex items-center justify-between">
+                    <h3 className="font-montserrat text-2xl font-bold text-blue-600">
                       {standard.code}
                     </h3>
-                    <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                      <span className="text-2xl">📜</span>
-                    </div>
                   </div>
-                  <h4 className="font-montserrat font-semibold text-lg text-gray-800 mb-2">
+                  <h4 className="mb-2 font-montserrat text-lg font-semibold text-gray-800">
                     {standard.name}
                   </h4>
-                  <p className="text-gray-600 font-montserrat text-sm mb-4 leading-relaxed">
+                  <p className="mb-4 font-montserrat text-sm leading-relaxed text-gray-600">
                     {standard.description}
                   </p>
-                  <div className="flex flex-wrap gap-2">
-                    {standard.areas.map((area) => (
-                      <span
-                        key={area}
-                        className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-semibold font-montserrat"
-                      >
-                        {area}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+                </a>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Expert Quotes Section */}
-        <section className="py-16 bg-white">
-          <div className="container mx-auto px-6 max-w-6xl">
-            <h2 className="font-montserrat font-bold text-3xl text-gray-800 mb-8 text-center">
-              Ý kiến Chuyên gia
+        <section className="bg-white py-16">
+          <div className="container mx-auto max-w-6xl px-6">
+            <h2 className="mb-8 text-center font-montserrat text-3xl font-bold text-gray-800">
+              {isEn ? 'Expert Opinions' : 'Ý kiến Chuyên gia'}
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
               {expertQuotes.map((item, index) => (
                 <div
                   key={index}
-                  className="bg-gradient-to-br from-blue-50 to-white border-l-4 border-blue-600 p-8 rounded-lg shadow-md"
+                  className="rounded-lg border-l-4 border-blue-600 bg-gradient-to-br from-blue-50 to-white p-8 shadow-md"
                 >
                   <div className="mb-4">
                     <svg
-                      className="w-10 h-10 text-blue-600 opacity-50"
+                      className="h-10 w-10 text-blue-600 opacity-50"
                       fill="currentColor"
                       viewBox="0 0 24 24"
                     >
                       <path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z" />
                     </svg>
                   </div>
-                  <p className="text-gray-700 font-montserrat italic text-lg leading-relaxed mb-6">
+                  <p className="mb-6 font-montserrat text-lg italic leading-relaxed text-gray-700">
                     &ldquo;{item.quote}&rdquo;
                   </p>
                   <div className="border-t border-gray-200 pt-4">
@@ -332,17 +427,16 @@ export default function PolicyPage() {
           </div>
         </section>
 
-        {/* Call to Action */}
-        <section className="py-12 bg-blue-900 text-white">
-          <div className="container mx-auto px-6 max-w-6xl text-center">
-            <h2 className="font-montserrat font-bold text-3xl mb-4">
-              Cần hỗ trợ về chính sách và quy định?
+        <section className="bg-blue-900 py-12 text-white">
+          <div className="container mx-auto max-w-6xl px-6 text-center">
+            <h2 className="mb-4 font-montserrat text-3xl font-bold">
+              {isEn ? 'Need support on policies and regulations?' : 'Cần hỗ trợ về chính sách và quy định?'}
             </h2>
-            <p className="font-montserrat text-lg text-blue-100 mb-6">
-              Liên hệ với chúng tôi để được tư vấn chi tiết về các chính sách, quy định và tiêu chuẩn quốc tế
+            <p className="mb-6 font-montserrat text-lg text-blue-100">
+              {isEn ? 'Contact us for detailed guidance on policies, regulations, and international standards.' : 'Liên hệ với chúng tôi để được tư vấn chi tiết về các chính sách, quy định và tiêu chuẩn quốc tế'}
             </p>
-            <button className="px-8 py-3 bg-white text-blue-900 font-montserrat font-bold rounded-lg hover:bg-blue-50 transition-colors duration-200">
-              Liên hệ ngay
+            <button className="rounded-lg bg-white px-8 py-3 font-montserrat font-bold text-blue-900 transition-colors duration-200 hover:bg-blue-50">
+              {isEn ? 'Contact now' : 'Liên hệ ngay'}
             </button>
           </div>
         </section>

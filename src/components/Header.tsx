@@ -3,28 +3,33 @@
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { signOut, useSession } from 'next-auth/react';
+import { getLocaleFromPathname, withLocalePrefix } from '@/lib/content-locale';
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { data: session, status } = useSession();
+  const pathname = usePathname();
+  const locale = getLocaleFromPathname(pathname);
+  const homeHref = withLocalePrefix('/', locale);
+  const signInHref = withLocalePrefix('/auth/signin', locale);
+  const signUpHref = withLocalePrefix('/auth/signup', locale);
 
   const navigation = [
-    { name: 'Trang chủ', href: '/' },
-    { name: 'Giới thiệu', href: '/about' },
-    { name: 'Thư viện', href: '/library' },
-    { name: 'Công cụ', href: '/tools' },
-    { name: 'Cộng đồng', href: '/community' },
-    { name: 'Tin tức', href: '/news' },
+    { name: 'Trang chủ', href: withLocalePrefix('/', locale) },
+    { name: 'Giới thiệu', href: withLocalePrefix('/about', locale) },
+    { name: 'Thư viện', href: withLocalePrefix('/library', locale) },
+    { name: 'Công cụ', href: withLocalePrefix('/tools', locale) },
+    { name: 'Cộng đồng', href: withLocalePrefix('/community', locale) },
+    { name: 'Sự kiện', href: withLocalePrefix('/tat-ca-su-kien', locale) },
   ];
 
   return (
     <header className="sticky top-0 z-50 bg-blue-600 shadow-lg">
       <div className="container mx-auto px-6">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link
-            href="/"
-            className="flex items-center space-x-3"
-          >
+          <Link href={homeHref} className="flex items-center space-x-3">
             <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
               <span className="text-blue-600 font-bold text-sm">GP</span>
             </div>
@@ -33,7 +38,6 @@ export default function Header() {
             </span>
           </Link>
 
-          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             {navigation.map((item) => (
               <Link
@@ -46,25 +50,37 @@ export default function Header() {
             ))}
           </nav>
 
-          {/* Right side */}
           <div className="flex items-center space-x-4">
-            {/* Auth buttons */}
             <div className="hidden md:flex items-center space-x-2">
-              <Link
-                href="/auth/signin"
-                className="text-white hover:text-blue-200 transition-colors font-medium"
-              >
-                Đăng nhập
-              </Link>
-              <Link
-                href="/auth/signup"
-                className="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors"
-              >
-                Đăng ký
-              </Link>
+              {status === 'authenticated' ? (
+                <>
+                  <span className="text-white font-medium">{session.user?.name || session.user?.email}</span>
+                  <button
+                    type="button"
+                    onClick={() => signOut({ callbackUrl: homeHref })}
+                    className="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors"
+                  >
+                    Đăng xuất
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href={signInHref}
+                    className="text-white hover:text-blue-200 transition-colors font-medium"
+                  >
+                    Đăng nhập
+                  </Link>
+                  <Link
+                    href={signUpHref}
+                    className="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors"
+                  >
+                    Đăng ký
+                  </Link>
+                </>
+              )}
             </div>
 
-            {/* Mobile menu button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="md:hidden text-white p-2"
@@ -79,7 +95,6 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Mobile Navigation */}
         {isMobileMenuOpen && (
           <div className="md:hidden bg-blue-700 rounded-lg mt-2 py-4">
             <nav className="flex flex-col space-y-2">
@@ -95,18 +110,38 @@ export default function Header() {
               ))}
               <div className="border-t border-blue-600 mt-4 pt-4 px-4">
                 <div className="flex flex-col space-y-2">
-                  <Link
-                    href="/auth/signin"
-                    className="text-white hover:text-blue-200 transition-colors font-medium"
-                  >
-                    Đăng nhập
-                  </Link>
-                  <Link
-                    href="/auth/signup"
-                    className="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors text-center"
-                  >
-                    Đăng ký
-                  </Link>
+                  {status === 'authenticated' ? (
+                    <>
+                      <div className="text-white font-medium text-center">
+                        {session.user?.name || session.user?.email}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsMobileMenuOpen(false);
+                          signOut({ callbackUrl: homeHref });
+                        }}
+                        className="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors text-center"
+                      >
+                        Đăng xuất
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <Link
+                        href={signInHref}
+                        className="text-white hover:text-blue-200 transition-colors font-medium"
+                      >
+                        Đăng nhập
+                      </Link>
+                      <Link
+                        href={signUpHref}
+                        className="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors text-center"
+                      >
+                        Đăng ký
+                      </Link>
+                    </>
+                  )}
                 </div>
               </div>
             </nav>

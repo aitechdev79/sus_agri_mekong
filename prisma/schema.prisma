@@ -56,6 +56,81 @@ model User {
   bookmarks     Bookmark[]
   submissions   UserSubmission[]
   notifications Notification[]
+  categoryAuditLogs CategoryAuditLog[] @relation("CategoryAuditPerformedBy")
+  businessProfiles BusinessProfile[] @relation("BusinessProfileOwner")
+  reviewedBusinessProfiles BusinessProfile[] @relation("BusinessProfileReviewedBy")
+}
+
+model BusinessProfile {
+  id            String                @id @default(cuid())
+  ownerUserId   String?
+  companyName   String
+  slug          String                @unique
+  logoUrl       String?
+  coverUrl      String?
+  website       String?
+  contactEmail  String?
+  phone         String?
+  province      String?
+  description   String?
+  status        BusinessProfileStatus @default(DRAFT)
+  isPublic      Boolean               @default(false)
+  isVerified    Boolean               @default(false)
+  displayOrder  Int                   @default(0)
+  reviewedById  String?
+  reviewNotes   String?
+  reviewedAt    DateTime?
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
+
+  owner         User?                 @relation("BusinessProfileOwner", fields: [ownerUserId], references: [id], onDelete: SetNull)
+  reviewedBy    User?                 @relation("BusinessProfileReviewedBy", fields: [reviewedById], references: [id], onDelete: SetNull)
+
+  @@index([ownerUserId])
+  @@index([status])
+  @@index([isPublic])
+  @@index([displayOrder])
+}
+
+model AppSetting {
+  key       String   @id
+  valueInt  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Category {
+  id           String             @id @default(cuid())
+  slug         String             @unique
+  nameVi       String
+  nameEn       String?
+  isActive     Boolean            @default(true)
+  displayOrder Int                @default(0)
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+
+  auditLogs    CategoryAuditLog[]
+
+  @@index([isActive])
+  @@index([displayOrder])
+}
+
+model CategoryAuditLog {
+  id            String              @id @default(cuid())
+  categoryId    String?
+  performedById String?
+  action        CategoryAuditAction
+  beforeData    Json?
+  afterData     Json?
+  createdAt     DateTime            @default(now())
+
+  category      Category?           @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  performedBy   User?               @relation("CategoryAuditPerformedBy", fields: [performedById], references: [id], onDelete: SetNull)
+
+  @@index([categoryId])
+  @@index([performedById])
+  @@index([action])
+  @@index([createdAt])
 }
 
 model VerificationToken {
@@ -80,17 +155,29 @@ model OTPVerification {
 model Content {
   id          String        @id @default(cuid())
   title       String
+  titleEn     String?
   description String?
+  descriptionEn String?
   content     String
+  contentEn   String?
   type        ContentType
   category    String
   tags        String
+  sectionKey  ContentSection?
+  displayOrder Int?
+  undertitle  String?
+  projectUrl  String?
   fileUrl     String?
   fileType    String?
   fileSize    Int?
   thumbnailUrl String?
   imageUrl    String?
   videoUrl    String?
+  eventStartAt DateTime?
+  eventEndAt  DateTime?
+  eventTimezone String?
+  eventLocation String?
+  isAllDay    Boolean       @default(false)
   isPublic    Boolean       @default(true)
   isFeatured  Boolean       @default(false)
   viewCount   Int           @default(0)
@@ -108,6 +195,9 @@ model Content {
   @@index([type])
   @@index([status])
   @@index([isPublic])
+  @@index([eventStartAt])
+  @@index([sectionKey])
+  @@index([sectionKey, displayOrder])
 }
 
 model Comment {
@@ -197,8 +287,17 @@ model Analytics {
 
 enum UserRole {
   USER
+  BUSINESS
   MODERATOR
   ADMIN
+}
+
+enum BusinessProfileStatus {
+  DRAFT
+  PENDING
+  APPROVED
+  REJECTED
+  SUSPENDED
 }
 
 enum ContentType {
@@ -207,9 +306,16 @@ enum ContentType {
   INFOGRAPHIC
   DOCUMENT
   STORY
+  PROJECT_ACTIVITY
   GUIDE
   POLICY
   NEWS
+  EVENT
+}
+
+enum ContentSection {
+  HOME_DIEN_HINH
+  HOME_HOAT_DONG_DU_AN
 }
 
 enum ContentStatus {
@@ -231,4 +337,12 @@ enum NotificationType {
   SUBMISSION_UPDATE
   SYSTEM_ANNOUNCEMENT
   NEWSLETTER
+}
+
+enum CategoryAuditAction {
+  CREATE
+  UPDATE
+  DELETE
+  ACTIVATE
+  DEACTIVATE
 }

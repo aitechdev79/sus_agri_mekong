@@ -1,3 +1,5 @@
+import { renderRichTextContent } from '@/lib/rich-text';
+
 interface LocalizedContentProps {
   title?: string;
   description?: string;
@@ -13,6 +15,6 @@ export function LocalizedContent({
   // Simple display for Vietnamese-only content
   if (title) return <span>{title}</span>;
   if (description) return <span>{description}</span>;
-  if (content) return <span dangerouslySetInnerHTML={{ __html: content?.replace(/\n/g, '<br>') || '' }} />;
+  if (content) return <span dangerouslySetInnerHTML={{ __html: renderRichTextContent(content) }} />;
   return null;
 }

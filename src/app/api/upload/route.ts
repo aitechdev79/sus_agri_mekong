@@ -1,17 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { requireAuth } from '@/lib/auth-middleware'
+import { requireModerator } from '@/lib/auth-middleware'
 import { saveFile } from '@/lib/file-upload'
 import { prisma } from '@/lib/prisma'
-import { ContentType } from '@/types/content'
 
 export async function POST(request: NextRequest) {
   try {
-    const user = await requireAuth(request)
+    const user = await requireModerator(request)
 
     if (!user) {
       return NextResponse.json(
         { error: 'Cần đăng nhập để tải file' },
-        { status: 401 }
+        { status: 403 }
       )
     }
 
@@ -25,7 +24,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Save file
     const result = await saveFile(file)
 
     if (!result.success) {
@@ -35,7 +33,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Save file metadata to database
     const fileRecord = await prisma.content.create({
       data: {
         title: result.originalName || 'Untitled',
@@ -43,17 +40,16 @@ export async function POST(request: NextRequest) {
         content: `File: ${result.originalName}`,
         type: getContentType(file.type),
         category: 'file_upload',
-        tags: '', // Add required tags field
+        tags: '',
         fileUrl: result.url,
         fileType: result.type,
         fileSize: result.size,
         thumbnailUrl: file.type.startsWith('image/') ? result.url?.replace(result.fileName!, `thumb_${result.fileName}`) : undefined,
         status: 'DRAFT',
-        authorId: user.id
-      }
+        authorId: user.id,
+      },
     })
 
-    // Track upload analytics
     await prisma.analytics.create({
       data: {
         event: 'file_upload',
@@ -62,9 +58,9 @@ export async function POST(request: NextRequest) {
         metadata: {
           fileName: result.originalName,
           fileSize: result.size,
-          fileType: result.type
-        }
-      }
+          fileType: result.type,
+        },
+      },
     })
 
     return NextResponse.json({
@@ -75,10 +71,9 @@ export async function POST(request: NextRequest) {
         fileName: result.fileName,
         originalName: result.originalName,
         size: result.size,
-        type: result.type
-      }
+        type: result.type,
+      },
     })
-
   } catch (error) {
     console.error('Upload error:', error)
     return NextResponse.json(
@@ -88,7 +83,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-function getContentType(mimeType: string): ContentType {
+function getContentType(mimeType: string): 'INFOGRAPHIC' | 'VIDEO' | 'DOCUMENT' {
   if (mimeType.startsWith('image/')) return 'INFOGRAPHIC'
   if (mimeType.startsWith('video/')) return 'VIDEO'
   if (mimeType === 'application/pdf') return 'DOCUMENT'

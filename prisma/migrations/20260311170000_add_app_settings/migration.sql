@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS "public"."AppSetting" (
+  "key" TEXT NOT NULL,
+  "valueInt" INTEGER NOT NULL,
+  "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "updatedAt" TIMESTAMP(3) NOT NULL,
+  CONSTRAINT "AppSetting_pkey" PRIMARY KEY ("key")
+);
+
