@@ -342,10 +342,10 @@ export default function LibraryPage() {
             <div className="mb-10 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
               <div>
                 <h2 className="mb-3 font-montserrat text-3xl font-bold text-[#3C3C3B] md:text-4xl">
-                  {isEn ? 'Document Repository' : 'Kho tài liệu'}
+                  {isEn ? 'Document Repository' : 'Kho tư liệu'}
                 </h2>
                 <p className="max-w-3xl font-montserrat text-lg text-[#6B7280]">
-                  {isEn ? 'Search by topic, content type, or browse the latest publications.' : 'Tìm theo chủ đề, loại nội dung hoặc truy cập trực tiếp các tài liệu mới nhất.'}
+                  {isEn ? 'Search by topic, content type, or browse the latest publications.' : 'Tìm theo chủ đề, loại nội dung hoặc truy cập trực tiếp các tư liệu mới nhất.'}
                 </p>
               </div>
 
