@@ -4,6 +4,8 @@ const FONT_FAMILY_PATTERN = /^[\w\s,"'-]+$/
 const FONT_SIZE_PATTERN = /^\d+(px|rem|em|%)$/
 const TEXT_ALIGN_PATTERN = /^(left|right|center|justify)$/
 const MARGIN_LEFT_PATTERN = /^(0|[0-9]+(\.[0-9]+)?rem)$/
+const IMAGE_MARGIN_PATTERN = /^(0|auto)$/
+const IMAGE_DISPLAY_PATTERN = /^block$/
 const BLOCK_TAGS = ['p', 'li', 'blockquote', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'] as const
 const BLOCK_STYLE_RULES = Object.fromEntries(
   BLOCK_TAGS.map((tag) => [
@@ -37,10 +39,15 @@ export function sanitizeRichText(input: string) {
       h4: ['style', 'data-indent'],
       h5: ['style', 'data-indent'],
       h6: ['style', 'data-indent'],
-      img: ['src', 'alt', 'title', 'width']
+      img: ['src', 'alt', 'title', 'width', 'style', 'data-align']
     },
     allowedStyles: {
       ...BLOCK_STYLE_RULES,
+      img: {
+        display: [IMAGE_DISPLAY_PATTERN],
+        'margin-left': [IMAGE_MARGIN_PATTERN],
+        'margin-right': [IMAGE_MARGIN_PATTERN]
+      },
       span: {
         'font-family': [FONT_FAMILY_PATTERN],
         'font-size': [FONT_SIZE_PATTERN]

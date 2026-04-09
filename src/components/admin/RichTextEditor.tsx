@@ -12,6 +12,7 @@ type RichTextEditorProps = {
 }
 
 type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6
+type ImageAlignment = 'left' | 'center' | 'right'
 
 const FONT_FAMILIES = [
   { label: 'Default', value: '' },
@@ -32,6 +33,7 @@ function ResizableImageNodeView({ node, selected, updateAttributes, editor }: No
   const containerRef = useRef<HTMLDivElement | null>(null)
   const widthRef = useRef<number | null>(typeof node.attrs.width === 'number' ? node.attrs.width : null)
   const [displayWidth, setDisplayWidth] = useState<number | null>(widthRef.current)
+  const alignment = (node.attrs.align as ImageAlignment | null) || 'left'
 
   useEffect(() => {
     const nextWidth = typeof node.attrs.width === 'number' ? node.attrs.width : null
@@ -73,11 +75,20 @@ function ResizableImageNodeView({ node, selected, updateAttributes, editor }: No
     ? { width: `${displayWidth}px`, maxWidth: '100%', height: 'auto' as const }
     : { maxWidth: '100%', height: 'auto' as const }
 
+  const wrapperClassName = [
+    'relative inline-block max-w-full',
+    alignment === 'center' ? 'mx-auto block' : '',
+    alignment === 'right' ? 'ml-auto block' : '',
+    selected ? 'ring-2 ring-green-500 rounded-md' : ''
+  ]
+    .filter(Boolean)
+    .join(' ')
+
   return (
     <NodeViewWrapper as="div" className="my-2">
       <div
         ref={containerRef}
-        className={`relative inline-block max-w-full ${selected ? 'ring-2 ring-green-500 rounded-md' : ''}`}
+        className={wrapperClassName}
       >
         {/* eslint-disable-next-line @next/next/no-img-element -- Rich text content image must render dynamic uploaded URLs */}
         <img
@@ -252,6 +263,35 @@ const ImageNode = Node.create({
       },
       title: {
         default: null
+      },
+      align: {
+        default: 'left',
+        parseHTML: (element) => {
+          const dataAlign = element.getAttribute('data-align')
+          if (dataAlign === 'center' || dataAlign === 'right' || dataAlign === 'left') {
+            return dataAlign
+          }
+
+          const marginLeft = element.style.marginLeft
+          const marginRight = element.style.marginRight
+          if (marginLeft === 'auto' && marginRight === 'auto') return 'center'
+          if (marginLeft === 'auto') return 'right'
+          return 'left'
+        },
+        renderHTML: (attributes) => {
+          const align = attributes.align === 'center' || attributes.align === 'right' ? attributes.align : 'left'
+          const styleByAlign =
+            align === 'center'
+              ? 'display: block; margin-left: auto; margin-right: auto;'
+              : align === 'right'
+                ? 'display: block; margin-left: auto; margin-right: 0;'
+                : 'display: block; margin-left: 0; margin-right: auto;'
+
+          return {
+            'data-align': align,
+            style: styleByAlign
+          }
+        }
       },
       width: {
         default: null,
@@ -584,6 +624,7 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
     fontFamily?: string | null
     fontSize?: string | null
   } | null
+  const currentImageAlignment = ((editor?.getAttributes('image')?.align as ImageAlignment | undefined) || 'left')
 
   const withSelection = () => {
     if (!editor) return null
@@ -701,6 +742,11 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
 
   const handleUnsetLink = () => {
     withSelection()?.unsetMark('link').run()
+  }
+
+  const handleSetImageAlignment = (align: ImageAlignment) => {
+    if (!editor) return
+    editor.chain().focus().updateAttributes('image', { align }).run()
   }
 
   const handleIndent = () => {
@@ -850,6 +896,31 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
           <option value="3">H3</option>
           <option value="4">H4</option>
         </select>
+
+        <button
+          type="button"
+          onClick={() => handleSetImageAlignment('left')}
+          className={`px-2 py-1 text-sm border rounded ${currentImageAlignment === 'left' ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
+          disabled={!editor}
+        >
+          Img Left
+        </button>
+        <button
+          type="button"
+          onClick={() => handleSetImageAlignment('center')}
+          className={`px-2 py-1 text-sm border rounded ${currentImageAlignment === 'center' ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
+          disabled={!editor}
+        >
+          Img Center
+        </button>
+        <button
+          type="button"
+          onClick={() => handleSetImageAlignment('right')}
+          className={`px-2 py-1 text-sm border rounded ${currentImageAlignment === 'right' ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
+          disabled={!editor}
+        >
+          Img Right
+        </button>
 
         <select
           className="text-sm border border-gray-300 rounded px-2 py-1 bg-white"
