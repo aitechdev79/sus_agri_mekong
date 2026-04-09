@@ -15,8 +15,8 @@ export default function LocaleHomePage() {
         <AboutSection />
         <DienHinhSection />
         <TinTucSection />
-        <LibraryAndToolsWrapper />
         <ProjectsAndNewsWrapper />
+        <LibraryAndToolsWrapper />
         <SignUpSection />
       </main>
       <Footer />

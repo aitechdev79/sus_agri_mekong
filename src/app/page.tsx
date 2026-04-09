@@ -15,8 +15,8 @@ export default function Home() {
         <AboutSection />
         <DienHinhSection />
         <TinTucSection />
-        <LibraryAndToolsWrapper />
         <ProjectsAndNewsWrapper />
+        <LibraryAndToolsWrapper />
         <SignUpSection />
       </main>
       <Footer />
