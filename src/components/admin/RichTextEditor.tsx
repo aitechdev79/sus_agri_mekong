@@ -11,6 +11,8 @@ type RichTextEditorProps = {
   onChange: (value: string) => void
 }
 
+type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6
+
 const FONT_FAMILIES = [
   { label: 'Default', value: '' },
   { label: 'Geist', value: 'Geist, sans-serif' },
@@ -633,7 +635,7 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
 
     const level = Number(value)
     if (Number.isInteger(level) && level >= 1 && level <= 6) {
-      withSelection()?.setHeading({ level }).run()
+      withSelection()?.setHeading({ level: level as HeadingLevel }).run()
     }
   }
 
