@@ -107,7 +107,7 @@ export default async function NewsPage({ params }: { params: Promise<{ id: strin
           )}
 
           {/* Article Content */}
-          <div className="prose prose-lg max-w-none mb-8 [&_ul]:list-disc [&_ul]:list-inside [&_ul]:pl-2 [&_ol]:list-decimal [&_ol]:list-inside [&_ol]:pl-2 [&_li]:my-1 [&_li>p]:inline [&_li>p]:m-0">
+          <div className="prose prose-lg max-w-none mb-8 [&_ul]:list-disc [&_ul]:list-inside [&_ul]:pl-2 [&_ol]:list-decimal [&_ol]:list-inside [&_ol]:pl-2 [&_li]:my-1 [&_li>p]:inline [&_li>p]:m-0 [&_blockquote]:my-6 [&_blockquote]:border-l-4 [&_blockquote]:border-green-700 [&_blockquote]:bg-green-50 [&_blockquote]:px-5 [&_blockquote]:py-4 [&_blockquote]:italic [&_blockquote_p]:text-gray-700">
             <div
               className="text-gray-800 leading-relaxed"
               dangerouslySetInnerHTML={{ __html: renderRichTextContent(content.content) }}

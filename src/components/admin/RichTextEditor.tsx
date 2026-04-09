@@ -23,6 +23,8 @@ const LIST_INDENT_STEP_REM = 1.5
 const MAX_LIST_INDENT = 6
 const MIN_IMAGE_WIDTH_PX = 120
 const MAX_INLINE_FALLBACK_IMAGE_SIZE = 2 * 1024 * 1024
+const MAX_PASTED_IMAGE_DIMENSION_PX = 1600
+const PASTED_IMAGE_JPEG_QUALITY = 0.85
 
 function ResizableImageNodeView({ node, selected, updateAttributes, editor }: NodeViewProps) {
   const containerRef = useRef<HTMLDivElement | null>(null)
@@ -129,6 +131,52 @@ const TextStyleMark = Mark.create({
       mergeAttributes(rest, style ? { style } : {}),
       0
     ]
+  }
+})
+
+const UnderlineMark = Mark.create({
+  name: 'underline',
+
+  parseHTML() {
+    return [
+      { tag: 'u' },
+      {
+        style: 'text-decoration',
+        getAttrs: value => typeof value === 'string' && value.includes('underline') ? {} : false
+      }
+    ]
+  },
+
+  renderHTML() {
+    return ['u', 0]
+  }
+})
+
+const LinkMark = Mark.create({
+  name: 'link',
+
+  inclusive: false,
+
+  addAttributes() {
+    return {
+      href: {
+        default: null
+      },
+      target: {
+        default: '_blank'
+      },
+      rel: {
+        default: 'noopener noreferrer'
+      }
+    }
+  },
+
+  parseHTML() {
+    return [{ tag: 'a[href]' }]
+  },
+
+  renderHTML({ HTMLAttributes }) {
+    return ['a', mergeAttributes(HTMLAttributes), 0]
   }
 })
 
@@ -265,6 +313,49 @@ const ImagePasteExtension = Extension.create<{
   },
 
   addProseMirrorPlugins() {
+    const insertImage = (src: string, alt: string, insertAt?: number) => {
+      const chain = this.editor.chain().focus()
+
+      if (typeof insertAt === 'number') {
+        chain.insertContentAt(insertAt, [
+          { type: 'image', attrs: { src, alt } },
+          { type: 'paragraph' }
+        ])
+      } else {
+        chain.insertContent([
+          { type: 'image', attrs: { src, alt } },
+          { type: 'paragraph' }
+        ])
+      }
+
+      chain.run()
+    }
+
+    const uploadAndInsertImages = (files: File[], insertAt?: number) => {
+      this.options.onImageUploadStart()
+
+      void (async () => {
+        try {
+          let currentInsertAt = insertAt
+
+          for (const file of files) {
+            const url = await this.options.uploadImage(file)
+            if (!url) continue
+
+            insertImage(url, file.name || 'Pasted image', currentInsertAt)
+            if (typeof currentInsertAt === 'number') {
+              currentInsertAt += 2
+            }
+          }
+        } catch (error) {
+          const message = error instanceof Error ? error.message : 'Khong the tai anh len.'
+          this.options.onImageUploadError(message)
+        } finally {
+          this.options.onImageUploadEnd()
+        }
+      })()
+    }
+
     return [
       new Plugin({
         props: {
@@ -281,30 +372,7 @@ const ImagePasteExtension = Extension.create<{
 
             if (imageFiles.length > 0) {
               event.preventDefault()
-              this.options.onImageUploadStart()
-
-              void (async () => {
-                try {
-                  for (const file of imageFiles) {
-                    const url = await this.options.uploadImage(file)
-                    if (!url) continue
-
-                    this.editor.chain()
-                      .focus()
-                      .insertContent([
-                        { type: 'image', attrs: { src: url, alt: file.name || 'Pasted image' } },
-                        { type: 'paragraph' }
-                      ])
-                      .run()
-                  }
-                } catch (error) {
-                  const message = error instanceof Error ? error.message : 'KhÃ´ng thá»ƒ táº£i áº£nh lÃªn.'
-                  this.options.onImageUploadError(message)
-                } finally {
-                  this.options.onImageUploadEnd()
-                }
-              })()
-
+              uploadAndInsertImages(imageFiles)
               return true
             }
 
@@ -317,13 +385,7 @@ const ImagePasteExtension = Extension.create<{
             if (htmlImageSources.length > 0) {
               event.preventDefault()
               for (const src of htmlImageSources) {
-                this.editor.chain()
-                  .focus()
-                  .insertContent([
-                    { type: 'image', attrs: { src, alt: 'Pasted image' } },
-                    { type: 'paragraph' }
-                  ])
-                  .run()
+                insertImage(src, 'Pasted image')
               }
               return true
             }
@@ -332,17 +394,28 @@ const ImagePasteExtension = Extension.create<{
             const isImageUrl = /^(https?:\/\/\S+|data:image\/\w+;base64,\S+)$/i.test(pastedText)
             if (isImageUrl) {
               event.preventDefault()
-              this.editor.chain()
-                .focus()
-                .insertContent([
-                  { type: 'image', attrs: { src: pastedText, alt: 'Pasted image' } },
-                  { type: 'paragraph' }
-                ])
-                .run()
+              insertImage(pastedText, 'Pasted image')
               return true
             }
 
             return false
+          },
+          handleDrop: (view, event, _slice, moved) => {
+            if (moved) return false
+
+            const transfer = event.dataTransfer
+            if (!transfer) return false
+
+            const imageFiles = Array.from(transfer.files || []).filter((file) => file.type.startsWith('image/'))
+            if (imageFiles.length === 0) return false
+
+            event.preventDefault()
+
+            const coords = view.posAtCoords({ left: event.clientX, top: event.clientY })
+            const insertAt = coords?.pos
+
+            uploadAndInsertImages(imageFiles, insertAt)
+            return true
           }
         }
       })
@@ -354,6 +427,14 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
   const lastSelectionRef = useRef<{ from: number; to: number } | null>(null)
   const [isImageUploading, setIsImageUploading] = useState(false)
 
+  const loadImageElement = (src: string) =>
+    new Promise<HTMLImageElement>((resolve, reject) => {
+      const image = new window.Image()
+      image.onload = () => resolve(image)
+      image.onerror = () => reject(new Error('Không thể đọc ảnh đã paste.'))
+      image.src = src
+    })
+
   const toDataUrl = (file: File) => new Promise<string>((resolve, reject) => {
     const reader = new FileReader()
     reader.onload = () => resolve(String(reader.result || ''))
@@ -361,10 +442,62 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
     reader.readAsDataURL(file)
   })
 
+  const resizePastedImage = async (file: File) => {
+    if (!file.type.startsWith('image/')) {
+      return file
+    }
+
+    const sourceUrl = await toDataUrl(file)
+    const image = await loadImageElement(sourceUrl)
+    const longestSide = Math.max(image.width, image.height)
+    const shouldResize = longestSide > MAX_PASTED_IMAGE_DIMENSION_PX
+    const shouldCompress = file.size > MAX_INLINE_FALLBACK_IMAGE_SIZE
+
+    if (!shouldResize && !shouldCompress) {
+      return file
+    }
+
+    const scale = shouldResize ? MAX_PASTED_IMAGE_DIMENSION_PX / longestSide : 1
+    const targetWidth = Math.max(1, Math.round(image.width * scale))
+    const targetHeight = Math.max(1, Math.round(image.height * scale))
+    const canvas = document.createElement('canvas')
+    canvas.width = targetWidth
+    canvas.height = targetHeight
+
+    const context = canvas.getContext('2d')
+    if (!context) {
+      return file
+    }
+
+    context.drawImage(image, 0, 0, targetWidth, targetHeight)
+
+    const keepsTransparency = file.type === 'image/png' || file.type === 'image/webp'
+    const outputType = keepsTransparency ? 'image/png' : 'image/jpeg'
+    const quality = outputType === 'image/jpeg' ? PASTED_IMAGE_JPEG_QUALITY : undefined
+
+    const blob = await new Promise<Blob | null>((resolve) => {
+      canvas.toBlob(resolve, outputType, quality)
+    })
+
+    if (!blob) {
+      return file
+    }
+
+    const extension = outputType === 'image/png' ? 'png' : 'jpg'
+    const baseName = file.name.replace(/\.[^.]+$/, '') || 'pasted-image'
+
+    return new File([blob], `${baseName}.${extension}`, {
+      type: outputType,
+      lastModified: Date.now()
+    })
+  }
+
   const uploadPastedImage = async (file: File) => {
+    const preparedFile = await resizePastedImage(file)
+
     try {
       const formData = new FormData()
-      formData.append('file', file)
+      formData.append('file', preparedFile)
 
       const response = await fetch('/api/upload/file-only', {
         method: 'POST',
@@ -376,17 +509,17 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
         return String(result.file.url)
       }
 
-      if (file.type.startsWith('image/') && file.size <= MAX_INLINE_FALLBACK_IMAGE_SIZE) {
-        return await toDataUrl(file)
+      if (preparedFile.type.startsWith('image/') && preparedFile.size <= MAX_INLINE_FALLBACK_IMAGE_SIZE) {
+        return await toDataUrl(preparedFile)
       }
 
       const suggestion = result?.suggestion ? ` ${result.suggestion}` : ''
       throw new Error((result?.error || 'Không thể tải ảnh lên.') + suggestion)
     } catch {
-      if (file.type.startsWith('image/') && file.size <= MAX_INLINE_FALLBACK_IMAGE_SIZE) {
-        return await toDataUrl(file)
+      if (preparedFile.type.startsWith('image/') && preparedFile.size <= MAX_INLINE_FALLBACK_IMAGE_SIZE) {
+        return await toDataUrl(preparedFile)
       }
-      throw new Error('Không thể tải ảnh lên. Hãy thử ảnh nhỏ hơn 2MB.')
+      throw new Error('Không thể tải ảnh lên sau khi đã tự nén ảnh. Hãy thử ảnh nhỏ hơn hoặc đổi định dạng khác.')
     }
   }
 
@@ -394,6 +527,8 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
     extensions: [
       StarterKit,
       TextStyleMark,
+      UnderlineMark,
+      LinkMark,
       ListIndentExtension,
       TextAlignExtension,
       ImageNode,
@@ -465,12 +600,41 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
     withSelection()?.toggleItalic().run()
   }
 
+  const handleToggleUnderline = () => {
+    if (!editor) return
+
+    if (editor.isActive('underline')) {
+      withSelection()?.unsetMark('underline').run()
+      return
+    }
+
+    withSelection()?.setMark('underline').run()
+  }
+
   const handleToggleBulletList = () => {
     withSelection()?.toggleBulletList().run()
   }
 
   const handleToggleOrderedList = () => {
     withSelection()?.toggleOrderedList().run()
+  }
+
+  const handleToggleBlockquote = () => {
+    withSelection()?.toggleBlockquote().run()
+  }
+
+  const handleSetHeadingLevel = (value: string) => {
+    if (!editor) return
+
+    if (value === 'paragraph') {
+      withSelection()?.setParagraph().run()
+      return
+    }
+
+    const level = Number(value)
+    if (Number.isInteger(level) && level >= 1 && level <= 6) {
+      withSelection()?.setHeading({ level }).run()
+    }
   }
 
   const activeFontSize = currentTextStyle?.fontSize || '12px'
@@ -491,9 +655,50 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
   const indentTargetType = getIndentTargetType()
   const currentIndent = Number(editor?.getAttributes(indentTargetType)?.indent || 0)
   const currentTextAlign = (editor?.getAttributes(indentTargetType)?.textAlign as string | undefined) || 'left'
+  const currentLinkHref = (editor?.getAttributes('link')?.href as string | undefined) || ''
+  const currentHeadingValue = (() => {
+    if (!editor) return 'paragraph'
+    for (const level of [1, 2, 3, 4, 5, 6]) {
+      if (editor.isActive('heading', { level })) {
+        return String(level)
+      }
+    }
+    return 'paragraph'
+  })()
 
-  const handleSetTextAlign = (textAlign: 'left' | 'center' | 'right') => {
+  const handleSetTextAlign = (textAlign: 'left' | 'center' | 'right' | 'justify') => {
     withSelection()?.updateAttributes(indentTargetType, { textAlign }).run()
+  }
+
+  const normalizeLinkHref = (href: string) => {
+    const trimmed = href.trim()
+    if (!trimmed) return ''
+    if (/^(https?:\/\/|mailto:|tel:)/i.test(trimmed)) return trimmed
+    if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) return `mailto:${trimmed}`
+    return `https://${trimmed}`
+  }
+
+  const handleSetLink = () => {
+    if (!editor) return
+
+    const nextHref = window.prompt('Nhap URL', currentLinkHref || 'https://')
+    if (nextHref === null) return
+
+    const normalizedHref = normalizeLinkHref(nextHref)
+    if (!normalizedHref) {
+      withSelection()?.unsetMark('link').run()
+      return
+    }
+
+    withSelection()?.setMark('link', {
+      href: normalizedHref,
+      target: '_blank',
+      rel: 'noopener noreferrer'
+    }).run()
+  }
+
+  const handleUnsetLink = () => {
+    withSelection()?.unsetMark('link').run()
   }
 
   const handleIndent = () => {
@@ -536,6 +741,14 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
         </button>
         <button
           type="button"
+          onClick={handleToggleUnderline}
+          className={`px-2 py-1 text-sm border rounded ${editor?.isActive('underline') ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
+          disabled={!editor}
+        >
+          Underline
+        </button>
+        <button
+          type="button"
           onClick={handleToggleBulletList}
           className={`px-2 py-1 text-sm border rounded ${editor?.isActive('bulletList') ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
           disabled={!editor}
@@ -549,6 +762,14 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
           disabled={!editor}
         >
           Numbering
+        </button>
+        <button
+          type="button"
+          onClick={handleToggleBlockquote}
+          className={`px-2 py-1 text-sm border rounded ${editor?.isActive('blockquote') ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
+          disabled={!editor}
+        >
+          Blockquote
         </button>
         <button
           type="button"
@@ -590,6 +811,43 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
         >
           Right
         </button>
+        <button
+          type="button"
+          onClick={() => handleSetTextAlign('justify')}
+          className={`px-2 py-1 text-sm border rounded ${currentTextAlign === 'justify' ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
+          disabled={!editor}
+        >
+          Justify
+        </button>
+        <button
+          type="button"
+          onClick={handleSetLink}
+          className={`px-2 py-1 text-sm border rounded ${editor?.isActive('link') ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
+          disabled={!editor}
+        >
+          Link
+        </button>
+        <button
+          type="button"
+          onClick={handleUnsetLink}
+          className="px-2 py-1 text-sm border rounded bg-white text-gray-700 border-gray-300"
+          disabled={!editor}
+        >
+          Unlink
+        </button>
+
+        <select
+          className="text-sm border border-gray-300 rounded px-2 py-1 bg-white"
+          value={currentHeadingValue}
+          onChange={(event) => handleSetHeadingLevel(event.target.value)}
+          disabled={!editor}
+        >
+          <option value="paragraph">Paragraph</option>
+          <option value="1">H1</option>
+          <option value="2">H2</option>
+          <option value="3">H3</option>
+          <option value="4">H4</option>
+        </select>
 
         <select
           className="text-sm border border-gray-300 rounded px-2 py-1 bg-white"
@@ -621,13 +879,13 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
       </div>
       {isImageUploading && (
         <div className="border-b bg-amber-50 px-3 py-2 text-xs text-amber-700">
-          Dang tai anh da paste...
+          Dang tai anh...
         </div>
       )}
 
       <EditorContent
         editor={editor}
-        className="min-h-[200px] px-3 py-2 text-[12px] leading-relaxed focus:outline-none [&_.ProseMirror]:min-h-[180px] [&_.ProseMirror]:outline-none [&_.ProseMirror_p]:my-2 [&_.ProseMirror_ul]:list-disc [&_.ProseMirror_ul]:pl-6 [&_.ProseMirror_ol]:list-decimal [&_.ProseMirror_ol]:pl-6 [&_.ProseMirror_li>p]:my-1"
+        className="min-h-[200px] px-3 py-2 text-[12px] leading-relaxed focus:outline-none [&_.ProseMirror]:min-h-[180px] [&_.ProseMirror]:outline-none [&_.ProseMirror_p]:my-2 [&_.ProseMirror_ul]:list-disc [&_.ProseMirror_ul]:pl-6 [&_.ProseMirror_ol]:list-decimal [&_.ProseMirror_ol]:pl-6 [&_.ProseMirror_li>p]:my-1 [&_.ProseMirror_blockquote]:my-4 [&_.ProseMirror_blockquote]:border-l-4 [&_.ProseMirror_blockquote]:border-green-600 [&_.ProseMirror_blockquote]:bg-green-50/60 [&_.ProseMirror_blockquote]:px-4 [&_.ProseMirror_blockquote]:py-3 [&_.ProseMirror_blockquote]:italic"
       />
     </div>
   )
