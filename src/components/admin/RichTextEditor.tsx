@@ -25,9 +25,9 @@ const FONT_SIZES = ['12px', '14px', '16px', '18px', '20px', '24px']
 const LIST_INDENT_STEP_REM = 1.5
 const MAX_LIST_INDENT = 6
 const MIN_IMAGE_WIDTH_PX = 120
-const MAX_INLINE_FALLBACK_IMAGE_SIZE = 2 * 1024 * 1024
 const MAX_PASTED_IMAGE_DIMENSION_PX = 1600
 const PASTED_IMAGE_JPEG_QUALITY = 0.85
+const MAX_RICH_TEXT_IMAGE_UPLOAD_SIZE = 900 * 1024
 
 function ResizableImageNodeView({ node, selected, updateAttributes, editor }: NodeViewProps) {
   const containerRef = useRef<HTMLDivElement | null>(null)
@@ -493,7 +493,7 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
     const image = await loadImageElement(sourceUrl)
     const longestSide = Math.max(image.width, image.height)
     const shouldResize = longestSide > MAX_PASTED_IMAGE_DIMENSION_PX
-    const shouldCompress = file.size > MAX_INLINE_FALLBACK_IMAGE_SIZE
+    const shouldCompress = file.size > MAX_RICH_TEXT_IMAGE_UPLOAD_SIZE
 
     if (!shouldResize && !shouldCompress) {
       return file
@@ -513,19 +513,44 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
 
     context.drawImage(image, 0, 0, targetWidth, targetHeight)
 
-    const keepsTransparency = file.type === 'image/png' || file.type === 'image/webp'
-    const outputType = keepsTransparency ? 'image/png' : 'image/jpeg'
-    const quality = outputType === 'image/jpeg' ? PASTED_IMAGE_JPEG_QUALITY : undefined
+    const supportsTransparency = file.type === 'image/png' || file.type === 'image/webp'
+    const attemptEncode = (outputType: string, quality?: number) =>
+      new Promise<Blob | null>((resolve) => {
+        canvas.toBlob(resolve, outputType, quality)
+      })
 
-    const blob = await new Promise<Blob | null>((resolve) => {
-      canvas.toBlob(resolve, outputType, quality)
-    })
+    let outputType = supportsTransparency ? 'image/webp' : 'image/jpeg'
+    let quality = outputType === 'image/jpeg' || outputType === 'image/webp' ? PASTED_IMAGE_JPEG_QUALITY : undefined
+    let blob = await attemptEncode(outputType, quality)
+
+    if (blob && blob.size > MAX_RICH_TEXT_IMAGE_UPLOAD_SIZE && (outputType === 'image/jpeg' || outputType === 'image/webp')) {
+      const qualitySteps = [0.78, 0.72, 0.66, 0.6]
+      for (const nextQuality of qualitySteps) {
+        const nextBlob = await attemptEncode(outputType, nextQuality)
+        if (!nextBlob) continue
+        blob = nextBlob
+        quality = nextQuality
+        if (blob.size <= MAX_RICH_TEXT_IMAGE_UPLOAD_SIZE) break
+      }
+    }
+
+    if (blob && blob.size > MAX_RICH_TEXT_IMAGE_UPLOAD_SIZE) {
+      outputType = 'image/jpeg'
+      const qualitySteps = [0.78, 0.7, 0.62, 0.55]
+      for (const nextQuality of qualitySteps) {
+        const nextBlob = await attemptEncode(outputType, nextQuality)
+        if (!nextBlob) continue
+        blob = nextBlob
+        quality = nextQuality
+        if (blob.size <= MAX_RICH_TEXT_IMAGE_UPLOAD_SIZE) break
+      }
+    }
 
     if (!blob) {
       return file
     }
 
-    const extension = outputType === 'image/png' ? 'png' : 'jpg'
+    const extension = outputType === 'image/webp' ? 'webp' : 'jpg'
     const baseName = file.name.replace(/\.[^.]+$/, '') || 'pasted-image'
 
     return new File([blob], `${baseName}.${extension}`, {
@@ -551,17 +576,17 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
         return String(result.file.url)
       }
 
-      if (preparedFile.type.startsWith('image/') && preparedFile.size <= MAX_INLINE_FALLBACK_IMAGE_SIZE) {
+      if (preparedFile.type.startsWith('image/') && preparedFile.size <= MAX_RICH_TEXT_IMAGE_UPLOAD_SIZE) {
         return await toDataUrl(preparedFile)
       }
 
       const suggestion = result?.suggestion ? ` ${result.suggestion}` : ''
       throw new Error((result?.error || 'Không thể tải ảnh lên.') + suggestion)
     } catch {
-      if (preparedFile.type.startsWith('image/') && preparedFile.size <= MAX_INLINE_FALLBACK_IMAGE_SIZE) {
+      if (preparedFile.type.startsWith('image/') && preparedFile.size <= MAX_RICH_TEXT_IMAGE_UPLOAD_SIZE) {
         return await toDataUrl(preparedFile)
       }
-      throw new Error('Không thể tải ảnh lên sau khi đã tự nén ảnh. Hãy thử ảnh nhỏ hơn hoặc đổi định dạng khác.')
+      throw new Error('Không thể tải ảnh lên sau khi đã tự nén ảnh. Hãy thử ảnh nhỏ hơn, cắt bớt ảnh, hoặc đổi sang JPG/WebP.')
     }
   }
 
