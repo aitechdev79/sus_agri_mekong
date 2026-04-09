@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Calendar, ChevronLeft, ChevronRight, Eye } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import NavigationBar from '@/components/NavigationBar';
 import EventCalendar from '@/components/EventCalendar';
 import { usePublicCategories } from '@/hooks/use-public-categories';
@@ -32,7 +32,8 @@ interface PaginatedResponse {
 export default function NewsPage() {
   const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const itemsPerPage = 5; // 5 items per page for better pagination demonstration
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const itemsPerPage = 5;
   const { categoryLabels } = usePublicCategories();
 
   useEffect(() => {
@@ -68,20 +69,12 @@ export default function NewsPage() {
     return categoryLabels[category] || category;
   };
 
-  // Carousel state for upcoming events
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const sortedNews = [...newsItems].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  let carouselItems = sortedNews.slice(0, 3);
 
-  // Sort events by date and prepare carousel items
-  const sortedEvents = [...newsItems].sort((a, b) =>
-    new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-  );
-
-  // Create at least 3 items for carousel by duplicating if needed
-  let carouselItems = sortedEvents.slice(0, 3);
   if (carouselItems.length < 3 && carouselItems.length > 0) {
-    // Duplicate items to reach 3
     while (carouselItems.length < 3) {
-      carouselItems = [...carouselItems, ...sortedEvents];
+      carouselItems = [...carouselItems, ...sortedNews];
     }
     carouselItems = carouselItems.slice(0, 3);
   }
@@ -94,7 +87,6 @@ export default function NewsPage() {
     setCurrentSlide((prev) => (prev - 1 + carouselItems.length) % carouselItems.length);
   };
 
-  // Auto-rotate carousel every 5 seconds
   useEffect(() => {
     if (carouselItems.length > 1) {
       const interval = setInterval(() => {
@@ -104,12 +96,13 @@ export default function NewsPage() {
     }
   }, [carouselItems.length]);
 
-  // Prepare events for calendar
-  const calendarEvents = newsItems.map(item => ({
+  const calendarEvents = newsItems.map((item) => ({
     id: item.id,
     title: item.title,
     date: new Date(item.createdAt),
-    type: (getCategoryLabel(item.category).toLowerCase().includes('dao tao') || getCategoryLabel(item.category).toLowerCase().includes('training')) ? 'training' as const : 'event' as const,
+    type: (getCategoryLabel(item.category).toLowerCase().includes('dao tao') || getCategoryLabel(item.category).toLowerCase().includes('training'))
+      ? 'training' as const
+      : 'event' as const,
   }));
 
   return (
@@ -118,13 +111,12 @@ export default function NewsPage() {
 
       <main className="container mx-auto px-6 py-20">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column - Upcoming Events */}
           <div className="lg:col-span-2">
             <div className="flex items-center justify-between mb-6">
               <h1 className="text-2xl md:text-3xl font-bold text-yellow-400 font-montserrat">
-                SỰ KIỆN SẮP DIỄN RA
+                TIN TỨC NỔI BẬT
               </h1>
-              <button className="text-yellow-400 hover:text-yellow-300">
+              <button className="text-yellow-400 hover:text-yellow-300" aria-label="Tin tức nổi bật">
                 <span className="text-2xl">»</span>
               </button>
             </div>
@@ -132,12 +124,11 @@ export default function NewsPage() {
             {loading ? (
               <div className="space-y-4">
                 {[...Array(3)].map((_, i) => (
-                  <div key={i} className="h-96 bg-white/20 animate-pulse rounded-lg"></div>
+                  <div key={i} className="h-96 bg-white/20 animate-pulse rounded-lg" />
                 ))}
               </div>
             ) : carouselItems.length > 0 ? (
               <div className="relative">
-                {/* Carousel Container */}
                 <div className="overflow-hidden rounded-lg">
                   <div
                     className="flex transition-transform duration-500 ease-in-out"
@@ -145,7 +136,7 @@ export default function NewsPage() {
                   >
                     {carouselItems.map((item, index) => (
                       <div key={`${item.id}-${index}`} className="w-full flex-shrink-0">
-                        <Link href={`/content/${item.id}`} className="block group">
+                        <Link href={`/news/${item.id}`} className="block group">
                           <div className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow mx-2">
                             <div className="relative h-64 md:h-96">
                               {item.thumbnailUrl || item.imageUrl ? (
@@ -160,7 +151,6 @@ export default function NewsPage() {
                                   <span className="text-gray-500">Không có hình ảnh</span>
                                 </div>
                               )}
-                              {/* Date Badge */}
                               <div className="absolute top-4 left-4 bg-yellow-400 text-blue-900 px-4 py-2 rounded-lg font-bold shadow-lg">
                                 <div className="flex items-center gap-2">
                                   <Calendar className="w-4 h-4" />
@@ -196,7 +186,6 @@ export default function NewsPage() {
                   </div>
                 </div>
 
-                {/* Navigation Buttons */}
                 {carouselItems.length > 1 && (
                   <>
                     <button
@@ -216,7 +205,6 @@ export default function NewsPage() {
                   </>
                 )}
 
-                {/* Carousel Indicators */}
                 {carouselItems.length > 1 && (
                   <div className="flex justify-center gap-2 mt-6">
                     {carouselItems.map((_, index) => (
@@ -224,9 +212,7 @@ export default function NewsPage() {
                         key={index}
                         onClick={() => setCurrentSlide(index)}
                         className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                          index === currentSlide
-                            ? 'bg-yellow-400 w-8'
-                            : 'bg-white/50 hover:bg-white/75'
+                          index === currentSlide ? 'bg-yellow-400 w-8' : 'bg-white/50 hover:bg-white/75'
                         }`}
                         aria-label={`Go to slide ${index + 1}`}
                       />
@@ -236,12 +222,11 @@ export default function NewsPage() {
               </div>
             ) : (
               <div className="bg-white rounded-lg p-12 text-center">
-                <p className="text-gray-500 text-lg">Chưa có sự kiện nào được đăng</p>
+                <p className="text-gray-500 text-lg">Chưa có tin tức nào được đăng</p>
               </div>
             )}
           </div>
 
-          {/* Right Column - Calendar */}
           <div className="lg:col-span-1">
             <div className="mb-6 invisible">
               <h2 className="text-2xl md:text-3xl font-bold">Placeholder</h2>
@@ -250,33 +235,27 @@ export default function NewsPage() {
           </div>
         </div>
 
-        {/* Tin Sự Kiện Section */}
         <div className="mt-16">
           <div className="mb-8">
             <h2 className="text-3xl font-bold text-yellow-400 mb-2 md:text-4xl font-montserrat">
-              Tin Sự Kiện
+              Tin tức mới nhất
             </h2>
             <p className="text-lg text-white/90 font-montserrat max-w-3xl">
-              Danh sách các tin tức và sự kiện nổi bật
+              Danh sách các tin tức và cập nhật nổi bật
             </p>
           </div>
 
           {loading ? (
             <div className="space-y-4">
               {[...Array(5)].map((_, i) => (
-                <div key={i} className="h-32 bg-white/20 animate-pulse rounded-lg"></div>
+                <div key={i} className="h-32 bg-white/20 animate-pulse rounded-lg" />
               ))}
             </div>
           ) : newsItems.length > 0 ? (
             <div className="space-y-4">
               {newsItems.slice(0, 5).map((item) => (
-                <Link
-                  key={item.id}
-                  href={`/content/${item.id}`}
-                  className="block group"
-                >
+                <Link key={item.id} href={`/news/${item.id}`} className="block group">
                   <article className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow flex flex-col md:flex-row">
-                    {/* Image */}
                     <div className="relative h-32 md:h-32 md:w-48 flex-shrink-0">
                       {item.thumbnailUrl || item.imageUrl ? (
                         <Image
@@ -292,29 +271,22 @@ export default function NewsPage() {
                       )}
                     </div>
 
-                    {/* Content */}
                     <div className="p-4 flex-1">
-                      {/* Date */}
                       <div className="flex items-center text-xs text-gray-500 mb-2">
                         <Calendar className="w-3 h-3 mr-1" />
-                        <span className="font-montserrat">
-                          {formatDate(item.createdAt)}
-                        </span>
+                        <span className="font-montserrat">{formatDate(item.createdAt)}</span>
                       </div>
 
-                      {/* Title */}
                       <h3 className="text-lg font-bold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors font-montserrat line-clamp-2">
                         {item.title}
                       </h3>
 
-                      {/* Description */}
                       {item.description && (
                         <p className="text-sm text-gray-600 line-clamp-2 font-montserrat">
                           {item.description}
                         </p>
                       )}
 
-                      {/* View Count and Category */}
                       <div className="flex items-center gap-4 mt-2 text-sm text-gray-600">
                         <div className="flex items-center gap-1">
                           <Eye className="w-4 h-4" />
@@ -341,4 +313,3 @@ export default function NewsPage() {
     </div>
   );
 }
-

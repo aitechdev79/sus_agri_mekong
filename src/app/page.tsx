@@ -3,6 +3,7 @@ import HeroSection from '@/components/HeroSection';
 import AboutSection from '@/components/AboutSection';
 import SignUpSection from '@/components/SignUpSection';
 import DienHinhSection from '@/components/DienHinhSection';
+import TinTucSection from '@/components/TinTucSection';
 import LibraryAndToolsWrapper from '@/components/LibraryAndToolsWrapper';
 import ProjectsAndNewsWrapper from '@/components/ProjectsAndNewsWrapper';
 
@@ -13,6 +14,7 @@ export default function Home() {
         <HeroSection />
         <AboutSection />
         <DienHinhSection />
+        <TinTucSection />
         <LibraryAndToolsWrapper />
         <ProjectsAndNewsWrapper />
         <SignUpSection />

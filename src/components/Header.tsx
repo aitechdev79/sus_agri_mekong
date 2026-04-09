@@ -12,17 +12,19 @@ export default function Header() {
   const { data: session, status } = useSession();
   const pathname = usePathname();
   const locale = getLocaleFromPathname(pathname);
+  const isEn = locale === 'en';
   const homeHref = withLocalePrefix('/', locale);
   const signInHref = withLocalePrefix('/auth/signin', locale);
   const signUpHref = withLocalePrefix('/auth/signup', locale);
 
   const navigation = [
-    { name: 'Trang chủ', href: withLocalePrefix('/', locale) },
-    { name: 'Giới thiệu', href: withLocalePrefix('/about', locale) },
-    { name: 'Thư viện', href: withLocalePrefix('/library', locale) },
-    { name: 'Công cụ', href: withLocalePrefix('/tools', locale) },
-    { name: 'Cộng đồng', href: withLocalePrefix('/community', locale) },
-    { name: 'Sự kiện', href: withLocalePrefix('/tat-ca-su-kien', locale) },
+    { name: isEn ? 'Home' : 'Trang chủ', href: withLocalePrefix('/', locale) },
+    { name: isEn ? 'About' : 'Giới thiệu', href: withLocalePrefix('/about', locale) },
+    { name: isEn ? 'Library' : 'Thư viện', href: withLocalePrefix('/library', locale) },
+    { name: isEn ? 'Tools' : 'Công cụ', href: withLocalePrefix('/tools', locale) },
+    { name: isEn ? 'News' : 'Tin tức', href: withLocalePrefix('/news', locale) },
+    { name: isEn ? 'Community' : 'Cộng đồng', href: withLocalePrefix('/community', locale) },
+    { name: isEn ? 'Events' : 'Sự kiện', href: withLocalePrefix('/tat-ca-su-kien', locale) },
   ];
 
   return (
@@ -34,7 +36,7 @@ export default function Header() {
               <span className="text-blue-600 font-bold text-sm">GP</span>
             </div>
             <span className="text-white font-bold text-lg hidden md:block">
-              Nền Tảng Tư Liệu Hóa
+              {isEn ? 'Digitized Knowledge Platform' : 'Nền Tảng Tư Liệu Hóa'}
             </span>
           </Link>
 
@@ -60,7 +62,7 @@ export default function Header() {
                     onClick={() => signOut({ callbackUrl: homeHref })}
                     className="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors"
                   >
-                    Đăng xuất
+                    {isEn ? 'Sign out' : 'Đăng xuất'}
                   </button>
                 </>
               ) : (
@@ -69,13 +71,13 @@ export default function Header() {
                     href={signInHref}
                     className="text-white hover:text-blue-200 transition-colors font-medium"
                   >
-                    Đăng nhập
+                    {isEn ? 'Sign in' : 'Đăng nhập'}
                   </Link>
                   <Link
                     href={signUpHref}
                     className="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors"
                   >
-                    Đăng ký
+                    {isEn ? 'Sign up' : 'Đăng ký'}
                   </Link>
                 </>
               )}
@@ -123,7 +125,7 @@ export default function Header() {
                         }}
                         className="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors text-center"
                       >
-                        Đăng xuất
+                        {isEn ? 'Sign out' : 'Đăng xuất'}
                       </button>
                     </>
                   ) : (
@@ -132,13 +134,13 @@ export default function Header() {
                         href={signInHref}
                         className="text-white hover:text-blue-200 transition-colors font-medium"
                       >
-                        Đăng nhập
+                        {isEn ? 'Sign in' : 'Đăng nhập'}
                       </Link>
                       <Link
                         href={signUpHref}
                         className="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors text-center"
                       >
-                        Đăng ký
+                        {isEn ? 'Sign up' : 'Đăng ký'}
                       </Link>
                     </>
                   )}

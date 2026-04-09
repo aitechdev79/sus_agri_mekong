@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Calendar, Eye, ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import EventCalendar from '@/components/EventCalendar';
 import { usePublicCategories } from '@/hooks/use-public-categories';
 import { pickLocalizedText } from '@/lib/content-locale';
@@ -29,7 +29,7 @@ export default function NewsPage({ params }: { params: Promise<{ locale: string 
   const isEn = locale === 'en';
 
   useEffect(() => {
-    params.then(p => setLocale(p.locale));
+    params.then((p) => setLocale(p.locale));
   }, [params]);
 
   useEffect(() => {
@@ -65,17 +65,12 @@ export default function NewsPage({ params }: { params: Promise<{ locale: string 
     return categoryLabels[category] || category;
   };
 
-  // Sort events by date and prepare carousel items
-  const sortedEvents = [...newsItems].sort((a, b) =>
-    new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-  );
+  const sortedNews = [...newsItems].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  let carouselItems = sortedNews.slice(0, 3);
 
-  // Create at least 3 items for carousel by duplicating if needed
-  let carouselItems = sortedEvents.slice(0, 3);
   if (carouselItems.length < 3 && carouselItems.length > 0) {
-    // Duplicate items to reach 3
     while (carouselItems.length < 3) {
-      carouselItems = [...carouselItems, ...sortedEvents];
+      carouselItems = [...carouselItems, ...sortedNews];
     }
     carouselItems = carouselItems.slice(0, 3);
   }
@@ -88,7 +83,6 @@ export default function NewsPage({ params }: { params: Promise<{ locale: string 
     setCurrentSlide((prev) => (prev - 1 + carouselItems.length) % carouselItems.length);
   };
 
-  // Auto-rotate carousel every 5 seconds
   useEffect(() => {
     if (carouselItems.length > 1) {
       const interval = setInterval(() => {
@@ -98,17 +92,17 @@ export default function NewsPage({ params }: { params: Promise<{ locale: string 
     }
   }, [carouselItems.length]);
 
-  // Prepare events for calendar
-  const calendarEvents = newsItems.map(item => ({
+  const calendarEvents = newsItems.map((item) => ({
     id: item.id,
     title: pickLocalizedText(locale, item.title, item.titleEn),
     date: new Date(item.createdAt),
-    type: (getCategoryLabel(item.category).toLowerCase().includes('dao tao') || getCategoryLabel(item.category).toLowerCase().includes('training')) ? 'training' as const : 'event' as const,
+    type: (getCategoryLabel(item.category).toLowerCase().includes('dao tao') || getCategoryLabel(item.category).toLowerCase().includes('training'))
+      ? 'training' as const
+      : 'event' as const,
   }));
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
       <header className="bg-white border-b" style={{ borderColor: '#E8F5E9' }}>
         <div className="container mx-auto px-6 py-4">
           <Link
@@ -130,26 +124,24 @@ export default function NewsPage({ params }: { params: Promise<{ locale: string 
 
       <main className="container mx-auto px-6 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column - Upcoming Events */}
           <div className="lg:col-span-2">
             <div className="mb-8">
               <h1 className="text-3xl md:text-4xl font-bold mb-2 font-montserrat" style={{ color: '#3C3C3B' }}>
-                {isEn ? 'Upcoming Events' : 'Sự Kiện Sắp Diễn Ra'}
+                {isEn ? 'Featured News' : 'Tin tức nổi bật'}
               </h1>
               <p className="text-lg font-montserrat" style={{ color: '#6B7280' }}>
-                {isEn ? 'Latest updates on upcoming activities and events' : 'Cập nhật những sự kiện mới nhất và sắp diễn ra'}
+                {isEn ? 'Latest updates, stories and highlights from the platform' : 'Cập nhật những tin mới, câu chuyện và điểm nhấn nổi bật từ nền tảng'}
               </p>
             </div>
 
             {loading ? (
               <div className="space-y-4">
                 {[...Array(3)].map((_, i) => (
-                  <div key={i} className="h-96 bg-gray-100 animate-pulse"></div>
+                  <div key={i} className="h-96 bg-gray-100 animate-pulse" />
                 ))}
               </div>
             ) : carouselItems.length > 0 ? (
               <div className="relative">
-                {/* Carousel Container */}
                 <div className="overflow-hidden">
                   <div
                     className="flex transition-transform duration-500 ease-in-out"
@@ -160,71 +152,65 @@ export default function NewsPage({ params }: { params: Promise<{ locale: string 
                       const description = pickLocalizedText(locale, item.description, item.descriptionEn);
 
                       return (
-                      <div key={`${item.id}-${index}`} className="w-full flex-shrink-0 px-2">
-                        <Link href={`/${locale}/news/${item.id}`} className="block group">
-                          <div className="bg-white overflow-hidden transition-all duration-300" style={{ boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)' }}>
-                            {/* Image Container - Sharp corners with zoom effect */}
-                            <div className="relative h-64 md:h-96 overflow-hidden">
-                              {item.thumbnailUrl ? (
-                                <Image
-                                  src={item.thumbnailUrl}
-                                  alt={title}
-                                  fill
-                                  className="object-cover group-hover:scale-110 transition-transform duration-500"
-                                />
-                              ) : (
-                                <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                                  <span className="text-gray-500">{isEn ? 'No image' : 'Không có hình ảnh'}</span>
-                                </div>
-                              )}
-                              {/* Date Badge - Green theme */}
-                              <div className="absolute top-4 left-4 px-4 py-2 font-bold shadow-lg font-montserrat" style={{ backgroundColor: '#0A7029', color: 'white' }}>
-                                <div className="flex items-center gap-2">
-                                  <Calendar className="w-4 h-4" />
-                                  <span>{formatDate(item.createdAt)}</span>
-                                </div>
-                              </div>
-                            </div>
-                            {/* Text Content with Animated Border */}
-                            <div className="p-6 relative" style={{ minHeight: '160px' }}>
-                              {/* Base light-green border */}
-                              <div className="absolute bottom-0 left-0 w-full h-0.5" style={{ backgroundColor: '#E8F5E9' }}></div>
-
-                              {/* Animated dark-green border */}
-                              <div
-                                className="absolute bottom-0 left-0 h-0.5 w-0 group-hover:w-full transition-all duration-500 ease-out"
-                                style={{ backgroundColor: '#0A7029' }}
-                              ></div>
-
-                              <h2 className="text-xl md:text-2xl font-bold mb-3 font-montserrat line-clamp-2" style={{ color: '#3C3C3B' }}>
-                                {title}
-                              </h2>
-                              {description && (
-                                <p className="leading-relaxed line-clamp-3 mb-4 font-montserrat" style={{ color: '#6B7280' }}>
-                                  {description}
-                                </p>
-                              )}
-                              <div className="flex items-center gap-4 text-sm" style={{ color: '#9CA3AF' }}>
-                                <div className="flex items-center gap-1">
-                                  <Eye className="w-4 h-4" />
-                                  <span>{item.viewCount} {isEn ? 'views' : 'lượt xem'}</span>
-                                </div>
-                                {item.category && (
-                                  <span className="px-3 py-1 text-xs font-semibold font-montserrat" style={{ backgroundColor: '#E8F5E9', color: '#0A7029' }}>
-                                    {getCategoryLabel(item.category)}
-                                  </span>
+                        <div key={`${item.id}-${index}`} className="w-full flex-shrink-0 px-2">
+                          <Link href={`/${locale}/news/${item.id}`} className="block group">
+                            <div className="bg-white overflow-hidden transition-all duration-300" style={{ boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)' }}>
+                              <div className="relative h-64 md:h-96 overflow-hidden">
+                                {item.thumbnailUrl ? (
+                                  <Image
+                                    src={item.thumbnailUrl}
+                                    alt={title}
+                                    fill
+                                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+                                  />
+                                ) : (
+                                  <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                                    <span className="text-gray-500">{isEn ? 'No image' : 'Không có hình ảnh'}</span>
+                                  </div>
                                 )}
+                                <div className="absolute top-4 left-4 px-4 py-2 font-bold shadow-lg font-montserrat" style={{ backgroundColor: '#0A7029', color: 'white' }}>
+                                  <div className="flex items-center gap-2">
+                                    <Calendar className="w-4 h-4" />
+                                    <span>{formatDate(item.createdAt)}</span>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="p-6 relative" style={{ minHeight: '160px' }}>
+                                <div className="absolute bottom-0 left-0 w-full h-0.5" style={{ backgroundColor: '#E8F5E9' }} />
+                                <div
+                                  className="absolute bottom-0 left-0 h-0.5 w-0 group-hover:w-full transition-all duration-500 ease-out"
+                                  style={{ backgroundColor: '#0A7029' }}
+                                />
+
+                                <h2 className="text-xl md:text-2xl font-bold mb-3 font-montserrat line-clamp-2" style={{ color: '#3C3C3B' }}>
+                                  {title}
+                                </h2>
+                                {description && (
+                                  <p className="leading-relaxed line-clamp-3 mb-4 font-montserrat" style={{ color: '#6B7280' }}>
+                                    {description}
+                                  </p>
+                                )}
+                                <div className="flex items-center gap-4 text-sm" style={{ color: '#9CA3AF' }}>
+                                  <div className="flex items-center gap-1">
+                                    <Eye className="w-4 h-4" />
+                                    <span>{item.viewCount} {isEn ? 'views' : 'lượt xem'}</span>
+                                  </div>
+                                  {item.category && (
+                                    <span className="px-3 py-1 text-xs font-semibold font-montserrat" style={{ backgroundColor: '#E8F5E9', color: '#0A7029' }}>
+                                      {getCategoryLabel(item.category)}
+                                    </span>
+                                  )}
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </Link>
-                      </div>
+                          </Link>
+                        </div>
                       );
                     })}
                   </div>
                 </div>
 
-                {/* Navigation Buttons */}
                 {carouselItems.length > 1 && (
                   <>
                     <button
@@ -258,7 +244,6 @@ export default function NewsPage({ params }: { params: Promise<{ locale: string 
                   </>
                 )}
 
-                {/* Carousel Indicators */}
                 {carouselItems.length > 1 && (
                   <div className="flex justify-center gap-2 mt-6">
                     {carouselItems.map((_, index) => (
@@ -289,13 +274,12 @@ export default function NewsPage({ params }: { params: Promise<{ locale: string 
             ) : (
               <div className="bg-white p-12 text-center" style={{ boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)' }}>
                 <p className="text-lg font-montserrat" style={{ color: '#6B7280' }}>
-                  {isEn ? 'No events have been published yet' : 'Chưa có sự kiện nào được đăng'}
+                  {isEn ? 'No news has been published yet' : 'Chưa có tin tức nào được đăng'}
                 </p>
               </div>
             )}
           </div>
 
-          {/* Right Column - Calendar */}
           <div className="lg:col-span-1">
             <div className="mb-6 invisible">
               <h2 className="text-2xl md:text-3xl font-bold">Placeholder</h2>
@@ -304,21 +288,20 @@ export default function NewsPage({ params }: { params: Promise<{ locale: string 
           </div>
         </div>
 
-        {/* Tin Sự Kiện Section */}
         <div className="mt-16">
           <div className="mb-8">
             <h2 className="text-3xl font-bold mb-2 md:text-4xl font-montserrat" style={{ color: '#3C3C3B' }}>
-              {isEn ? 'Event News' : 'Tin Sự Kiện'}
+              {isEn ? 'Latest News' : 'Tin tức mới nhất'}
             </h2>
             <p className="text-lg font-montserrat max-w-3xl" style={{ color: '#6B7280' }}>
-              {isEn ? 'Highlighted news and event updates' : 'Danh sách các tin tức và sự kiện nổi bật'}
+              {isEn ? 'Highlighted stories and recent updates' : 'Danh sách các tin tức và cập nhật nổi bật'}
             </p>
           </div>
 
           {loading ? (
             <div className="space-y-4">
               {[...Array(5)].map((_, i) => (
-                <div key={i} className="h-32 bg-gray-100 animate-pulse"></div>
+                <div key={i} className="h-32 bg-gray-100 animate-pulse" />
               ))}
             </div>
           ) : newsItems.length > 0 ? (
@@ -328,74 +311,59 @@ export default function NewsPage({ params }: { params: Promise<{ locale: string 
                 const description = pickLocalizedText(locale, item.description, item.descriptionEn);
 
                 return (
-                <Link
-                  key={item.id}
-                  href={`/${locale}/news/${item.id}`}
-                  className="block group"
-                >
-                  <article className="bg-white overflow-hidden transition-all duration-300 flex flex-col md:flex-row relative" style={{ boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)' }}>
-                    {/* Image - Sharp corners with zoom effect */}
-                    <div className="relative h-40 md:h-40 md:w-56 flex-shrink-0 overflow-hidden">
-                      {item.thumbnailUrl ? (
-                        <Image
-                          src={item.thumbnailUrl}
-                          alt={title}
-                          fill
-                          className="object-cover group-hover:scale-110 transition-transform duration-500"
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-gray-100 flex items-center justify-center">
-                          <Calendar className="w-8 h-8 text-gray-400" />
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Content with Animated Border */}
-                    <div className="p-6 flex-1 relative" style={{ minHeight: '120px' }}>
-                      {/* Base light-green border */}
-                      <div className="absolute bottom-0 left-0 w-full h-0.5" style={{ backgroundColor: '#E8F5E9' }}></div>
-
-                      {/* Animated dark-green border */}
-                      <div
-                        className="absolute bottom-0 left-0 h-0.5 w-0 group-hover:w-full transition-all duration-500 ease-out"
-                        style={{ backgroundColor: '#0A7029' }}
-                      ></div>
-
-                      {/* Date */}
-                      <div className="flex items-center text-sm mb-2" style={{ color: '#9CA3AF' }}>
-                        <Calendar className="w-4 h-4 mr-1" />
-                        <span className="font-montserrat font-medium">
-                          {formatDate(item.createdAt)}
-                        </span>
-                      </div>
-
-                      {/* Title */}
-                      <h3 className="text-lg md:text-xl font-bold mb-2 font-montserrat line-clamp-2" style={{ color: '#3C3C3B' }}>
-                        {title}
-                      </h3>
-
-                      {/* Description */}
-                      {description && (
-                        <p className="text-sm md:text-base line-clamp-2 mb-3 font-montserrat" style={{ color: '#6B7280' }}>
-                          {description}
-                        </p>
-                      )}
-
-                      {/* View Count and Category */}
-                      <div className="flex items-center gap-4 text-sm" style={{ color: '#9CA3AF' }}>
-                        <div className="flex items-center gap-1">
-                          <Eye className="w-4 h-4" />
-                          <span>{item.viewCount} {isEn ? 'views' : 'lượt xem'}</span>
-                        </div>
-                        {item.category && (
-                          <span className="px-3 py-1 text-xs font-semibold font-montserrat" style={{ backgroundColor: '#E8F5E9', color: '#0A7029' }}>
-                            {getCategoryLabel(item.category)}
-                          </span>
+                  <Link key={item.id} href={`/${locale}/news/${item.id}`} className="block group">
+                    <article className="bg-white overflow-hidden transition-all duration-300 flex flex-col md:flex-row relative" style={{ boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)' }}>
+                      <div className="relative h-40 md:h-40 md:w-56 flex-shrink-0 overflow-hidden">
+                        {item.thumbnailUrl ? (
+                          <Image
+                            src={item.thumbnailUrl}
+                            alt={title}
+                            fill
+                            className="object-cover group-hover:scale-110 transition-transform duration-500"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+                            <Calendar className="w-8 h-8 text-gray-400" />
+                          </div>
                         )}
                       </div>
-                    </div>
-                  </article>
-                </Link>
+
+                      <div className="p-6 flex-1 relative" style={{ minHeight: '120px' }}>
+                        <div className="absolute bottom-0 left-0 w-full h-0.5" style={{ backgroundColor: '#E8F5E9' }} />
+                        <div
+                          className="absolute bottom-0 left-0 h-0.5 w-0 group-hover:w-full transition-all duration-500 ease-out"
+                          style={{ backgroundColor: '#0A7029' }}
+                        />
+
+                        <div className="flex items-center text-sm mb-2" style={{ color: '#9CA3AF' }}>
+                          <Calendar className="w-4 h-4 mr-1" />
+                          <span className="font-montserrat font-medium">{formatDate(item.createdAt)}</span>
+                        </div>
+
+                        <h3 className="text-lg md:text-xl font-bold mb-2 font-montserrat line-clamp-2" style={{ color: '#3C3C3B' }}>
+                          {title}
+                        </h3>
+
+                        {description && (
+                          <p className="text-sm md:text-base line-clamp-2 mb-3 font-montserrat" style={{ color: '#6B7280' }}>
+                            {description}
+                          </p>
+                        )}
+
+                        <div className="flex items-center gap-4 text-sm" style={{ color: '#9CA3AF' }}>
+                          <div className="flex items-center gap-1">
+                            <Eye className="w-4 h-4" />
+                            <span>{item.viewCount} {isEn ? 'views' : 'lượt xem'}</span>
+                          </div>
+                          {item.category && (
+                            <span className="px-3 py-1 text-xs font-semibold font-montserrat" style={{ backgroundColor: '#E8F5E9', color: '#0A7029' }}>
+                              {getCategoryLabel(item.category)}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </article>
+                  </Link>
                 );
               })}
             </div>
@@ -411,4 +379,3 @@ export default function NewsPage({ params }: { params: Promise<{ locale: string 
     </div>
   );
 }
-

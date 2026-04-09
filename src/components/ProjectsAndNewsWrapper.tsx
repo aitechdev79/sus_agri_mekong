@@ -1,14 +1,13 @@
 'use client';
 
-import NewsSection from '@/components/NewsSection';
+import EventsSection from '@/components/EventsSection';
 import HoatDongSection from '@/components/HoatDongSection';
 
 export default function ProjectsAndNewsWrapper() {
   return (
     <section className="relative overflow-hidden w-full">
-      {/* Content */}
       <div className="relative z-10">
-        <NewsSection />
+        <EventsSection />
         <HoatDongSection />
       </div>
     </section>

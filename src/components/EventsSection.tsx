@@ -39,7 +39,7 @@ function formatEventDate(item: EventItem, locale: string) {
   });
 }
 
-export default function NewsSection() {
+export default function EventsSection() {
   const [events, setEvents] = useState<EventItem[]>([]);
   const [loading, setLoading] = useState(true);
   const pathname = usePathname();
@@ -114,7 +114,7 @@ export default function NewsSection() {
         <div className="mb-12 flex items-center justify-between">
           <div>
             <h2 className="text-3xl font-bold mb-2 md:text-4xl font-montserrat text-left" style={{ color: '#3C3C3B' }}>
-              {isEn ? 'Events' : 'Sự Kiện'}
+              {isEn ? 'Events' : 'Sự kiện'}
             </h2>
             <p className="text-lg font-montserrat text-left max-w-3xl" style={{ color: '#6B7280' }}>
               {isEn
