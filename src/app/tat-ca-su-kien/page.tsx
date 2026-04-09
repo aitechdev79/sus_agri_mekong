@@ -6,6 +6,7 @@ import { Calendar, ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import NavigationBar from '@/components/NavigationBar';
+import MiniEventCalendar from '@/components/MiniEventCalendar';
 import Footer from '@/components/Footer';
 import { getLocaleFromPathname, pickLocalizedText, withLocalePrefix } from '@/lib/content-locale';
 
@@ -82,6 +83,16 @@ export default function TatCaSuKienPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const calendarEvents = items
+    .filter((item) => item.eventStartAt)
+    .map((item) => ({
+      id: item.id,
+      title: pickLocalizedText(locale, item.title, item.titleEn),
+      date: new Date(item.eventStartAt as string),
+      isPast: new Date(item.eventStartAt as string).getTime() < Date.now()
+    }))
+    .filter((item) => !Number.isNaN(item.date.getTime()));
+
   const renderPaginationButtons = () => {
     const buttons = [];
     const maxButtons = 5;
@@ -131,78 +142,89 @@ export default function TatCaSuKienPage() {
           </p>
         </header>
 
-        {loading ? (
-          <div className="space-y-6">
-            {[...Array(itemsPerPage)].map((_, index) => (
-              <div key={index} className="animate-pulse bg-white p-5 shadow-sm">
-                <div className="flex flex-col gap-4 md:flex-row">
-                  <div className="bg-gray-200 md:w-1/4" style={{ aspectRatio: '16/9' }} />
-                  <div className="flex-1 space-y-3">
-                    <div className="h-6 bg-gray-200" />
-                    <div className="h-4 w-2/3 bg-gray-100" />
-                    <div className="h-4 w-1/2 bg-gray-100" />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : items.length === 0 ? (
-          <div className="bg-white p-12 text-center text-gray-500 shadow-sm">{isEn ? 'No events yet.' : 'Chưa có sự kiện nào.'}</div>
-        ) : (
-          <div className="space-y-6">
-            {items.map((item) => {
-              const imageSrc = item.thumbnailUrl || item.imageUrl || '';
-              const localizedTitle = pickLocalizedText(locale, item.title, item.titleEn);
-              const eventStartTime = item.eventStartAt ? new Date(item.eventStartAt).getTime() : Number.NaN;
-              const hasValidEventStart = Number.isFinite(eventStartTime);
-              const isUpcoming = hasValidEventStart ? eventStartTime >= Date.now() : false;
-              return (
-                <Link key={item.id} href={`${contentDetailPrefix}/${item.id}`} className="group block overflow-hidden bg-white p-5 shadow-sm transition-shadow hover:shadow-md">
-                  <div className="flex flex-col gap-5 md:flex-row">
-                    <div className="relative overflow-hidden bg-gray-100 md:w-1/4" style={{ aspectRatio: '16/9' }}>
-                      {imageSrc ? (
-                        <Image
-                          src={imageSrc}
-                          alt={localizedTitle}
-                          fill
-                          className="object-cover transition-transform duration-500 group-hover:scale-105"
-                          sizes="(max-width: 768px) 100vw, 25vw"
-                        />
-                      ) : (
-                        <div className="flex h-full w-full items-center justify-center text-sm text-gray-400">{isEn ? 'No image' : 'Không có ảnh'}</div>
-                      )}
-                    </div>
-
-                    <div className="flex flex-1 flex-col justify-center">
-                      {hasValidEventStart && (
-                        <div className="mb-3">
-                          <span
-                            className="inline-flex rounded-full px-3 py-1 text-xs font-bold font-montserrat text-white"
-                            style={{ backgroundColor: isUpcoming ? '#0A7029' : '#F97316' }}
-                          >
-                            {isUpcoming ? (isEn ? 'Upcoming' : 'Sắp diễn ra') : (isEn ? 'Completed' : 'Đã diễn ra')}
-                          </span>
-                        </div>
-                      )}
-                      <h2 className="mb-4 line-clamp-2 text-xl font-bold text-gray-900">{localizedTitle}</h2>
-
-                      <div className="space-y-3 text-sm text-gray-600">
-                        <div className="flex items-start gap-2">
-                          <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0" />
-                          <span>{item.eventLocation || (isEn ? 'Location pending' : 'Chưa cập nhật địa điểm')}</span>
-                        </div>
-                        <div className="flex items-start gap-2">
-                          <Calendar className="mt-0.5 h-4 w-4 flex-shrink-0" />
-                          <span>{formatEventStart(item.eventStartAt, locale)}</span>
-                        </div>
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start">
+          <div>
+            {loading ? (
+              <div className="space-y-6">
+                {[...Array(itemsPerPage)].map((_, index) => (
+                  <div key={index} className="animate-pulse bg-white p-5 shadow-sm">
+                    <div className="flex flex-col gap-4 md:flex-row">
+                      <div className="bg-gray-200 md:w-1/4" style={{ aspectRatio: '16/9' }} />
+                      <div className="flex-1 space-y-3">
+                        <div className="h-6 bg-gray-200" />
+                        <div className="h-4 w-2/3 bg-gray-100" />
+                        <div className="h-4 w-1/2 bg-gray-100" />
                       </div>
                     </div>
                   </div>
-                </Link>
-              );
-            })}
+                ))}
+              </div>
+            ) : items.length === 0 ? (
+              <div className="bg-white p-12 text-center text-gray-500 shadow-sm">{isEn ? 'No events yet.' : 'Chưa có sự kiện nào.'}</div>
+            ) : (
+              <div className="space-y-6">
+                {items.map((item) => {
+                  const imageSrc = item.thumbnailUrl || item.imageUrl || '';
+                  const localizedTitle = pickLocalizedText(locale, item.title, item.titleEn);
+                  const eventStartTime = item.eventStartAt ? new Date(item.eventStartAt).getTime() : Number.NaN;
+                  const hasValidEventStart = Number.isFinite(eventStartTime);
+                  const isUpcoming = hasValidEventStart ? eventStartTime >= Date.now() : false;
+
+                  return (
+                    <Link key={item.id} href={`${contentDetailPrefix}/${item.id}`} className="group block overflow-hidden bg-white p-5 shadow-sm transition-shadow hover:shadow-md">
+                      <div className="flex flex-col gap-5 md:flex-row">
+                        <div className="relative overflow-hidden bg-gray-100 md:w-1/4" style={{ aspectRatio: '16/9' }}>
+                          {imageSrc ? (
+                            <Image
+                              src={imageSrc}
+                              alt={localizedTitle}
+                              fill
+                              className="object-cover transition-transform duration-500 group-hover:scale-105"
+                              sizes="(max-width: 768px) 100vw, 25vw"
+                            />
+                          ) : (
+                            <div className="flex h-full w-full items-center justify-center text-sm text-gray-400">{isEn ? 'No image' : 'Không có ảnh'}</div>
+                          )}
+                        </div>
+
+                        <div className="flex flex-1 flex-col justify-center">
+                          {hasValidEventStart && (
+                            <div className="mb-3">
+                              <span
+                                className="inline-flex rounded-full px-3 py-1 text-xs font-bold font-montserrat text-white"
+                                style={{ backgroundColor: isUpcoming ? '#0A7029' : '#F97316' }}
+                              >
+                                {isUpcoming ? (isEn ? 'Upcoming' : 'Sắp diễn ra') : (isEn ? 'Completed' : 'Đã diễn ra')}
+                              </span>
+                            </div>
+                          )}
+                          <h2 className="mb-4 line-clamp-2 text-xl font-bold text-gray-900">{localizedTitle}</h2>
+
+                          <div className="space-y-3 text-sm text-gray-600">
+                            <div className="flex items-start gap-2">
+                              <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0" />
+                              <span>{item.eventLocation || (isEn ? 'Location pending' : 'Chưa cập nhật địa điểm')}</span>
+                            </div>
+                            <div className="flex items-start gap-2">
+                              <Calendar className="mt-0.5 h-4 w-4 flex-shrink-0" />
+                              <span>{formatEventStart(item.eventStartAt, locale)}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
           </div>
-        )}
+
+          <aside className="lg:sticky lg:top-24">
+            <div className="overflow-hidden bg-[#FFF8DC]" style={{ boxShadow: '0 4px 16px rgba(0, 0, 0, 0.08)' }}>
+              <MiniEventCalendar events={calendarEvents} />
+            </div>
+          </aside>
+        </div>
 
         {totalPages > 1 && (
           <div className="mt-10 flex justify-center">
