@@ -5,6 +5,23 @@ import { EditorContent, NodeViewProps, NodeViewWrapper, ReactNodeViewRenderer, u
 import StarterKit from '@tiptap/starter-kit'
 import { Extension, Mark, Node, mergeAttributes } from '@tiptap/core'
 import { Plugin } from '@tiptap/pm/state'
+import {
+  AlignCenter,
+  AlignJustify,
+  AlignLeft,
+  AlignRight,
+  Bold,
+  Image as ImageIcon,
+  IndentDecrease,
+  IndentIncrease,
+  Italic,
+  Link2,
+  List,
+  ListOrdered,
+  Quote,
+  Underline,
+  Unlink2
+} from 'lucide-react'
 
 type RichTextEditorProps = {
   value: string
@@ -27,6 +44,7 @@ const MIN_IMAGE_WIDTH_PX = 120
 const MAX_PASTED_IMAGE_DIMENSION_PX = 1600
 const PASTED_IMAGE_JPEG_QUALITY = 0.85
 const MAX_RICH_TEXT_IMAGE_UPLOAD_SIZE = 900 * 1024
+const TOOLBAR_ICON_CLASS = 'h-4 w-4'
 
 function ResizableImageNodeView({ node, selected, updateAttributes, editor }: NodeViewProps) {
   const containerRef = useRef<HTMLDivElement | null>(null)
@@ -774,139 +792,182 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
         <button
           type="button"
           onClick={handleToggleBold}
-          className={`px-2 py-1 text-sm border rounded ${editor?.isActive('bold') ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
+          className={`inline-flex h-9 w-9 items-center justify-center border rounded ${editor?.isActive('bold') ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
           disabled={!editor}
+          title="Bold"
+          aria-label="Bold"
         >
-          Bold
+          <Bold className={TOOLBAR_ICON_CLASS} />
         </button>
         <button
           type="button"
           onClick={handleToggleItalic}
-          className={`px-2 py-1 text-sm border rounded ${editor?.isActive('italic') ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
+          className={`inline-flex h-9 w-9 items-center justify-center border rounded ${editor?.isActive('italic') ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
           disabled={!editor}
+          title="Italic"
+          aria-label="Italic"
         >
-          Italic
+          <Italic className={TOOLBAR_ICON_CLASS} />
         </button>
         <button
           type="button"
           onClick={handleToggleUnderline}
-          className={`px-2 py-1 text-sm border rounded ${editor?.isActive('underline') ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
+          className={`inline-flex h-9 w-9 items-center justify-center border rounded ${editor?.isActive('underline') ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
           disabled={!editor}
+          title="Underline"
+          aria-label="Underline"
         >
-          Underline
+          <Underline className={TOOLBAR_ICON_CLASS} />
         </button>
         <button
           type="button"
           onClick={handleToggleBulletList}
-          className={`px-2 py-1 text-sm border rounded ${editor?.isActive('bulletList') ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
+          className={`inline-flex h-9 w-9 items-center justify-center border rounded ${editor?.isActive('bulletList') ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
           disabled={!editor}
+          title="Bullet list"
+          aria-label="Bullet list"
         >
-          Bullet
+          <List className={TOOLBAR_ICON_CLASS} />
         </button>
         <button
           type="button"
           onClick={handleToggleOrderedList}
-          className={`px-2 py-1 text-sm border rounded ${editor?.isActive('orderedList') ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
+          className={`inline-flex h-9 w-9 items-center justify-center border rounded ${editor?.isActive('orderedList') ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
           disabled={!editor}
+          title="Numbered list"
+          aria-label="Numbered list"
         >
-          Numbering
+          <ListOrdered className={TOOLBAR_ICON_CLASS} />
         </button>
         <button
           type="button"
           onClick={handleToggleBlockquote}
-          className={`px-2 py-1 text-sm border rounded ${editor?.isActive('blockquote') ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
+          className={`inline-flex h-9 w-9 items-center justify-center border rounded ${editor?.isActive('blockquote') ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
           disabled={!editor}
+          title="Blockquote"
+          aria-label="Blockquote"
         >
-          Blockquote
+          <Quote className={TOOLBAR_ICON_CLASS} />
         </button>
         <button
           type="button"
           onClick={handleOutdent}
-          className="px-2 py-1 text-sm border rounded bg-white text-gray-700 border-gray-300"
+          className="inline-flex h-9 w-9 items-center justify-center border rounded bg-white text-gray-700 border-gray-300"
           disabled={!editor}
+          title="Outdent"
+          aria-label="Outdent"
         >
-          Outdent
+          <IndentDecrease className={TOOLBAR_ICON_CLASS} />
         </button>
         <button
           type="button"
           onClick={handleIndent}
-          className="px-2 py-1 text-sm border rounded bg-white text-gray-700 border-gray-300"
+          className="inline-flex h-9 w-9 items-center justify-center border rounded bg-white text-gray-700 border-gray-300"
           disabled={!editor}
+          title="Indent"
+          aria-label="Indent"
         >
-          Indent
+          <IndentIncrease className={TOOLBAR_ICON_CLASS} />
         </button>
         <button
           type="button"
           onClick={() => handleSetTextAlign('left')}
-          className={`px-2 py-1 text-sm border rounded ${currentTextAlign === 'left' ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
+          className={`inline-flex h-9 w-9 items-center justify-center border rounded ${currentTextAlign === 'left' ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
           disabled={!editor}
+          title="Align left"
+          aria-label="Align left"
         >
-          Left
+          <AlignLeft className={TOOLBAR_ICON_CLASS} />
         </button>
         <button
           type="button"
           onClick={() => handleSetTextAlign('center')}
-          className={`px-2 py-1 text-sm border rounded ${currentTextAlign === 'center' ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
+          className={`inline-flex h-9 w-9 items-center justify-center border rounded ${currentTextAlign === 'center' ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
           disabled={!editor}
+          title="Align center"
+          aria-label="Align center"
         >
-          Center
+          <AlignCenter className={TOOLBAR_ICON_CLASS} />
         </button>
         <button
           type="button"
           onClick={() => handleSetTextAlign('right')}
-          className={`px-2 py-1 text-sm border rounded ${currentTextAlign === 'right' ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
+          className={`inline-flex h-9 w-9 items-center justify-center border rounded ${currentTextAlign === 'right' ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
           disabled={!editor}
+          title="Align right"
+          aria-label="Align right"
         >
-          Right
+          <AlignRight className={TOOLBAR_ICON_CLASS} />
         </button>
         <button
           type="button"
           onClick={() => handleSetTextAlign('justify')}
-          className={`px-2 py-1 text-sm border rounded ${currentTextAlign === 'justify' ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
+          className={`inline-flex h-9 w-9 items-center justify-center border rounded ${currentTextAlign === 'justify' ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
           disabled={!editor}
+          title="Justify"
+          aria-label="Justify"
         >
-          Justify
+          <AlignJustify className={TOOLBAR_ICON_CLASS} />
         </button>
         <button
           type="button"
           onClick={handleSetLink}
-          className={`px-2 py-1 text-sm border rounded ${editor?.isActive('link') ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
+          className={`inline-flex h-9 w-9 items-center justify-center border rounded ${editor?.isActive('link') ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
           disabled={!editor}
+          title="Set link"
+          aria-label="Set link"
         >
-          Link
+          <Link2 className={TOOLBAR_ICON_CLASS} />
         </button>
         <button
           type="button"
           onClick={handleUnsetLink}
-          className="px-2 py-1 text-sm border rounded bg-white text-gray-700 border-gray-300"
+          className="inline-flex h-9 w-9 items-center justify-center border rounded bg-white text-gray-700 border-gray-300"
           disabled={!editor}
+          title="Remove link"
+          aria-label="Remove link"
         >
-          Unlink
+          <Unlink2 className={TOOLBAR_ICON_CLASS} />
         </button>
 
         <button
           type="button"
           onClick={() => handleSetImageAlignment('left')}
-          className={`px-2 py-1 text-sm border rounded ${currentImageAlignment === 'left' ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
+          className={`inline-flex h-9 w-9 items-center justify-center border rounded ${currentImageAlignment === 'left' ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
           disabled={!editor}
+          title="Image align left"
+          aria-label="Image align left"
         >
-          Img Left
+          <div className="relative">
+            <ImageIcon className={TOOLBAR_ICON_CLASS} />
+            <AlignLeft className="absolute -bottom-1 -right-1 h-3 w-3" />
+          </div>
         </button>
         <button
           type="button"
           onClick={() => handleSetImageAlignment('center')}
-          className={`px-2 py-1 text-sm border rounded ${currentImageAlignment === 'center' ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
+          className={`inline-flex h-9 w-9 items-center justify-center border rounded ${currentImageAlignment === 'center' ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
           disabled={!editor}
+          title="Image align center"
+          aria-label="Image align center"
         >
-          Img Center
+          <div className="relative">
+            <ImageIcon className={TOOLBAR_ICON_CLASS} />
+            <AlignCenter className="absolute -bottom-1 -right-1 h-3 w-3" />
+          </div>
         </button>
         <button
           type="button"
           onClick={() => handleSetImageAlignment('right')}
-          className={`px-2 py-1 text-sm border rounded ${currentImageAlignment === 'right' ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
+          className={`inline-flex h-9 w-9 items-center justify-center border rounded ${currentImageAlignment === 'right' ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-700 border-gray-300'}`}
           disabled={!editor}
+          title="Image align right"
+          aria-label="Image align right"
         >
-          Img Right
+          <div className="relative">
+            <ImageIcon className={TOOLBAR_ICON_CLASS} />
+            <AlignRight className="absolute -bottom-1 -right-1 h-3 w-3" />
+          </div>
         </button>
 
         <select
