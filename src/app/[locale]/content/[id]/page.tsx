@@ -310,7 +310,6 @@ export default async function LocaleContentDetailPage({
                     <h2 className="mb-4 text-2xl font-semibold text-gray-900">{isEn ? 'Introduction' : 'Giới thiệu'}</h2>
                     <div
                       className="prose prose-lg max-w-none text-justify prose-headings:text-gray-900 prose-p:leading-relaxed prose-p:text-gray-700 [&_ul]:list-disc [&_ul]:list-inside [&_ul]:pl-2 [&_ol]:list-decimal [&_ol]:list-inside [&_ol]:pl-2 [&_li]:my-1 [&_li>p]:inline [&_li>p]:m-0 [&_blockquote]:my-6 [&_blockquote]:border-l-4 [&_blockquote]:border-green-700 [&_blockquote]:bg-green-50 [&_blockquote]:px-5 [&_blockquote]:py-4 [&_blockquote]:italic [&_blockquote_p]:text-gray-700"
-                      style={{ textAlign: 'justify', textAlignLast: 'left' }}
                       dangerouslySetInnerHTML={{ __html: renderRichTextContent(localizedBody) }}
                     />
                   </section>
@@ -318,7 +317,6 @@ export default async function LocaleContentDetailPage({
               ) : (
                 <div
                   className="prose prose-lg max-w-none text-justify prose-headings:text-gray-900 prose-p:leading-relaxed prose-p:text-gray-700 [&_ul]:list-disc [&_ul]:list-inside [&_ul]:pl-2 [&_ol]:list-decimal [&_ol]:list-inside [&_ol]:pl-2 [&_li]:my-1 [&_li>p]:inline [&_li>p]:m-0 [&_blockquote]:my-6 [&_blockquote]:border-l-4 [&_blockquote]:border-green-700 [&_blockquote]:bg-green-50 [&_blockquote]:px-5 [&_blockquote]:py-4 [&_blockquote]:italic [&_blockquote_p]:text-gray-700"
-                  style={{ textAlign: 'justify', textAlignLast: 'left' }}
                   dangerouslySetInnerHTML={{ __html: renderRichTextContent(localizedBody) }}
                 />
               )}
