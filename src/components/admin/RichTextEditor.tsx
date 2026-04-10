@@ -11,7 +11,6 @@ type RichTextEditorProps = {
   onChange: (value: string) => void
 }
 
-type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6
 type ImageAlignment = 'left' | 'center' | 'right'
 
 const FONT_FAMILIES = [
@@ -76,9 +75,9 @@ function ResizableImageNodeView({ node, selected, updateAttributes, editor }: No
     : { maxWidth: '100%', height: 'auto' as const }
 
   const wrapperClassName = [
-    'relative inline-block max-w-full',
-    alignment === 'center' ? 'mx-auto block' : '',
-    alignment === 'right' ? 'ml-auto block' : '',
+    'relative block w-fit max-w-full',
+    alignment === 'center' ? 'mx-auto' : '',
+    alignment === 'right' ? 'ml-auto' : '',
     selected ? 'ring-2 ring-green-500 rounded-md' : ''
   ]
     .filter(Boolean)
@@ -691,20 +690,6 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
     withSelection()?.toggleBlockquote().run()
   }
 
-  const handleSetHeadingLevel = (value: string) => {
-    if (!editor) return
-
-    if (value === 'paragraph') {
-      withSelection()?.setParagraph().run()
-      return
-    }
-
-    const level = Number(value)
-    if (Number.isInteger(level) && level >= 1 && level <= 6) {
-      withSelection()?.setHeading({ level: level as HeadingLevel }).run()
-    }
-  }
-
   const activeFontSize = currentTextStyle?.fontSize || '12px'
   const isListActive = Boolean(editor?.isActive('bulletList') || editor?.isActive('orderedList'))
   const getIndentTargetType = () => {
@@ -724,16 +709,6 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
   const currentIndent = Number(editor?.getAttributes(indentTargetType)?.indent || 0)
   const currentTextAlign = (editor?.getAttributes(indentTargetType)?.textAlign as string | undefined) || 'left'
   const currentLinkHref = (editor?.getAttributes('link')?.href as string | undefined) || ''
-  const currentHeadingValue = (() => {
-    if (!editor) return 'paragraph'
-    for (const level of [1, 2, 3, 4, 5, 6]) {
-      if (editor.isActive('heading', { level })) {
-        return String(level)
-      }
-    }
-    return 'paragraph'
-  })()
-
   const handleSetTextAlign = (textAlign: 'left' | 'center' | 'right' | 'justify') => {
     withSelection()?.updateAttributes(indentTargetType, { textAlign }).run()
   }
@@ -908,19 +883,6 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
         >
           Unlink
         </button>
-
-        <select
-          className="text-sm border border-gray-300 rounded px-2 py-1 bg-white"
-          value={currentHeadingValue}
-          onChange={(event) => handleSetHeadingLevel(event.target.value)}
-          disabled={!editor}
-        >
-          <option value="paragraph">Paragraph</option>
-          <option value="1">H1</option>
-          <option value="2">H2</option>
-          <option value="3">H3</option>
-          <option value="4">H4</option>
-        </select>
 
         <button
           type="button"
