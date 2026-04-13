@@ -50,7 +50,16 @@ export default function HomeContentGridSection({
 
     const fetchItems = async () => {
       try {
-        const response = await fetch(fetchUrl);
+        const url = new URL(fetchUrl, window.location.origin);
+        url.searchParams.set('limit', String(maxItems));
+        url.searchParams.set('_t', String(Date.now()));
+
+        const response = await fetch(url.toString(), {
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache'
+          }
+        });
         if (!response.ok) return;
         const data = await response.json();
 

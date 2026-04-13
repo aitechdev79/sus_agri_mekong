@@ -1,8 +1,19 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-export async function GET() {
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
+function getLimit(request: NextRequest) {
+  const limit = Number(request.nextUrl.searchParams.get('limit') || 3);
+  if (!Number.isFinite(limit)) return 3;
+  return Math.min(Math.max(Math.trunc(limit), 1), 6);
+}
+
+export async function GET(request: NextRequest) {
   try {
+    const limit = getLimit(request);
+
     const newsItems = await prisma.content.findMany({
       where: {
         status: 'PUBLISHED',
@@ -17,31 +28,17 @@ export async function GET() {
         descriptionEn: true,
         thumbnailUrl: true,
         imageUrl: true,
-        viewCount: true,
         createdAt: true,
-        type: true, // Added for debugging
       },
       orderBy: {
         createdAt: 'desc',
       },
-      take: 6, // Limit to 6 items for the homepage
-    });
-
-    console.log('News API - Found items:', newsItems.length);
-    newsItems.forEach((item, index) => {
-      console.log(`News ${index + 1}:`, {
-        id: item.id,
-        title: item.title.substring(0, 50),
-        type: item.type,
-        thumbnailUrl: item.thumbnailUrl ? 'YES' : 'NO',
-        imageUrl: item.imageUrl ? 'YES' : 'NO'
-      });
+      take: limit,
     });
 
     const response = NextResponse.json(newsItems);
 
-    // Add cache control headers for better cache management
-    response.headers.set('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
+    response.headers.set('Cache-Control', 'no-store, no-cache, max-age=0, must-revalidate');
 
     return response;
   } catch (error) {
@@ -52,5 +49,3 @@ export async function GET() {
     );
   }
 }
-
-export const revalidate = 60; // Cache for 1 minute (more responsive to content changes)
