@@ -20,6 +20,8 @@ interface EventItem {
   eventStartAt: string;
   eventLocation?: string | null;
   isAllDay?: boolean;
+  projectUrl?: string | null;
+  hasContent?: boolean;
 }
 
 function formatEventDate(item: EventItem, locale: string) {
@@ -139,11 +141,15 @@ export default function EventsSection() {
               const isUpcoming = new Date(item.eventStartAt).getTime() >= now.getTime();
               const title = pickLocalizedText(locale, item.title, item.titleEn);
               const description = pickLocalizedText(locale, item.description, item.descriptionEn);
+              const isExternal = Boolean(item.projectUrl && !item.hasContent);
+              const href = isExternal ? item.projectUrl! : `${localizedContentPrefix}/content/${item.id}`;
 
               return (
                 <Link
                   key={item.id}
-                  href={`${localizedContentPrefix}/content/${item.id}`}
+                  href={href}
+                  target={isExternal ? '_blank' : undefined}
+                  rel={isExternal ? 'noopener noreferrer' : undefined}
                   className="group block overflow-hidden bg-white transition-all duration-500"
                   style={{ boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)' }}
                 >

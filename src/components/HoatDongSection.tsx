@@ -17,6 +17,7 @@ interface ProjectActivityItem {
   projectUrl?: string | null;
   thumbnailUrl?: string | null;
   imageUrl?: string | null;
+  hasContent?: boolean;
 }
 
 export default function HoatDongSection() {
@@ -112,8 +113,8 @@ export default function HoatDongSection() {
               const undertitle = pickLocalizedText(locale, item.undertitle, item.undertitleEn);
               const description = pickLocalizedText(locale, item.description, item.descriptionEn);
               const imageSrc = item.thumbnailUrl || item.imageUrl || '';
-              const href = item.projectUrl || withLocalePrefix(`/content/${item.id}`, locale);
-              const isExternal = Boolean(item.projectUrl);
+              const isExternal = Boolean(item.projectUrl && !item.hasContent);
+              const href = isExternal ? item.projectUrl! : withLocalePrefix(`/content/${item.id}`, locale);
 
               return (
                 <Link

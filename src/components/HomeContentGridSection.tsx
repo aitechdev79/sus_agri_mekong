@@ -12,8 +12,10 @@ interface HomeContentGridItem {
   titleEn?: string | null;
   description?: string | null;
   descriptionEn?: string | null;
+  projectUrl?: string | null;
   thumbnailUrl?: string | null;
   imageUrl?: string | null;
+  hasContent?: boolean;
 }
 
 interface HomeContentGridSectionProps {
@@ -127,11 +129,15 @@ export default function HomeContentGridSection({
               const imageSrc = item.thumbnailUrl || item.imageUrl || '';
               const title = pickLocalizedText(locale, item.title, item.titleEn);
               const description = pickLocalizedText(locale, item.description, item.descriptionEn);
+              const isExternal = Boolean(item.projectUrl && !item.hasContent);
+              const href = isExternal ? item.projectUrl! : withLocalePrefix(`/content/${item.id}`, locale);
 
               return (
                 <Link
                   key={item.id}
-                  href={withLocalePrefix(`/content/${item.id}`, locale)}
+                  href={href}
+                  target={isExternal ? '_blank' : undefined}
+                  rel={isExternal ? 'noopener noreferrer' : undefined}
                   className="group block flex flex-col"
                   aria-label={`${title} - ${description || ''}`}
                 >

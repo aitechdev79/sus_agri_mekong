@@ -10,6 +10,17 @@ function getLimit(request: NextRequest) {
   return Math.min(Math.max(Math.trunc(limit), 1), 6);
 }
 
+function hasRichText(value?: string | null) {
+  if (!value) return false;
+
+  return Boolean(
+    value
+      .replace(/<[^>]*>/g, ' ')
+      .replace(/&nbsp;/g, ' ')
+      .trim()
+  );
+}
+
 export async function GET(request: NextRequest) {
   try {
     const limit = getLimit(request);
@@ -26,6 +37,9 @@ export async function GET(request: NextRequest) {
         titleEn: true,
         description: true,
         descriptionEn: true,
+        content: true,
+        contentEn: true,
+        projectUrl: true,
         thumbnailUrl: true,
         imageUrl: true,
         createdAt: true,
@@ -37,7 +51,12 @@ export async function GET(request: NextRequest) {
       take: limit,
     });
 
-    const response = NextResponse.json(newsItems);
+    const responseItems = newsItems.map(({ content, contentEn, ...item }) => ({
+      ...item,
+      hasContent: hasRichText(content) || hasRichText(contentEn),
+    }));
+
+    const response = NextResponse.json(responseItems);
 
     response.headers.set('Cache-Control', 'no-store, no-cache, max-age=0, must-revalidate');
 

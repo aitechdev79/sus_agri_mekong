@@ -12,6 +12,17 @@ function parseDateParam(value: string | null) {
   return date
 }
 
+function hasRichText(value?: string | null) {
+  if (!value) return false
+
+  return Boolean(
+    value
+      .replace(/<[^>]*>/g, ' ')
+      .replace(/&nbsp;/g, ' ')
+      .trim()
+  )
+}
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = request.nextUrl
@@ -41,6 +52,9 @@ export async function GET(request: NextRequest) {
         titleEn: true,
         description: true,
         descriptionEn: true,
+        content: true,
+        contentEn: true,
+        projectUrl: true,
         thumbnailUrl: true,
         imageUrl: true,
         createdAt: true,
@@ -59,7 +73,12 @@ export async function GET(request: NextRequest) {
       }
     } as never)
 
-    const response = NextResponse.json(events)
+    const responseItems = events.map(({ content, contentEn, ...item }) => ({
+      ...item,
+      hasContent: hasRichText(content) || hasRichText(contentEn)
+    }))
+
+    const response = NextResponse.json(responseItems)
     response.headers.set('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300')
     return response
   } catch (error) {

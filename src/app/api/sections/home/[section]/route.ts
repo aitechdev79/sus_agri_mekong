@@ -6,6 +6,17 @@ const SECTION_MAP: Record<string, { type: 'STORY' | 'PROJECT_ACTIVITY'; take: nu
   'hoat-dong-du-an': { type: 'PROJECT_ACTIVITY', take: 3 }
 }
 
+function hasRichText(value?: string | null) {
+  if (!value) return false
+
+  return Boolean(
+    value
+      .replace(/<[^>]*>/g, ' ')
+      .replace(/&nbsp;/g, ' ')
+      .trim()
+  )
+}
+
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ section: string }> }
@@ -30,6 +41,8 @@ export async function GET(
         titleEn: true,
         description: true,
         descriptionEn: true,
+        content: true,
+        contentEn: true,
         undertitle: true,
         projectUrl: true,
         thumbnailUrl: true,
@@ -44,7 +57,12 @@ export async function GET(
       take: config.take
     })
 
-    const response = NextResponse.json(items)
+    const responseItems = items.map(({ content, contentEn, ...item }) => ({
+      ...item,
+      hasContent: hasRichText(content) || hasRichText(contentEn)
+    }))
+
+    const response = NextResponse.json(responseItems)
     response.headers.set('Cache-Control', 'no-store, no-cache, max-age=0, must-revalidate')
     return response
   } catch (error) {
