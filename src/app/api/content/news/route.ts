@@ -30,9 +30,10 @@ export async function GET(request: NextRequest) {
         imageUrl: true,
         createdAt: true,
       },
-      orderBy: {
-        createdAt: 'desc',
-      },
+      orderBy: [
+        { displayOrder: { sort: 'asc', nulls: 'last' } },
+        { createdAt: 'desc' },
+      ],
       take: limit,
     });
 

@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
-const SECTION_MAP: Record<string, { sectionKey: 'HOME_DIEN_HINH' | 'HOME_HOAT_DONG_DU_AN'; type: 'STORY' | 'PROJECT_ACTIVITY'; take: number }> = {
-  'dien-hinh': { sectionKey: 'HOME_DIEN_HINH', type: 'STORY', take: 3 },
-  'hoat-dong-du-an': { sectionKey: 'HOME_HOAT_DONG_DU_AN', type: 'PROJECT_ACTIVITY', take: 3 }
+const SECTION_MAP: Record<string, { type: 'STORY' | 'PROJECT_ACTIVITY'; take: number }> = {
+  'dien-hinh': { type: 'STORY', take: 3 },
+  'hoat-dong-du-an': { type: 'PROJECT_ACTIVITY', take: 3 }
 }
 
 export async function GET(
@@ -22,7 +22,6 @@ export async function GET(
       where: {
         status: 'PUBLISHED',
         isPublic: true,
-        sectionKey: config.sectionKey,
         type: config.type
       },
       select: {
@@ -39,13 +38,15 @@ export async function GET(
         createdAt: true
       },
       orderBy: [
-        { displayOrder: 'asc' },
+        { displayOrder: { sort: 'asc', nulls: 'last' } },
         { createdAt: 'desc' }
       ],
       take: config.take
     })
 
-    return NextResponse.json(items)
+    const response = NextResponse.json(items)
+    response.headers.set('Cache-Control', 'no-store, no-cache, max-age=0, must-revalidate')
+    return response
   } catch (error) {
     console.error('Section fetch error:', error)
     return NextResponse.json(
@@ -55,4 +56,5 @@ export async function GET(
   }
 }
 
-export const revalidate = 3600
+export const dynamic = 'force-dynamic'
+export const revalidate = 0

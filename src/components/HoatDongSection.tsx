@@ -31,7 +31,15 @@ export default function HoatDongSection() {
 
     const fetchItems = async () => {
       try {
-        const response = await fetch('/api/sections/home/hoat-dong-du-an');
+        const url = new URL('/api/sections/home/hoat-dong-du-an', window.location.origin);
+        url.searchParams.set('_t', String(Date.now()));
+
+        const response = await fetch(url.toString(), {
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache',
+          },
+        });
         if (!response.ok) return;
         const data = await response.json();
         if (isMounted) {

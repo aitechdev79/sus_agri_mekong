@@ -286,31 +286,8 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
     { value: 'EVENT', label: 'Sự kiện' }
   ]
 
-  const sectionOptions = [
-    { value: '', label: 'Không hiển thị trên trang chủ' },
-    { value: 'HOME_DIEN_HINH', label: 'Thực hành điển hình' },
-    { value: 'HOME_HOAT_DONG_DU_AN', label: 'Hoạt động dự án' }
-  ]
-
-  const isSectionCompatibleWithType = (sectionKey: string, contentType: string) => {
-    if (!sectionKey) return true
-    if (sectionKey === 'HOME_DIEN_HINH') return contentType === 'STORY'
-    if (sectionKey === 'HOME_HOAT_DONG_DU_AN') return contentType === 'PROJECT_ACTIVITY'
-    return true
-  }
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target
-
-    if (name === 'type') {
-      const nextType = value
-      setFormData((current: typeof formData) => ({
-        ...current,
-        type: nextType,
-        sectionKey: isSectionCompatibleWithType(current.sectionKey, nextType) ? current.sectionKey : ''
-      }))
-      return
-    }
 
     if (type === 'checkbox') {
       const checked = (e.target as HTMLInputElement).checked
@@ -400,7 +377,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
 
       const submitData = {
         ...formData,
-        sectionKey: isSectionCompatibleWithType(formData.sectionKey, formData.type) ? formData.sectionKey : '',
+        sectionKey: '',
         tags: formData.tags
       }
 
@@ -639,26 +616,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Hiển thị trên trang chủ
-              </label>
-              <select
-                name="sectionKey"
-                value={formData.sectionKey}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              >
-                {sectionOptions.map(option => (
-                  <option key={option.value} value={option.value}>{option.label}</option>
-                ))}
-              </select>
-              <p className="text-xs text-gray-500 mt-1">
-                Chỉ chọn khi muốn hiển thị nội dung trên trang chủ.
-              </p>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Thứ tự hiển thị
+                Thứ tự ưu tiên trên trang chủ
               </label>
               <input
                 type="number"
@@ -669,7 +627,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
               />
               <p className="text-xs text-gray-500 mt-1">
-                Số nhỏ hiển thị trước. Bỏ trống thì sắp xếp theo ngày tạo.
+                Áp dụng cho Tin tức, Điển hình và Hoạt động dự án. Số nhỏ hiển thị trước; bỏ trống thì sắp xếp theo ngày tạo mới nhất.
               </p>
             </div>
           </div>
