@@ -3,6 +3,9 @@ import { requireModerator } from "@/lib/auth-middleware";
 import { summarizeArticles, summarizePdfBuffer, summarizePdfFromUrl, summarizeText, summarizeUrlContent } from "@/lib/openai-admin";
 import { SummarizeRequest, SummarizeResponse } from "@/types/ai-news";
 
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const moderator = await requireModerator(request);

@@ -16,6 +16,7 @@ interface SearchFormState {
 }
 
 type SummarizeMode = "news" | "pdf-url" | "pdf-upload" | "url" | "text";
+const MAX_PDF_UPLOAD_BYTES = 4 * 1024 * 1024;
 
 const initialSearchForm: SearchFormState = {
   topic: "nông nghiệp bền vững",
@@ -26,6 +27,21 @@ const initialSearchForm: SearchFormState = {
   timeframeDays: 7,
   useAiQuery: true,
 };
+
+async function readApiResponse(response: Response) {
+  const contentType = response.headers.get("content-type") || "";
+  const text = await response.text();
+
+  if (contentType.includes("application/json")) {
+    try {
+      return JSON.parse(text) as Record<string, unknown>;
+    } catch {
+      return { error: text || "Invalid JSON response from server" };
+    }
+  }
+
+  return { error: text || `Request failed with status ${response.status}` };
+}
 
 export function AiNewsPanel() {
   const [form, setForm] = useState<SearchFormState>(initialSearchForm);
@@ -85,12 +101,12 @@ export function AiNewsPanel() {
         body: JSON.stringify(form),
       });
 
-      const data = await response.json();
+      const data = await readApiResponse(response);
       if (!response.ok) {
-        throw new Error(data.error || "Search failed");
+        throw new Error(String(data.error || "Search failed"));
       }
 
-      setSearchResult(data as NewsSearchResponse);
+      setSearchResult(data as unknown as NewsSearchResponse);
       setSelectedUrl(null);
     } catch (error) {
       setSearchError(error instanceof Error ? error.message : "Search failed");
@@ -110,6 +126,10 @@ export function AiNewsPanel() {
       if (sourceMode === "pdf-upload") {
         if (!pdfFile) {
           throw new Error("Vui lòng chọn tệp PDF trước.");
+        }
+
+        if (pdfFile.size > MAX_PDF_UPLOAD_BYTES) {
+          throw new Error("PDF tải lên quá lớn. Vui lòng dùng file dưới 4MB hoặc dùng nguồn PDF URL.");
         }
 
         const formData = new FormData();
@@ -144,12 +164,12 @@ export function AiNewsPanel() {
         });
       }
 
-      const data = await response.json();
+      const data = await readApiResponse(response);
       if (!response.ok) {
-        throw new Error(data.error || "Summarization failed");
+        throw new Error(String(data.error || "Summarization failed"));
       }
 
-      setSummary(data.summary || "");
+      setSummary(String(data.summary || ""));
     } catch (error) {
       setSummaryError(error instanceof Error ? error.message : "Summarization failed");
     } finally {
@@ -391,7 +411,7 @@ export function AiNewsPanel() {
           <h2 className="text-xl font-semibold text-gray-900">AI Content Summarizer</h2>
         </div>
         <p className="mb-4 text-sm text-gray-600">
-          Tóm tắt từ tin đã tìm, URL, PDF URL, PDF tải lên hoặc văn bản thô với prompt tùy chỉnh.
+          Tóm tắt từ tin đã tìm, URL, PDF URL, PDF tải lên tối đa 4MB hoặc văn bản thô với prompt tùy chỉnh.
         </p>
 
         <div className="grid gap-3">
@@ -402,6 +422,7 @@ export function AiNewsPanel() {
           >
             <option value="news">Nguồn: Tin đã chọn</option>
             <option value="url">Nguồn: URL trang web</option>
+            <option value="pdf-url">Nguồn: PDF URL</option>
             <option value="pdf-upload">Nguồn: Tải lên PDF</option>
             <option value="text">Nguồn: Văn bản thô</option>
           </select>
@@ -434,12 +455,26 @@ export function AiNewsPanel() {
           )}
 
           {sourceMode === "pdf-upload" && (
-            <input
-              type="file"
-              accept="application/pdf,.pdf"
-              onChange={(event) => setPdfFile(event.target.files?.[0] || null)}
-              className="rounded-md border border-gray-300 px-3 py-2 text-sm"
-            />
+            <div className="grid gap-1">
+              <input
+                type="file"
+                accept="application/pdf,.pdf"
+                onChange={(event) => {
+                  const nextFile = event.target.files?.[0] || null;
+                  if (nextFile && nextFile.size > MAX_PDF_UPLOAD_BYTES) {
+                    setPdfFile(null);
+                    setSummaryError("PDF tải lên quá lớn. Vui lòng dùng file dưới 4MB hoặc dùng nguồn PDF URL.");
+                    event.target.value = "";
+                    return;
+                  }
+
+                  setSummaryError("");
+                  setPdfFile(nextFile);
+                }}
+                className="rounded-md border border-gray-300 px-3 py-2 text-sm"
+              />
+              <p className="text-xs text-gray-500">Tối đa 4MB cho PDF tải lên. File lớn hơn nên dùng PDF URL.</p>
+            </div>
           )}
 
           {sourceMode === "text" && (

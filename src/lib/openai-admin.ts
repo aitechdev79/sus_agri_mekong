@@ -2,7 +2,7 @@ import { NewsArticle } from "@/types/ai-news";
 
 const OPENAI_API_BASE = "https://api.openai.com/v1";
 const DEFAULT_MODEL = process.env.OPENAI_MODEL || "gpt-4.1-mini";
-const MAX_PDF_SIZE_BYTES = 8 * 1024 * 1024;
+const MAX_PDF_SIZE_BYTES = 4 * 1024 * 1024;
 const MAX_URL_TEXT_LENGTH = 18000;
 const FETCH_TIMEOUT_MS = 15000;
 
@@ -92,12 +92,17 @@ async function callResponsesApi(body: Record<string, unknown>): Promise<OpenAITe
     cache: "no-store",
   });
 
+  const responseText = await response.text();
   if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`OpenAI request failed (${response.status}): ${errorText}`);
+    throw new Error(`OpenAI request failed (${response.status}): ${responseText || response.statusText}`);
   }
 
-  return (await response.json()) as OpenAITextResponse;
+  try {
+    return JSON.parse(responseText) as OpenAITextResponse;
+  } catch {
+    const preview = responseText.slice(0, 240) || response.statusText || "empty response";
+    throw new Error(`OpenAI returned a non-JSON response while summarizing the PDF: ${preview}`);
+  }
 }
 
 export async function draftNewsQuery(
@@ -300,7 +305,7 @@ export async function summarizePdfBuffer(
   }
 
   if (buffer.length > MAX_PDF_SIZE_BYTES) {
-    throw new Error("PDF is too large. Please use a file under 8MB.");
+    throw new Error("PDF is too large. Please use a file under 4MB or provide a PDF URL.");
   }
 
   const base64 = buffer.toString("base64");
