@@ -522,6 +522,7 @@ const ImagePasteExtension = Extension.create<{
 
 export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
   const lastSelectionRef = useRef<{ from: number; to: number } | null>(null)
+  const lastNonEmptySelectionRef = useRef<{ from: number; to: number } | null>(null)
   const [isImageUploading, setIsImageUploading] = useState(false)
 
   const loadImageElement = (src: string) =>
@@ -668,6 +669,9 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
     onSelectionUpdate({ editor: editorInstance }) {
       const { from, to } = editorInstance.state.selection
       lastSelectionRef.current = { from, to }
+      if (from !== to) {
+        lastNonEmptySelectionRef.current = { from, to }
+      }
     },
     onUpdate({ editor: editorInstance }) {
       onChange(editorInstance.getHTML())
@@ -691,6 +695,30 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
     }
 
     const hasStyles = Boolean(updated.fontFamily || updated.fontSize)
+    const range = getStoredSelectionRange()
+
+    if (range && range.from !== range.to) {
+      const markType = editor.schema.marks.textStyle
+      if (!markType) return
+
+      const tr = editor.state.tr
+      editor.state.doc.nodesBetween(range.from, range.to, (node, pos) => {
+        if (!node.isText || !node.text) return
+
+        const from = Math.max(pos, range.from)
+        const to = Math.min(pos + node.nodeSize, range.to)
+        if (from >= to) return
+
+        tr.removeMark(from, to, markType)
+        if (hasStyles) {
+          tr.addMark(from, to, markType.create(updated))
+        }
+      })
+
+      editor.view.dispatch(tr.scrollIntoView())
+      editor.view.focus()
+      return
+    }
 
     if (!hasStyles) {
       withSelection()?.unsetMark('textStyle').run()
@@ -717,6 +745,21 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
 
   const getStoredSelectionRange = () => {
     if (!editor) return null
+    const currentSelection = editor.state.selection
+    if (currentSelection.from !== currentSelection.to) {
+      return { from: currentSelection.from, to: currentSelection.to }
+    }
+
+    const lastSelection = lastSelectionRef.current
+    if (lastSelection && lastSelection.from !== lastSelection.to) {
+      return lastSelection
+    }
+
+    const lastNonEmptySelection = lastNonEmptySelectionRef.current
+    if (lastNonEmptySelection && lastNonEmptySelection.from !== lastNonEmptySelection.to) {
+      return lastNonEmptySelection
+    }
+
     return lastSelectionRef.current || editor.state.selection
   }
 
