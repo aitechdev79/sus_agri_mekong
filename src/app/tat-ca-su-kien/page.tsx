@@ -9,6 +9,7 @@ import NavigationBar from '@/components/NavigationBar';
 import MiniEventCalendar from '@/components/MiniEventCalendar';
 import Footer from '@/components/Footer';
 import { getLocaleFromPathname, pickLocalizedText, withLocalePrefix } from '@/lib/content-locale';
+import { formatVietnamDateTime } from '@/lib/vietnam-time';
 
 interface EventItem {
   id: string;
@@ -38,13 +39,7 @@ function formatEventStart(dateString: string | null | undefined, locale: string)
   if (!dateString) return locale === 'en' ? 'Not scheduled yet' : 'Chưa cập nhật thời gian';
   const date = new Date(dateString);
   if (Number.isNaN(date.getTime())) return locale === 'en' ? 'Not scheduled yet' : 'Chưa cập nhật thời gian';
-  return date.toLocaleString(locale === 'en' ? 'en-US' : 'vi-VN', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  });
+  return formatVietnamDateTime(date, locale);
 }
 
 export default function TatCaSuKienPage() {

@@ -8,6 +8,7 @@ import { usePathname } from 'next/navigation';
 import MiniEventCalendar from '@/components/MiniEventCalendar';
 import { getBestImageUrl } from '@/lib/image-utils';
 import { getLocaleFromPathname, pickLocalizedText } from '@/lib/content-locale';
+import { formatVietnamDate, formatVietnamDateTime } from '@/lib/vietnam-time';
 
 interface EventItem {
   id: string;
@@ -26,19 +27,12 @@ interface EventItem {
 
 function formatEventDate(item: EventItem, locale: string) {
   const date = new Date(item.eventStartAt);
-  const targetLocale = locale === 'en' ? 'en-US' : 'vi-VN';
 
   if (item.isAllDay) {
-    return date.toLocaleDateString(targetLocale, { day: '2-digit', month: '2-digit', year: 'numeric' });
+    return formatVietnamDate(date, locale);
   }
 
-  return date.toLocaleString(targetLocale, {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  });
+  return formatVietnamDateTime(date, locale);
 }
 
 export default function EventsSection() {

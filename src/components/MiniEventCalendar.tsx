@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { getLocaleFromPathname } from '@/lib/content-locale';
+import { formatVietnamDateInput } from '@/lib/vietnam-time';
 
 interface Event {
   id: string;
@@ -16,8 +17,20 @@ interface MiniEventCalendarProps {
   events: Event[];
 }
 
+function getCalendarDateKey(date: Date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+function getVietnamTodayAsCalendarDate() {
+  const [year, month, day] = formatVietnamDateInput(new Date()).split('-').map(Number);
+  return new Date(year, month - 1, day);
+}
+
 export default function MiniEventCalendar({ events }: MiniEventCalendarProps) {
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const [currentDate, setCurrentDate] = useState(getVietnamTodayAsCalendarDate);
   const pathname = usePathname();
   const locale = getLocaleFromPathname(pathname);
   const isEn = locale === 'en';
@@ -52,13 +65,10 @@ export default function MiniEventCalendar({ events }: MiniEventCalendarProps) {
   const getEventsForDate = (date: Date | null) => {
     if (!date) return [];
 
+    const dateKey = getCalendarDateKey(date);
     return events.filter((event) => {
       const eventDate = new Date(event.date);
-      return (
-        eventDate.getDate() === date.getDate() &&
-        eventDate.getMonth() === date.getMonth() &&
-        eventDate.getFullYear() === date.getFullYear()
-      );
+      return formatVietnamDateInput(eventDate) === dateKey;
     });
   };
 
@@ -71,7 +81,7 @@ export default function MiniEventCalendar({ events }: MiniEventCalendarProps) {
   };
 
   const days = getDaysInMonth(currentDate);
-  const today = new Date();
+  const todayKey = formatVietnamDateInput(new Date());
 
   return (
     <div className="bg-[#FFF8DC] p-4 shadow-md h-full flex flex-col">
@@ -116,10 +126,7 @@ export default function MiniEventCalendar({ events }: MiniEventCalendarProps) {
           const dateEvents = getEventsForDate(date);
           const hasUpcomingEvents = dateEvents.some((event) => !event.isPast);
           const hasPastEvents = dateEvents.some((event) => event.isPast);
-          const isToday =
-            date.getDate() === today.getDate() &&
-            date.getMonth() === today.getMonth() &&
-            date.getFullYear() === today.getFullYear();
+          const isToday = getCalendarDateKey(date) === todayKey;
 
           return (
             <div

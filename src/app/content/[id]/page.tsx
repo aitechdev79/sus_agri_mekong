@@ -6,6 +6,7 @@ import Footer from '@/components/Footer';
 import { prisma } from '@/lib/prisma';
 import { renderRichTextContent } from '@/lib/rich-text';
 import { PublicContent } from '@/types/content';
+import { formatVietnamDate, formatVietnamDateTime } from '@/lib/vietnam-time';
 
 async function getContent(contentId: string): Promise<PublicContent | null> {
   try {
@@ -77,33 +78,17 @@ function formatEventRange(content: PublicContent) {
   if (Number.isNaN(start.getTime())) return null;
 
   if (content.isAllDay) {
-    return start.toLocaleDateString('vi-VN', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    });
+    return formatVietnamDate(start);
   }
 
-  const startLabel = start.toLocaleString('vi-VN', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
+  const startLabel = formatVietnamDateTime(start);
 
   if (!content.eventEndAt) return startLabel;
 
   const end = new Date(content.eventEndAt);
   if (Number.isNaN(end.getTime())) return startLabel;
 
-  const endLabel = end.toLocaleString('vi-VN', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
+  const endLabel = formatVietnamDateTime(end);
 
   return `${startLabel} - ${endLabel}`;
 }

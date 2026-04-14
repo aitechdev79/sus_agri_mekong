@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Edit, Trash2, Eye } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import type { ContentTableProps } from '@/types/content'
+import { formatVietnamDate, formatVietnamDateTime } from '@/lib/vietnam-time'
 
 function formatEventDate(content: ContentTableProps['contents'][number]) {
   if (!content.eventStartAt) return '-'
@@ -12,16 +13,10 @@ function formatEventDate(content: ContentTableProps['contents'][number]) {
   if (Number.isNaN(start.getTime())) return '-'
 
   if (content.isAllDay) {
-    return start.toLocaleDateString('vi-VN')
+    return formatVietnamDate(start)
   }
 
-  return start.toLocaleString('vi-VN', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  })
+  return formatVietnamDateTime(start)
 }
 
 export function ContentTable({

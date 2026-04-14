@@ -2,21 +2,14 @@
 import { prisma } from '@/lib/prisma'
 import { requireModerator } from '@/lib/auth-middleware'
 import { sanitizeRichText } from '@/lib/sanitize'
+import { parseVietnamDateTimeInput } from '@/lib/vietnam-time'
 
 interface RouteParams {
   params: Promise<{ id: string }>
 }
 
 function normalizeEventDate(value?: string | null, isAllDay?: boolean) {
-  if (!value) return null
-
-  const normalized = isAllDay ? `${value}T00:00:00` : value
-  const date = new Date(normalized)
-  if (Number.isNaN(date.getTime())) {
-    return null
-  }
-
-  return date
+  return parseVietnamDateTimeInput(value, isAllDay)
 }
 
 function normalizeDisplayOrder(value?: unknown) {

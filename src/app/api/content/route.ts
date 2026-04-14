@@ -3,20 +3,13 @@ import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import { requireModerator } from '@/lib/auth-middleware'
 import { sanitizeRichText } from '@/lib/sanitize'
+import { parseVietnamDateTimeInput } from '@/lib/vietnam-time'
 
 // Use Prisma's generated types for proper type safety
 type ContentWhereInput = Prisma.ContentWhereInput
 
 function normalizeEventDate(value?: string | null, isAllDay?: boolean) {
-  if (!value) return null
-
-  const normalized = isAllDay ? `${value}T00:00:00` : value
-  const date = new Date(normalized)
-  if (Number.isNaN(date.getTime())) {
-    return null
-  }
-
-  return date
+  return parseVietnamDateTimeInput(value, isAllDay)
 }
 
 function normalizeDisplayOrder(value?: unknown) {

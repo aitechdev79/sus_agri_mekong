@@ -9,6 +9,7 @@ import { ContentFormProps } from '@/types/content'
 import { RichTextEditor } from '@/components/admin/RichTextEditor'
 import type { CategorySummary } from '@/types/category'
 import { normalizeCategorySlug } from '@/lib/category-utils'
+import { formatVietnamDateInput, formatVietnamDateTimeInput } from '@/lib/vietnam-time'
 
 function toDateTimeLocalValue(value?: string | null) {
   if (!value) return ''
@@ -16,9 +17,7 @@ function toDateTimeLocalValue(value?: string | null) {
   const date = new Date(value)
   if (Number.isNaN(date.getTime())) return ''
 
-  const offset = date.getTimezoneOffset()
-  const localDate = new Date(date.getTime() - offset * 60 * 1000)
-  return localDate.toISOString().slice(0, 16)
+  return formatVietnamDateTimeInput(date)
 }
 
 function toDateValue(value?: string | null) {
@@ -27,9 +26,7 @@ function toDateValue(value?: string | null) {
   const date = new Date(value)
   if (Number.isNaN(date.getTime())) return ''
 
-  const offset = date.getTimezoneOffset()
-  const localDate = new Date(date.getTime() - offset * 60 * 1000)
-  return localDate.toISOString().slice(0, 10)
+  return formatVietnamDateInput(date)
 }
 
 export function ContentForm({ content, onClose, userRole, categories = [], onCategoryCreated }: ContentFormProps) {

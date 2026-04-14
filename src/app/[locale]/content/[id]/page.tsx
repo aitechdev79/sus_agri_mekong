@@ -7,6 +7,7 @@ import { prisma } from '@/lib/prisma';
 import { PublicContent } from '@/types/content';
 import { isEnglishLocale, pickLocalizedText } from '@/lib/content-locale';
 import { renderRichTextContent } from '@/lib/rich-text';
+import { formatVietnamDate, formatVietnamDateTime } from '@/lib/vietnam-time';
 
 async function getContent(contentId: string): Promise<PublicContent | null> {
   try {
@@ -89,35 +90,18 @@ function formatEventRange(content: PublicContent, locale: string) {
   const start = new Date(content.eventStartAt);
   if (Number.isNaN(start.getTime())) return null;
 
-  const targetLocale = isEnglishLocale(locale) ? 'en-US' : 'vi-VN';
   if (content.isAllDay) {
-    return start.toLocaleDateString(targetLocale, {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
+    return formatVietnamDate(start, locale);
   }
 
-  const startLabel = start.toLocaleString(targetLocale, {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  });
+  const startLabel = formatVietnamDateTime(start, locale);
 
   if (!content.eventEndAt) return startLabel;
 
   const end = new Date(content.eventEndAt);
   if (Number.isNaN(end.getTime())) return startLabel;
 
-  const endLabel = end.toLocaleString(targetLocale, {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  });
+  const endLabel = formatVietnamDateTime(end, locale);
 
   return `${startLabel} - ${endLabel}`;
 }
