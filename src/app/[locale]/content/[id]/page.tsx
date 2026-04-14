@@ -306,7 +306,7 @@ export default async function LocaleContentDetailPage({
               )}
 
               {externalUrl && (
-                <div className="mt-8 pt-6">
+                <div className="mt-8 border-t border-gray-200 pt-6">
                   <p className="text-xs italic text-gray-500">
                     <span>{getExternalLabel(content.type, locale)} </span>
                     <a
