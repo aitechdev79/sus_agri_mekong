@@ -503,7 +503,7 @@ export function AiNewsPanel() {
         {summary && (
           <div className="mt-6 rounded-md border border-gray-200 bg-gray-50 p-4">
             <div className="mb-2 text-sm font-semibold text-gray-900">Kết quả tóm tắt</div>
-            <pre className="whitespace-pre-wrap text-sm text-gray-800">{summary}</pre>
+            <div className="whitespace-pre-wrap text-sm text-gray-800">{summary}</div>
           </div>
         )}
       </section>

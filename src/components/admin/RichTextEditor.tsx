@@ -474,6 +474,15 @@ const ImagePasteExtension = Extension.create<{
             }
 
             const html = clipboard.getData('text/html') || ''
+            const pastedText = clipboard.getData('text/plain') || ''
+            const isPreformattedHtml = /<(pre|code)(\s|>)/i.test(html)
+
+            if (isPreformattedHtml && pastedText.trim()) {
+              event.preventDefault()
+              this.editor.chain().focus().insertContent(selectedTextToParagraphHtml(pastedText)).run()
+              return true
+            }
+
             const htmlImageSources = Array.from(html.matchAll(/<img[^>]+src=["']([^"']+)["'][^>]*>/gi))
               .map((match) => (match[1] || '').trim())
               .filter((src) => /^(https?:\/\/|data:image\/|\/uploads\/|\.?\/uploads\/)/i.test(src))
@@ -487,11 +496,11 @@ const ImagePasteExtension = Extension.create<{
               return true
             }
 
-            const pastedText = (clipboard.getData('text/plain') || '').trim()
-            const isImageUrl = /^(https?:\/\/\S+|data:image\/\w+;base64,\S+)$/i.test(pastedText)
+            const pastedTextTrimmed = pastedText.trim()
+            const isImageUrl = /^(https?:\/\/\S+|data:image\/\w+;base64,\S+)$/i.test(pastedTextTrimmed)
             if (isImageUrl) {
               event.preventDefault()
-              insertImage(pastedText, 'Pasted image')
+              insertImage(pastedTextTrimmed, 'Pasted image')
               return true
             }
 
