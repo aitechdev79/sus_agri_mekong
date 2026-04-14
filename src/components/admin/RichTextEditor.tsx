@@ -46,6 +46,24 @@ const PASTED_IMAGE_JPEG_QUALITY = 0.85
 const MAX_RICH_TEXT_IMAGE_UPLOAD_SIZE = 900 * 1024
 const TOOLBAR_ICON_CLASS = 'h-4 w-4'
 
+function escapeHtml(value: string) {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
+function selectedTextToBlockquoteHtml(value: string) {
+  return value
+    .split(/\n{2,}/)
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean)
+    .map((paragraph) => `<p>${escapeHtml(paragraph).replace(/\n/g, '<br>')}</p>`)
+    .join('')
+}
+
 function ResizableImageNodeView({ node, selected, updateAttributes, editor }: NodeViewProps) {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const widthRef = useRef<number | null>(typeof node.attrs.width === 'number' ? node.attrs.width : null)
@@ -705,6 +723,32 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
   }
 
   const handleToggleBlockquote = () => {
+    if (!editor) return
+
+    const selectionRange = lastSelectionRef.current || editor.state.selection
+    const { from, to } = selectionRange
+    const $from = editor.state.doc.resolve(from)
+    const $to = editor.state.doc.resolve(to)
+    const selectedText = editor.state.doc.textBetween(from, to, '\n\n').trim()
+    const isPartialSingleBlockSelection =
+      from !== to &&
+      selectedText.length > 0 &&
+      $from.sameParent($to) &&
+      ($from.parentOffset > 0 || $to.parentOffset < $to.parent.content.size)
+
+    if (isPartialSingleBlockSelection) {
+      const quoteContent = selectedTextToBlockquoteHtml(selectedText)
+      if (quoteContent) {
+        editor
+          .chain()
+          .setTextSelection({ from, to })
+          .focus()
+          .insertContentAt({ from, to }, `<blockquote>${quoteContent}</blockquote>`)
+          .run()
+        return
+      }
+    }
+
     withSelection()?.toggleBlockquote().run()
   }
 
