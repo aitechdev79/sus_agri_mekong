@@ -58,7 +58,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
         content: content.content || '',
         contentEn: content.contentEn || '',
         category: content.category || '',
-        type: content.type || 'ARTICLE',
+        type: content.type || 'NEWS',
         tags: content.tags || '',
         sectionKey: content.sectionKey || '',
         displayOrder: content.displayOrder ?? '',
@@ -105,7 +105,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
         content: '',
         contentEn: '',
         category: '',
-        type: 'ARTICLE',
+        type: 'NEWS',
         tags: '',
         sectionKey: '',
         displayOrder: '',
@@ -232,7 +232,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
         content: '',
         contentEn: '',
         category: '',
-        type: 'ARTICLE',
+        type: 'NEWS',
         tags: '',
         sectionKey: '',
         displayOrder: '',
@@ -276,11 +276,9 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
     ]
   })()
   const contentTypes = [
-    { value: 'ARTICLE', label: 'Bài viết' },
     { value: 'DOCUMENT', label: 'Tài liệu' },
     { value: 'STORY', label: 'Điển hình' },
     { value: 'PROJECT_ACTIVITY', label: 'Hoạt động dự án' },
-    { value: 'GUIDE', label: 'Hướng dẫn' },
     { value: 'POLICY', label: 'Chính sách' },
     { value: 'NEWS', label: 'Tin tức' },
     { value: 'EVENT', label: 'Sự kiện' }
