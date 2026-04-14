@@ -808,16 +808,56 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
     return true
   }
 
+  const toggleInlineMarkAcrossSelection = (markName: 'bold' | 'italic' | 'underline') => {
+    if (!editor) return false
+
+    const range = getStoredSelectionRange()
+    const markType = editor.schema.marks[markName]
+    if (!range || !markType || range.from === range.to) return false
+
+    let shouldSetMark = false
+    editor.state.doc.nodesBetween(range.from, range.to, (node) => {
+      if (!node.isText || !node.text) return
+
+      if (!markType.isInSet(node.marks)) {
+        shouldSetMark = true
+      }
+    })
+
+    const tr = editor.state.tr
+    editor.state.doc.nodesBetween(range.from, range.to, (node, pos) => {
+      if (!node.isText || !node.text) return
+
+      const from = Math.max(pos, range.from)
+      const to = Math.min(pos + node.nodeSize, range.to)
+      if (from >= to) return
+
+      if (shouldSetMark) {
+        tr.addMark(from, to, markType.create())
+      } else {
+        tr.removeMark(from, to, markType)
+      }
+    })
+
+    editor.view.dispatch(tr.scrollIntoView())
+    editor.view.focus()
+    return true
+  }
+
   const handleToggleBold = () => {
+    if (toggleInlineMarkAcrossSelection('bold')) return
     withSelection()?.toggleBold().run()
   }
 
   const handleToggleItalic = () => {
+    if (toggleInlineMarkAcrossSelection('italic')) return
     withSelection()?.toggleItalic().run()
   }
 
   const handleToggleUnderline = () => {
     if (!editor) return
+
+    if (toggleInlineMarkAcrossSelection('underline')) return
 
     if (editor.isActive('underline')) {
       withSelection()?.unsetMark('underline').run()
