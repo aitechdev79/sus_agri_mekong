@@ -64,6 +64,26 @@ function selectedTextToBlockquoteHtml(value: string) {
     .join('')
 }
 
+function selectedTextToParagraphHtml(value: string, attributes = '') {
+  return value
+    .split(/\n{2,}/)
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean)
+    .map((paragraph) => `<p${attributes}>${escapeHtml(paragraph).replace(/\n/g, '<br>')}</p>`)
+    .join('')
+}
+
+function selectedTextToListHtml(value: string, listTag: 'ul' | 'ol') {
+  const items = value
+    .split(/\n+/)
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .map((item) => `<li><p>${escapeHtml(item)}</p></li>`)
+    .join('')
+
+  return items ? `<${listTag}>${items}</${listTag}>` : ''
+}
+
 function ResizableImageNodeView({ node, selected, updateAttributes, editor }: NodeViewProps) {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const widthRef = useRef<number | null>(typeof node.attrs.width === 'number' ? node.attrs.width : null)
@@ -695,6 +715,99 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
     return chain.focus()
   }
 
+  const getStoredSelectionRange = () => {
+    if (!editor) return null
+    return lastSelectionRef.current || editor.state.selection
+  }
+
+  const getInlineBlockFormatRange = () => {
+    if (!editor) return null
+
+    const selectionRange = getStoredSelectionRange()
+    if (!selectionRange) return null
+
+    const { from, to } = selectionRange
+    const $from = editor.state.doc.resolve(from)
+    const $to = editor.state.doc.resolve(to)
+    const selectedText = editor.state.doc.textBetween(from, to, '\n', '\n').trim()
+    const isPartialSingleBlockSelection =
+      from !== to &&
+      selectedText.length > 0 &&
+      $from.sameParent($to) &&
+      ($from.parentOffset > 0 || $to.parentOffset < $to.parent.content.size)
+
+    if (isPartialSingleBlockSelection) {
+      return { from, to, text: selectedText }
+    }
+
+    if (from !== to || !$from.parent.isTextblock) {
+      return null
+    }
+
+    const parent = $from.parent
+    const parentStart = $from.start()
+    const parentSize = parent.content.size
+    let segmentStart = 0
+    const segments: Array<{ start: number; end: number }> = []
+
+    parent.forEach((node, offset) => {
+      if (node.type.name === 'hardBreak') {
+        segments.push({ start: segmentStart, end: offset })
+        segmentStart = offset + node.nodeSize
+        return
+      }
+
+      if (node.isText && node.text?.includes('\n')) {
+        for (const match of node.text.matchAll(/\n/g)) {
+          const delimiterOffset = offset + (match.index || 0)
+          segments.push({ start: segmentStart, end: delimiterOffset })
+          segmentStart = delimiterOffset + 1
+        }
+      }
+    })
+    segments.push({ start: segmentStart, end: parentSize })
+
+    const activeSegment = segments.find((segment) => (
+      $from.parentOffset >= segment.start &&
+      $from.parentOffset <= segment.end &&
+      segment.end > segment.start
+    ))
+
+    if (!activeSegment) return null
+    if (activeSegment.start === 0 && activeSegment.end === parentSize) return null
+
+    const segmentFrom = parentStart + activeSegment.start
+    const segmentTo = parentStart + activeSegment.end
+    const segmentText = editor.state.doc.textBetween(segmentFrom, segmentTo, '\n', '\n').trim()
+
+    if (!segmentText) return null
+
+    return {
+      from: segmentFrom,
+      to: segmentTo,
+      text: segmentText
+    }
+  }
+
+  const replaceInlineBlockWithHtml = (buildHtml: (text: string) => string) => {
+    if (!editor) return false
+
+    const range = getInlineBlockFormatRange()
+    if (!range) return false
+
+    const html = buildHtml(range.text)
+    if (!html) return false
+
+    editor
+      .chain()
+      .setTextSelection({ from: range.from, to: range.to })
+      .focus()
+      .insertContentAt({ from: range.from, to: range.to }, html)
+      .run()
+
+    return true
+  }
+
   const handleToggleBold = () => {
     withSelection()?.toggleBold().run()
   }
@@ -715,40 +828,17 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
   }
 
   const handleToggleBulletList = () => {
+    if (replaceInlineBlockWithHtml((text) => selectedTextToListHtml(text, 'ul'))) return
     withSelection()?.toggleBulletList().run()
   }
 
   const handleToggleOrderedList = () => {
+    if (replaceInlineBlockWithHtml((text) => selectedTextToListHtml(text, 'ol'))) return
     withSelection()?.toggleOrderedList().run()
   }
 
   const handleToggleBlockquote = () => {
-    if (!editor) return
-
-    const selectionRange = lastSelectionRef.current || editor.state.selection
-    const { from, to } = selectionRange
-    const $from = editor.state.doc.resolve(from)
-    const $to = editor.state.doc.resolve(to)
-    const selectedText = editor.state.doc.textBetween(from, to, '\n\n').trim()
-    const isPartialSingleBlockSelection =
-      from !== to &&
-      selectedText.length > 0 &&
-      $from.sameParent($to) &&
-      ($from.parentOffset > 0 || $to.parentOffset < $to.parent.content.size)
-
-    if (isPartialSingleBlockSelection) {
-      const quoteContent = selectedTextToBlockquoteHtml(selectedText)
-      if (quoteContent) {
-        editor
-          .chain()
-          .setTextSelection({ from, to })
-          .focus()
-          .insertContentAt({ from, to }, `<blockquote>${quoteContent}</blockquote>`)
-          .run()
-        return
-      }
-    }
-
+    if (replaceInlineBlockWithHtml((text) => `<blockquote>${selectedTextToBlockquoteHtml(text)}</blockquote>`)) return
     withSelection()?.toggleBlockquote().run()
   }
 
@@ -772,6 +862,7 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
   const currentTextAlign = (editor?.getAttributes(indentTargetType)?.textAlign as string | undefined) || 'left'
   const currentLinkHref = (editor?.getAttributes('link')?.href as string | undefined) || ''
   const handleSetTextAlign = (textAlign: 'left' | 'center' | 'right' | 'justify') => {
+    if (replaceInlineBlockWithHtml((text) => selectedTextToParagraphHtml(text, ` style="text-align: ${textAlign}"`))) return
     withSelection()?.updateAttributes(indentTargetType, { textAlign }).run()
   }
 
