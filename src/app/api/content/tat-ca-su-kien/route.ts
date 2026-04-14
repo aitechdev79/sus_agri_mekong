@@ -14,7 +14,6 @@ export async function GET(request: NextRequest) {
     const where = {
       type: 'EVENT' as const,
       status: 'PUBLISHED' as const,
-      isPublic: true,
     };
 
     const [contents, total] = await Promise.all([

@@ -32,7 +32,6 @@ export async function GET(
     const items = await prisma.content.findMany({
       where: {
         status: 'PUBLISHED',
-        isPublic: true,
         type: config.type
       },
       select: {

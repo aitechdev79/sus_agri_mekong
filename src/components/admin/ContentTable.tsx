@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Edit, Trash2, Eye, Star, Users } from 'lucide-react'
+import { Edit, Trash2, Eye } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import type { ContentTableProps } from '@/types/content'
 
@@ -97,14 +97,9 @@ export function ContentTable({
                 Chuyển về nháp
               </Button>
               {userRole === 'ADMIN' && (
-                <>
-                  <Button size="sm" variant="ghost" onClick={() => onBulkAction?.('feature', selectedIds)}>
-                    Đặt nổi bật
-                  </Button>
-                  <Button size="sm" variant="ghost" onClick={() => onBulkAction?.('archive', selectedIds)}>
-                    Lưu trữ
-                  </Button>
-                </>
+                <Button size="sm" variant="ghost" onClick={() => onBulkAction?.('archive', selectedIds)}>
+                  Lưu trữ
+                </Button>
               )}
             </div>
           </div>
@@ -149,10 +144,6 @@ export function ContentTable({
                     <div className="flex-1">
                       <div className="mb-1 font-medium text-gray-900">{content.title}</div>
                       {content.titleEn && <div className="text-sm text-gray-500">{content.titleEn}</div>}
-                    </div>
-                    <div className="ml-2 flex space-x-1">
-                      {content.isFeatured && <Star className="h-4 w-4 text-yellow-500" />}
-                      {!content.isPublic && <Users className="h-4 w-4 text-gray-500" />}
                     </div>
                   </div>
                 </td>

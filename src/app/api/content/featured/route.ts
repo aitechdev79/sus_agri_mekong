@@ -6,8 +6,6 @@ export async function GET() {
     const featuredContent = await prisma.content.findFirst({
       where: {
         status: 'PUBLISHED',
-        isPublic: true,
-        isFeatured: true,
       },
       select: {
         id: true,
@@ -23,31 +21,6 @@ export async function GET() {
         createdAt: 'desc',
       },
     });
-
-    if (!featuredContent) {
-      // Fallback to most viewed content if no featured content
-      const fallbackContent = await prisma.content.findFirst({
-        where: {
-          status: 'PUBLISHED',
-          isPublic: true,
-        },
-        select: {
-          id: true,
-          title: true,
-          description: true,
-          type: true,
-          thumbnailUrl: true,
-          viewCount: true,
-          fileUrl: true,
-          createdAt: true,
-        },
-        orderBy: {
-          viewCount: 'desc',
-        },
-      });
-
-      return NextResponse.json(fallbackContent);
-    }
 
     return NextResponse.json(featuredContent);
   } catch (error) {

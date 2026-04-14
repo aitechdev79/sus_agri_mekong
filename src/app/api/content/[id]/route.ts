@@ -117,14 +117,7 @@ export async function GET(
       )
     }
 
-    // Check if content is public or user has access
     const user = await requireModerator(request)
-    if (!content.isPublic && (!user || (user.role !== 'ADMIN' && user.role !== 'MODERATOR'))) {
-      return NextResponse.json(
-        { error: 'Không có quyền truy cập nội dung này' },
-        { status: 403 }
-      )
-    }
 
     // Increment view count
     await prisma.content.update({
@@ -204,8 +197,6 @@ export async function PUT(
       displayOrder,
       undertitle,
       projectUrl,
-      isPublic,
-      isFeatured,
       status,
       videoUrl,
       imageUrl,
@@ -267,7 +258,7 @@ export async function PUT(
     console.log('Content type being saved:', type)
     console.log('Full data received:', { type, category, title })
 
-    // Only admins can modify featured status or change status of published content
+    // Visibility is controlled by status only.
     const updateData: Record<string, unknown> = {
       title,
       titleEn: titleEn || null,
@@ -282,7 +273,8 @@ export async function PUT(
       displayOrder: normalizedDisplayOrder,
       undertitle: undertitle || null,
       projectUrl: projectUrl || null,
-      isPublic: isPublic !== false,
+      isPublic: true,
+      isFeatured: false,
       videoUrl: videoUrl || null,
       imageUrl: imageUrl || null,
       thumbnailUrl: thumbnailUrl || null,
@@ -297,7 +289,6 @@ export async function PUT(
     }
 
     if (user.role === 'ADMIN') {
-      updateData.isFeatured = isFeatured
       updateData.status = status
     } else if (content.status === 'DRAFT') {
       updateData.status = status === 'PUBLISHED' ? 'PUBLISHED' : 'DRAFT'

@@ -40,7 +40,6 @@ export async function GET(request: NextRequest) {
       where: {
         type: 'EVENT',
         status: 'PUBLISHED',
-        isPublic: true,
         eventStartAt: {
           gte: from || undefined,
           lte: to || undefined

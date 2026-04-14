@@ -6,7 +6,6 @@ export async function GET() {
     const stories = await prisma.content.findMany({
       where: {
         status: 'PUBLISHED',
-        isPublic: true,
         type: 'STORY'
       },
       select: {

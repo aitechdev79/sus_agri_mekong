@@ -10,7 +10,6 @@ export async function GET(request: NextRequest) {
 
     const where = {
       status: 'PUBLISHED' as const,
-      isPublic: true,
       type: 'STORY' as const,
       sectionKey: 'HOME_DIEN_HINH' as const
     }

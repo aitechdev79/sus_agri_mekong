@@ -10,7 +10,6 @@ export async function GET(request: NextRequest) {
 
     const where = {
       status: 'PUBLISHED' as const,
-      isPublic: true,
       type: 'PROJECT_ACTIVITY' as const,
       sectionKey: 'HOME_HOAT_DONG_DU_AN' as const
     }

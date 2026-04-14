@@ -64,8 +64,8 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
         displayOrder: content.displayOrder ?? '',
         undertitle: content.undertitle || '',
         projectUrl: content.projectUrl || '',
-        isFeatured: content.isFeatured || false,
-        isPublic: content.isPublic !== false,
+        isFeatured: false,
+        isPublic: true,
         status: content.status || 'DRAFT',
         fileUrl: content.fileUrl || '',
         fileType: content.fileType || '',
@@ -377,6 +377,8 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
 
       const submitData = {
         ...formData,
+        isFeatured: false,
+        isPublic: true,
         sectionKey: '',
         tags: formData.tags
       }
@@ -934,32 +936,6 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
           </div>
 
           <div className="space-y-4">
-            <div className="flex items-center space-x-6">
-              {userRole === 'ADMIN' && (
-                <label className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="isFeatured"
-                    checked={formData.isFeatured}
-                    onChange={handleChange}
-                    className="rounded border-gray-300 text-green-600 focus:ring-green-500"
-                  />
-                  <span className="ml-2 text-sm text-gray-700">Nội dung nổi bật</span>
-                </label>
-              )}
-
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  name="isPublic"
-                  checked={formData.isPublic}
-                  onChange={handleChange}
-                  className="rounded border-gray-300 text-green-600 focus:ring-green-500"
-                />
-                <span className="ml-2 text-sm text-gray-700">Công khai</span>
-              </label>
-            </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Trạng thái

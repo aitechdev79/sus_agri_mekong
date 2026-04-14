@@ -69,14 +69,12 @@ export async function GET(request: NextRequest) {
     const category = searchParams.get('category')
     const type = searchParams.get('type')
     const search = searchParams.get('search')
-    const featured = searchParams.get('featured') === 'true'
     const sort = searchParams.get('sort')
 
     const skip = (page - 1) * limit
 
     const where: ContentWhereInput = {
-      status: 'PUBLISHED',
-      isPublic: true
+      status: 'PUBLISHED'
     }
 
     if (category) {
@@ -93,10 +91,6 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    if (featured) {
-      where.isFeatured = true
-    }
-
     if (search) {
       where.OR = [
         { title: { contains: search } },
@@ -111,10 +105,7 @@ export async function GET(request: NextRequest) {
     const orderBy =
       sort === 'newest'
         ? [{ createdAt: 'desc' as const }]
-        : [
-            { isFeatured: 'desc' as const },
-            { createdAt: 'desc' as const }
-          ]
+        : [{ createdAt: 'desc' as const }]
 
     const [contents, total] = await Promise.all([
       prisma.content.findMany({
@@ -185,8 +176,6 @@ export async function POST(request: NextRequest) {
       displayOrder,
       undertitle,
       projectUrl,
-      isPublic,
-      isFeatured,
       status,
       videoUrl,
       imageUrl,
@@ -244,9 +233,8 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Only admins can create featured content or publish directly
+    // Visibility is controlled by status only.
     const finalStatus = user.role === 'ADMIN' ? (status || 'PUBLISHED') : 'DRAFT'
-    const finalIsFeatured = user.role === 'ADMIN' ? (isFeatured || false) : false
 
     const newContent = await prisma.content.create({
       data: {
@@ -263,8 +251,8 @@ export async function POST(request: NextRequest) {
         displayOrder: normalizedDisplayOrder,
         undertitle: undertitle || null,
         projectUrl: projectUrl || null,
-        isPublic: isPublic !== false,
-        isFeatured: finalIsFeatured,
+        isPublic: true,
+        isFeatured: false,
         status: finalStatus,
         authorId: user.id,
         videoUrl: videoUrl || null,

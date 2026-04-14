@@ -24,7 +24,7 @@ async function getContent(contentId: string): Promise<PublicContent | null> {
       }
     });
 
-    if (!content || !content.isPublic) {
+    if (!content) {
       return null;
     }
 

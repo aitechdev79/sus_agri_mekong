@@ -28,7 +28,6 @@ export async function GET(request: NextRequest) {
     const newsItems = await prisma.content.findMany({
       where: {
         status: 'PUBLISHED',
-        isPublic: true,
         type: 'NEWS', // Only NEWS content type
       },
       select: {

@@ -6,7 +6,6 @@ export async function GET() {
     const communityItems = await prisma.content.findMany({
       where: {
         status: 'PUBLISHED',
-        isPublic: true,
         type: {
           in: ['STORY', 'GUIDE'], // Community stories and guides
         },
