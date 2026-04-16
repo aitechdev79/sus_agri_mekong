@@ -364,12 +364,6 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
         return
       }
 
-      if (formData.type === 'PROJECT_ACTIVITY' && !formData.projectUrl) {
-        alert('Vui lòng nhập đường dẫn dự án')
-        setLoading(false)
-        return
-      }
-
       const submitData = {
         ...formData,
         isFeatured: false,
@@ -635,7 +629,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
 
               <div>
                 <p className="text-sm text-amber-800">
-                  Điền trường Content URL bên dưới để card mở liên kết ngoài. Trường này bắt buộc với hoạt động dự án.
+                  Có thể điền Content URL bên dưới nếu muốn card mở liên kết ngoài. Nếu bỏ trống, card sẽ mở trang chi tiết nội dung.
                 </p>
               </div>
             </div>
@@ -781,14 +775,13 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Content URL {formData.type === 'PROJECT_ACTIVITY' ? '*' : '(tùy chọn)'}
+                  Content URL (tùy chọn)
                 </label>
                 <input
                   type="url"
                   name="projectUrl"
                   value={formData.projectUrl}
                   onChange={handleChange}
-                  required={formData.type === 'PROJECT_ACTIVITY'}
                   placeholder="https://example.com/article-or-pdf"
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                 />

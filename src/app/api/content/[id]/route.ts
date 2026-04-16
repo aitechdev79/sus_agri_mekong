@@ -226,13 +226,6 @@ export async function PUT(
       )
     }
 
-    if (type === 'PROJECT_ACTIVITY' && !projectUrl) {
-      return NextResponse.json(
-        { error: 'Hoạt động dự án cần có Content URL.' },
-        { status: 400 }
-      )
-    }
-
     if (type === 'EVENT' && !normalizedEventStartAt) {
       return NextResponse.json(
         { error: 'Sự kiện cần có thời gian bắt đầu hợp lệ' },
