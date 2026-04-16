@@ -8,6 +8,7 @@ import { usePathname } from 'next/navigation';
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
 import { getLocaleFromPathname, pickLocalizedText, withLocalePrefix } from '@/lib/content-locale';
+import { formatVietnamDate } from '@/lib/vietnam-time';
 
 interface DienHinhItem {
   id: string;
@@ -176,7 +177,7 @@ export default function TatCaDienHinhPage() {
                       </div>
 
                       <div className="mt-5 flex items-center justify-between pt-4 text-sm text-gray-500">
-                        <span>{new Date(item.createdAt).toLocaleDateString(isEn ? 'en-US' : 'vi-VN')}</span>
+                        <span>{formatVietnamDate(item.createdAt, isEn ? 'en' : 'vi')}</span>
                         <span className="flex items-center gap-1">
                           <Eye className="h-4 w-4" />
                           {item.viewCount.toLocaleString(isEn ? 'en-US' : 'vi-VN')}

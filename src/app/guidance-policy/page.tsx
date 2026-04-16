@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
 import { MinimalContent, MinimalContentListResponse } from '@/types/content';
+import { formatVietnamDate } from '@/lib/vietnam-time';
 
 export default function GuidancePolicyPage() {
   const [contentItems, setContentItems] = useState<MinimalContent[]>([]);
@@ -43,12 +44,7 @@ export default function GuidancePolicyPage() {
   };
 
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('vi-VN', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
+    return formatVietnamDate(dateString);
   };
 
   const getContentTypeLabel = (type: string): string => {

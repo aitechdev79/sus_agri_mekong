@@ -6,6 +6,7 @@ import { Calendar, Eye, ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-reac
 import { useEffect, useState } from 'react';
 import { usePublicCategories } from '@/hooks/use-public-categories';
 import { pickLocalizedText } from '@/lib/content-locale';
+import { formatVietnamDate } from '@/lib/vietnam-time';
 
 interface NewsItem {
   id: string;
@@ -64,12 +65,7 @@ export default function NewsPage({ params }: { params: Promise<{ locale: string 
   }, [currentPage]);
 
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString(isEn ? 'en-US' : 'vi-VN', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
+    return formatVietnamDate(dateString, isEn ? 'en' : 'vi');
   };
 
   const getCategoryLabel = (category?: string) => {

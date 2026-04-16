@@ -12,6 +12,7 @@ import { LibraryContent } from '@/types/content'
 import { usePublicCategories } from '@/hooks/use-public-categories'
 import { usePathname } from 'next/navigation'
 import { getLocaleFromPathname, pickLocalizedText, withLocalePrefix } from '@/lib/content-locale'
+import { formatVietnamDate } from '@/lib/vietnam-time'
 
 function getQuickAccessCards(isEn: boolean) {
   return [
@@ -157,14 +158,7 @@ function getTypeAccent(type: string) {
 }
 
 function formatDate(dateString: string, isEn: boolean) {
-  const date = new Date(dateString)
-  if (Number.isNaN(date.getTime())) return ''
-
-  return date.toLocaleDateString(isEn ? 'en-US' : 'vi-VN', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  })
+  return formatVietnamDate(dateString, isEn ? 'en' : 'vi')
 }
 
 export default function LibraryPage() {
@@ -415,7 +409,7 @@ export default function LibraryPage() {
                     <div>STT</div>
                     <div>{isEn ? 'Content' : 'Nội dung'}</div>
                     <div>{isEn ? 'Type' : 'Loại'}</div>
-                    <div>{isEn ? 'Created date' : 'Ngày tạo'}</div>
+                    <div>{isEn ? 'Published date' : 'Ngày đăng'}</div>
                   </div>
 
                   {contents.map((content, index) => {

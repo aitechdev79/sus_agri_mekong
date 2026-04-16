@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import NavigationBar from '@/components/NavigationBar';
+import { formatVietnamDate } from '@/lib/vietnam-time';
 
 interface StoryItem {
   id: string;
@@ -51,12 +52,7 @@ export default function DienHinhPage() {
   };
 
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('vi-VN', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
+    return formatVietnamDate(dateString);
   };
 
   const goToPage = (page: number) => {

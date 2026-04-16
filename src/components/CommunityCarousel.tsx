@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { getLocaleFromPathname, pickLocalizedText, withLocalePrefix } from '@/lib/content-locale';
+import { formatVietnamDate } from '@/lib/vietnam-time';
 
 interface CommunityItem {
   id: string;
@@ -106,7 +107,7 @@ export default function CommunityCarousel() {
                             {description && <p className="text-gray-600 text-sm mb-3 line-clamp-2">{description}</p>}
                             <div className="flex items-center justify-between">
                               <span className="text-xs text-gray-500 font-montserrat">
-                                {new Date(carouselItem.createdAt).toLocaleDateString(isEn ? 'en-US' : 'vi-VN')}
+                                {formatVietnamDate(carouselItem.createdAt, isEn ? 'en' : 'vi')}
                               </span>
                               <Link href={withLocalePrefix(`/content/${carouselItem.id}`, locale)} className="text-blue-600 hover:text-blue-700 text-sm font-medium font-montserrat">
                                 {isEn ? 'Read more' : 'Đọc thêm'}

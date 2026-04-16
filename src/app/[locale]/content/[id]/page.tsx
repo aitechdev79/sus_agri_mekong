@@ -42,15 +42,6 @@ async function getContent(contentId: string): Promise<PublicContent | null> {
   }
 }
 
-function formatDate(dateString: string, locale: string) {
-  const date = new Date(dateString);
-  return date.toLocaleDateString(isEnglishLocale(locale) ? 'en-US' : 'vi-VN', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric'
-  });
-}
-
 function extractYouTubeVideoId(url: string): string | null {
   const regex = /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/;
   const match = url.match(regex);
@@ -186,7 +177,7 @@ export default async function LocaleContentDetailPage({
                 )}
                 <div className="flex items-center">
                   <Calendar className="mr-2 h-4 w-4" />
-                  <span>{isEn ? `Published: ${formatDate(content.createdAt, locale)}` : `Ngày đăng: ${formatDate(content.createdAt, locale)}`}</span>
+                  <span>{isEn ? `Published: ${formatVietnamDateTime(content.createdAt, locale)}` : `Ngày đăng: ${formatVietnamDateTime(content.createdAt, locale)}`}</span>
                 </div>
                 <div className="flex items-center">
                   <Eye className="mr-2 h-4 w-4" />

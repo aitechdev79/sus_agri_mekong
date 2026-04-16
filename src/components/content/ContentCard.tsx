@@ -3,6 +3,7 @@ import { Eye, Download, MessageCircle, Bookmark, Clock, User } from 'lucide-reac
 import { MediaContent } from './MediaContent'
 import { LocalizedContent } from '../LocalizedContent'
 import { ContentCardProps } from '@/types/content'
+import { formatVietnamDate } from '@/lib/vietnam-time'
 
 export function ContentCard({ content, categoryLabels = {} }: ContentCardProps) {
   const getTypeBadge = (type: string) => {
@@ -24,14 +25,6 @@ export function ContentCard({ content, categoryLabels = {} }: ContentCardProps) 
         {typeStyle.text}
       </span>
     )
-  }
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString)
-    const day = date.getDate().toString().padStart(2, '0')
-    const month = (date.getMonth() + 1).toString().padStart(2, '0')
-    const year = date.getFullYear()
-    return `${day}/${month}/${year}`
   }
 
   return (
@@ -78,7 +71,7 @@ export function ContentCard({ content, categoryLabels = {} }: ContentCardProps) 
           <User className="mr-1 h-4 w-4" />
           <span className="mr-3">{content.author.name}</span>
           <Clock className="mr-1 h-4 w-4" />
-          <span>{formatDate(content.createdAt)}</span>
+          <span>{formatVietnamDate(content.createdAt)}</span>
         </div>
 
         <div className="flex items-center justify-between text-sm text-gray-500">

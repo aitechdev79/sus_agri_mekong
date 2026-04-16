@@ -6,6 +6,7 @@ import Footer from '@/components/Footer';
 import { NewsContent } from '@/types/content';
 import { prisma } from '@/lib/prisma';
 import { renderRichTextContent } from '@/lib/rich-text';
+import { formatVietnamDateTime } from '@/lib/vietnam-time';
 
 // Use dynamic rendering for Vercel deployment
 export const dynamic = 'force-dynamic';
@@ -62,11 +63,7 @@ export default async function NewsPage({ params }: { params: Promise<{ id: strin
             <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-6">
               <div className="flex items-center">
                 <Calendar className="w-4 h-4 mr-2" />
-                {new Date(content.createdAt).toLocaleDateString('vi-VN', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                })}
+                <span>Ngày đăng: {formatVietnamDateTime(content.createdAt)}</span>
               </div>
 
               <div className="flex items-center">

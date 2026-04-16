@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
 import { getLocaleFromPathname, pickLocalizedText, withLocalePrefix } from '@/lib/content-locale';
+import { formatVietnamDate } from '@/lib/vietnam-time';
 
 interface StoryItem {
   id: string;
@@ -61,12 +62,7 @@ export default function StoriesPage() {
   }, [currentPage]);
 
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString(isEn ? 'en-US' : 'vi-VN', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
+    return formatVietnamDate(dateString, isEn ? 'en' : 'vi');
   };
 
   const goToPage = (page: number) => {

@@ -41,15 +41,6 @@ async function getContent(contentId: string): Promise<PublicContent | null> {
   }
 }
 
-function formatDate(dateString: string) {
-  const date = new Date(dateString);
-  return date.toLocaleDateString('vi-VN', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  });
-}
-
 function extractYouTubeVideoId(url: string): string | null {
   const regex = /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/;
   const match = url.match(regex);
@@ -167,7 +158,7 @@ export default async function ContentDetailPage({
                 )}
                 <div className="flex items-center">
                   <Calendar className="mr-2 h-4 w-4" />
-                  <span>Ngày đăng: {formatDate(content.createdAt)}</span>
+                  <span>Ngày đăng: {formatVietnamDateTime(content.createdAt)}</span>
                 </div>
                 <div className="flex items-center">
                   <Eye className="mr-2 h-4 w-4" />

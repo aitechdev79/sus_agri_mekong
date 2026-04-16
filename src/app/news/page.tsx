@@ -6,6 +6,7 @@ import { Calendar, ChevronLeft, ChevronRight, Eye } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import NavigationBar from '@/components/NavigationBar';
 import { usePublicCategories } from '@/hooks/use-public-categories';
+import { formatVietnamDate } from '@/lib/vietnam-time';
 
 interface NewsItem {
   id: string;
@@ -56,12 +57,7 @@ export default function NewsPage() {
   }, [currentPage]);
 
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('vi-VN', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
+    return formatVietnamDate(dateString);
   };
 
   const getCategoryLabel = (category?: string) => {
