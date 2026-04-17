@@ -152,7 +152,7 @@ export default function JoinUsPage() {
                   href={signUpBusinessHref}
                   className="inline-flex items-center justify-center self-start rounded-xl bg-emerald-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700 md:self-auto"
                 >
-                  {isEn ? 'Register business account' : 'Đăng ký doanh nghiệp'}
+                  {isEn ? 'Register business account' : 'Đăng ký'}
                 </Link>
               </div>
 

@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
-import { ArrowLeft, Download, PencilLine, Save, Search, ShieldCheck, Trash2, UserCheck, Users, X } from 'lucide-react'
+import { ArrowLeft, Download, PencilLine, Plus, Save, Search, ShieldCheck, Trash2, UserCheck, Users, X } from 'lucide-react'
 
 interface AdminUser {
   id: string
@@ -44,6 +44,20 @@ interface PromoteFormState {
   province: string
   displayOrder: string
   logoUrl: string
+}
+
+interface CreateFormState {
+  name: string
+  email: string
+  phone: string
+  password: string
+  role: 'USER' | 'BUSINESS'
+  province: string
+  organization: string
+  isVerified: boolean
+  createPartnerProfile: boolean
+  companyName: string
+  displayOrder: string
 }
 
 const CSV_HEADERS = ['ID', 'Tên', 'Email', 'Số điện thoại', 'Vai trò', 'Đã xác minh', 'Tỉnh/Thành', 'Tổ chức', 'Số nội dung', 'Số bài gửi', 'Số bình luận', 'Số bookmark', 'Ngày tạo']
@@ -92,6 +106,32 @@ export function UserManager({ backHref }: UserManagerProps) {
   const [promoteError, setPromoteError] = useState('')
   const [editError, setEditError] = useState('')
   const [editSuccess, setEditSuccess] = useState('')
+  const [createForm, setCreateForm] = useState<CreateFormState | null>(null)
+  const [creatingUser, setCreatingUser] = useState(false)
+  const [createError, setCreateError] = useState('')
+
+  const openCreateUser = () => {
+    setCreateError('')
+    setCreateForm({
+      name: '',
+      email: '',
+      phone: '',
+      password: '',
+      role: 'USER',
+      province: '',
+      organization: '',
+      isVerified: true,
+      createPartnerProfile: false,
+      companyName: '',
+      displayOrder: '0',
+    })
+  }
+
+  const closeCreateUser = () => {
+    if (creatingUser) return
+    setCreateForm(null)
+    setCreateError('')
+  }
 
   useEffect(() => {
     const loadUsers = async () => {
@@ -155,6 +195,65 @@ export function UserManager({ backHref }: UserManagerProps) {
     const tableRows = exportRows.map((row) => `<tr>${row.map((cell) => `<td>${escapeXmlValue(cell)}</td>`).join('')}</tr>`).join('')
     const excelContent = `<!DOCTYPE html><html><head><meta charset="UTF-8" /></head><body><table border="1"><thead><tr>${tableHeader}</tr></thead><tbody>${tableRows}</tbody></table></body></html>`
     downloadBlob(excelContent, `users-${new Date().toISOString().slice(0, 10)}.xls`, 'application/vnd.ms-excel;charset=utf-8;')
+  }
+
+  const submitCreateUser = async () => {
+    if (!createForm) return
+
+    if (!createForm.name.trim() || !createForm.email.trim() || !createForm.password) {
+      setCreateError('Vui lòng nhập họ tên, email và mật khẩu tạm.')
+      return
+    }
+
+    if (createForm.password.length < 8) {
+      setCreateError('Mật khẩu tạm phải có ít nhất 8 ký tự.')
+      return
+    }
+
+    if (createForm.role === 'BUSINESS' && !createForm.organization.trim()) {
+      setCreateError('Tài khoản doanh nghiệp cần có tổ chức/lĩnh vực kinh doanh.')
+      return
+    }
+
+    if (createForm.role === 'BUSINESS' && createForm.createPartnerProfile && !(createForm.companyName || createForm.organization).trim()) {
+      setCreateError('Vui lòng nhập tên doanh nghiệp để tạo hồ sơ đối tác.')
+      return
+    }
+
+    try {
+      setCreatingUser(true)
+      setCreateError('')
+      const response = await fetch('/api/admin/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: createForm.name.trim(),
+          email: createForm.email.trim(),
+          phone: createForm.phone.trim() || null,
+          password: createForm.password,
+          role: createForm.role,
+          province: createForm.province.trim() || null,
+          organization: createForm.organization.trim() || null,
+          isVerified: createForm.isVerified,
+          createPartnerProfile: createForm.role === 'BUSINESS' && createForm.createPartnerProfile,
+          companyName: createForm.companyName.trim() || createForm.organization.trim(),
+          displayOrder: Number(createForm.displayOrder) || 0,
+        }),
+      })
+      const data = await response.json()
+      if (!response.ok) throw new Error(data.error || 'Không thể tạo tài khoản')
+
+      setUsers((prev) => [data.user, ...prev])
+      if (data.partner?.ownerUserId) {
+        setPartnerOwnerIds((prev) => (prev.includes(data.partner.ownerUserId) ? prev : [...prev, data.partner.ownerUserId]))
+      }
+      setEditSuccess(data.partner ? 'Đã tạo tài khoản doanh nghiệp và hồ sơ đối tác.' : 'Đã tạo tài khoản mới.')
+      closeCreateUser()
+    } catch (error) {
+      setCreateError(error instanceof Error ? error.message : 'Không thể tạo tài khoản')
+    } finally {
+      setCreatingUser(false)
+    }
   }
 
   const openEditUser = (user: AdminUser) => {
@@ -305,6 +404,10 @@ export function UserManager({ backHref }: UserManagerProps) {
           <p className="text-sm text-gray-600">Admin có thể xem danh sách tài khoản đã đăng ký, trạng thái xác minh và mức độ hoạt động cơ bản.</p>
         </div>
         <div className="flex flex-wrap gap-2">
+          <button type="button" onClick={openCreateUser} className="inline-flex items-center rounded-md bg-emerald-600 px-3 py-2 text-sm font-medium text-white hover:bg-emerald-700">
+            <Plus className="mr-2 h-4 w-4" />
+            Tạo tài khoản
+          </button>
           <button type="button" onClick={handleExportCsv} className="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
             <Download className="mr-2 h-4 w-4" />
             Tải CSV
@@ -371,6 +474,85 @@ export function UserManager({ backHref }: UserManagerProps) {
           {loading && <div className="px-5 py-10 text-center text-sm text-gray-500">Đang tải danh sách người dùng...</div>}
         </div>
       </div>
+
+      {createForm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-4">
+          <div className="w-full max-w-2xl rounded-xl bg-white shadow-xl">
+            <div className="flex items-center justify-between border-b px-6 py-4">
+              <h3 className="text-lg font-semibold text-gray-900">Tạo tài khoản</h3>
+              <button type="button" onClick={closeCreateUser} className="rounded-md p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700" aria-label="Đóng"><X className="h-5 w-5" /></button>
+            </div>
+
+            <div className="grid gap-4 px-6 py-5 md:grid-cols-2">
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-700">Loại tài khoản</label>
+                <select value={createForm.role} onChange={(event) => setCreateForm((prev) => (prev ? { ...prev, role: event.target.value as CreateFormState['role'], createPartnerProfile: event.target.value === 'BUSINESS' ? prev.createPartnerProfile : false } : prev))} className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+                  <option value="USER">Cá nhân</option>
+                  <option value="BUSINESS">Doanh nghiệp</option>
+                </select>
+              </div>
+              <div className="flex items-end">
+                <label className="inline-flex items-center gap-2 text-sm text-gray-700">
+                  <input type="checkbox" checked={createForm.isVerified} onChange={(event) => setCreateForm((prev) => (prev ? { ...prev, isVerified: event.target.checked } : prev))} className="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-500" />
+                  Xác minh ngay
+                </label>
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-700">Họ tên</label>
+                <input type="text" value={createForm.name} onChange={(event) => setCreateForm((prev) => (prev ? { ...prev, name: event.target.value } : prev))} className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500" />
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-700">Email</label>
+                <input type="email" value={createForm.email} onChange={(event) => setCreateForm((prev) => (prev ? { ...prev, email: event.target.value } : prev))} className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500" />
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-700">Số điện thoại</label>
+                <input type="text" value={createForm.phone} onChange={(event) => setCreateForm((prev) => (prev ? { ...prev, phone: event.target.value } : prev))} className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500" />
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-700">Mật khẩu tạm</label>
+                <input type="password" value={createForm.password} onChange={(event) => setCreateForm((prev) => (prev ? { ...prev, password: event.target.value } : prev))} placeholder="Ít nhất 8 ký tự" className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500" />
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-700">Tỉnh/Thành</label>
+                <input type="text" value={createForm.province} onChange={(event) => setCreateForm((prev) => (prev ? { ...prev, province: event.target.value } : prev))} className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500" />
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-700">{createForm.role === 'BUSINESS' ? 'Tổ chức / lĩnh vực kinh doanh' : 'Tổ chức'}</label>
+                <input type="text" value={createForm.organization} onChange={(event) => setCreateForm((prev) => (prev ? { ...prev, organization: event.target.value, companyName: prev.companyName || event.target.value } : prev))} className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500" />
+              </div>
+
+              {createForm.role === 'BUSINESS' && (
+                <div className="md:col-span-2 rounded-lg border border-emerald-100 bg-emerald-50 p-4">
+                  <label className="mb-3 inline-flex items-center gap-2 text-sm font-medium text-emerald-900">
+                    <input type="checkbox" checked={createForm.createPartnerProfile} onChange={(event) => setCreateForm((prev) => (prev ? { ...prev, createPartnerProfile: event.target.checked } : prev))} className="h-4 w-4 rounded border-emerald-300 text-emerald-600 focus:ring-emerald-500" />
+                    Tạo hồ sơ đối tác ngay
+                  </label>
+                  {createForm.createPartnerProfile && (
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">Tên doanh nghiệp</label>
+                        <input type="text" value={createForm.companyName} onChange={(event) => setCreateForm((prev) => (prev ? { ...prev, companyName: event.target.value } : prev))} className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+                      </div>
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">Thứ tự hiển thị</label>
+                        <input type="number" value={createForm.displayOrder} onChange={(event) => setCreateForm((prev) => (prev ? { ...prev, displayOrder: event.target.value } : prev))} className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {createError && <div className="px-6 pb-2"><p className="text-sm text-red-600">{createError}</p></div>}
+
+            <div className="flex items-center justify-end gap-2 border-t px-6 py-4">
+              <button type="button" onClick={closeCreateUser} disabled={creatingUser} className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60">Hủy</button>
+              <button type="button" onClick={() => void submitCreateUser()} disabled={creatingUser} className="inline-flex items-center rounded-md bg-emerald-600 px-3 py-2 text-sm font-medium text-white hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60"><Plus className="mr-2 h-4 w-4" />{creatingUser ? 'Đang tạo...' : 'Tạo tài khoản'}</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {editForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-4">

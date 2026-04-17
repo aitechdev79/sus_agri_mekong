@@ -1,17 +1,18 @@
 'use client';
 
 import Link from 'next/link';
-import { Mail, MapPin, Phone } from 'lucide-react';
+import { Facebook, Linkedin, Mail, MapPin, Phone, Twitter, Youtube } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { getLocaleFromPathname, withLocalePrefix } from '@/lib/content-locale';
 
 const socialLinks = [
-  { label: 'Facebook', href: 'https://www.facebook.com/VCCIHCMC/' },
-  { label: 'Twitter/X', href: 'https://twitter.com/VCCI_HCM' },
-  { label: 'YouTube', href: 'https://www.youtube.com/user/VCCIHCMC' },
+  { label: 'Facebook', href: 'https://www.facebook.com/VCCIHCMC/', icon: Facebook },
+  { label: 'Twitter/X', href: 'https://twitter.com/VCCI_HCM', icon: Twitter },
+  { label: 'YouTube', href: 'https://www.youtube.com/user/VCCIHCMC', icon: Youtube },
   {
     label: 'LinkedIn',
     href: 'https://www.linkedin.com/company/vietnam-chamber-of-commerce-and-industry-ho-chi-minh-city-branch-vcci-hcm-',
+    icon: Linkedin,
   },
 ];
 
@@ -92,18 +93,24 @@ export default function Footer() {
               {isEn ? 'Connect' : 'KẾT NỐI'}
             </h3>
             <div className="flex flex-wrap gap-3">
-              {socialLinks.map((item) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="rounded border border-white/25 px-3 py-2 font-montserrat text-sm transition-colors hover:border-vn-gold hover:text-vn-gold"
-                  style={{ color: 'rgba(255, 255, 255, 0.8)' }}
-                >
-                  {item.label}
-                </a>
-              ))}
+              {socialLinks.map((item) => {
+                const Icon = item.icon;
+
+                return (
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={item.label}
+                    title={item.label}
+                    className="inline-flex h-11 w-11 items-center justify-center rounded border border-white/25 transition-colors hover:border-vn-gold hover:text-vn-gold"
+                    style={{ color: 'rgba(255, 255, 255, 0.8)' }}
+                  >
+                    <Icon className="h-5 w-5" strokeWidth={2.1} />
+                  </a>
+                );
+              })}
             </div>
           </div>
         </div>
