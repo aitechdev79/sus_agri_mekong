@@ -8,7 +8,7 @@ export default function LibraryAndToolsWrapper() {
   return (
     <div className="relative overflow-visible w-full bg-white">
       {/* Shared Background SVG - Extended to cover sections below */}
-      <div className="absolute inset-0 w-full opacity-40" style={{ height: '200%' }}>
+      <div className="pointer-events-none absolute inset-0 w-full opacity-40" style={{ height: '200%' }}>
         <Image
           src="/vecteezy_topo_34242655.svg"
           alt="Topographic background"
@@ -20,7 +20,7 @@ export default function LibraryAndToolsWrapper() {
       </div>
 
       {/* Light yellow transparent overlay */}
-      <div className="absolute inset-0 w-full" style={{ height: '200%', backgroundColor: 'rgba(255, 248, 225, 0.3)' }}></div>
+      <div className="pointer-events-none absolute inset-0 w-full" style={{ height: '200%', backgroundColor: 'rgba(255, 248, 225, 0.3)' }}></div>
 
       {/* Content - Both sections stacked */}
       <div className="relative z-10">
