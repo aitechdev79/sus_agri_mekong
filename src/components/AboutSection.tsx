@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { getLocaleFromPathname, withLocalePrefix } from '@/lib/content-locale';
+import { HOME_STATS_DEFAULTS, HOME_STATS_FIELDS } from '@/lib/home-stats';
 
 interface Stats {
   publishedReports: number;
@@ -19,19 +20,23 @@ export default function AboutSection() {
   const isEn = locale === 'en';
 
   const [stats, setStats] = useState<Stats>({
-    publishedReports: 0,
-    trackedPolicies: 0,
-    members: 0,
-    supportedInitiatives: 0
+    ...HOME_STATS_DEFAULTS
   });
 
   useEffect(() => {
-    setStats({
-      publishedReports: 10,
-      trackedPolicies: 20,
-      members: 5000,
-      supportedInitiatives: 15
-    });
+    const loadStats = async () => {
+      try {
+        const response = await fetch('/api/home-stats');
+        const data = await response.json();
+        if (response.ok && data?.stats) {
+          setStats({ ...HOME_STATS_DEFAULTS, ...data.stats });
+        }
+      } catch (error) {
+        console.error('Home stats fetch error:', error);
+      }
+    };
+
+    void loadStats();
   }, []);
 
   const infoCards = [
@@ -76,26 +81,15 @@ export default function AboutSection() {
             </p>
 
             <div className="mb-8 grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="bg-white rounded-lg shadow-md p-4 text-center relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-1 bg-vn-green" />
-                <div className="text-3xl font-bold text-vn-gold font-montserrat mb-2">{stats.publishedReports}</div>
-                <div className="text-xs text-vn-dark font-montserrat">{isEn ? 'Published reports' : 'Số báo cáo được xuất bản'}</div>
-              </div>
-              <div className="bg-white rounded-lg shadow-md p-4 text-center relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-1 bg-vn-green" />
-                <div className="text-3xl font-bold text-vn-gold font-montserrat mb-2">{stats.trackedPolicies}</div>
-                <div className="text-xs text-vn-dark font-montserrat">{isEn ? 'Tracked policies' : 'Số chính sách đã theo dõi'}</div>
-              </div>
-              <div className="bg-white rounded-lg shadow-md p-4 text-center relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-1 bg-vn-green" />
-                <div className="text-3xl font-bold text-vn-gold font-montserrat mb-2">{stats.members}</div>
-                <div className="text-xs text-vn-dark font-montserrat">{isEn ? 'Community members' : 'Số thành viên tham gia'}</div>
-              </div>
-              <div className="bg-white rounded-lg shadow-md p-4 text-center relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-1 bg-vn-green" />
-                <div className="text-3xl font-bold text-vn-gold font-montserrat mb-2">{stats.supportedInitiatives}</div>
-                <div className="text-xs text-vn-dark font-montserrat">{isEn ? 'Supported initiatives' : 'Số sáng kiến được hỗ trợ'}</div>
-              </div>
+              {HOME_STATS_FIELDS.map((field) => (
+                <div key={field.key} className="bg-white rounded-lg shadow-md p-4 text-center relative overflow-hidden">
+                  <div className="absolute top-0 left-0 w-full h-1 bg-vn-green" />
+                  <div className="text-3xl font-bold text-vn-gold font-montserrat mb-2">
+                    {stats[field.key].toLocaleString(locale === 'en' ? 'en-US' : 'vi-VN')}
+                  </div>
+                  <div className="text-xs text-vn-dark font-montserrat">{isEn ? field.labelEn : field.labelVi}</div>
+                </div>
+              ))}
             </div>
           </div>
 

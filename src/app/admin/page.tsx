@@ -9,6 +9,7 @@ import NavigationBar from '@/components/NavigationBar'
 import { ContentTable } from '@/components/admin/ContentTable'
 import { ContentForm } from '@/components/admin/ContentForm'
 import { AiNewsPanel } from '@/components/admin/AiNewsPanel'
+import { HomeStatsManager } from '@/components/admin/HomeStatsManager'
 import { Button } from '@/components/ui/button'
 import { AdminContent } from '@/types/content'
 import { useAdminCategories } from '@/hooks/use-admin-categories'
@@ -243,6 +244,12 @@ export default function AdminPage() {
         <section className="mb-8">
           <AiNewsPanel />
         </section>
+
+        {session.user.role === 'ADMIN' && (
+          <section className="mb-8">
+            <HomeStatsManager />
+          </section>
+        )}
 
         <section className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm md:p-6">
           <div className="mb-4">
