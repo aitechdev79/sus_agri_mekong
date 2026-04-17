@@ -185,16 +185,7 @@ export default function AdminPage() {
                   className="inline-flex h-11 items-center justify-center rounded-xl border border-slate-200 px-4 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
                 >
                   <Users className="mr-2 h-4 w-4" />
-                  Quản lý người dùng
-                </Link>
-              )}
-              {session.user.role === 'ADMIN' && (
-                <Link
-                  href="/admin/categories"
-                  className="inline-flex h-11 items-center justify-center rounded-xl border border-slate-200 px-4 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
-                >
-                  <Tags className="mr-2 h-4 w-4" />
-                  Quản lý danh mục
+                  Quản lý người dùng (cá nhân, doanh nghiệp)
                 </Link>
               )}
               {session.user.role === 'ADMIN' && (
@@ -204,6 +195,15 @@ export default function AdminPage() {
                 >
                   <Users className="mr-2 h-4 w-4" />
                   Quản lý đối tác
+                </Link>
+              )}
+              {session.user.role === 'ADMIN' && (
+                <Link
+                  href="/admin/categories"
+                  className="inline-flex h-11 items-center justify-center rounded-xl border border-slate-200 px-4 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                >
+                  <Tags className="mr-2 h-4 w-4" />
+                  Quản lý danh mục
                 </Link>
               )}
             </div>

@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useEffect, useMemo, useState } from 'react'
+import { useSession } from 'next-auth/react'
 import { usePathname } from 'next/navigation'
 import { Handshake, Network, BookOpen } from 'lucide-react'
 import NavigationBar from '@/components/NavigationBar'
@@ -25,10 +26,14 @@ const FALLBACK_PARTNERS: PartnerItem[] = [
 ]
 
 export default function JoinUsPage() {
+  const { data: session } = useSession()
   const pathname = usePathname()
   const locale = getLocaleFromPathname(pathname)
   const isEn = locale === 'en'
-  const signUpBusinessHref = `${withLocalePrefix('/auth/signup', locale)}?role=business`
+  const signUpBusinessHref =
+    session?.user?.role === 'BUSINESS'
+      ? `${withLocalePrefix('/business/profile', locale)}?init=1`
+      : `${withLocalePrefix('/auth/signup', locale)}?role=business`
   const [partners, setPartners] = useState<PartnerItem[]>([])
   const [loadingPartners, setLoadingPartners] = useState(true)
 
