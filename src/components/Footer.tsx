@@ -8,17 +8,21 @@ export default function Footer() {
   const pathname = usePathname();
   const locale = getLocaleFromPathname(pathname);
   const isEn = locale === 'en';
+  const contactHref = withLocalePrefix('/contact', locale);
+  const signupHref = withLocalePrefix('/auth/signup', locale);
 
   return (
     <footer className="bg-vn-dark text-white">
       <div className="container mx-auto px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           <div>
-            <h3 className="font-montserrat font-semibold text-xl mb-4 text-vn-gold">
-              {isEn ? 'Contact' : 'Liên lạc'}
+            <h3 className="font-montserrat font-semibold text-xl mb-4">
+              <Link href={contactHref} className="text-vn-gold transition-colors duration-300 hover:text-white">
+                {isEn ? 'Contact' : 'Liên lạc'}
+              </Link>
             </h3>
             <Link
-              href={withLocalePrefix('/contact', locale)}
+              href={contactHref}
               className="hover:text-vn-gold transition-colors duration-300 text-base font-montserrat"
               style={{ color: 'rgba(255, 255, 255, 0.8)' }}
             >
@@ -27,15 +31,17 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="font-montserrat font-semibold text-xl mb-4 text-vn-gold">
-              {isEn ? 'Member Access' : 'Đăng ký thành viên'}
+            <h3 className="font-montserrat font-semibold text-xl mb-4">
+              <Link href={signupHref} className="text-vn-gold transition-colors duration-300 hover:text-white">
+                {isEn ? 'Member Registration' : 'Đăng ký thành viên'}
+              </Link>
             </h3>
             <Link
-              href={withLocalePrefix('/auth/signin', locale)}
+              href={signupHref}
               className="hover:text-vn-gold transition-colors duration-300 text-base font-montserrat"
               style={{ color: 'rgba(255, 255, 255, 0.8)' }}
             >
-              {isEn ? 'Sign in now' : 'Đăng ký ngay'}
+              {isEn ? 'Register now' : 'Đăng ký ngay'}
             </Link>
           </div>
         </div>
