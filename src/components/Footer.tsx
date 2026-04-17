@@ -15,14 +15,14 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           <div>
             <h3 className="font-montserrat font-semibold text-xl mb-4 text-vn-gold">
-              {isEn ? 'Contact' : 'Liên hệ'}
+              {isEn ? 'Contact' : 'Liên lạc'}
             </h3>
             <Link
               href={withLocalePrefix('/contact', locale)}
               className="hover:text-vn-gold transition-colors duration-300 text-base font-montserrat"
               style={{ color: 'rgba(255, 255, 255, 0.8)' }}
             >
-              {isEn ? 'Contact page' : 'Trang liên hệ'}
+              {isEn ? 'Contact page' : 'Trang liên lạc'}
             </Link>
           </div>
 

@@ -19,14 +19,10 @@ export function SearchFilters({ selectedCategory, selectedType, onFilterChange }
 
   const contentTypes = [
     { value: '', label: isEn ? 'All types' : 'Tất cả loại' },
-    { value: 'ARTICLE', label: isEn ? 'Article' : 'Bài viết' },
-    { value: 'VIDEO', label: 'Video' },
     { value: 'DOCUMENT', label: isEn ? 'Document' : 'Tài liệu' },
     { value: 'STORY', label: isEn ? 'Story' : 'Điển hình' },
     { value: 'PROJECT_ACTIVITY', label: isEn ? 'Project activity' : 'Hoạt động dự án' },
-    { value: 'GUIDE', label: isEn ? 'Guide' : 'Hướng dẫn' },
     { value: 'POLICY', label: isEn ? 'Policy' : 'Chính sách' },
-    { value: 'INFOGRAPHIC', label: 'Infographic' },
     { value: 'NEWS', label: isEn ? 'News' : 'Tin tức' },
     { value: 'EVENT', label: isEn ? 'Event' : 'Sự kiện' }
   ]
@@ -64,7 +60,6 @@ export function SearchFilters({ selectedCategory, selectedType, onFilterChange }
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {/* Category Filter */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             {isEn ? 'Category' : 'Danh mục'}
@@ -84,7 +79,6 @@ export function SearchFilters({ selectedCategory, selectedType, onFilterChange }
           </select>
         </div>
 
-        {/* Type Filter */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             {isEn ? 'Content type' : 'Loại nội dung'}
@@ -102,7 +96,6 @@ export function SearchFilters({ selectedCategory, selectedType, onFilterChange }
           </select>
         </div>
 
-        {/* Clear Filters */}
         <div className="flex items-end">
           <button
             onClick={clearFilters}
@@ -113,14 +106,13 @@ export function SearchFilters({ selectedCategory, selectedType, onFilterChange }
         </div>
       </div>
 
-      {/* Active Filters */}
       {(selectedCategory || selectedType) && (
         <div className="flex flex-wrap gap-2 pt-2 border-t">
           <span className="text-sm text-gray-600">{isEn ? 'Active filters:' : 'Bộ lọc đang áp dụng:'}</span>
           {selectedCategory && (
             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
               {(() => {
-                const category = categories.find(c => c.slug === selectedCategory)
+                const category = categories.find((item) => item.slug === selectedCategory)
                 if (!category) return selectedCategory
                 return isEn ? category.nameEn || category.name || category.nameVi : category.nameVi || category.name
               })()}
@@ -134,7 +126,7 @@ export function SearchFilters({ selectedCategory, selectedType, onFilterChange }
           )}
           {selectedType && (
             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-              {contentTypes.find(t => t.value === selectedType)?.label}
+              {contentTypes.find((item) => item.value === selectedType)?.label}
               <button
                 onClick={() => handleTypeChange('')}
                 className="ml-1 text-blue-600 hover:text-blue-800"
