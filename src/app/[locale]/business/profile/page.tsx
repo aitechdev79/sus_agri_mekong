@@ -12,6 +12,10 @@ interface BusinessProfile {
   id: string
   companyName: string
   slug: string
+  status: 'DRAFT' | 'PENDING' | 'APPROVED' | 'REJECTED' | 'SUSPENDED'
+  isPublic: boolean
+  isVerified: boolean
+  reviewNotes: string | null
   logoUrl: string | null
   website: string | null
   contactEmail: string | null
@@ -30,7 +34,10 @@ export default function BusinessProfilePage() {
 
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [submittingForReview, setSubmittingForReview] = useState(false)
   const [uploadingLogo, setUploadingLogo] = useState(false)
+  const [profileStatus, setProfileStatus] = useState<BusinessProfile['status'] | null>(null)
+  const [reviewNotes, setReviewNotes] = useState<string | null>(null)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const [formData, setFormData] = useState({
@@ -61,8 +68,19 @@ export default function BusinessProfilePage() {
             noLogo: 'No logo uploaded',
             save: 'Save profile',
             saving: 'Saving...',
+            submitReview: 'Submit for review',
+            submittingReview: 'Submitting...',
             unauthorized: 'Only business accounts can access this page.',
             defaultSuccess: 'Business profile saved successfully.',
+            submitSuccess: 'Business profile submitted for admin review.',
+            statusLabel: 'Review status',
+            statusText: {
+              DRAFT: 'Draft',
+              PENDING: 'Pending review',
+              APPROVED: 'Approved',
+              REJECTED: 'Rejected',
+              SUSPENDED: 'Suspended',
+            },
           }
         : {
             title: 'Hoàn thiện hồ sơ doanh nghiệp',
@@ -79,8 +97,19 @@ export default function BusinessProfilePage() {
             noLogo: 'Chưa có logo',
             save: 'Lưu hồ sơ',
             saving: 'Đang lưu...',
+            submitReview: 'Gửi duyệt',
+            submittingReview: 'Đang gửi...',
             unauthorized: 'Chỉ tài khoản doanh nghiệp mới truy cập được trang này.',
             defaultSuccess: 'Đã lưu hồ sơ doanh nghiệp thành công.',
+            submitSuccess: 'Đã gửi hồ sơ doanh nghiệp cho admin duyệt.',
+            statusLabel: 'Trạng thái duyệt',
+            statusText: {
+              DRAFT: 'Bản nháp',
+              PENDING: 'Đang chờ duyệt',
+              APPROVED: 'Đã duyệt',
+              REJECTED: 'Bị từ chối',
+              SUSPENDED: 'Tạm ngưng',
+            },
           },
     [isEn],
   )
@@ -151,6 +180,8 @@ export default function BusinessProfilePage() {
   }
 
   const fillForm = (profile: BusinessProfile) => {
+    setProfileStatus(profile.status)
+    setReviewNotes(profile.reviewNotes)
     setFormData({
       companyName: profile.companyName || '',
       logoUrl: profile.logoUrl || '',
@@ -188,6 +219,32 @@ export default function BusinessProfilePage() {
       setError(submitError instanceof Error ? submitError.message : 'Đã xảy ra lỗi')
     } finally {
       setSaving(false)
+    }
+  }
+
+  const handleSubmitForReview = async () => {
+    setSubmittingForReview(true)
+    setError('')
+    setSuccess('')
+
+    try {
+      const response = await fetch('/api/business/profile/submit', {
+        method: 'POST',
+      })
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to submit profile')
+      }
+
+      if (data.profile) {
+        fillForm(data.profile as BusinessProfile)
+      }
+      setSuccess(text.submitSuccess)
+    } catch (submitError) {
+      setError(submitError instanceof Error ? submitError.message : 'Đã xảy ra lỗi')
+    } finally {
+      setSubmittingForReview(false)
     }
   }
 
@@ -257,6 +314,13 @@ export default function BusinessProfilePage() {
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
           <h1 className="text-2xl font-bold text-slate-900">{text.title}</h1>
           <p className="mt-2 text-sm text-slate-600">{text.subtitle}</p>
+          {profileStatus && (
+            <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+              <span className="font-semibold">{text.statusLabel}: </span>
+              {text.statusText[profileStatus]}
+              {reviewNotes && <p className="mt-2 text-slate-600">{reviewNotes}</p>}
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="mt-6 space-y-4">
             <div>
@@ -335,9 +399,19 @@ export default function BusinessProfilePage() {
             {error && <p className="text-sm text-rose-600">{error}</p>}
             {success && <p className="text-sm text-emerald-600">{success}</p>}
 
-            <Button type="submit" disabled={saving} className="rounded-lg bg-emerald-600 px-5 hover:bg-emerald-700">
-              {saving ? text.saving : text.save}
-            </Button>
+            <div className="flex flex-wrap gap-3">
+              <Button type="submit" disabled={saving || submittingForReview} className="rounded-lg bg-emerald-600 px-5 hover:bg-emerald-700">
+                {saving ? text.saving : text.save}
+              </Button>
+              <Button
+                type="button"
+                disabled={saving || submittingForReview || !profileStatus || profileStatus === 'PENDING' || profileStatus === 'APPROVED'}
+                onClick={() => void handleSubmitForReview()}
+                className="rounded-lg bg-amber-500 px-5 hover:bg-amber-600 disabled:opacity-60"
+              >
+                {submittingForReview ? text.submittingReview : text.submitReview}
+              </Button>
+            </div>
           </form>
         </div>
       </main>

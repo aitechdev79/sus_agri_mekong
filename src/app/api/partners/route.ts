@@ -15,6 +15,8 @@ export async function GET(request: NextRequest) {
 
     const partners = await prisma.businessProfile.findMany({
       where: {
+        status: "APPROVED",
+        isPublic: true,
         displayOrder: {
           gte: 0,
         },
