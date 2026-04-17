@@ -10,8 +10,7 @@ export async function GET(request: NextRequest) {
 
     const where = {
       status: 'PUBLISHED' as const,
-      type: 'PROJECT_ACTIVITY' as const,
-      sectionKey: 'HOME_HOAT_DONG_DU_AN' as const
+      type: 'PROJECT_ACTIVITY' as const
     }
 
     const [contents, total] = await Promise.all([
@@ -20,8 +19,10 @@ export async function GET(request: NextRequest) {
         select: {
           id: true,
           title: true,
+          titleEn: true,
           undertitle: true,
           description: true,
+          descriptionEn: true,
           projectUrl: true,
           thumbnailUrl: true,
           imageUrl: true,

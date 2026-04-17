@@ -7,13 +7,15 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { getLocaleFromPathname, withLocalePrefix } from '@/lib/content-locale';
+import { getLocaleFromPathname, pickLocalizedText, withLocalePrefix } from '@/lib/content-locale';
 
 interface ProjectActivityItem {
   id: string;
   title: string;
+  titleEn?: string | null;
   undertitle?: string | null;
   description?: string | null;
+  descriptionEn?: string | null;
   projectUrl?: string | null;
   thumbnailUrl?: string | null;
   imageUrl?: string | null;
@@ -161,25 +163,25 @@ export default function HoatDongDuAnPage() {
             ) : (
               <div className="grid grid-cols-1 items-stretch gap-8 md:grid-cols-3">
                 {items.map((item) => {
+                  const title = pickLocalizedText(locale, item.title, item.titleEn);
+                  const undertitle = item.undertitle;
+                  const description = pickLocalizedText(locale, item.description, item.descriptionEn);
                   const imageSrc = item.thumbnailUrl || item.imageUrl || '';
-                  const href = item.projectUrl || withLocalePrefix(`/content/${item.id}`, locale);
-                  const isExternal = Boolean(item.projectUrl);
+                  const href = withLocalePrefix(`/content/${item.id}`, locale);
 
                   return (
                     <Link
                       key={item.id}
                       href={href}
-                      target={isExternal ? '_blank' : undefined}
-                      rel={isExternal ? 'noopener noreferrer' : undefined}
                       className="group mx-auto flex h-full w-full max-w-md flex-col bg-white p-5 border md:mx-0 md:max-w-none"
                       style={{ borderColor: '#FFB81C' }}
-                      aria-label={`${item.title} - ${item.description || ''}`}
+                      aria-label={`${title} - ${description || ''}`}
                     >
                       {imageSrc && (
                         <div className="relative mb-4 overflow-hidden" style={{ aspectRatio: '16/9' }}>
                           <Image
                             src={imageSrc}
-                            alt={item.title}
+                            alt={title}
                             fill
                             className="object-cover transition-transform duration-500 group-hover:scale-110"
                             sizes="(max-width: 768px) 100vw, 33vw"
@@ -195,14 +197,14 @@ export default function HoatDongDuAnPage() {
                         ></div>
 
                         <h2 className="mb-2 text-lg font-bold font-montserrat md:text-xl" style={{ color: '#3C3C3B' }}>
-                          {item.title}
+                          {title}
                         </h2>
-                        {item.undertitle && (
+                        {undertitle && (
                           <p className="mb-2 text-xs font-semibold uppercase tracking-wide" style={{ color: '#6B7280' }}>
-                            {item.undertitle}
+                            {undertitle}
                           </p>
                         )}
-                        {item.description && (
+                        {description && (
                           <p
                             className="flex-1 text-sm font-montserrat md:text-base"
                             style={{
@@ -213,7 +215,7 @@ export default function HoatDongDuAnPage() {
                               overflow: 'hidden',
                             }}
                           >
-                            {item.description}
+                            {description}
                           </p>
                         )}
                       </div>
