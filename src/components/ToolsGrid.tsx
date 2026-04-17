@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Leaf, Search } from 'lucide-react';
+import { BarChart3, Leaf, Search } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { getLocaleFromPathname, withLocalePrefix } from '@/lib/content-locale';
 
@@ -64,7 +64,8 @@ export default function ToolsGrid() {
           </div>
 
           <div className="md:flex-1">
-            <div
+            <Link
+              href={withLocalePrefix('/reports', locale)}
               className="group block overflow-hidden transition-all duration-500 h-full"
               style={{ backgroundColor: '#0A7029', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)' }}
               onMouseEnter={(e) => {
@@ -73,18 +74,17 @@ export default function ToolsGrid() {
               onMouseLeave={(e) => {
                 e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.08)';
               }}
+              aria-label={isEn ? 'Research & Reports' : 'Nghiên cứu và Báo cáo'}
             >
               <div className="flex flex-col items-center justify-center text-center p-6 h-full transition-transform duration-500 group-hover:scale-105" style={{ minHeight: '100px' }}>
                 <div className="mb-3 w-12 h-12 bg-white/20 flex items-center justify-center">
-                  <span className="text-3xl">📊</span>
+                  <BarChart3 className="w-8 h-8 text-white" strokeWidth={2.25} />
                 </div>
-                <h3 className="font-montserrat font-black text-2xl mb-1 text-white">{isEn ? 'REPORT' : 'BÁO CÁO'}</h3>
-                <h4 className="font-montserrat font-black text-3xl mb-2 text-white">2025</h4>
-                <p className="font-montserrat text-sm font-semibold text-white/90">
-                  {isEn ? 'Sustainable Development' : 'Phát triển Bền vững'}
-                </p>
+                <h3 className="font-montserrat font-black text-2xl mb-1 text-white">
+                  {isEn ? 'RESEARCH & REPORTS' : 'NGHIÊN CỨU VÀ BÁO CÁO'}
+                </h3>
               </div>
-            </div>
+            </Link>
           </div>
         </div>
       </div>
