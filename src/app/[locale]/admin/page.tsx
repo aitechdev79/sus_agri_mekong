@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useLocale } from 'next-intl'
@@ -37,9 +37,57 @@ export default function AdminPage() {
   const [editingContent, setEditingContent] = useState<AdminContent | null>(null)
   const [contents, setContents] = useState<AdminContent[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [page, setPage] = useState(1)
+  const [limit, setLimit] = useState(20)
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 20,
+    total: 0,
+    pages: 1
+  })
   const { categories, categoryLabels, loadCategories, upsertCategory } = useAdminCategories(
     status !== 'loading' && !!session && (session.user.role === 'ADMIN' || session.user.role === 'MODERATOR')
   )
+
+  const fetchAdminData = useCallback(async (nextPage = page, nextLimit = limit) => {
+    try {
+      const response = await fetch(`/api/admin/content?page=${nextPage}&limit=${nextLimit}`)
+      if (!response.ok) {
+        throw new Error('Failed to fetch admin content')
+      }
+
+      const contentData = await response.json()
+      const nextContents = Array.isArray(contentData) ? contentData : contentData.contents || []
+      setContents(nextContents)
+      setPagination(contentData.pagination || {
+        page: nextPage,
+        limit: nextLimit,
+        total: nextContents.length,
+        pages: 1
+      })
+      setStats(contentData.stats ? {
+        totalContent: contentData.stats.total,
+        totalViews: contentData.stats.totalViews,
+        published: contentData.stats.published,
+        draft: contentData.stats.draft
+      } : {
+        totalContent: nextContents.length,
+        totalViews: nextContents.reduce((sum: number, item: AdminContent) => sum + item.viewCount, 0),
+        published: nextContents.filter((item: AdminContent) => item.status === 'PUBLISHED').length,
+        draft: nextContents.filter((item: AdminContent) => item.status === 'DRAFT').length
+      })
+    } catch (error) {
+      console.error('Error fetching admin data:', error)
+      setContents([])
+    } finally {
+      setIsLoading(false)
+    }
+  }, [page, limit])
+
+  const handleLimitChange = (nextLimit: number) => {
+    setLimit(nextLimit)
+    setPage(1)
+  }
 
   useEffect(() => {
     if (status === 'loading') return
@@ -55,31 +103,7 @@ export default function AdminPage() {
     }
 
     fetchAdminData()
-  }, [session, status, router, locale])
-
-  const fetchAdminData = async () => {
-    try {
-      const response = await fetch('/api/admin/content')
-      if (!response.ok) {
-        throw new Error('Failed to fetch admin content')
-      }
-
-      const contentData = await response.json()
-      const nextContents = Array.isArray(contentData) ? contentData : contentData.contents || []
-      setContents(nextContents)
-      setStats({
-        totalContent: nextContents.length,
-        totalViews: nextContents.reduce((sum: number, item: AdminContent) => sum + item.viewCount, 0),
-        published: nextContents.filter((item: AdminContent) => item.status === 'PUBLISHED').length,
-        draft: nextContents.filter((item: AdminContent) => item.status === 'DRAFT').length
-      })
-    } catch (error) {
-      console.error('Error fetching admin data:', error)
-      setContents([])
-    } finally {
-      setIsLoading(false)
-    }
-  }
+  }, [session, status, router, locale, fetchAdminData])
 
   const handleCreateContent = () => {
     setEditingContent(null)
@@ -164,7 +188,7 @@ export default function AdminPage() {
       <main className="flex-grow pb-8 pt-24 md:pb-10">
         <div className="container mx-auto px-6">
           <section className="mb-8 overflow-hidden rounded-3xl border border-sky-100 bg-white shadow-xl">
-            <div className="grid md:grid-cols-[1.2fr_1fr]">
+            <div>
               <div className="bg-sky-700 px-6 py-8 text-sky-50 md:px-8">
                 <h1 className="text-3xl font-bold">Admin Dashboard</h1>
                 <p className="mt-3 max-w-xl text-sm text-sky-100">
@@ -184,40 +208,6 @@ export default function AdminPage() {
                     <div className="mt-1 text-xl font-semibold">{stats.draft}</div>
                   </div>
                 </div>
-              </div>
-
-              <div className="grid gap-3 bg-white p-6 md:p-8">
-                <Button onClick={handleCreateContent} className="h-11 justify-center rounded-xl bg-emerald-600 hover:bg-emerald-700">
-                  <Plus className="mr-2 h-4 w-4" />
-                  Thêm nội dung
-                </Button>
-                {session.user.role === 'ADMIN' && (
-                  <Link
-                    href={`/${locale}/admin/users`}
-                    className="inline-flex h-11 items-center justify-center rounded-xl border border-slate-200 px-4 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
-                  >
-                    <Users className="mr-2 h-4 w-4" />
-                    Quản lý người dùng (cá nhân, doanh nghiệp)
-                  </Link>
-                )}
-                {session.user.role === 'ADMIN' && (
-                  <Link
-                    href={`/${locale}/admin/partners`}
-                    className="inline-flex h-11 items-center justify-center rounded-xl border border-slate-200 px-4 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
-                  >
-                    <Users className="mr-2 h-4 w-4" />
-                    Quản lý đối tác
-                  </Link>
-                )}
-                {session.user.role === 'ADMIN' && (
-                  <Link
-                    href={`/${locale}/admin/categories`}
-                    className="inline-flex h-11 items-center justify-center rounded-xl border border-slate-200 px-4 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
-                  >
-                    <Tags className="mr-2 h-4 w-4" />
-                    Quản lý danh mục
-                  </Link>
-                )}
               </div>
             </div>
           </section>
@@ -267,6 +257,81 @@ export default function AdminPage() {
             <div className="mb-4">
               <h2 className="text-xl font-semibold text-slate-900">Danh sách nội dung</h2>
               <p className="mt-1 text-sm text-slate-600">Quản lý chỉnh sửa, xuất bản và thao tác hàng loạt.</p>
+            </div>
+            <div className="mb-4 grid gap-3 rounded-2xl border border-slate-200 bg-white p-4">
+              <Button onClick={handleCreateContent} className="h-11 justify-center rounded-xl bg-emerald-600 hover:bg-emerald-700">
+                <Plus className="mr-2 h-4 w-4" />
+                Thêm nội dung
+              </Button>
+              {session.user.role === 'ADMIN' && (
+                <Link
+                  href={`/${locale}/admin/users`}
+                  className="inline-flex h-11 items-center justify-center rounded-xl border border-slate-200 px-4 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                >
+                  <Users className="mr-2 h-4 w-4" />
+                  Quản lý người dùng (cá nhân, doanh nghiệp)
+                </Link>
+              )}
+              {session.user.role === 'ADMIN' && (
+                <Link
+                  href={`/${locale}/admin/partners`}
+                  className="inline-flex h-11 items-center justify-center rounded-xl border border-slate-200 px-4 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                >
+                  <Users className="mr-2 h-4 w-4" />
+                  Quản lý đối tác
+                </Link>
+              )}
+              {session.user.role === 'ADMIN' && (
+                <Link
+                  href={`/${locale}/admin/categories`}
+                  className="inline-flex h-11 items-center justify-center rounded-xl border border-slate-200 px-4 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                >
+                  <Tags className="mr-2 h-4 w-4" />
+                  Quản lý danh mục
+                </Link>
+              )}
+            </div>
+            <div className="mb-4 flex flex-col gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+              <div className="text-sm text-slate-600">
+                Hiển thị {contents.length > 0 ? (pagination.page - 1) * pagination.limit + 1 : 0}
+                {' - '}
+                {Math.min(pagination.page * pagination.limit, pagination.total)}
+                {' / '}
+                {pagination.total} nội dung
+              </div>
+              <div className="flex flex-wrap items-center gap-3">
+                <label className="flex items-center gap-2 text-sm text-slate-600">
+                  Số dòng
+                  <select
+                    value={limit}
+                    onChange={(event) => handleLimitChange(Number(event.target.value))}
+                    className="rounded-md border border-slate-300 bg-white px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  >
+                    <option value={20}>20</option>
+                    <option value={50}>50</option>
+                    <option value={100}>100</option>
+                  </select>
+                </label>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  disabled={pagination.page <= 1}
+                  onClick={() => setPage((current) => Math.max(1, current - 1))}
+                >
+                  Trước
+                </Button>
+                <span className="text-sm text-slate-600">
+                  Trang {pagination.page} / {pagination.pages}
+                </span>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  disabled={pagination.page >= pagination.pages}
+                  onClick={() => setPage((current) => Math.min(pagination.pages, current + 1))}
+                >
+                  Sau
+                </Button>
+              </div>
             </div>
             <ContentTable
               contents={contents}

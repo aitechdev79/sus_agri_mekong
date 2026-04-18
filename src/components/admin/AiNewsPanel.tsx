@@ -1,7 +1,23 @@
 "use client";
 
 import { ChangeEvent, useMemo, useState } from "react";
-import { Download, FileText, Loader2, Newspaper, Sparkles } from "lucide-react";
+import {
+  Bot,
+  CalendarDays,
+  FileText,
+  FileUp,
+  Globe2,
+  Languages,
+  Link as LinkIcon,
+  Loader2,
+  MapPin,
+  Newspaper,
+  Search,
+  Settings2,
+  SlidersHorizontal,
+  Sparkles,
+  Type,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { NewsArticle, NewsSearchEngine, NewsSearchResponse } from "@/types/ai-news";
 
@@ -193,36 +209,6 @@ export function AiNewsPanel() {
     }
   };
 
-  const downloadCsv = () => {
-    const rows = selectedArticles.length > 0 ? selectedArticles : displayArticles;
-    if (!rows.length) return;
-
-    const escapeCell = (value: string): string => `"${value.replace(/"/g, '""')}"`;
-    const headers = ["title", "source", "publishedDate", "normalizedDate", "url", "content"];
-    const body = rows.map((item) =>
-      [
-        item.title,
-        item.source,
-        item.publishedDate,
-        item.normalizedDate || "",
-        item.url,
-        item.content,
-      ]
-        .map((cell) => escapeCell(String(cell || "")))
-        .join(","),
-    );
-
-    const csv = [headers.join(","), ...body].join("\n");
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "ai-news-results.csv";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(link.href);
-  };
-
   const canSummarizeNews = sourceMode === "news" && selectedArticles.length > 0;
   const canSummarizePdfUrl = sourceMode === "pdf-url" && pdfUrl.trim().length > 0;
   const canSummarizePdfUpload = sourceMode === "pdf-upload" && !!pdfFile;
@@ -242,105 +228,178 @@ export function AiNewsPanel() {
           Tìm tin theo chủ đề, địa lý và thời gian với SerpAPI. Có thể dùng OpenAI để tối ưu truy vấn tìm kiếm.
         </p>
 
-        <div className="grid gap-3">
-          <input
-            value={form.topic}
-            onChange={(event) => setForm((prev) => ({ ...prev, topic: event.target.value }))}
-            className="rounded-md border border-gray-300 px-3 py-2 text-sm"
-            placeholder="Chủ đề"
-          />
-          <input
-            value={form.geoScope}
-            onChange={(event) => setForm((prev) => ({ ...prev, geoScope: event.target.value }))}
-            className="rounded-md border border-gray-300 px-3 py-2 text-sm"
-            placeholder="Phạm vi địa lý"
-          />
-
-          <div className="grid gap-3 md:grid-cols-2">
-            <select
-              value={form.engine}
-              onChange={(event) =>
-                setForm((prev) => ({ ...prev, engine: event.target.value as NewsSearchEngine }))
-              }
-              className="rounded-md border border-gray-300 px-3 py-2 text-sm"
-            >
-              <option value="google_news">Google News</option>
-              <option value="google">Google Search</option>
-              <option value="bing_news">Bing News</option>
-            </select>
-            <select
-              value={form.lang}
-              onChange={(event) => setForm((prev) => ({ ...prev, lang: event.target.value as "vi" | "en" }))}
-              className="rounded-md border border-gray-300 px-3 py-2 text-sm"
-            >
-              <option value="vi">Tiếng Việt</option>
-              <option value="en">English</option>
-            </select>
+        <div className="grid gap-4">
+          <div className="rounded-lg border border-blue-100 bg-blue-50/60 p-4">
+            <div className="mb-3 flex items-start gap-3">
+              <div className="rounded-md bg-white p-2 text-blue-700">
+                <Search className="h-4 w-4" />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-900">1. Nhập nội dung cần tìm</label>
+                <p className="mt-1 text-xs text-gray-600">Mô tả chủ đề và khu vực để AI tìm đúng nhóm tin cần thu thập.</p>
+              </div>
+            </div>
+            <div className="grid gap-3">
+              <div className="grid gap-2">
+                <label className="flex items-center gap-2 text-sm font-semibold text-gray-800">
+                  <FileText className="h-4 w-4 text-gray-500" />
+                  Chủ đề
+                </label>
+                <input
+                  value={form.topic}
+                  onChange={(event) => setForm((prev) => ({ ...prev, topic: event.target.value }))}
+                  className="rounded-md border border-blue-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Ví dụ: nông nghiệp bền vững"
+                />
+              </div>
+              <div className="grid gap-2">
+                <label className="flex items-center gap-2 text-sm font-semibold text-gray-800">
+                  <MapPin className="h-4 w-4 text-gray-500" />
+                  Phạm vi địa lý
+                </label>
+                <input
+                  value={form.geoScope}
+                  onChange={(event) => setForm((prev) => ({ ...prev, geoScope: event.target.value }))}
+                  className="rounded-md border border-blue-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Ví dụ: Việt Nam, ASEAN"
+                />
+              </div>
+            </div>
           </div>
 
-          <div className="grid gap-3 md:grid-cols-2">
-            <input
-              type="number"
-              min={1}
-              max={20}
-              value={form.maxResults}
-              onChange={onNumberInput("maxResults")}
-              className="rounded-md border border-gray-300 px-3 py-2 text-sm"
-              placeholder="Số kết quả"
-            />
-            <input
-              type="number"
-              min={0}
-              max={90}
-              value={form.timeframeDays}
-              onChange={onNumberInput("timeframeDays")}
-              className="rounded-md border border-gray-300 px-3 py-2 text-sm"
-              placeholder="Số ngày"
-            />
+          <div className="rounded-lg border border-indigo-100 bg-indigo-50/60 p-4">
+            <div className="mb-3 flex items-start gap-3">
+              <div className="rounded-md bg-white p-2 text-indigo-700">
+                <Globe2 className="h-4 w-4" />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-900">2. Chọn nguồn tìm kiếm và ngôn ngữ</label>
+                <p className="mt-1 text-xs text-gray-600">Google News thường phù hợp nhất cho tin mới; Google Search rộng hơn.</p>
+              </div>
+            </div>
+            <div className="grid gap-3 md:grid-cols-2">
+              <select
+                value={form.engine}
+                onChange={(event) =>
+                  setForm((prev) => ({ ...prev, engine: event.target.value as NewsSearchEngine }))
+                }
+                className="rounded-md border border-indigo-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              >
+                <option value="google_news">Google News</option>
+                <option value="google">Google Search</option>
+                <option value="bing_news">Bing News</option>
+              </select>
+              <select
+                value={form.lang}
+                onChange={(event) => setForm((prev) => ({ ...prev, lang: event.target.value as "vi" | "en" }))}
+                className="rounded-md border border-indigo-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              >
+                <option value="vi">Tiếng Việt</option>
+                <option value="en">English</option>
+              </select>
+            </div>
           </div>
 
-          <label className="flex items-center gap-2 text-sm text-gray-700">
-            <input
-              type="checkbox"
-              checked={form.useAiQuery}
-              onChange={(event) => setForm((prev) => ({ ...prev, useAiQuery: event.target.checked }))}
-            />
-            Dùng OpenAI để tối ưu truy vấn
-          </label>
+          <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+            <div className="mb-3 flex items-start gap-3">
+              <div className="rounded-md bg-white p-2 text-slate-700">
+                <SlidersHorizontal className="h-4 w-4" />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-900">3. Giới hạn kết quả</label>
+                <p className="mt-1 text-xs text-gray-600">Điều chỉnh số tin và khoảng thời gian để danh sách không quá rộng.</p>
+              </div>
+            </div>
+            <div className="grid gap-3 md:grid-cols-2">
+              <div className="grid gap-2">
+                <label className="flex items-center gap-2 text-sm font-semibold text-gray-800">
+                  <Newspaper className="h-4 w-4 text-gray-500" />
+                  Số kết quả mới
+                </label>
+                <input
+                  type="number"
+                  min={1}
+                  max={20}
+                  value={form.maxResults}
+                  onChange={onNumberInput("maxResults")}
+                  className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-500"
+                  placeholder="Số kết quả"
+                />
+              </div>
+              <div className="grid gap-2">
+                <label className="flex items-center gap-2 text-sm font-semibold text-gray-800">
+                  <CalendarDays className="h-4 w-4 text-gray-500" />
+                  Số ngày gần đây
+                </label>
+                <input
+                  type="number"
+                  min={0}
+                  max={90}
+                  value={form.timeframeDays}
+                  onChange={onNumberInput("timeframeDays")}
+                  className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-500"
+                  placeholder="Số ngày"
+                />
+              </div>
+            </div>
+          </div>
 
-          <label className="flex items-center gap-2 text-sm text-gray-700">
-            <input
-              type="checkbox"
-              checked={fallbackEnabled}
-              onChange={(event) => setFallbackEnabled(event.target.checked)}
-            />
-            Fallback: bổ sung bài cũ nếu bài mới không đủ
-          </label>
+          <div className="rounded-lg border border-amber-100 bg-amber-50/60 p-4">
+            <div className="mb-3 flex items-start gap-3">
+              <div className="rounded-md bg-white p-2 text-amber-700">
+                <Bot className="h-4 w-4" />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-900">4. Tùy chọn hỗ trợ AI</label>
+                <p className="mt-1 text-xs text-gray-600">Giữ mặc định nếu muốn AI tự tối ưu truy vấn và bổ sung bài cũ khi thiếu tin mới.</p>
+              </div>
+            </div>
+            <div className="grid gap-3">
+              <label className="flex items-center gap-2 text-sm text-gray-700">
+                <input
+                  type="checkbox"
+                  checked={form.useAiQuery}
+                  onChange={(event) => setForm((prev) => ({ ...prev, useAiQuery: event.target.checked }))}
+                  className="rounded border-gray-300 text-amber-600 focus:ring-amber-500"
+                />
+                Dùng OpenAI để tối ưu truy vấn
+              </label>
 
-          {fallbackEnabled && (
-            <input
-              type="number"
-              min={1}
-              max={20}
-              value={fallbackTargetCount}
-              onChange={(event) => setFallbackTargetCount(Number(event.target.value) || 1)}
-              className="rounded-md border border-gray-300 px-3 py-2 text-sm"
-              placeholder="Tổng số bài mong muốn"
-            />
-          )}
+              <label className="flex items-center gap-2 text-sm text-gray-700">
+                <input
+                  type="checkbox"
+                  checked={fallbackEnabled}
+                  onChange={(event) => setFallbackEnabled(event.target.checked)}
+                  className="rounded border-gray-300 text-amber-600 focus:ring-amber-500"
+                />
+                Bổ sung bài cũ nếu bài mới không đủ
+              </label>
 
-          <div className="flex gap-2">
-            <Button onClick={onSearchNews} disabled={searching}>
+              {fallbackEnabled && (
+                <div className="grid gap-2">
+                  <label className="text-sm font-semibold text-gray-800">Tổng số bài mong muốn</label>
+                  <input
+                    type="number"
+                    min={1}
+                    max={20}
+                    value={fallbackTargetCount}
+                    onChange={(event) => setFallbackTargetCount(Number(event.target.value) || 1)}
+                    className="rounded-md border border-amber-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+                    placeholder="Tổng số bài mong muốn"
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            <Button onClick={onSearchNews} disabled={searching} className="h-12 text-base font-semibold">
               {searching ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               ) : (
                 <Sparkles className="mr-2 h-4 w-4" />
               )}
               Tìm tin
-            </Button>
-            <Button type="button" variant="secondary" onClick={downloadCsv} disabled={!displayArticles.length}>
-              <Download className="mr-2 h-4 w-4" />
-              Xuất CSV
             </Button>
           </div>
           {searchError && <p className="text-sm text-red-600">{searchError}</p>}
@@ -414,48 +473,91 @@ export function AiNewsPanel() {
           Tóm tắt từ tin đã tìm, URL, PDF URL, PDF tải lên tối đa 4MB hoặc văn bản thô với prompt tùy chỉnh.
         </p>
 
-        <div className="grid gap-3">
-          <select
-            value={sourceMode}
-            onChange={(event) => setSourceMode(event.target.value as SummarizeMode)}
-            className="rounded-md border border-gray-300 px-3 py-2 text-sm"
-          >
-            <option value="news">Nguồn: Tin đã chọn</option>
-            <option value="url">Nguồn: URL trang web</option>
-            <option value="pdf-url">Nguồn: PDF URL</option>
-            <option value="pdf-upload">Nguồn: Tải lên PDF</option>
-            <option value="text">Nguồn: Văn bản thô</option>
-          </select>
+        <div className="grid gap-4">
+          <div className="rounded-lg border border-emerald-100 bg-emerald-50/60 p-4">
+            <div className="mb-3 flex items-start gap-3">
+              <div className="rounded-md bg-white p-2 text-emerald-700">
+                <FileText className="h-4 w-4" />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-900">1. Chọn nguồn cần tóm tắt</label>
+                <p className="mt-1 text-xs text-gray-600">Dùng tin đã chọn, link bài viết, PDF, hoặc dán văn bản trực tiếp.</p>
+              </div>
+            </div>
+            <select
+              value={sourceMode}
+              onChange={(event) => setSourceMode(event.target.value as SummarizeMode)}
+              className="w-full rounded-md border border-emerald-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            >
+              <option value="news">Tin đã chọn từ Content Finder</option>
+              <option value="url">URL trang web</option>
+              <option value="pdf-url">PDF URL</option>
+              <option value="pdf-upload">Tải lên PDF</option>
+              <option value="text">Văn bản thô</option>
+            </select>
+            {sourceMode === "news" && (
+              <p className="mt-2 text-xs text-emerald-700">
+                Đã chọn {selectedArticles.length} tin. Chọn một tin ở danh sách bên trái trước khi tóm tắt.
+              </p>
+            )}
+          </div>
 
-          <select
-            value={outputLanguage}
-            onChange={(event) => setOutputLanguage(event.target.value as "vi" | "en")}
-            className="rounded-md border border-gray-300 px-3 py-2 text-sm"
-          >
-            <option value="vi">Đầu ra: Tiếng Việt</option>
-            <option value="en">Output: English</option>
-          </select>
+          <div className="rounded-lg border border-sky-100 bg-sky-50/60 p-4">
+            <div className="mb-3 flex items-start gap-3">
+              <div className="rounded-md bg-white p-2 text-sky-700">
+                <Languages className="h-4 w-4" />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-900">2. Chọn ngôn ngữ đầu ra</label>
+                <p className="mt-1 text-xs text-gray-600">Kết quả tóm tắt sẽ được viết bằng ngôn ngữ này.</p>
+              </div>
+            </div>
+            <select
+              value={outputLanguage}
+              onChange={(event) => setOutputLanguage(event.target.value as "vi" | "en")}
+              className="w-full rounded-md border border-sky-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
+            >
+              <option value="vi">Tiếng Việt</option>
+              <option value="en">English</option>
+            </select>
+          </div>
 
           {sourceMode === "url" && (
-            <input
-              value={sourceUrl}
-              onChange={(event) => setSourceUrl(event.target.value)}
-              className="rounded-md border border-gray-300 px-3 py-2 text-sm"
-              placeholder="https://example.com/article"
-            />
+            <div className="grid gap-2">
+              <label className="flex items-center gap-2 text-sm font-semibold text-gray-800">
+                <LinkIcon className="h-4 w-4 text-gray-500" />
+                URL bài viết
+              </label>
+              <input
+                value={sourceUrl}
+                onChange={(event) => setSourceUrl(event.target.value)}
+                className="rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                placeholder="https://example.com/article"
+              />
+            </div>
           )}
 
           {sourceMode === "pdf-url" && (
-            <input
-              value={pdfUrl}
-              onChange={(event) => setPdfUrl(event.target.value)}
-              className="rounded-md border border-gray-300 px-3 py-2 text-sm"
-              placeholder="https://example.com/report.pdf"
-            />
+            <div className="grid gap-2">
+              <label className="flex items-center gap-2 text-sm font-semibold text-gray-800">
+                <FileText className="h-4 w-4 text-gray-500" />
+                PDF URL
+              </label>
+              <input
+                value={pdfUrl}
+                onChange={(event) => setPdfUrl(event.target.value)}
+                className="rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                placeholder="https://example.com/report.pdf"
+              />
+            </div>
           )}
 
           {sourceMode === "pdf-upload" && (
             <div className="grid gap-1">
+              <label className="flex items-center gap-2 text-sm font-semibold text-gray-800">
+                <FileUp className="h-4 w-4 text-gray-500" />
+                Tải lên PDF
+              </label>
               <input
                 type="file"
                 accept="application/pdf,.pdf"
@@ -471,31 +573,48 @@ export function AiNewsPanel() {
                   setSummaryError("");
                   setPdfFile(nextFile);
                 }}
-                className="rounded-md border border-gray-300 px-3 py-2 text-sm"
+                className="rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
               />
               <p className="text-xs text-gray-500">Tối đa 4MB cho PDF tải lên. File lớn hơn nên dùng PDF URL.</p>
             </div>
           )}
 
           {sourceMode === "text" && (
-            <textarea
-              value={rawText}
-              onChange={(event) => setRawText(event.target.value)}
-              className="min-h-28 rounded-md border border-gray-300 px-3 py-2 text-sm"
-              placeholder="Dán nội dung cần tóm tắt..."
-            />
+            <div className="grid gap-2">
+              <label className="flex items-center gap-2 text-sm font-semibold text-gray-800">
+                <Type className="h-4 w-4 text-gray-500" />
+                Văn bản cần tóm tắt
+              </label>
+              <textarea
+                value={rawText}
+                onChange={(event) => setRawText(event.target.value)}
+                className="min-h-28 rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                placeholder="Dán nội dung cần tóm tắt..."
+              />
+            </div>
           )}
 
-          <textarea
-            value={customPrompt}
-            onChange={(event) => setCustomPrompt(event.target.value)}
-            className="min-h-24 rounded-md border border-gray-300 px-3 py-2 text-sm"
-            placeholder="Câu trả lời gồm 2 phần. [1] Nội dung ngắn: Trả lời đúng 1 câu duy nhất, tóm tắt cốt lõi của tài liệu. [2] Nội dung dài: Tóm tắt chi tiết khoảng 1 trang A4, mạch lạc, trung tính, có cấu trúc với các đoạn rõ ràng."
-          />
+          <div className="rounded-lg border border-amber-100 bg-amber-50/60 p-4">
+            <div className="mb-3 flex items-start gap-3">
+              <div className="rounded-md bg-white p-2 text-amber-700">
+                <Settings2 className="h-4 w-4" />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-900">3. Yêu cầu tóm tắt</label>
+                <p className="mt-1 text-xs text-gray-600">Có thể giữ mẫu mặc định hoặc chỉnh lại theo nhu cầu.</p>
+              </div>
+            </div>
+            <textarea
+              value={customPrompt}
+              onChange={(event) => setCustomPrompt(event.target.value)}
+              className="min-h-28 w-full rounded-md border border-amber-200 bg-white px-3 py-2 text-sm leading-6 focus:outline-none focus:ring-2 focus:ring-amber-500"
+              placeholder="Mô tả cách bạn muốn AI tóm tắt..."
+            />
+          </div>
 
-          <Button onClick={onSummarize} disabled={summarizing || !canSummarize}>
+          <Button onClick={onSummarize} disabled={summarizing || !canSummarize} className="h-12 text-base font-semibold">
             {summarizing ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
-            Tóm tắt
+            Tạo bản tóm tắt
           </Button>
           {summaryError && <p className="text-sm text-red-600">{summaryError}</p>}
         </div>
