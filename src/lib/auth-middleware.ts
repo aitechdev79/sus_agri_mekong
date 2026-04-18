@@ -15,6 +15,9 @@ export async function requireAuth(request: NextRequest) {
       id: true,
       email: true,
       name: true,
+      phone: true,
+      province: true,
+      organization: true,
       role: true,
       isVerified: true
     }

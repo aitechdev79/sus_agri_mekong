@@ -27,6 +27,7 @@ export default function SignUpPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+  const [businessRegistered, setBusinessRegistered] = useState(false)
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -61,8 +62,11 @@ export default function SignUpPage() {
             hasAccount: 'Already have an account?',
             signIn: 'Sign in',
             businessSectorRequired: 'Business sector is required for business accounts.',
-            successBusiness: 'Business account created. Please sign in.',
+            successBusiness: 'Business account created successfully.',
             successUser: 'Registration successful. Please sign in.',
+            partnerInvite: 'Complete your business profile to become a platform partner, or return to the homepage.',
+            completeBusinessProfile: 'Complete business profile',
+            backHome: 'Back to homepage',
           }
         : {
             title: 'Tạo tài khoản',
@@ -85,8 +89,11 @@ export default function SignUpPage() {
             hasAccount: 'Đã có tài khoản?',
             signIn: 'Đăng nhập',
             businessSectorRequired: 'Vui lòng nhập lĩnh vực kinh doanh cho tài khoản doanh nghiệp.',
-            successBusiness: 'Đăng ký tài khoản doanh nghiệp thành công. Vui lòng đăng nhập.',
+            successBusiness: 'Đăng ký tài khoản doanh nghiệp thành công.',
             successUser: 'Đăng ký thành công. Vui lòng đăng nhập.',
+            partnerInvite: 'Hoàn thiện hồ sơ doanh nghiệp để trở thành doanh nghiệp đối tác của nền tảng, hoặc quay về trang chủ.',
+            completeBusinessProfile: 'Hoàn thiện hồ sơ doanh nghiệp',
+            backHome: 'Quay về trang chủ',
           },
     [isEn],
   )
@@ -139,6 +146,7 @@ export default function SignUpPage() {
     setIsLoading(true)
     setError('')
     setSuccess('')
+    setBusinessRegistered(false)
 
     if (formData.password !== formData.confirmPassword) {
       setError(text.passwordMismatch)
@@ -174,11 +182,11 @@ export default function SignUpPage() {
       }
 
       setSuccess(accountType === 'BUSINESS' ? text.successBusiness : text.successUser)
+      if (accountType === 'BUSINESS') {
+        setBusinessRegistered(true)
+        return
+      }
       setTimeout(() => {
-        if (accountType === 'BUSINESS') {
-          router.push(`/${locale}/auth/signin`)
-          return
-        }
         router.push(`/${locale}/welcome?role=user`)
       }, 1200)
     } catch (submitError) {
@@ -203,6 +211,25 @@ export default function SignUpPage() {
             {success && (
               <div className="mb-6 rounded-lg border border-green-200 bg-green-50 p-4">
                 <p className="text-sm text-green-600">{success}</p>
+                {businessRegistered && (
+                  <div className="mt-4 space-y-3">
+                    <p className="text-sm text-green-700">{text.partnerInvite}</p>
+                    <div className="flex flex-wrap gap-3">
+                      <Link
+                        href={`/${locale}/auth/signin?callbackUrl=${encodeURIComponent(`/${locale}/business/profile?init=1`)}`}
+                        className="inline-flex rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700"
+                      >
+                        {text.completeBusinessProfile}
+                      </Link>
+                      <Link
+                        href={`/${locale}`}
+                        className="inline-flex rounded-lg border border-green-300 bg-white px-4 py-2 text-sm font-semibold text-green-700 hover:bg-green-50"
+                      >
+                        {text.backHome}
+                      </Link>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 

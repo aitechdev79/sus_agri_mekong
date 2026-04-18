@@ -4,6 +4,7 @@ import { FormEvent, useEffect, useMemo, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useLocale } from 'next-intl'
+import { Upload } from 'lucide-react'
 import NavigationBar from '@/components/NavigationBar'
 import Footer from '@/components/Footer'
 import { Button } from '@/components/ui/button'
@@ -92,7 +93,7 @@ export default function BusinessProfilePage() {
             province: 'Tỉnh/Thành phố',
             description: 'Mô tả',
             logo: 'Logo doanh nghiệp',
-            uploadLogo: 'Tải logo',
+            uploadLogo: 'Upload logo',
             uploadingLogo: 'Đang tải...',
             noLogo: 'Chưa có logo',
             save: 'Lưu hồ sơ',
@@ -336,7 +337,8 @@ export default function BusinessProfilePage() {
                     </div>
                   )}
                 </div>
-                <label className="inline-flex cursor-pointer items-center rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50">
+                <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50">
+                  <Upload className="h-4 w-4" aria-hidden="true" />
                   {uploadingLogo ? text.uploadingLogo : text.uploadLogo}
                   <input
                     type="file"

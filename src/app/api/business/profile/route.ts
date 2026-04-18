@@ -71,16 +71,16 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: "Slug is already used" }, { status: 409 });
     }
 
-    const data = {
+    const profileData = {
       ownerUserId: user.id,
       companyName,
       slug,
       logoUrl: String(body.logoUrl || "").trim() || null,
       coverUrl: String(body.coverUrl || "").trim() || null,
       website: String(body.website || "").trim() || null,
-      contactEmail: String(body.contactEmail || "").trim() || null,
-      phone: String(body.phone || "").trim() || null,
-      province: String(body.province || "").trim() || null,
+      contactEmail: String(body.contactEmail || "").trim() || (!existing ? user.email : null),
+      phone: String(body.phone || "").trim() || (!existing ? user.phone : null),
+      province: String(body.province || "").trim() || (!existing ? user.province : null),
       description: String(body.description || "").trim() || null,
       status: "DRAFT" as const,
       isPublic: false,
@@ -92,9 +92,9 @@ export async function PUT(request: NextRequest) {
     const profile = existing
       ? await prisma.businessProfile.update({
           where: { id: existing.id },
-          data,
+          data: profileData,
         })
-      : await prisma.businessProfile.create({ data });
+      : await prisma.businessProfile.create({ data: profileData });
 
     return NextResponse.json({ profile });
   } catch (error) {

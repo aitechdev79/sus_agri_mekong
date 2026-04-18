@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { signIn } from 'next-auth/react'
 import Link from 'next/link'
 import { useLocale } from 'next-intl'
+import { useSearchParams } from 'next/navigation'
 import { Eye, EyeOff, Lock, Mail } from 'lucide-react'
 import NavigationBar from '@/components/NavigationBar'
 import Footer from '@/components/Footer'
@@ -18,6 +19,8 @@ export default function SignInPage() {
 
   const locale = useLocale()
   const isEn = locale === 'en'
+  const searchParams = useSearchParams()
+  const callbackUrl = searchParams.get('callbackUrl')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -38,7 +41,7 @@ export default function SignInPage() {
         const sessionData = await sessionResponse.json()
         const role = sessionData?.user?.role as 'USER' | 'BUSINESS' | 'MODERATOR' | 'ADMIN' | undefined
 
-        let nextPath = `/${locale}`
+        let nextPath = callbackUrl && callbackUrl.startsWith(`/${locale}/`) ? callbackUrl : `/${locale}`
         if (role === 'ADMIN' || role === 'MODERATOR') {
           nextPath = `/${locale}/admin`
         }

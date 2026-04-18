@@ -173,12 +173,12 @@ export default function HoatDongDuAnPage() {
                     <Link
                       key={item.id}
                       href={href}
-                      className="group mx-auto flex h-full w-full max-w-md flex-col bg-white p-5 border md:mx-0 md:max-w-none"
-                      style={{ borderColor: '#FFB81C' }}
+                      className="group relative mx-auto flex h-full w-full max-w-md flex-col overflow-hidden border border-gray-200 bg-white p-5 shadow-sm transition-all duration-300 hover:border-[#FFB81C] hover:shadow-xl md:mx-0 md:max-w-none"
                       aria-label={`${title} - ${description || ''}`}
                     >
+                      <div className="absolute left-0 top-0 h-1 w-full bg-[#FFB81C]" />
                       {imageSrc && (
-                        <div className="relative mb-4 overflow-hidden" style={{ aspectRatio: '16/9' }}>
+                        <div className="relative mb-4 mt-1 overflow-hidden" style={{ aspectRatio: '16/9' }}>
                           <Image
                             src={imageSrc}
                             alt={title}

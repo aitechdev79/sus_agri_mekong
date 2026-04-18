@@ -122,12 +122,12 @@ export default function HoatDongSection() {
                   href={href}
                   target={isExternal ? '_blank' : undefined}
                   rel={isExternal ? 'noopener noreferrer' : undefined}
-                  className="group block flex h-full w-full max-w-md flex-col bg-white p-5 mx-auto border md:mx-0 md:max-w-none"
-                  style={{ borderColor: '#FFB81C' }}
+                  className="group relative mx-auto flex h-full w-full max-w-md flex-col overflow-hidden border border-gray-200 bg-white p-5 shadow-sm transition-all duration-300 hover:border-[#FFB81C] hover:shadow-xl md:mx-0 md:max-w-none"
                   aria-label={`${title} - ${description || ''}`}
                 >
+                  <div className="absolute left-0 top-0 h-1 w-full bg-[#FFB81C]" />
                   {imageSrc && (
-                    <div className="relative overflow-hidden mb-4" style={{ aspectRatio: '16/9' }}>
+                    <div className="relative mb-4 mt-1 overflow-hidden" style={{ aspectRatio: '16/9' }}>
                       <Image
                         src={imageSrc}
                         alt={title}
