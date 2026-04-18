@@ -237,9 +237,15 @@ export default function AdminPage() {
         </section>
 
         <section className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm md:p-6">
-          <div className="mb-4">
-            <h2 className="text-xl font-semibold text-slate-900">Danh sách nội dung</h2>
-            <p className="mt-1 text-sm text-slate-600">Quản lý chỉnh sửa, xuất bản và thao tác hàng loạt.</p>
+          <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <h2 className="text-xl font-semibold text-slate-900">Danh sách nội dung</h2>
+              <p className="mt-1 text-sm text-slate-600">Quản lý chỉnh sửa, xuất bản và thao tác hàng loạt.</p>
+            </div>
+            <Button onClick={handleCreateContent} className="h-11 justify-center rounded-xl bg-emerald-600 px-5 hover:bg-emerald-700">
+              <Plus className="mr-2 h-4 w-4" />
+              Thêm nội dung
+            </Button>
           </div>
           <div className="mb-4 rounded-2xl border border-slate-200 bg-slate-50 p-4">
             <div className="mb-3 text-sm font-semibold text-slate-700">Tổng quan nội dung</div>
@@ -290,12 +296,8 @@ export default function AdminPage() {
               </article>
             </div>
           </div>
-          <div className="mb-4 grid gap-4 rounded-2xl border border-slate-200 bg-white p-4">
-            <Button onClick={handleCreateContent} className="h-11 justify-center rounded-xl bg-emerald-600 hover:bg-emerald-700">
-              <Plus className="mr-2 h-4 w-4" />
-              Thêm nội dung
-            </Button>
-            {session.user.role === 'ADMIN' && (
+          {session.user.role === 'ADMIN' && (
+            <div className="mb-4 grid gap-4 rounded-2xl border border-slate-200 bg-white p-4">
               <div className="grid gap-4 lg:grid-cols-2">
                 <Link
                   href="/admin/users"
@@ -362,8 +364,6 @@ export default function AdminPage() {
                   </div>
                 </Link>
               </div>
-            )}
-            {session.user.role === 'ADMIN' && (
               <Link
                 href="/admin/categories"
                 className="inline-flex h-11 items-center justify-center rounded-xl border border-slate-200 px-4 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
@@ -371,8 +371,8 @@ export default function AdminPage() {
                 <Tags className="mr-2 h-4 w-4" />
                 Quản lý danh mục
               </Link>
-            )}
-          </div>
+            </div>
+          )}
           <div className="mb-4 flex flex-col gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="text-sm text-slate-600">
               Hiển thị {contents.length > 0 ? (pagination.page - 1) * pagination.limit + 1 : 0}

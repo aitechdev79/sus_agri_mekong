@@ -222,7 +222,7 @@ export function AiNewsPanel() {
       <section className="rounded-2xl border border-orange-100 bg-orange-50 p-6 shadow-sm">
         <div className="mb-4 flex items-center gap-2">
           <Newspaper className="h-5 w-5 text-blue-600" />
-          <h2 className="text-xl font-semibold text-gray-900">AI Content Finder</h2>
+          <h2 className="text-xl font-semibold text-gray-900">Tìm tin tức bằng AI</h2>
         </div>
         <p className="mb-4 text-sm text-gray-600">
           Tìm tin theo chủ đề, địa lý và thời gian với SerpAPI. Có thể dùng OpenAI để tối ưu truy vấn tìm kiếm.
@@ -467,7 +467,7 @@ export function AiNewsPanel() {
       <section className="rounded-2xl border border-orange-100 bg-orange-50 p-6 shadow-sm">
         <div className="mb-4 flex items-center gap-2">
           <FileText className="h-5 w-5 text-emerald-600" />
-          <h2 className="text-xl font-semibold text-gray-900">AI Content Summarizer</h2>
+          <h2 className="text-xl font-semibold text-gray-900">Tổng hợp tư liệu bằng AI</h2>
         </div>
         <p className="mb-4 text-sm text-gray-600">
           Tóm tắt từ tin đã tìm, URL, PDF URL, PDF tải lên tối đa 4MB hoặc văn bản thô với prompt tùy chỉnh.
@@ -612,10 +612,12 @@ export function AiNewsPanel() {
             />
           </div>
 
-          <Button onClick={onSummarize} disabled={summarizing || !canSummarize} className="h-12 text-base font-semibold">
-            {summarizing ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
-            Tạo bản tóm tắt
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            <Button onClick={onSummarize} disabled={summarizing || !canSummarize} className="h-12 text-base font-semibold">
+              {summarizing ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
+              Tạo bản tóm tắt
+            </Button>
+          </div>
           {summaryError && <p className="text-sm text-red-600">{summaryError}</p>}
         </div>
 
