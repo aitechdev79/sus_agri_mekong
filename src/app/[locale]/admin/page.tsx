@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useLocale } from 'next-intl'
-import { BarChart3, FileCheck2, FileText, FolderTree, Plus, Tags, Users } from 'lucide-react'
+import { BarChart3, Building2, FileCheck2, FileText, FolderTree, Plus, Tags, Users } from 'lucide-react'
 import NavigationBar from '@/components/NavigationBar'
 import Footer from '@/components/Footer'
 import { ContentTable } from '@/components/admin/ContentTable'
@@ -44,6 +44,16 @@ export default function AdminPage() {
     limit: 20,
     total: 0,
     pages: 1
+  })
+  const [managementStats, setManagementStats] = useState({
+    totalUsers: 0,
+    personalUsers: 0,
+    businessUsers: 0,
+    verifiedUsers: 0,
+    totalPartners: 0,
+    publicPartners: 0,
+    verifiedPartners: 0,
+    pendingPartners: 0
   })
   const { categories, categoryLabels, loadCategories, upsertCategory } = useAdminCategories(
     status !== 'loading' && !!session && (session.user.role === 'ADMIN' || session.user.role === 'MODERATOR')
@@ -84,6 +94,39 @@ export default function AdminPage() {
     }
   }, [page, limit])
 
+  const fetchManagementStats = useCallback(async () => {
+    try {
+      const [usersResponse, partnersResponse] = await Promise.all([
+        fetch('/api/admin/users'),
+        fetch('/api/admin/partners')
+      ])
+
+      if (!usersResponse.ok || !partnersResponse.ok) {
+        return
+      }
+
+      const [usersData, partnersData] = await Promise.all([
+        usersResponse.json(),
+        partnersResponse.json()
+      ])
+      const users: Array<{ role?: string; isVerified?: boolean }> = Array.isArray(usersData.users) ? usersData.users : []
+      const partners: Array<{ status?: string; isPublic?: boolean; isVerified?: boolean }> = Array.isArray(partnersData.partners) ? partnersData.partners : []
+
+      setManagementStats({
+        totalUsers: users.length,
+        personalUsers: users.filter((user) => user.role === 'USER').length,
+        businessUsers: users.filter((user) => user.role === 'BUSINESS').length,
+        verifiedUsers: users.filter((user) => user.isVerified).length,
+        totalPartners: partners.length,
+        publicPartners: partners.filter((partner) => partner.isPublic).length,
+        verifiedPartners: partners.filter((partner) => partner.isVerified).length,
+        pendingPartners: partners.filter((partner) => partner.status === 'PENDING').length
+      })
+    } catch (error) {
+      console.error('Error fetching management stats:', error)
+    }
+  }, [])
+
   const handleLimitChange = (nextLimit: number) => {
     setLimit(nextLimit)
     setPage(1)
@@ -103,7 +146,10 @@ export default function AdminPage() {
     }
 
     fetchAdminData()
-  }, [session, status, router, locale, fetchAdminData])
+    if (session?.user?.role === 'ADMIN') {
+      fetchManagementStats()
+    }
+  }, [session, status, router, locale, fetchAdminData, fetchManagementStats])
 
   const handleCreateContent = () => {
     setEditingContent(null)
@@ -187,12 +233,6 @@ export default function AdminPage() {
 
       <main className="flex-grow pb-8 pt-24 md:pb-10">
         <div className="container mx-auto px-6">
-          {session.user.role === 'ADMIN' && (
-            <section className="mb-8">
-              <HomeStatsManager />
-            </section>
-          )}
-
           <section className="mb-8 overflow-hidden rounded-3xl border border-sky-100 bg-white shadow-xl">
             <div>
               <div className="bg-sky-700 px-6 py-8 text-sky-50 md:px-8">
@@ -203,6 +243,12 @@ export default function AdminPage() {
               </div>
             </div>
           </section>
+
+          {session.user.role === 'ADMIN' && (
+            <section className="mb-8">
+              <HomeStatsManager />
+            </section>
+          )}
 
           <section className="mb-8">
             <AiNewsPanel />
@@ -262,28 +308,78 @@ export default function AdminPage() {
                 </article>
               </div>
             </div>
-            <div className="mb-4 grid gap-3 rounded-2xl border border-slate-200 bg-white p-4">
+            <div className="mb-4 grid gap-4 rounded-2xl border border-slate-200 bg-white p-4">
               <Button onClick={handleCreateContent} className="h-11 justify-center rounded-xl bg-emerald-600 hover:bg-emerald-700">
                 <Plus className="mr-2 h-4 w-4" />
                 Thêm nội dung
               </Button>
               {session.user.role === 'ADMIN' && (
-                <Link
-                  href={`/${locale}/admin/users`}
-                  className="inline-flex h-11 items-center justify-center rounded-xl border border-slate-200 px-4 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
-                >
-                  <Users className="mr-2 h-4 w-4" />
-                  Quản lý người dùng (cá nhân, doanh nghiệp)
-                </Link>
-              )}
-              {session.user.role === 'ADMIN' && (
-                <Link
-                  href={`/${locale}/admin/partners`}
-                  className="inline-flex h-11 items-center justify-center rounded-xl border border-slate-200 px-4 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
-                >
-                  <Users className="mr-2 h-4 w-4" />
-                  Quản lý đối tác
-                </Link>
+                <div className="grid gap-4 lg:grid-cols-2">
+                  <Link
+                    href={`/${locale}/admin/users`}
+                    className="rounded-2xl border border-sky-100 bg-sky-50 p-4 transition hover:border-sky-200 hover:bg-sky-100/70"
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="rounded-lg bg-white p-2 text-sky-700">
+                        <Users className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <div className="text-base font-semibold text-slate-900">Quản lý người dùng</div>
+                        <p className="mt-1 text-sm text-slate-600">Cá nhân, doanh nghiệp và trạng thái xác thực.</p>
+                      </div>
+                    </div>
+                    <div className="mt-4 grid grid-cols-2 gap-2 text-center sm:grid-cols-4">
+                      <div className="rounded-lg bg-white p-3">
+                        <div className="text-xl font-bold text-slate-900">{managementStats.totalUsers}</div>
+                        <div className="mt-1 text-xs text-slate-500">Tài khoản</div>
+                      </div>
+                      <div className="rounded-lg bg-white p-3">
+                        <div className="text-xl font-bold text-slate-900">{managementStats.personalUsers}</div>
+                        <div className="mt-1 text-xs text-slate-500">Cá nhân</div>
+                      </div>
+                      <div className="rounded-lg bg-white p-3">
+                        <div className="text-xl font-bold text-slate-900">{managementStats.businessUsers}</div>
+                        <div className="mt-1 text-xs text-slate-500">Doanh nghiệp</div>
+                      </div>
+                      <div className="rounded-lg bg-white p-3">
+                        <div className="text-xl font-bold text-slate-900">{managementStats.verifiedUsers}</div>
+                        <div className="mt-1 text-xs text-slate-500">Đã xác thực</div>
+                      </div>
+                    </div>
+                  </Link>
+                  <Link
+                    href={`/${locale}/admin/partners`}
+                    className="rounded-2xl border border-emerald-100 bg-emerald-50 p-4 transition hover:border-emerald-200 hover:bg-emerald-100/70"
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="rounded-lg bg-white p-2 text-emerald-700">
+                        <Building2 className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <div className="text-base font-semibold text-slate-900">Quản lý đối tác</div>
+                        <p className="mt-1 text-sm text-slate-600">Hồ sơ đối tác, trạng thái công khai và duyệt hiển thị.</p>
+                      </div>
+                    </div>
+                    <div className="mt-4 grid grid-cols-2 gap-2 text-center sm:grid-cols-4">
+                      <div className="rounded-lg bg-white p-3">
+                        <div className="text-xl font-bold text-slate-900">{managementStats.totalPartners}</div>
+                        <div className="mt-1 text-xs text-slate-500">Đối tác</div>
+                      </div>
+                      <div className="rounded-lg bg-white p-3">
+                        <div className="text-xl font-bold text-slate-900">{managementStats.publicPartners}</div>
+                        <div className="mt-1 text-xs text-slate-500">Công khai</div>
+                      </div>
+                      <div className="rounded-lg bg-white p-3">
+                        <div className="text-xl font-bold text-slate-900">{managementStats.verifiedPartners}</div>
+                        <div className="mt-1 text-xs text-slate-500">Đã xác thực</div>
+                      </div>
+                      <div className="rounded-lg bg-white p-3">
+                        <div className="text-xl font-bold text-slate-900">{managementStats.pendingPartners}</div>
+                        <div className="mt-1 text-xs text-slate-500">Chờ duyệt</div>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
               )}
               {session.user.role === 'ADMIN' && (
                 <Link

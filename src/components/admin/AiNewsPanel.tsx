@@ -219,7 +219,7 @@ export function AiNewsPanel() {
 
   return (
     <div className="mb-8 grid gap-6 lg:grid-cols-2">
-      <section className="rounded-2xl bg-white p-6 shadow-sm">
+      <section className="rounded-2xl border border-orange-100 bg-orange-50 p-6 shadow-sm">
         <div className="mb-4 flex items-center gap-2">
           <Newspaper className="h-5 w-5 text-blue-600" />
           <h2 className="text-xl font-semibold text-gray-900">AI Content Finder</h2>
@@ -464,7 +464,7 @@ export function AiNewsPanel() {
         )}
       </section>
 
-      <section className="rounded-2xl bg-white p-6 shadow-sm">
+      <section className="rounded-2xl border border-orange-100 bg-orange-50 p-6 shadow-sm">
         <div className="mb-4 flex items-center gap-2">
           <FileText className="h-5 w-5 text-emerald-600" />
           <h2 className="text-xl font-semibold text-gray-900">AI Content Summarizer</h2>
