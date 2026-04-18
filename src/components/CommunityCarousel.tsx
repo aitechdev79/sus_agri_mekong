@@ -7,6 +7,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { getLocaleFromPathname, pickLocalizedText, withLocalePrefix } from '@/lib/content-locale';
 import { formatVietnamDate } from '@/lib/vietnam-time';
+import { getPublishedDate } from '@/lib/content-dates';
 
 interface CommunityItem {
   id: string;
@@ -16,6 +17,7 @@ interface CommunityItem {
   descriptionEn?: string | null;
   type: string;
   thumbnailUrl?: string;
+  publishedAt?: string | null;
   createdAt: string;
 }
 
@@ -107,7 +109,7 @@ export default function CommunityCarousel() {
                             {description && <p className="text-gray-600 text-sm mb-3 line-clamp-2">{description}</p>}
                             <div className="flex items-center justify-between">
                               <span className="text-xs text-gray-500 font-montserrat">
-                                {formatVietnamDate(carouselItem.createdAt, isEn ? 'en' : 'vi')}
+                                {formatVietnamDate(getPublishedDate(carouselItem), isEn ? 'en' : 'vi')}
                               </span>
                               <Link href={withLocalePrefix(`/content/${carouselItem.id}`, locale)} className="text-blue-600 hover:text-blue-700 text-sm font-medium font-montserrat">
                                 {isEn ? 'Read more' : 'Đọc thêm'}

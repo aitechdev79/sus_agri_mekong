@@ -97,8 +97,8 @@ export async function GET(request: NextRequest) {
 
     const orderBy =
       sort === 'newest'
-        ? [{ createdAt: 'desc' as const }]
-        : [{ createdAt: 'desc' as const }]
+        ? [{ publishedAt: 'desc' as const }, { createdAt: 'desc' as const }]
+        : [{ publishedAt: 'desc' as const }, { createdAt: 'desc' as const }]
 
     const [contents, total] = await Promise.all([
       prisma.content.findMany({
@@ -222,6 +222,8 @@ export async function POST(request: NextRequest) {
     // Visibility is controlled by status only.
     const finalStatus = user.role === 'ADMIN' ? (status || 'PUBLISHED') : 'DRAFT'
 
+    const now = new Date()
+
     const newContent = await prisma.content.create({
       data: {
         title,
@@ -240,6 +242,7 @@ export async function POST(request: NextRequest) {
         isPublic: true,
         isFeatured: false,
         status: finalStatus,
+        publishedAt: finalStatus === 'PUBLISHED' ? now : null,
         authorId: user.id,
         videoUrl: videoUrl || null,
         imageUrl: imageUrl || null,

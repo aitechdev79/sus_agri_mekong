@@ -46,6 +46,7 @@ export interface BaseContent {
   eventTimezone?: string | null;
   eventLocation?: string | null;
   isAllDay?: boolean;
+  publishedAt?: string | null;
   createdAt: string; // API returns ISO string, not Date
   updatedAt: string;
   authorId: string;
@@ -141,6 +142,7 @@ export interface FormContent {
   isFeatured?: boolean;
   author?: AuthorWithRole;
   viewCount?: number;
+  publishedAt?: string | null;
   createdAt?: string;
   thumbnailUrl?: string;
   imageUrl?: string;
@@ -162,6 +164,7 @@ export interface MinimalContent {
   description?: string;
   type: ContentType;
   viewCount: number;
+  publishedAt?: string | null;
   createdAt: string;
 }
 

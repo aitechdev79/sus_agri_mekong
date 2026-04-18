@@ -9,6 +9,7 @@ import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
 import { getLocaleFromPathname, pickLocalizedText, withLocalePrefix } from '@/lib/content-locale';
 import { formatVietnamDate } from '@/lib/vietnam-time';
+import { getPublishedDate } from '@/lib/content-dates';
 
 interface DienHinhItem {
   id: string;
@@ -19,6 +20,7 @@ interface DienHinhItem {
   thumbnailUrl?: string | null;
   imageUrl?: string | null;
   viewCount: number;
+  publishedAt?: string | null;
   createdAt: string;
 }
 
@@ -177,7 +179,7 @@ export default function TatCaDienHinhPage() {
                       </div>
 
                       <div className="mt-5 flex items-center justify-between pt-4 text-sm text-gray-500">
-                        <span>{formatVietnamDate(item.createdAt, isEn ? 'en' : 'vi')}</span>
+                        <span>{formatVietnamDate(getPublishedDate(item), isEn ? 'en' : 'vi')}</span>
                         <span className="flex items-center gap-1">
                           <Eye className="h-4 w-4" />
                           {item.viewCount.toLocaleString(isEn ? 'en-US' : 'vi-VN')}

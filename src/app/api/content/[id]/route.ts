@@ -280,6 +280,10 @@ export async function PUT(
       updateData.status = status === 'PUBLISHED' ? 'PUBLISHED' : 'DRAFT'
     }
 
+    if (updateData.status === 'PUBLISHED' && content.status !== 'PUBLISHED' && !content.publishedAt) {
+      updateData.publishedAt = new Date()
+    }
+
     console.log('Final updateData being saved:', updateData)
 
     const updatedContent = await prisma.content.update({

@@ -8,6 +8,7 @@ import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
 import { getLocaleFromPathname, pickLocalizedText, withLocalePrefix } from '@/lib/content-locale';
 import { formatVietnamDate } from '@/lib/vietnam-time';
+import { getPublishedDate } from '@/lib/content-dates';
 
 interface StoryItem {
   id: string;
@@ -15,6 +16,7 @@ interface StoryItem {
   titleEn?: string | null;
   description?: string | null;
   descriptionEn?: string | null;
+  publishedAt?: string | null;
   createdAt: string;
   viewCount: number;
 }
@@ -153,7 +155,7 @@ export default function StoriesPage() {
                           <div className="flex items-center space-x-4 text-sm text-gray-500 ml-4 flex-shrink-0">
                             <div className="flex items-center">
                               <Calendar className="w-4 h-4 mr-1" />
-                              {formatDate(item.createdAt)}
+                              {formatDate(String(getPublishedDate(item)))}
                             </div>
                             <div className="text-gray-400">
                               {item.viewCount} {isEn ? 'views' : 'lượt xem'}

@@ -7,6 +7,7 @@ import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
 import { MinimalContent, MinimalContentListResponse } from '@/types/content';
 import { formatVietnamDate } from '@/lib/vietnam-time';
+import { getPublishedDate } from '@/lib/content-dates';
 
 export default function GuidancePolicyPage() {
   const [contentItems, setContentItems] = useState<MinimalContent[]>([]);
@@ -233,7 +234,7 @@ export default function GuidancePolicyPage() {
                         <div className="flex items-center space-x-4 text-sm text-gray-500 ml-4 flex-shrink-0">
                           <div className="flex items-center">
                             <Calendar className="w-4 h-4 mr-1" />
-                            {formatDate(item.createdAt)}
+                            {formatDate(String(getPublishedDate(item)))}
                           </div>
                           <div className="text-gray-400">
                             {item.viewCount} lượt xem

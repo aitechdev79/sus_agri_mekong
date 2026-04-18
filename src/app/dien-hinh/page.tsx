@@ -5,11 +5,13 @@ import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import NavigationBar from '@/components/NavigationBar';
 import { formatVietnamDate } from '@/lib/vietnam-time';
+import { getPublishedDate } from '@/lib/content-dates';
 
 interface StoryItem {
   id: string;
   title: string;
   description?: string;
+  publishedAt?: string | null;
   createdAt: string;
   viewCount: number;
 }
@@ -179,7 +181,7 @@ export default function DienHinhPage() {
                         <div className="flex items-center space-x-4 text-sm text-gray-500 ml-4 flex-shrink-0">
                           <div className="flex items-center">
                             <Calendar className="w-4 h-4 mr-1" />
-                            {formatDate(item.createdAt)}
+                            {formatDate(String(getPublishedDate(item)))}
                           </div>
                           <div className="text-gray-400">
                             {item.viewCount} lượt xem

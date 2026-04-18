@@ -7,6 +7,7 @@ import { prisma } from '@/lib/prisma';
 import { renderRichTextContent } from '@/lib/rich-text';
 import { PublicContent } from '@/types/content';
 import { formatVietnamDate, formatVietnamDateTime } from '@/lib/vietnam-time';
+import { getPublishedDate } from '@/lib/content-dates';
 
 async function getContent(contentId: string): Promise<PublicContent | null> {
   try {
@@ -30,6 +31,7 @@ async function getContent(contentId: string): Promise<PublicContent | null> {
 
     return {
       ...content,
+      publishedAt: content.publishedAt?.toISOString() || null,
       createdAt: content.createdAt.toISOString(),
       updatedAt: content.updatedAt.toISOString(),
       eventStartAt: content.eventStartAt?.toISOString() || null,
@@ -158,7 +160,7 @@ export default async function ContentDetailPage({
                 )}
                 <div className="flex items-center">
                   <Calendar className="mr-2 h-4 w-4" />
-                  <span>Ngày đăng: {formatVietnamDateTime(content.createdAt)}</span>
+                  <span>Ngày đăng: {formatVietnamDateTime(getPublishedDate(content))}</span>
                 </div>
                 <div className="flex items-center">
                   <Eye className="mr-2 h-4 w-4" />

@@ -7,6 +7,7 @@ import { prisma } from '@/lib/prisma';
 import { pickLocalizedText } from '@/lib/content-locale';
 import { renderRichTextContent } from '@/lib/rich-text';
 import { formatVietnamDateTime } from '@/lib/vietnam-time';
+import { getPublishedDate } from '@/lib/content-dates';
 
 // Use dynamic rendering for Vercel deployment
 export const dynamic = 'force-dynamic';
@@ -79,7 +80,7 @@ export default async function NewsPage({ params }: { params: Promise<{ locale: s
             <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-6">
               <div className="flex items-center">
                 <Calendar className="w-4 h-4 mr-2" />
-                <span>{isEn ? `Published: ${formatVietnamDateTime(content.createdAt, locale)}` : `Ngày đăng: ${formatVietnamDateTime(content.createdAt, locale)}`}</span>
+                <span>{isEn ? `Published: ${formatVietnamDateTime(getPublishedDate(content), locale)}` : `Ngày đăng: ${formatVietnamDateTime(getPublishedDate(content), locale)}`}</span>
               </div>
 
               <div className="flex items-center">

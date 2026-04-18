@@ -15,11 +15,13 @@ export async function GET() {
         thumbnailUrl: true,
         viewCount: true,
         fileUrl: true,
+        publishedAt: true,
         createdAt: true,
       },
-      orderBy: {
-        createdAt: 'desc',
-      },
+      orderBy: [
+        { publishedAt: 'desc' },
+        { createdAt: 'desc' },
+      ],
     });
 
     return NextResponse.json(featuredContent);

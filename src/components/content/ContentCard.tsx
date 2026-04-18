@@ -4,6 +4,7 @@ import { MediaContent } from './MediaContent'
 import { LocalizedContent } from '../LocalizedContent'
 import { ContentCardProps } from '@/types/content'
 import { formatVietnamDate } from '@/lib/vietnam-time'
+import { getPublishedDate } from '@/lib/content-dates'
 
 export function ContentCard({ content, categoryLabels = {} }: ContentCardProps) {
   const getTypeBadge = (type: string) => {
@@ -71,7 +72,7 @@ export function ContentCard({ content, categoryLabels = {} }: ContentCardProps) 
           <User className="mr-1 h-4 w-4" />
           <span className="mr-3">{content.author.name}</span>
           <Clock className="mr-1 h-4 w-4" />
-          <span>{formatVietnamDate(content.createdAt)}</span>
+          <span>{formatVietnamDate(getPublishedDate(content))}</span>
         </div>
 
         <div className="flex items-center justify-between text-sm text-gray-500">

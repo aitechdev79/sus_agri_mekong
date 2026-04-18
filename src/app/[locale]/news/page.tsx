@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { usePublicCategories } from '@/hooks/use-public-categories';
 import { pickLocalizedText } from '@/lib/content-locale';
 import { formatVietnamDate } from '@/lib/vietnam-time';
+import { getPublishedDate } from '@/lib/content-dates';
 
 interface NewsItem {
   id: string;
@@ -17,6 +18,7 @@ interface NewsItem {
   thumbnailUrl?: string;
   imageUrl?: string;
   viewCount: number;
+  publishedAt?: string | null;
   createdAt: string;
   category?: string;
 }
@@ -188,7 +190,7 @@ export default function NewsPage({ params }: { params: Promise<{ locale: string 
 
                       <div className="flex items-center text-sm mb-2" style={{ color: '#9CA3AF' }}>
                         <Calendar className="w-4 h-4 mr-1" />
-                        <span className="font-montserrat font-medium">{formatDate(item.createdAt)}</span>
+                        <span className="font-montserrat font-medium">{formatDate(String(getPublishedDate(item)))}</span>
                       </div>
 
                       <h2 className="text-lg md:text-xl font-bold mb-2 font-montserrat line-clamp-2" style={{ color: '#3C3C3B' }}>

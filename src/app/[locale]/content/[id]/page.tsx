@@ -8,6 +8,7 @@ import { PublicContent } from '@/types/content';
 import { isEnglishLocale, pickLocalizedText } from '@/lib/content-locale';
 import { renderRichTextContent } from '@/lib/rich-text';
 import { formatVietnamDate, formatVietnamDateTime } from '@/lib/vietnam-time';
+import { getPublishedDate } from '@/lib/content-dates';
 
 async function getContent(contentId: string): Promise<PublicContent | null> {
   try {
@@ -31,6 +32,7 @@ async function getContent(contentId: string): Promise<PublicContent | null> {
 
     return {
       ...content,
+      publishedAt: content.publishedAt?.toISOString() || null,
       createdAt: content.createdAt.toISOString(),
       updatedAt: content.updatedAt.toISOString(),
       eventStartAt: content.eventStartAt?.toISOString() || null,
@@ -177,7 +179,7 @@ export default async function LocaleContentDetailPage({
                 )}
                 <div className="flex items-center">
                   <Calendar className="mr-2 h-4 w-4" />
-                  <span>{isEn ? `Published: ${formatVietnamDateTime(content.createdAt, locale)}` : `Ngày đăng: ${formatVietnamDateTime(content.createdAt, locale)}`}</span>
+                  <span>{isEn ? `Published: ${formatVietnamDateTime(getPublishedDate(content), locale)}` : `Ngày đăng: ${formatVietnamDateTime(getPublishedDate(content), locale)}`}</span>
                 </div>
                 <div className="flex items-center">
                   <Eye className="mr-2 h-4 w-4" />

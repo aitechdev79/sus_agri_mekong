@@ -17,13 +17,15 @@ export async function GET() {
         thumbnailUrl: true,
         imageUrl: true,
         viewCount: true,
+        publishedAt: true,
         createdAt: true,
         type: true,
         category: true,
       },
-      orderBy: {
-        createdAt: 'desc',
-      },
+      orderBy: [
+        { publishedAt: 'desc' },
+        { createdAt: 'desc' },
+      ],
       take: 6, // Limit to 6 items for the homepage
     });
 

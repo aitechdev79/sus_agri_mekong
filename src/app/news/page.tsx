@@ -7,11 +7,13 @@ import { useEffect, useState } from 'react';
 import NavigationBar from '@/components/NavigationBar';
 import { usePublicCategories } from '@/hooks/use-public-categories';
 import { formatVietnamDate } from '@/lib/vietnam-time';
+import { getPublishedDate } from '@/lib/content-dates';
 
 interface NewsItem {
   id: string;
   title: string;
   description?: string;
+  publishedAt?: string | null;
   createdAt: string;
   viewCount: number;
   thumbnailUrl?: string;
@@ -153,7 +155,7 @@ export default function NewsPage() {
                   <div className="p-4 flex-1">
                     <div className="flex items-center text-xs text-gray-500 mb-2">
                       <Calendar className="w-3 h-3 mr-1" />
-                      <span className="font-montserrat">{formatDate(item.createdAt)}</span>
+                      <span className="font-montserrat">{formatDate(String(getPublishedDate(item)))}</span>
                     </div>
 
                     <h2 className="text-lg font-bold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors font-montserrat line-clamp-2">

@@ -13,6 +13,7 @@ import { usePublicCategories } from '@/hooks/use-public-categories'
 import { usePathname } from 'next/navigation'
 import { getLocaleFromPathname, pickLocalizedText, withLocalePrefix } from '@/lib/content-locale'
 import { formatVietnamDate } from '@/lib/vietnam-time'
+import { getPublishedDate } from '@/lib/content-dates'
 
 function getQuickAccessCards(isEn: boolean) {
   return [
@@ -450,7 +451,7 @@ export default function LibraryPage() {
                           </div>
 
                           <div className="font-montserrat text-sm text-[#6B7280]">
-                            {formatDate(content.createdAt, isEn)}
+                            {formatDate(String(getPublishedDate(content)), isEn)}
                           </div>
                         </div>
                       </Link>

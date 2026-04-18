@@ -184,6 +184,7 @@ model Content {
   downloadCount Int         @default(0)
   status      ContentStatus @default(DRAFT)
   authorId    String
+  publishedAt DateTime?
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 
@@ -196,6 +197,7 @@ model Content {
   @@index([status])
   @@index([isPublic])
   @@index([eventStartAt])
+  @@index([publishedAt])
   @@index([sectionKey])
   @@index([sectionKey, displayOrder])
 }
