@@ -31,6 +31,7 @@ async function getContent(contentId: string): Promise<PublicContent | null> {
 
     return {
       ...content,
+      publishedAt: content.publishedAt?.toISOString() || null,
       createdAt: content.createdAt.toISOString(),
       updatedAt: content.updatedAt.toISOString(),
       eventStartAt: content.eventStartAt?.toISOString() || null,

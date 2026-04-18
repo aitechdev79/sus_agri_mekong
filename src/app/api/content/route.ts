@@ -12,6 +12,11 @@ function normalizeEventDate(value?: string | null, isAllDay?: boolean) {
   return parseVietnamDateTimeInput(value, isAllDay)
 }
 
+function normalizePublishedDate(value?: string | null) {
+  if (!value) return null
+  return parseVietnamDateTimeInput(value)
+}
+
 function normalizeDisplayOrder(value?: unknown) {
   if (value === null || value === undefined || value === '') return null
   const parsed = Number(value)
@@ -97,8 +102,8 @@ export async function GET(request: NextRequest) {
 
     const orderBy =
       sort === 'newest'
-        ? [{ createdAt: 'desc' as const }]
-        : [{ createdAt: 'desc' as const }]
+        ? [{ publishedAt: { sort: 'desc' as const, nulls: 'last' as const } }, { createdAt: 'desc' as const }]
+        : [{ publishedAt: { sort: 'desc' as const, nulls: 'last' as const } }, { createdAt: 'desc' as const }]
 
     const [contents, total] = await Promise.all([
       prisma.content.findMany({
@@ -180,14 +185,23 @@ export async function POST(request: NextRequest) {
       eventEndAt,
       eventTimezone,
       eventLocation,
-      isAllDay
+      isAllDay,
+      publishedAt
     } = data
 
     const sanitizedContent = sanitizeRichText(content || '')
     const sanitizedContentEn = sanitizeRichText(contentEn || '')
     const normalizedEventStartAt = normalizeEventDate(eventStartAt, isAllDay)
     const normalizedEventEndAt = normalizeEventDate(eventEndAt, isAllDay)
+    const normalizedPublishedAt = normalizePublishedDate(publishedAt)
     const normalizedDisplayOrder = normalizeDisplayOrder(displayOrder)
+
+    if (publishedAt && !normalizedPublishedAt) {
+      return NextResponse.json(
+        { error: 'Ngày đăng không hợp lệ' },
+        { status: 400 }
+      )
+    }
 
     const placementValidation = validateSectionPlacement(type, sectionKey)
     if (!placementValidation.ok) {
@@ -221,6 +235,7 @@ export async function POST(request: NextRequest) {
 
     // Visibility is controlled by status only.
     const finalStatus = user.role === 'ADMIN' ? (status || 'PUBLISHED') : 'DRAFT'
+    const finalPublishedAt = normalizedPublishedAt || (finalStatus === 'PUBLISHED' ? new Date() : null)
 
     const newContent = await prisma.content.create({
       data: {
@@ -240,6 +255,7 @@ export async function POST(request: NextRequest) {
         isPublic: true,
         isFeatured: false,
         status: finalStatus,
+        publishedAt: finalPublishedAt,
         authorId: user.id,
         videoUrl: videoUrl || null,
         imageUrl: imageUrl || null,

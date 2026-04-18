@@ -27,11 +27,13 @@ export async function GET(request: NextRequest) {
           thumbnailUrl: true,
           imageUrl: true,
           viewCount: true,
+          publishedAt: true,
           createdAt: true,
           displayOrder: true
         },
         orderBy: [
           { displayOrder: 'asc' },
+          { publishedAt: { sort: 'desc', nulls: 'last' } },
           { createdAt: 'desc' }
         ],
         skip,

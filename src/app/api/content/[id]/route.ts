@@ -12,6 +12,11 @@ function normalizeEventDate(value?: string | null, isAllDay?: boolean) {
   return parseVietnamDateTimeInput(value, isAllDay)
 }
 
+function normalizePublishedDate(value?: string | null) {
+  if (!value) return null
+  return parseVietnamDateTimeInput(value)
+}
+
 function normalizeDisplayOrder(value?: unknown) {
   if (value === null || value === undefined || value === '') return null
   const parsed = Number(value)
@@ -201,14 +206,23 @@ export async function PUT(
       eventEndAt,
       eventTimezone,
       eventLocation,
-      isAllDay
+      isAllDay,
+      publishedAt
     } = data
 
     const sanitizedContent = sanitizeRichText(contentText || '')
     const sanitizedContentEn = sanitizeRichText(contentEn || '')
     const normalizedEventStartAt = normalizeEventDate(eventStartAt, isAllDay)
     const normalizedEventEndAt = normalizeEventDate(eventEndAt, isAllDay)
+    const normalizedPublishedAt = normalizePublishedDate(publishedAt)
     const normalizedDisplayOrder = normalizeDisplayOrder(displayOrder)
+
+    if (publishedAt && !normalizedPublishedAt) {
+      return NextResponse.json(
+        { error: 'Ngày đăng không hợp lệ' },
+        { status: 400 }
+      )
+    }
 
     const placementValidation = validateSectionPlacement(type, sectionKey)
     if (!placementValidation.ok) {
@@ -278,6 +292,14 @@ export async function PUT(
       updateData.status = status
     } else if (content.status === 'DRAFT') {
       updateData.status = status === 'PUBLISHED' ? 'PUBLISHED' : 'DRAFT'
+    }
+
+    if (normalizedPublishedAt) {
+      updateData.publishedAt = normalizedPublishedAt
+    } else if (updateData.status === 'PUBLISHED' && !content.publishedAt) {
+      updateData.publishedAt = new Date()
+    } else if (updateData.status !== 'PUBLISHED') {
+      updateData.publishedAt = null
     }
 
     console.log('Final updateData being saved:', updateData)

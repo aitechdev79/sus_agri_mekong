@@ -16,9 +16,11 @@ export async function GET() {
         description: true,
         type: true,
         thumbnailUrl: true,
+        publishedAt: true,
         createdAt: true,
       },
       orderBy: [
+        { publishedAt: { sort: 'desc', nulls: 'last' } },
         { createdAt: 'desc' },
       ],
       take: 9, // Limit to 9 items for carousel (3 slides of 3 items)

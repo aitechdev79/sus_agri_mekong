@@ -64,6 +64,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
         isFeatured: false,
         isPublic: true,
         status: content.status || 'DRAFT',
+        publishedAt: toDateTimeLocalValue(content.publishedAt || (content.status === 'PUBLISHED' ? content.createdAt : null)),
         fileUrl: content.fileUrl || '',
         fileType: content.fileType || '',
         fileSize: content.fileSize || 0,
@@ -111,6 +112,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
         isFeatured: false,
         isPublic: true,
         status: 'DRAFT',
+        publishedAt: '',
         fileUrl: '',
         fileType: '',
         fileSize: 0,
@@ -238,6 +240,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
         isFeatured: false,
         isPublic: true,
         status: 'DRAFT',
+        publishedAt: '',
         fileUrl: '',
         fileType: '',
         fileSize: 0,
@@ -618,7 +621,23 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
               />
               <p className="text-xs text-gray-500 mt-1">
-                Áp dụng cho Tin tức, Điển hình và Hoạt động dự án. Số nhỏ hiển thị trước; bỏ trống thì sắp xếp theo ngày tạo mới nhất.
+                Áp dụng cho Tin tức, Điển hình và Hoạt động dự án. Số nhỏ hiển thị trước; bỏ trống thì sắp xếp theo ngày đăng mới nhất.
+              </p>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Ngày/giờ đăng
+              </label>
+              <input
+                type="datetime-local"
+                name="publishedAt"
+                value={formData.publishedAt}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Dùng khi đăng lại nội dung cũ. Nếu bỏ trống và chọn Đã xuất bản, hệ thống sẽ lấy thời điểm hiện tại.
               </p>
             </div>
           </div>

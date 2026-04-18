@@ -30,6 +30,7 @@ export async function GET(request: NextRequest) {
           eventStartAt: true,
           eventEndAt: true,
           eventLocation: true,
+          publishedAt: true,
           createdAt: true,
         },
         orderBy: [

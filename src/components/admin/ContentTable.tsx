@@ -141,7 +141,7 @@ export function ContentTable({
                       <div className="mb-1 font-medium text-gray-900">{content.title}</div>
                       {content.titleEn && <div className="text-sm text-gray-500">{content.titleEn}</div>}
                       <div className="text-xs text-gray-500">
-                        Ngày đăng: {content.status === 'PUBLISHED' ? formatVietnamDate(getPublishedDate(content)) : '-'}
+                        Ngày đăng: {content.status === 'PUBLISHED' ? formatVietnamDateTime(getPublishedDate(content)) : '-'}
                       </div>
                     </div>
                   </div>

@@ -56,6 +56,7 @@ export async function GET(request: NextRequest) {
         projectUrl: true,
         thumbnailUrl: true,
         imageUrl: true,
+        publishedAt: true,
         createdAt: true,
         updatedAt: true,
         eventStartAt: true,
