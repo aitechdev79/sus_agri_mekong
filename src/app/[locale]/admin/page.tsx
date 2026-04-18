@@ -250,6 +250,77 @@ export default function AdminPage() {
             </section>
           )}
 
+          {session.user.role === 'ADMIN' && (
+            <section className="mb-8 grid gap-4 rounded-3xl border border-slate-200 bg-white p-4 shadow-sm md:p-6">
+              <div className="grid gap-4 lg:grid-cols-2">
+                <Link
+                  href={`/${locale}/admin/users`}
+                  className="rounded-2xl border border-sky-100 bg-sky-50 p-4 transition hover:border-sky-200 hover:bg-sky-100/70"
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="rounded-lg bg-white p-2 text-sky-700">
+                      <Users className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <div className="text-base font-semibold text-slate-900">Quản lý người dùng</div>
+                      <p className="mt-1 text-sm text-slate-600">Cá nhân, doanh nghiệp và trạng thái xác thực.</p>
+                    </div>
+                  </div>
+                  <div className="mt-4 grid grid-cols-2 gap-2 text-center sm:grid-cols-4">
+                    <div className="rounded-lg bg-white p-3">
+                      <div className="text-xl font-bold text-slate-900">{managementStats.totalUsers}</div>
+                      <div className="mt-1 text-xs text-slate-500">Tài khoản</div>
+                    </div>
+                    <div className="rounded-lg bg-white p-3">
+                      <div className="text-xl font-bold text-slate-900">{managementStats.personalUsers}</div>
+                      <div className="mt-1 text-xs text-slate-500">Cá nhân</div>
+                    </div>
+                    <div className="rounded-lg bg-white p-3">
+                      <div className="text-xl font-bold text-slate-900">{managementStats.businessUsers}</div>
+                      <div className="mt-1 text-xs text-slate-500">Doanh nghiệp</div>
+                    </div>
+                    <div className="rounded-lg bg-white p-3">
+                      <div className="text-xl font-bold text-slate-900">{managementStats.verifiedUsers}</div>
+                      <div className="mt-1 text-xs text-slate-500">Đã xác thực</div>
+                    </div>
+                  </div>
+                </Link>
+                <Link
+                  href={`/${locale}/admin/partners`}
+                  className="rounded-2xl border border-emerald-100 bg-emerald-50 p-4 transition hover:border-emerald-200 hover:bg-emerald-100/70"
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="rounded-lg bg-white p-2 text-emerald-700">
+                      <Building2 className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <div className="text-base font-semibold text-slate-900">Quản lý đối tác</div>
+                      <p className="mt-1 text-sm text-slate-600">Hồ sơ đối tác, trạng thái công khai và duyệt hiển thị.</p>
+                    </div>
+                  </div>
+                  <div className="mt-4 grid grid-cols-2 gap-2 text-center sm:grid-cols-4">
+                    <div className="rounded-lg bg-white p-3">
+                      <div className="text-xl font-bold text-slate-900">{managementStats.totalPartners}</div>
+                      <div className="mt-1 text-xs text-slate-500">Đối tác</div>
+                    </div>
+                    <div className="rounded-lg bg-white p-3">
+                      <div className="text-xl font-bold text-slate-900">{managementStats.publicPartners}</div>
+                      <div className="mt-1 text-xs text-slate-500">Công khai</div>
+                    </div>
+                    <div className="rounded-lg bg-white p-3">
+                      <div className="text-xl font-bold text-slate-900">{managementStats.verifiedPartners}</div>
+                      <div className="mt-1 text-xs text-slate-500">Đã xác thực</div>
+                    </div>
+                    <div className="rounded-lg bg-white p-3">
+                      <div className="text-xl font-bold text-slate-900">{managementStats.pendingPartners}</div>
+                      <div className="mt-1 text-xs text-slate-500">Chờ duyệt</div>
+                    </div>
+                  </div>
+                </Link>
+              </div>
+            </section>
+          )}
+
           <section className="mb-8">
             <AiNewsPanel />
           </section>
@@ -331,76 +402,6 @@ export default function AdminPage() {
                 </div>
               </div>
             </div>
-            {session.user.role === 'ADMIN' && (
-              <div className="mb-4 grid gap-4 rounded-2xl border border-slate-200 bg-white p-4">
-                <div className="grid gap-4 lg:grid-cols-2">
-                  <Link
-                    href={`/${locale}/admin/users`}
-                    className="rounded-2xl border border-sky-100 bg-sky-50 p-4 transition hover:border-sky-200 hover:bg-sky-100/70"
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className="rounded-lg bg-white p-2 text-sky-700">
-                        <Users className="h-5 w-5" />
-                      </div>
-                      <div>
-                        <div className="text-base font-semibold text-slate-900">Quản lý người dùng</div>
-                        <p className="mt-1 text-sm text-slate-600">Cá nhân, doanh nghiệp và trạng thái xác thực.</p>
-                      </div>
-                    </div>
-                    <div className="mt-4 grid grid-cols-2 gap-2 text-center sm:grid-cols-4">
-                      <div className="rounded-lg bg-white p-3">
-                        <div className="text-xl font-bold text-slate-900">{managementStats.totalUsers}</div>
-                        <div className="mt-1 text-xs text-slate-500">Tài khoản</div>
-                      </div>
-                      <div className="rounded-lg bg-white p-3">
-                        <div className="text-xl font-bold text-slate-900">{managementStats.personalUsers}</div>
-                        <div className="mt-1 text-xs text-slate-500">Cá nhân</div>
-                      </div>
-                      <div className="rounded-lg bg-white p-3">
-                        <div className="text-xl font-bold text-slate-900">{managementStats.businessUsers}</div>
-                        <div className="mt-1 text-xs text-slate-500">Doanh nghiệp</div>
-                      </div>
-                      <div className="rounded-lg bg-white p-3">
-                        <div className="text-xl font-bold text-slate-900">{managementStats.verifiedUsers}</div>
-                        <div className="mt-1 text-xs text-slate-500">Đã xác thực</div>
-                      </div>
-                    </div>
-                  </Link>
-                  <Link
-                    href={`/${locale}/admin/partners`}
-                    className="rounded-2xl border border-emerald-100 bg-emerald-50 p-4 transition hover:border-emerald-200 hover:bg-emerald-100/70"
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className="rounded-lg bg-white p-2 text-emerald-700">
-                        <Building2 className="h-5 w-5" />
-                      </div>
-                      <div>
-                        <div className="text-base font-semibold text-slate-900">Quản lý đối tác</div>
-                        <p className="mt-1 text-sm text-slate-600">Hồ sơ đối tác, trạng thái công khai và duyệt hiển thị.</p>
-                      </div>
-                    </div>
-                    <div className="mt-4 grid grid-cols-2 gap-2 text-center sm:grid-cols-4">
-                      <div className="rounded-lg bg-white p-3">
-                        <div className="text-xl font-bold text-slate-900">{managementStats.totalPartners}</div>
-                        <div className="mt-1 text-xs text-slate-500">Đối tác</div>
-                      </div>
-                      <div className="rounded-lg bg-white p-3">
-                        <div className="text-xl font-bold text-slate-900">{managementStats.publicPartners}</div>
-                        <div className="mt-1 text-xs text-slate-500">Công khai</div>
-                      </div>
-                      <div className="rounded-lg bg-white p-3">
-                        <div className="text-xl font-bold text-slate-900">{managementStats.verifiedPartners}</div>
-                        <div className="mt-1 text-xs text-slate-500">Đã xác thực</div>
-                      </div>
-                      <div className="rounded-lg bg-white p-3">
-                        <div className="text-xl font-bold text-slate-900">{managementStats.pendingPartners}</div>
-                        <div className="mt-1 text-xs text-slate-500">Chờ duyệt</div>
-                      </div>
-                    </div>
-                  </Link>
-                </div>
-              </div>
-            )}
             <div className="mb-4 flex flex-col gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
               <div className="text-sm text-slate-600">
                 Hiển thị {contents.length > 0 ? (pagination.page - 1) * pagination.limit + 1 : 0}
