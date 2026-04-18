@@ -70,8 +70,9 @@ export default function SignUpSection() {
   }, [partners]);
 
   return (
-    <section className="bg-vn-rice-white py-20">
-      <div className="container mx-auto max-w-6xl px-6">
+    <section className="relative bg-vn-rice-white py-20">
+      <div className="absolute inset-0 bg-white/55" aria-hidden="true" />
+      <div className="container relative mx-auto max-w-6xl px-6">
         <div className="relative mb-16">
           <div className="flex items-start justify-between">
             <div style={{ maxWidth: '60%' }}>
@@ -117,15 +118,20 @@ export default function SignUpSection() {
             {isEn ? 'Loading partners...' : 'Đang tải đối tác...'}
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-4">
+          <div className="grid grid-cols-2 justify-center gap-6 md:grid-cols-[repeat(auto-fit,minmax(220px,1fr))] md:gap-8">
             {displayPartners.map((partner) => (
               <div
                 key={partner.id}
-                className="bg-white flex items-center justify-center transition-all duration-300 hover:scale-105"
-                style={{ border: '1px solid rgba(0, 0, 0, 0.1)', padding: '24px', maxHeight: '120px' }}
+                className="group flex h-36 items-center justify-center rounded-lg border border-gray-200 bg-white px-8 py-6 shadow-sm transition-all duration-300 hover:border-[#FFB81C] hover:shadow-lg"
               >
-                <div className="relative flex h-20 w-full items-center justify-center">
-                  <Image src={partner.logoUrl || '/Logo_Vinamilk_(2023).png'} alt={partner.companyName} fill className="object-contain" />
+                <div className="relative flex h-20 w-full max-w-[72%] items-center justify-center transition-transform duration-300 group-hover:scale-[1.03]">
+                  <Image
+                    src={partner.logoUrl || '/Logo_Vinamilk_(2023).png'}
+                    alt={partner.companyName}
+                    fill
+                    className="object-contain"
+                    sizes="(max-width: 768px) 50vw, 220px"
+                  />
                 </div>
               </div>
             ))}
