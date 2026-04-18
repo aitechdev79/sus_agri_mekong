@@ -255,63 +255,80 @@ export default function AdminPage() {
           </section>
 
           <section className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm md:p-6">
-            <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div className="mb-4">
               <div>
                 <h2 className="text-xl font-semibold text-slate-900">Danh sách nội dung</h2>
                 <p className="mt-1 text-sm text-slate-600">Quản lý chỉnh sửa, xuất bản và thao tác hàng loạt.</p>
               </div>
-              <Button onClick={handleCreateContent} className="h-11 justify-center rounded-xl bg-emerald-600 px-5 hover:bg-emerald-700">
-                <Plus className="mr-2 h-4 w-4" />
-                Thêm nội dung
-              </Button>
             </div>
             <div className="mb-4 rounded-2xl border border-slate-200 bg-slate-50 p-4">
               <div className="mb-3 text-sm font-semibold text-slate-700">Tổng quan nội dung</div>
-              <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-                <article className="rounded-xl border border-slate-200 bg-white p-4">
-                  <div className="flex items-center justify-between gap-3">
-                    <div>
-                      <div className="text-sm text-slate-500">Tổng nội dung</div>
-                      <div className="mt-1 text-2xl font-bold text-slate-900">{stats.totalContent}</div>
-                    </div>
-                    <div className="inline-flex rounded-lg bg-sky-100 p-2 text-sky-700">
-                      <FileText className="h-4 w-4" />
-                    </div>
+              <div className="grid gap-4 lg:grid-cols-2">
+                <div className="grid gap-3 rounded-2xl border border-slate-200 bg-white p-4">
+                  <div className="text-sm font-semibold text-slate-700">Nội dung</div>
+                  <div className="grid gap-3 sm:grid-cols-3">
+                    <article className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                      <div className="flex items-center justify-between gap-3">
+                        <div>
+                          <div className="text-sm text-slate-500">Tổng nội dung</div>
+                          <div className="mt-1 text-2xl font-bold text-slate-900">{stats.totalContent}</div>
+                        </div>
+                        <div className="inline-flex rounded-lg bg-sky-100 p-2 text-sky-700">
+                          <FileText className="h-4 w-4" />
+                        </div>
+                      </div>
+                    </article>
+                    <article className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                      <div className="flex items-center justify-between gap-3">
+                        <div>
+                          <div className="text-sm text-slate-500">Đã xuất bản</div>
+                          <div className="mt-1 text-2xl font-bold text-slate-900">{stats.published}</div>
+                        </div>
+                        <div className="inline-flex rounded-lg bg-emerald-100 p-2 text-emerald-700">
+                          <FileCheck2 className="h-4 w-4" />
+                        </div>
+                      </div>
+                    </article>
+                    <article className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                      <div className="flex items-center justify-between gap-3">
+                        <div>
+                          <div className="text-sm text-slate-500">Tổng lượt xem</div>
+                          <div className="mt-1 text-2xl font-bold text-slate-900">{stats.totalViews.toLocaleString('vi-VN')}</div>
+                        </div>
+                        <div className="inline-flex rounded-lg bg-violet-100 p-2 text-violet-700">
+                          <BarChart3 className="h-4 w-4" />
+                        </div>
+                      </div>
+                    </article>
                   </div>
-                </article>
-                <article className="rounded-xl border border-slate-200 bg-white p-4">
-                  <div className="flex items-center justify-between gap-3">
-                    <div>
-                      <div className="text-sm text-slate-500">Đã xuất bản</div>
-                      <div className="mt-1 text-2xl font-bold text-slate-900">{stats.published}</div>
+                  <Button onClick={handleCreateContent} className="h-11 justify-center rounded-xl bg-emerald-600 hover:bg-emerald-700">
+                    <Plus className="mr-2 h-4 w-4" />
+                    Thêm nội dung
+                  </Button>
+                </div>
+                <div className="grid gap-3 rounded-2xl border border-amber-100 bg-white p-4">
+                  <div className="text-sm font-semibold text-slate-700">Danh mục</div>
+                  <article className="rounded-xl border border-amber-100 bg-amber-50 p-4">
+                    <div className="flex items-center justify-between gap-3">
+                      <div>
+                        <div className="text-sm text-slate-500">Danh mục đang dùng</div>
+                        <div className="mt-1 text-2xl font-bold text-slate-900">{categories.filter((item) => item.isActive).length}</div>
+                      </div>
+                      <div className="inline-flex rounded-lg bg-amber-100 p-2 text-amber-700">
+                        <FolderTree className="h-4 w-4" />
+                      </div>
                     </div>
-                    <div className="inline-flex rounded-lg bg-emerald-100 p-2 text-emerald-700">
-                      <FileCheck2 className="h-4 w-4" />
-                    </div>
-                  </div>
-                </article>
-                <article className="rounded-xl border border-slate-200 bg-white p-4">
-                  <div className="flex items-center justify-between gap-3">
-                    <div>
-                      <div className="text-sm text-slate-500">Danh mục đang dùng</div>
-                      <div className="mt-1 text-2xl font-bold text-slate-900">{categories.filter((item) => item.isActive).length}</div>
-                    </div>
-                    <div className="inline-flex rounded-lg bg-amber-100 p-2 text-amber-700">
-                      <FolderTree className="h-4 w-4" />
-                    </div>
-                  </div>
-                </article>
-                <article className="rounded-xl border border-slate-200 bg-white p-4">
-                  <div className="flex items-center justify-between gap-3">
-                    <div>
-                      <div className="text-sm text-slate-500">Tổng lượt xem</div>
-                      <div className="mt-1 text-2xl font-bold text-slate-900">{stats.totalViews.toLocaleString('vi-VN')}</div>
-                    </div>
-                    <div className="inline-flex rounded-lg bg-violet-100 p-2 text-violet-700">
-                      <BarChart3 className="h-4 w-4" />
-                    </div>
-                  </div>
-                </article>
+                  </article>
+                  {session.user.role === 'ADMIN' && (
+                    <Link
+                      href={`/${locale}/admin/categories`}
+                      className="inline-flex h-11 items-center justify-center rounded-xl border border-amber-200 bg-white px-4 text-sm font-medium text-slate-700 transition hover:bg-amber-50"
+                    >
+                      <Tags className="mr-2 h-4 w-4" />
+                      Quản lý danh mục
+                    </Link>
+                  )}
+                </div>
               </div>
             </div>
             {session.user.role === 'ADMIN' && (
@@ -382,13 +399,6 @@ export default function AdminPage() {
                     </div>
                   </Link>
                 </div>
-                <Link
-                  href={`/${locale}/admin/categories`}
-                  className="inline-flex h-11 items-center justify-center rounded-xl border border-slate-200 px-4 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
-                >
-                  <Tags className="mr-2 h-4 w-4" />
-                  Quản lý danh mục
-                </Link>
               </div>
             )}
             <div className="mb-4 flex flex-col gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
