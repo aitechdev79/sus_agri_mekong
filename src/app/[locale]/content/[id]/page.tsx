@@ -3,6 +3,7 @@ import { Calendar, Download, Eye, ExternalLink } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
+import { ContentViewTracker } from '@/components/content/ContentViewTracker';
 import { prisma } from '@/lib/prisma';
 import { PublicContent } from '@/types/content';
 import { isEnglishLocale, pickLocalizedText } from '@/lib/content-locale';
@@ -152,6 +153,7 @@ export default async function LocaleContentDetailPage({
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <ContentViewTracker contentId={content.id} />
       <NavigationBar />
 
       <main className="container mx-auto px-6 py-20">

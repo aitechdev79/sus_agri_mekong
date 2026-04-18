@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { Calendar, Eye, User } from 'lucide-react';
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
+import { ContentViewTracker } from '@/components/content/ContentViewTracker';
 import { NewsContent } from '@/types/content';
 import { prisma } from '@/lib/prisma';
 import { renderRichTextContent } from '@/lib/rich-text';
@@ -50,6 +51,7 @@ export default async function NewsPage({ params }: { params: Promise<{ id: strin
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <ContentViewTracker contentId={content.id} />
       <NavigationBar />
 
       <main className="container mx-auto px-6 py-20">

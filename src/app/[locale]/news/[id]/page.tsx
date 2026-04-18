@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Calendar, Eye, User, ArrowLeft } from 'lucide-react';
+import { ContentViewTracker } from '@/components/content/ContentViewTracker';
 import { NewsContent } from '@/types/content';
 import { prisma } from '@/lib/prisma';
 import { pickLocalizedText } from '@/lib/content-locale';
@@ -55,6 +56,7 @@ export default async function NewsPage({ params }: { params: Promise<{ locale: s
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <ContentViewTracker contentId={content.id} />
       {/* Header */}
       <header className="bg-white shadow-sm">
         <div className="container mx-auto px-6 py-4">
