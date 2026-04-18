@@ -41,12 +41,10 @@ export async function GET(request: NextRequest) {
         projectUrl: true,
         thumbnailUrl: true,
         imageUrl: true,
-        publishedAt: true,
         createdAt: true,
       },
       orderBy: [
         { displayOrder: { sort: 'asc', nulls: 'last' } },
-        { publishedAt: 'desc' },
         { createdAt: 'desc' },
       ],
       take: limit,

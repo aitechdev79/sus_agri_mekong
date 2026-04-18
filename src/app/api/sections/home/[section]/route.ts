@@ -47,12 +47,10 @@ export async function GET(
         thumbnailUrl: true,
         imageUrl: true,
         displayOrder: true,
-        publishedAt: true,
         createdAt: true
       },
       orderBy: [
         { displayOrder: { sort: 'asc', nulls: 'last' } },
-        { publishedAt: 'desc' },
         { createdAt: 'desc' }
       ],
       take: config.take

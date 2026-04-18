@@ -16,7 +16,6 @@ export async function GET() {
         imageUrl: true,
         thumbnailUrl: true,
         viewCount: true,
-        publishedAt: true,
         createdAt: true,
         author: {
           select: {
@@ -26,7 +25,6 @@ export async function GET() {
         }
       },
       orderBy: [
-        { publishedAt: 'desc' },
         { createdAt: 'desc' },
       ],
       take: 6, // Limit to 6 items for the homepage

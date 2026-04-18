@@ -15,11 +15,9 @@ export async function GET() {
         thumbnailUrl: true,
         viewCount: true,
         fileUrl: true,
-        publishedAt: true,
         createdAt: true,
       },
       orderBy: [
-        { publishedAt: 'desc' },
         { createdAt: 'desc' },
       ],
     });

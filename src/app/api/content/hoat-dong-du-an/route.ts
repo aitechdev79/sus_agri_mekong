@@ -27,12 +27,10 @@ export async function GET(request: NextRequest) {
           thumbnailUrl: true,
           imageUrl: true,
           displayOrder: true,
-          publishedAt: true,
           createdAt: true
         },
         orderBy: [
           { displayOrder: 'asc' },
-          { publishedAt: 'desc' },
           { createdAt: 'desc' }
         ],
         skip,
