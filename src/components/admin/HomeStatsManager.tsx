@@ -80,46 +80,49 @@ export function HomeStatsManager() {
   }
 
   return (
-    <section className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm md:p-6">
-      <div className="mb-4">
-        <h2 className="text-xl font-semibold text-slate-900">Số liệu trang chủ</h2>
-        <p className="mt-1 text-sm text-slate-600">Chỉnh các con số trong khối giới thiệu ở trang chủ.</p>
-      </div>
+    <section className="overflow-hidden rounded-3xl border border-vn-gold/30 bg-vn-gold-light shadow-sm">
+      <div className="px-4 py-5 md:px-6">
+        <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="font-montserrat text-sm font-semibold uppercase tracking-wide text-vn-green">Trang chủ</p>
+            <h2 className="mt-1 font-montserrat text-2xl font-bold text-vn-dark">Số liệu trang chủ</h2>
+            <p className="mt-2 max-w-2xl font-montserrat text-sm text-slate-600">Chỉnh các con số trong khối giới thiệu ở trang chủ.</p>
+          </div>
+          <button
+            type="button"
+            disabled={loading || saving}
+            onClick={() => void saveStats()}
+            className="h-11 rounded-lg bg-vn-green px-5 text-sm font-semibold text-white transition hover:bg-vn-green/90 disabled:opacity-60"
+          >
+            {saving ? 'Đang lưu...' : 'Lưu số liệu'}
+          </button>
+        </div>
 
-      {error && <div className="mb-4 rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">{error}</div>}
-      {message && <div className="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">{message}</div>}
+        {error && <div className="mb-4 rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">{error}</div>}
+        {message && <div className="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">{message}</div>}
 
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        {HOME_STATS_FIELDS.map((field) => (
-          <label key={field.key} className="block">
-            <span className="mb-1 block text-sm font-medium text-slate-900">{field.labelVi}</span>
-            <input
-              type="number"
-              min={0}
-              step={1}
-              value={form[field.key]}
-              disabled={loading || saving}
-              onChange={(event) =>
-                setForm((current) => ({
-                  ...current,
-                  [field.key]: event.target.value,
-                }))
-              }
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 disabled:bg-slate-100"
-            />
-          </label>
-        ))}
-      </div>
-
-      <div className="mt-5 flex justify-end">
-        <button
-          type="button"
-          disabled={loading || saving}
-          onClick={() => void saveStats()}
-          className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700 disabled:opacity-60"
-        >
-          {saving ? 'Đang lưu...' : 'Lưu số liệu'}
-        </button>
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          {HOME_STATS_FIELDS.map((field) => (
+            <label key={field.key} className="relative block overflow-hidden rounded-lg bg-white p-4 shadow-md">
+              <span className="absolute left-0 top-0 h-1 w-full bg-vn-green" />
+              <span className="mb-3 block font-montserrat text-xs font-semibold text-vn-dark">{field.labelVi}</span>
+              <input
+                type="number"
+                min={0}
+                step={1}
+                value={form[field.key]}
+                disabled={loading || saving}
+                onChange={(event) =>
+                  setForm((current) => ({
+                    ...current,
+                    [field.key]: event.target.value,
+                  }))
+                }
+                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 font-montserrat text-3xl font-bold text-vn-gold focus:outline-none focus:ring-2 focus:ring-vn-green disabled:bg-slate-100"
+              />
+            </label>
+          ))}
+        </div>
       </div>
     </section>
   )

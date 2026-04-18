@@ -169,6 +169,12 @@ export default function AdminPage() {
       <NavigationBar />
 
       <div className="container mx-auto px-4 pb-8 pt-24 md:pb-10">
+        {session.user.role === 'ADMIN' && (
+          <section className="mb-8">
+            <HomeStatsManager />
+          </section>
+        )}
+
         <section className="mb-8 overflow-hidden rounded-3xl border border-sky-100 bg-white shadow-xl">
           <div>
             <div className="bg-sky-700 px-6 py-8 text-sky-50 md:px-8">
@@ -176,69 +182,67 @@ export default function AdminPage() {
               <p className="mt-3 max-w-xl text-sm text-sky-100">
                 Quản lý toàn bộ nội dung, danh mục và người dùng trên cùng một không gian làm việc.
               </p>
-              <div className="mt-5 grid gap-3 sm:grid-cols-3">
-                <div className="rounded-xl bg-white/15 px-3 py-2">
-                  <div className="text-xs uppercase tracking-wide text-sky-100">Tổng nội dung</div>
-                  <div className="mt-1 text-xl font-semibold">{stats.total}</div>
-                </div>
-                <div className="rounded-xl bg-white/15 px-3 py-2">
-                  <div className="text-xs uppercase tracking-wide text-sky-100">Đã xuất bản</div>
-                  <div className="mt-1 text-xl font-semibold">{stats.published}</div>
-                </div>
-                <div className="rounded-xl bg-white/15 px-3 py-2">
-                  <div className="text-xs uppercase tracking-wide text-sky-100">Bản nháp</div>
-                  <div className="mt-1 text-xl font-semibold">{stats.draft}</div>
-                </div>
-              </div>
             </div>
           </div>
-        </section>
-
-        <section className="mb-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-            <div className="mb-2 inline-flex rounded-lg bg-sky-100 p-2 text-sky-700">
-              <FileText className="h-4 w-4" />
-            </div>
-            <div className="text-sm text-slate-500">Tổng nội dung</div>
-            <div className="mt-1 text-3xl font-bold text-slate-900">{stats.total}</div>
-          </article>
-          <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-            <div className="mb-2 inline-flex rounded-lg bg-emerald-100 p-2 text-emerald-700">
-              <FileCheck2 className="h-4 w-4" />
-            </div>
-            <div className="text-sm text-slate-500">Đã xuất bản</div>
-            <div className="mt-1 text-3xl font-bold text-slate-900">{stats.published}</div>
-          </article>
-          <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-            <div className="mb-2 inline-flex rounded-lg bg-amber-100 p-2 text-amber-700">
-              <FolderTree className="h-4 w-4" />
-            </div>
-            <div className="text-sm text-slate-500">Danh mục đang dùng</div>
-            <div className="mt-1 text-3xl font-bold text-slate-900">{categories.filter((item) => item.isActive).length}</div>
-          </article>
-          <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-            <div className="mb-2 inline-flex rounded-lg bg-violet-100 p-2 text-violet-700">
-              <BarChart3 className="h-4 w-4" />
-            </div>
-            <div className="text-sm text-slate-500">Tổng lượt xem</div>
-            <div className="mt-1 text-3xl font-bold text-slate-900">{stats.totalViews.toLocaleString('vi-VN')}</div>
-          </article>
         </section>
 
         <section className="mb-8">
           <AiNewsPanel />
         </section>
 
-        {session.user.role === 'ADMIN' && (
-          <section className="mb-8">
-            <HomeStatsManager />
-          </section>
-        )}
-
         <section className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm md:p-6">
           <div className="mb-4">
             <h2 className="text-xl font-semibold text-slate-900">Danh sách nội dung</h2>
             <p className="mt-1 text-sm text-slate-600">Quản lý chỉnh sửa, xuất bản và thao tác hàng loạt.</p>
+          </div>
+          <div className="mb-4 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+            <div className="mb-3 text-sm font-semibold text-slate-700">Tổng quan nội dung</div>
+            <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+              <article className="rounded-xl border border-slate-200 bg-white p-4">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <div className="text-sm text-slate-500">Tổng nội dung</div>
+                    <div className="mt-1 text-2xl font-bold text-slate-900">{stats.total}</div>
+                  </div>
+                  <div className="inline-flex rounded-lg bg-sky-100 p-2 text-sky-700">
+                    <FileText className="h-4 w-4" />
+                  </div>
+                </div>
+              </article>
+              <article className="rounded-xl border border-slate-200 bg-white p-4">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <div className="text-sm text-slate-500">Đã xuất bản</div>
+                    <div className="mt-1 text-2xl font-bold text-slate-900">{stats.published}</div>
+                  </div>
+                  <div className="inline-flex rounded-lg bg-emerald-100 p-2 text-emerald-700">
+                    <FileCheck2 className="h-4 w-4" />
+                  </div>
+                </div>
+              </article>
+              <article className="rounded-xl border border-slate-200 bg-white p-4">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <div className="text-sm text-slate-500">Danh mục đang dùng</div>
+                    <div className="mt-1 text-2xl font-bold text-slate-900">{categories.filter((item) => item.isActive).length}</div>
+                  </div>
+                  <div className="inline-flex rounded-lg bg-amber-100 p-2 text-amber-700">
+                    <FolderTree className="h-4 w-4" />
+                  </div>
+                </div>
+              </article>
+              <article className="rounded-xl border border-slate-200 bg-white p-4">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <div className="text-sm text-slate-500">Tổng lượt xem</div>
+                    <div className="mt-1 text-2xl font-bold text-slate-900">{stats.totalViews.toLocaleString('vi-VN')}</div>
+                  </div>
+                  <div className="inline-flex rounded-lg bg-violet-100 p-2 text-violet-700">
+                    <BarChart3 className="h-4 w-4" />
+                  </div>
+                </div>
+              </article>
+            </div>
           </div>
           <div className="mb-4 grid gap-3 rounded-2xl border border-slate-200 bg-white p-4">
             <Button onClick={handleCreateContent} className="h-11 justify-center rounded-xl bg-emerald-600 hover:bg-emerald-700">
