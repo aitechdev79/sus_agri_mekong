@@ -1,8 +1,13 @@
 'use client'
 
 import { useState, useRef, useCallback } from 'react'
-import { Upload, X, File, Image, Video, FileText, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
+import { Upload, X, File as FileIcon, Image, Video, FileText, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+
+const MAX_FILE_ONLY_IMAGE_INPUT_SIZE = 10 * 1024 * 1024
+const MAX_FILE_ONLY_IMAGE_DIMENSION = 1600
+const FILE_ONLY_IMAGE_TARGET_SIZE = 900 * 1024
+const IMAGE_OUTPUT_QUALITY = 0.85
 
 interface UploadedFile {
   id?: string
@@ -32,6 +37,92 @@ interface FileUploadZoneProps {
   fileOnly?: boolean // If true, uploads files without creating content records
 }
 
+const supportsCanvasResize = (file: File) =>
+  file.type.startsWith('image/') && file.type !== 'image/svg+xml'
+
+const loadImageElement = (src: string) =>
+  new Promise<HTMLImageElement>((resolve, reject) => {
+    const image = document.createElement('img')
+    image.onload = () => resolve(image)
+    image.onerror = () => reject(new Error('Không thể đọc ảnh để resize.'))
+    image.src = src
+  })
+
+const fileToDataUrl = (file: File) =>
+  new Promise<string>((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => resolve(String(reader.result || ''))
+    reader.onerror = () => reject(new Error('Không thể đọc file ảnh.'))
+    reader.readAsDataURL(file)
+  })
+
+const canvasToBlob = (canvas: HTMLCanvasElement, type: string, quality?: number) =>
+  new Promise<Blob | null>((resolve) => {
+    canvas.toBlob(resolve, type, quality)
+  })
+
+async function resizeFileOnlyImage(file: File, targetMaxBytes: number) {
+  if (!supportsCanvasResize(file)) return file
+
+  const sourceUrl = await fileToDataUrl(file)
+  const image = await loadImageElement(sourceUrl)
+  const longestSide = Math.max(image.width, image.height)
+  const shouldResize = longestSide > MAX_FILE_ONLY_IMAGE_DIMENSION
+  const shouldCompress = file.size > targetMaxBytes
+
+  if (!shouldResize && !shouldCompress) {
+    return file
+  }
+
+  const scale = shouldResize ? MAX_FILE_ONLY_IMAGE_DIMENSION / longestSide : 1
+  const targetWidth = Math.max(1, Math.round(image.width * scale))
+  const targetHeight = Math.max(1, Math.round(image.height * scale))
+  const canvas = document.createElement('canvas')
+  canvas.width = targetWidth
+  canvas.height = targetHeight
+
+  const context = canvas.getContext('2d')
+  if (!context) return file
+
+  context.drawImage(image, 0, 0, targetWidth, targetHeight)
+
+  const outputTypes = file.type === 'image/png' || file.type === 'image/webp'
+    ? ['image/webp', 'image/jpeg']
+    : ['image/jpeg']
+  const qualitySteps = [IMAGE_OUTPUT_QUALITY, 0.78, 0.72, 0.66, 0.6, 0.54]
+
+  let bestBlob: Blob | null = null
+  let bestType = outputTypes[0]
+
+  for (const outputType of outputTypes) {
+    for (const quality of qualitySteps) {
+      const blob = await canvasToBlob(canvas, outputType, quality)
+      if (!blob) continue
+
+      bestBlob = blob
+      bestType = outputType
+
+      if (blob.size <= targetMaxBytes) {
+        const extension = outputType === 'image/webp' ? 'webp' : 'jpg'
+        const baseName = file.name.replace(/\.[^.]+$/, '') || 'image'
+        return new File([blob], `${baseName}.${extension}`, {
+          type: outputType,
+          lastModified: Date.now()
+        })
+      }
+    }
+  }
+
+  if (!bestBlob) return file
+
+  const extension = bestType === 'image/webp' ? 'webp' : 'jpg'
+  const baseName = file.name.replace(/\.[^.]+$/, '') || 'image'
+  return new File([bestBlob], `${baseName}.${extension}`, {
+    type: bestType,
+    lastModified: Date.now()
+  })
+}
+
 export function FileUploadZone({
   multiple = false,
   accept = "image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx",
@@ -50,8 +141,15 @@ export function FileUploadZone({
     const validFiles: UploadedFile[] = []
 
     for (const file of selectedFiles) {
+      const canResizeBeforeUpload = fileOnly && supportsCanvasResize(file)
+
       // Validate file size
-      if (file.size > maxSize * 1024 * 1024) {
+      if (canResizeBeforeUpload && file.size > MAX_FILE_ONLY_IMAGE_INPUT_SIZE) {
+        onUploadError?.(`File "${file.name}" quá lớn. Kích thước tối đa trước khi nén: ${MAX_FILE_ONLY_IMAGE_INPUT_SIZE / 1024 / 1024}MB`)
+        continue
+      }
+
+      if (!canResizeBeforeUpload && file.size > maxSize * 1024 * 1024) {
         onUploadError?.(`File "${file.name}" quá lớn. Kích thước tối đa: ${maxSize}MB`)
         continue
       }
@@ -67,7 +165,7 @@ export function FileUploadZone({
     } else {
       setFiles(prev => [...prev, ...validFiles])
     }
-  }, [maxSize, multiple, onUploadError])
+  }, [fileOnly, maxSize, multiple, onUploadError])
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault()
@@ -156,10 +254,13 @@ export function FileUploadZone({
             f === fileData ? { ...f, status: 'uploading' as const } : f
           ))
 
-          const formData = new FormData()
-          formData.append('file', fileData.file)
-
           try {
+            const uploadFile = fileOnly && fileData.file.type.startsWith('image/')
+              ? await resizeFileOnlyImage(fileData.file, Math.min(maxSize * 1024 * 1024, FILE_ONLY_IMAGE_TARGET_SIZE))
+              : fileData.file
+            const formData = new FormData()
+            formData.append('file', uploadFile)
+
             const uploadUrl = fileOnly ? '/api/upload/file-only' : '/api/upload'
             const response = await fetch(uploadUrl, {
               method: 'POST',
@@ -227,7 +328,7 @@ export function FileUploadZone({
     if (file.type.startsWith('image/')) return <Image className="w-5 h-5" />
     if (file.type.startsWith('video/')) return <Video className="w-5 h-5" />
     if (file.type === 'application/pdf') return <FileText className="w-5 h-5" />
-    return <File className="w-5 h-5" />
+    return <FileIcon className="w-5 h-5" />
   }
 
   const getStatusIcon = (status: UploadedFile['status']) => {
@@ -284,7 +385,7 @@ export function FileUploadZone({
         </p>
         {fileOnly && (
           <p className="text-xs text-amber-600 mt-2 bg-amber-50 px-2 py-1 rounded">
-            ⚠️ Hiện tại chỉ hỗ trợ hình ảnh dưới 1MB trên Vercel
+            Ảnh lớn sẽ được tự resize/nén trước khi tải lên.
           </p>
         )}
       </div>
