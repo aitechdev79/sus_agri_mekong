@@ -8,6 +8,7 @@ import { usePathname } from 'next/navigation'
 import { Handshake, Network, BookOpen } from 'lucide-react'
 import NavigationBar from '@/components/NavigationBar'
 import Footer from '@/components/Footer'
+import PartnerLogoCard from '@/components/PartnerLogoCard'
 import { getLocaleFromPathname, withLocalePrefix } from '@/lib/content-locale'
 
 interface PartnerItem {
@@ -168,20 +169,12 @@ export default function JoinUsPage() {
               ) : (
                 <div className="grid grid-cols-2 justify-center gap-6 md:grid-cols-[repeat(auto-fit,minmax(220px,1fr))] md:gap-8">
                   {displayPartners.map((partner) => (
-                    <div
+                    <PartnerLogoCard
                       key={partner.id}
-                      className="group flex h-36 items-center justify-center rounded-lg border border-gray-200 bg-white px-8 py-6 shadow-sm transition-all duration-300 hover:border-[#FFB81C] hover:shadow-lg"
-                    >
-                      <div className="relative flex h-20 w-full max-w-[72%] items-center justify-center transition-transform duration-300 group-hover:scale-[1.03]">
-                        <Image
-                          src={partner.logoUrl || '/Logo_Vinamilk_(2023).png'}
-                          alt={partner.companyName}
-                          fill
-                          className="object-contain"
-                          sizes="(max-width: 768px) 50vw, 220px"
-                        />
-                      </div>
-                    </div>
+                      companyName={partner.companyName}
+                      logoUrl={partner.logoUrl}
+                      website={partner.website}
+                    />
                   ))}
                 </div>
               )}
