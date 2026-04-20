@@ -7,6 +7,7 @@ Good Practices Platform is a bilingual (Vietnamese/English) knowledge hub for su
 Main user groups:
 - Visitors: browse public content without logging in.
 - Registered users: create an account and sign in.
+- Business/partner users: create business accounts, complete partner profiles, and submit profiles for admin review. See `BUSINESS_PARTNER_USER_GUIDE.md`.
 - Moderators/Admins: manage content in the admin area.
 
 Default language is Vietnamese (`/vi` or non-prefixed routes). English pages are under `/en/...`.
@@ -218,8 +219,13 @@ Admin can:
 - Home: `/` or `/vi` or `/en`
 - Sign in: `/auth/signin`
 - Sign up: `/auth/signup`
+- Business sign up: `/auth/signup?role=business`
+- Business profile: `/business/profile`
+- Join partner network: `/join-us`
+- Partners: `/partners`
 - Library: `/library`
 - Events: `/tat-ca-su-kien`
 - Admin dashboard: `/admin`
 - Admin users: `/admin/users`
 - Admin categories: `/admin/categories`
+- Admin partners: `/admin/partners`

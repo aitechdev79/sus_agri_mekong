@@ -45,9 +45,9 @@ export default function AboutSection() {
       title: isEn ? 'Vision, Mission & Goals' : 'Tầm nhìn, sứ mệnh, mục tiêu',
       description: isEn
         ? 'Commitment to transparent and reliable information for a sustainable future.'
-        : 'Cam kết cung cấp thông tin minh bạch và đáng tin cậy để xây dựng tương lai bền vững',
-      href: withLocalePrefix('/commitment', locale),
-      image: '/nong dan duoc mua.jpg'
+        : 'Cung cấp dữ liệu, thông tin minh bạch và đáng tin cậy đặt nền móng cho tương lai phát triển bền vững của Việt Nam.',
+      href: withLocalePrefix('/vision-mission', locale),
+      image: '/tam-nhin-su-menh-muc-tieu.png'
     },
     {
       id: 'vcci',
