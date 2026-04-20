@@ -31,6 +31,7 @@ export default function SignUpSection() {
   const [partners, setPartners] = useState<PartnerItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [carouselStart, setCarouselStart] = useState(0);
+  const [carouselTransition, setCarouselTransition] = useState(true);
 
   useEffect(() => {
     const loadPartners = async () => {
@@ -73,23 +74,35 @@ export default function SignUpSection() {
   useEffect(() => {
     if (displayPartners.length <= 4) {
       setCarouselStart(0);
+      setCarouselTransition(true);
       return;
     }
 
     const intervalId = window.setInterval(() => {
-      setCarouselStart((current) => (current + 1) % displayPartners.length);
+      setCarouselTransition(true);
+      setCarouselStart((current) => current + 1);
     }, 3000);
 
     return () => window.clearInterval(intervalId);
   }, [displayPartners.length]);
 
-  const visiblePartners = useMemo(() => {
+  const carouselPartners = useMemo(() => {
     if (displayPartners.length <= 4) {
       return displayPartners;
     }
 
-    return Array.from({ length: 4 }, (_, index) => displayPartners[(carouselStart + index) % displayPartners.length]);
-  }, [carouselStart, displayPartners]);
+    return [...displayPartners, ...displayPartners.slice(0, 4)];
+  }, [displayPartners]);
+
+  const handleCarouselTransitionEnd = () => {
+    if (displayPartners.length > 4 && carouselStart >= displayPartners.length) {
+      setCarouselTransition(false);
+      setCarouselStart(0);
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => setCarouselTransition(true));
+      });
+    }
+  };
 
   return (
     <section className="relative bg-vn-rice-white py-20">
@@ -140,15 +153,28 @@ export default function SignUpSection() {
             {isEn ? 'Loading partners...' : 'Đang tải đối tác...'}
           </div>
         ) : (
-          <div className="grid grid-cols-4 justify-center gap-4 md:gap-8">
-            {visiblePartners.map((partner) => (
-              <PartnerLogoCard
-                key={partner.id}
-                companyName={partner.companyName}
-                logoUrl={partner.logoUrl}
-                website={partner.website}
-              />
-            ))}
+          <div className="overflow-hidden [--partner-gap:1rem] md:[--partner-gap:2rem]">
+            <div
+              className={`flex gap-[var(--partner-gap)] ${carouselTransition ? 'transition-transform duration-700 ease-in-out' : ''}`}
+              style={{
+                transform: `translateX(calc(-${carouselStart} * ((100% - (3 * var(--partner-gap))) / 4 + var(--partner-gap))))`,
+              }}
+              onTransitionEnd={handleCarouselTransitionEnd}
+            >
+              {carouselPartners.map((partner, index) => (
+                <div
+                  key={`${partner.id}-${index}`}
+                  className="shrink-0"
+                  style={{ flexBasis: 'calc((100% - (3 * var(--partner-gap))) / 4)' }}
+                >
+                  <PartnerLogoCard
+                    companyName={partner.companyName}
+                    logoUrl={partner.logoUrl}
+                    website={partner.website}
+                  />
+                </div>
+              ))}
+            </div>
             </div>
         )}
       </div>
