@@ -26,22 +26,7 @@ export default function Footer() {
   return (
     <footer className="relative z-20 bg-vn-dark text-white">
       <div className="container mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4">
-          <div>
-            <h3 className="mb-4 font-montserrat text-xl font-semibold">
-              <Link href={contactHref} className="text-vn-gold transition-colors duration-300 hover:text-white">
-                {isEn ? 'Contact' : 'Liên lạc'}
-              </Link>
-            </h3>
-            <Link
-              href={contactHref}
-              className="font-montserrat text-base transition-colors duration-300 hover:text-vn-gold"
-              style={{ color: 'rgba(255, 255, 255, 0.8)' }}
-            >
-              {isEn ? 'Contact page' : 'Trang liên lạc'}
-            </Link>
-          </div>
-
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3">
           <div>
             <h3 className="mb-4 font-montserrat text-xl font-semibold">
               <Link href={signupHref} className="text-vn-gold transition-colors duration-300 hover:text-white">
@@ -58,8 +43,10 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="mb-4 font-montserrat text-xl font-semibold text-vn-gold">
-              {isEn ? 'VCCI-HCM Contact' : 'LIÊN HỆ'}
+            <h3 className="mb-4 font-montserrat text-xl font-semibold">
+              <Link href={contactHref} className="text-vn-gold transition-colors duration-300 hover:text-white">
+                {isEn ? 'VCCI-HCM Contact' : 'LIÊN HỆ'}
+              </Link>
             </h3>
             <div className="space-y-3 font-montserrat text-sm leading-relaxed" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>
               <p className="font-semibold text-white">

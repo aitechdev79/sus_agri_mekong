@@ -152,13 +152,13 @@ export default function JoinUsPage() {
 
               <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                 <h3 className="text-lg font-semibold text-slate-900">
-                  {isEn ? 'Platform Partners' : 'Đối tác của nền tảng'}
+                  {isEn ? 'Partners' : 'ĐỐI TÁC'}
                 </h3>
                 <Link
                   href={signUpBusinessHref}
                   className="inline-flex items-center justify-center self-start rounded-xl bg-emerald-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700 md:self-auto"
                 >
-                  {isEn ? 'Register business account' : 'Đăng ký'}
+                  {isEn ? 'Become a partner' : 'Trở thành đối tác'}
                 </Link>
               </div>
 

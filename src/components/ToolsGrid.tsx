@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { BarChart3, Leaf, Search } from 'lucide-react';
+import { BarChart3, Cloud, Leaf, Search } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { getLocaleFromPathname, withLocalePrefix } from '@/lib/content-locale';
 
@@ -22,6 +22,12 @@ export default function ToolsGrid() {
       title: isEn ? 'Explore ESG' : 'Tìm hiểu ESG',
       href: withLocalePrefix('/esg', locale),
       icon: <Leaf className="w-8 h-8" strokeWidth={2.25} />
+    },
+    {
+      id: 'ghg-inventory',
+      title: isEn ? 'GHG Inventory Self-Assessment' : 'Tự đánh giá kiểm kê khí nhà kính',
+      comingSoon: isEn ? 'Coming soon' : 'Sắp có',
+      icon: <Cloud className="w-8 h-8" strokeWidth={2.25} />
     }
   ];
 
@@ -36,19 +42,8 @@ export default function ToolsGrid() {
 
         <div className="flex flex-col md:flex-row gap-6 items-stretch">
           <div className="flex flex-col gap-6 md:flex-1">
-            {tools.map((tool) => (
-              <Link
-                key={tool.id}
-                href={tool.href}
-                className="group block overflow-hidden bg-white transition-all duration-500"
-                style={{ boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)' }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.12)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.08)';
-                }}
-              >
+            {tools.map((tool) => {
+              const cardContent = (
                 <div className="flex flex-row items-center px-6 py-4 transition-transform duration-500 group-hover:scale-105" style={{ minHeight: '100px' }}>
                   <div className="hexagon-icon h-20 w-20 flex-shrink-0 mr-4 bg-[#0A7029] flex items-center justify-center text-white">
                     {tool.icon}
@@ -57,10 +52,44 @@ export default function ToolsGrid() {
                     <h3 className="text-lg md:text-xl font-bold font-montserrat" style={{ color: '#3C3C3B' }}>
                       {tool.title}
                     </h3>
+                    {'comingSoon' in tool && tool.comingSoon && (
+                      <p className="mt-1 font-montserrat text-sm italic text-gray-500">
+                        {tool.comingSoon}
+                      </p>
+                    )}
                   </div>
                 </div>
-              </Link>
-            ))}
+              );
+
+              if (!('href' in tool) || !tool.href) {
+                return (
+                  <div
+                    key={tool.id}
+                    className="group block overflow-hidden bg-white transition-all duration-500"
+                    style={{ boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)' }}
+                  >
+                    {cardContent}
+                  </div>
+                );
+              }
+
+              return (
+                <Link
+                  key={tool.id}
+                  href={tool.href}
+                  className="group block overflow-hidden bg-white transition-all duration-500"
+                  style={{ boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)' }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.12)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.08)';
+                  }}
+                >
+                  {cardContent}
+                </Link>
+              );
+            })}
           </div>
 
           <div className="md:flex-1">
@@ -77,7 +106,7 @@ export default function ToolsGrid() {
               aria-label={isEn ? 'Research & Reports' : 'Nghiên cứu và Báo cáo'}
             >
               <div className="flex flex-col items-center justify-center text-center p-6 h-full transition-transform duration-500 group-hover:scale-105" style={{ minHeight: '100px' }}>
-                <div className="hexagon-icon mb-3 h-16 w-16 bg-white/20 flex items-center justify-center">
+                <div className="hexagon-icon mb-3 h-20 w-20 bg-white/20 flex items-center justify-center">
                   <BarChart3 className="w-8 h-8 text-white" strokeWidth={2.25} />
                 </div>
                 <h3 className="font-montserrat font-black text-2xl mb-1 text-white">
