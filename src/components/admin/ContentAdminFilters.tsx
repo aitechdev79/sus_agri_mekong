@@ -1,6 +1,6 @@
 'use client'
 
-import { Filter, Search, X } from 'lucide-react'
+import { Filter, Loader2, Search, X } from 'lucide-react'
 import type { CategorySummary } from '@/types/category'
 
 export interface AdminContentFilters {
@@ -14,6 +14,7 @@ interface ContentAdminFiltersProps {
   filters: AdminContentFilters
   searchInput: string
   categories: CategorySummary[]
+  isLoading?: boolean
   onSearchInputChange: (value: string) => void
   onFilterChange: (filters: AdminContentFilters) => void
   onClear: () => void
@@ -44,6 +45,7 @@ export function ContentAdminFilters({
   filters,
   searchInput,
   categories,
+  isLoading = false,
   onSearchInputChange,
   onFilterChange,
   onClear,
@@ -69,8 +71,11 @@ export function ContentAdminFilters({
             value={searchInput}
             onChange={(event) => onSearchInputChange(event.target.value)}
             placeholder="Tìm theo tiêu đề, mô tả, tag, tác giả..."
-            className="h-11 w-full rounded-lg border border-slate-300 bg-white pl-9 pr-3 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            className="h-11 w-full rounded-lg border border-slate-300 bg-white pl-9 pr-10 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500"
           />
+          {isLoading && (
+            <Loader2 className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin text-emerald-700" />
+          )}
         </div>
 
         <select

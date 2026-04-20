@@ -64,7 +64,7 @@ export default function ContentLibrarySection() {
   ];
 
   return (
-    <section className="py-16 w-full">
+    <section id="content-library" className="scroll-mt-24 py-16 w-full">
       <div className="container mx-auto px-6 max-w-6xl relative z-10">
         <div className="mb-12 text-left">
           <h2 className="text-3xl font-bold mb-4 md:text-4xl font-montserrat text-left tracking-tight" style={{ color: '#3C3C3B' }}>

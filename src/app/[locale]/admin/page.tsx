@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useLocale } from 'next-intl'
@@ -46,6 +46,7 @@ export default function AdminPage() {
     total: 0,
     pages: 1
   })
+  const latestContentRequestRef = useRef(0)
   const [searchInput, setSearchInput] = useState('')
   const [filters, setFilters] = useState<AdminContentFilters>({
     search: '',
@@ -68,6 +69,9 @@ export default function AdminPage() {
   )
 
   const fetchAdminData = useCallback(async (nextPage = page, nextLimit = limit, nextFilters = filters) => {
+    const requestId = latestContentRequestRef.current + 1
+    latestContentRequestRef.current = requestId
+
     try {
       const params = new URLSearchParams({
         page: String(nextPage),
@@ -83,6 +87,7 @@ export default function AdminPage() {
       }
 
       const contentData = await response.json()
+      if (latestContentRequestRef.current !== requestId) return
       const nextContents = Array.isArray(contentData) ? contentData : contentData.contents || []
       setContents(nextContents)
       setPagination(contentData.pagination || {
@@ -103,10 +108,13 @@ export default function AdminPage() {
         draft: nextContents.filter((item: AdminContent) => item.status === 'DRAFT').length
       })
     } catch (error) {
+      if (latestContentRequestRef.current !== requestId) return
       console.error('Error fetching admin data:', error)
       setContents([])
     } finally {
-      setIsLoading(false)
+      if (latestContentRequestRef.current === requestId) {
+        setIsLoading(false)
+      }
     }
   }, [page, limit, filters])
 
@@ -446,6 +454,7 @@ export default function AdminPage() {
               filters={filters}
               searchInput={searchInput}
               categories={categories}
+              isLoading={isLoading}
               onSearchInputChange={setSearchInput}
               onFilterChange={handleFilterChange}
               onClear={handleClearFilters}
@@ -453,11 +462,17 @@ export default function AdminPage() {
 
             <div className="mb-4 flex flex-col gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
               <div className="text-sm text-slate-600">
-                Hiển thị {contents.length > 0 ? (pagination.page - 1) * pagination.limit + 1 : 0}
-                {' - '}
-                {Math.min(pagination.page * pagination.limit, pagination.total)}
-                {' / '}
-                {pagination.total} nội dung
+                {isLoading ? (
+                  <span>Đang tìm kiếm nội dung...</span>
+                ) : (
+                  <>
+                    Hiển thị {contents.length > 0 ? (pagination.page - 1) * pagination.limit + 1 : 0}
+                    {' - '}
+                    {Math.min(pagination.page * pagination.limit, pagination.total)}
+                    {' / '}
+                    {pagination.total} nội dung
+                  </>
+                )}
               </div>
               <div className="flex flex-wrap items-center gap-3">
                 <label className="flex items-center gap-2 text-sm text-slate-600">
@@ -493,14 +508,16 @@ export default function AdminPage() {
                 </Button>
               </div>
             </div>
-            <ContentTable
-              contents={contents}
-              onEdit={handleEditContent}
-              onDelete={handleDeleteContent}
-              onBulkAction={handleBulkAction}
-              userRole={session.user.role}
-              categoryLabels={categoryLabels}
-            />
+            <div className={`transition-opacity ${isLoading ? 'opacity-60' : 'opacity-100'}`}>
+              <ContentTable
+                contents={contents}
+                onEdit={handleEditContent}
+                onDelete={handleDeleteContent}
+                onBulkAction={handleBulkAction}
+                userRole={session.user.role}
+                categoryLabels={categoryLabels}
+              />
+            </div>
           </section>
         </div>
       </main>

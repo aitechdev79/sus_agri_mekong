@@ -1,10 +1,9 @@
 'use client';
 
-import Link from 'next/link';
 import MuxPlayer from '@mux/mux-player-react/lazy';
 import { usePathname } from 'next/navigation';
 import NavigationBar from './NavigationBar';
-import { getLocaleFromPathname, withLocalePrefix } from '@/lib/content-locale';
+import { getLocaleFromPathname } from '@/lib/content-locale';
 
 const heroPlaybackId = process.env.NEXT_PUBLIC_MUX_HERO_PLAYBACK_ID;
 
@@ -12,7 +11,6 @@ export default function HeroSection() {
   const pathname = usePathname();
   const locale = getLocaleFromPathname(pathname);
   const isEn = locale === 'en';
-  const exploreHref = withLocalePrefix('/vision-mission', locale);
 
   return (
     <section className="relative left-1/2 min-h-[75vh] w-screen -translate-x-1/2 overflow-hidden md:min-h-0 md:aspect-[5/2]">
@@ -75,8 +73,8 @@ export default function HeroSection() {
             </div>
 
             <div>
-              <Link
-                href={exploreHref}
+              <a
+                href="#content-library"
                 className="inline-block rounded-lg bg-vn-gold px-8 py-4 font-montserrat text-base font-semibold text-vn-dark transition-all duration-300 hover:shadow-lg md:text-lg"
                 style={{ boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
                 onMouseEnter={(e) => {
@@ -89,7 +87,7 @@ export default function HeroSection() {
                 }}
               >
                 {isEn ? 'Explore →' : 'Khám phá →'}
-              </Link>
+              </a>
             </div>
           </div>
         </div>

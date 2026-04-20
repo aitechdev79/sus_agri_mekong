@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { BarChart3, Building2, FileCheck2, FileText, FolderTree, Plus, Tags, Users } from 'lucide-react'
@@ -30,6 +30,7 @@ export default function AdminPage() {
     total: 0,
     pages: 1
   })
+  const latestContentRequestRef = useRef(0)
   const [searchInput, setSearchInput] = useState('')
   const [filters, setFilters] = useState<AdminContentFilters>({
     search: '',
@@ -59,6 +60,9 @@ export default function AdminPage() {
   )
 
   const loadContents = useCallback(async (nextPage = page, nextLimit = limit, nextFilters = filters) => {
+    const requestId = latestContentRequestRef.current + 1
+    latestContentRequestRef.current = requestId
+
     try {
       setLoading(true)
       const params = new URLSearchParams({
@@ -72,6 +76,7 @@ export default function AdminPage() {
       const response = await fetch(`/api/admin/content?${params.toString()}`)
       if (response.ok) {
         const data = await response.json()
+        if (latestContentRequestRef.current !== requestId) return
         const contentList = Array.isArray(data) ? data : data.contents || []
         setContents(contentList)
         setPagination(data.pagination || {
@@ -87,13 +92,17 @@ export default function AdminPage() {
           totalViews: contentList.reduce((sum: number, content: AdminContent) => sum + (content.viewCount || 0), 0)
         })
       } else {
+        if (latestContentRequestRef.current !== requestId) return
         setContents([])
       }
     } catch (error) {
+      if (latestContentRequestRef.current !== requestId) return
       console.error('Error loading contents:', error)
       setContents([])
     } finally {
-      setLoading(false)
+      if (latestContentRequestRef.current === requestId) {
+        setLoading(false)
+      }
     }
   }, [page, limit, filters])
 
@@ -428,6 +437,7 @@ export default function AdminPage() {
             filters={filters}
             searchInput={searchInput}
             categories={categories}
+            isLoading={loading}
             onSearchInputChange={setSearchInput}
             onFilterChange={handleFilterChange}
             onClear={handleClearFilters}
@@ -435,11 +445,17 @@ export default function AdminPage() {
 
           <div className="mb-4 flex flex-col gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="text-sm text-slate-600">
-              Hiển thị {contents.length > 0 ? (pagination.page - 1) * pagination.limit + 1 : 0}
-              {' - '}
-              {Math.min(pagination.page * pagination.limit, pagination.total)}
-              {' / '}
-              {pagination.total} nội dung
+              {loading ? (
+                <span>Đang tìm kiếm nội dung...</span>
+              ) : (
+                <>
+                  Hiển thị {contents.length > 0 ? (pagination.page - 1) * pagination.limit + 1 : 0}
+                  {' - '}
+                  {Math.min(pagination.page * pagination.limit, pagination.total)}
+                  {' / '}
+                  {pagination.total} nội dung
+                </>
+              )}
             </div>
             <div className="flex flex-wrap items-center gap-3">
               <label className="flex items-center gap-2 text-sm text-slate-600">
@@ -475,14 +491,16 @@ export default function AdminPage() {
               </Button>
             </div>
           </div>
-          <ContentTable
-            contents={contents}
-            onEdit={handleEditContent}
-            onDelete={handleDeleteContent}
-            onBulkAction={handleBulkAction}
-            userRole={session.user.role}
-            categoryLabels={categoryLabels}
-          />
+          <div className={`transition-opacity ${loading ? 'opacity-60' : 'opacity-100'}`}>
+            <ContentTable
+              contents={contents}
+              onEdit={handleEditContent}
+              onDelete={handleDeleteContent}
+              onBulkAction={handleBulkAction}
+              userRole={session.user.role}
+              categoryLabels={categoryLabels}
+            />
+          </div>
         </section>
 
         {showForm && (

@@ -6,7 +6,7 @@ import Link from 'next/link'
 import NavigationBar from '@/components/NavigationBar'
 import Footer from '@/components/Footer'
 import { SearchFilters } from '@/components/content/SearchFilters'
-import { Search, Filter, ExternalLink, FileText, BarChart3, Globe2, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Search, Filter, ExternalLink, FileText, BarChart3, Globe2, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { LibraryContent } from '@/types/content'
 import { usePublicCategories } from '@/hooks/use-public-categories'
@@ -177,6 +177,7 @@ export default function LibraryPage() {
   const [showFilters, setShowFilters] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
   const repositorySectionRef = useRef<HTMLElement | null>(null)
+  const latestRequestRef = useRef(0)
   const [pagination, setPagination] = useState({
     page: 1,
     limit: 10,
@@ -186,6 +187,9 @@ export default function LibraryPage() {
   const { categories } = usePublicCategories()
 
   const loadContents = useCallback(async () => {
+    const requestId = latestRequestRef.current + 1
+    latestRequestRef.current = requestId
+
     try {
       setLoading(true)
       const params = new URLSearchParams({
@@ -201,13 +205,17 @@ export default function LibraryPage() {
       const response = await fetch(`/api/content?${params}`)
       if (response.ok) {
         const data = await response.json()
+        if (latestRequestRef.current !== requestId) return
         setContents(data.contents)
         setPagination(data.pagination)
       }
     } catch (error) {
+      if (latestRequestRef.current !== requestId) return
       console.error('Error loading contents:', error)
     } finally {
-      setLoading(false)
+      if (latestRequestRef.current === requestId) {
+        setLoading(false)
+      }
     }
   }, [currentPage, pagination.limit, searchTerm, selectedCategory, selectedType])
 
@@ -345,7 +353,12 @@ export default function LibraryPage() {
               </div>
 
               <div className="text-sm font-montserrat text-[#6B7280]">
-                {!loading && (
+                {loading ? (
+                  <span className="inline-flex items-center gap-2">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    {isEn ? 'Searching...' : 'Đang tìm kiếm...'}
+                  </span>
+                ) : (
                   <span>
                     {isEn ? `Found ${pagination.total} items` : `Tìm thấy ${pagination.total} tài liệu`}
                     {searchTerm && (isEn ? ` for "${searchTerm}"` : ` cho "${searchTerm}"`)}
@@ -363,8 +376,11 @@ export default function LibraryPage() {
                     placeholder={isEn ? 'Search documents, stories, guides...' : 'Tìm kiếm tài liệu, câu chuyện, hướng dẫn...'}
                     value={searchTerm}
                     onChange={(e) => handleSearch(e.target.value)}
-                    className="w-full border border-gray-300 bg-white py-3 pl-11 pr-4 font-montserrat text-sm focus:outline-none focus:ring-1 focus:ring-[#0A7029]"
+                    className="w-full border border-gray-300 bg-white py-3 pl-11 pr-11 font-montserrat text-sm focus:outline-none focus:ring-1 focus:ring-[#0A7029]"
                   />
+                  {loading && (
+                    <Loader2 className="absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin text-[#0A7029]" />
+                  )}
                 </div>
 
                 <Button
@@ -388,7 +404,7 @@ export default function LibraryPage() {
               )}
             </div>
 
-            {loading ? (
+            {loading && contents.length === 0 ? (
               <div className="overflow-hidden border border-[#E5E7EB] bg-white shadow-sm">
                 {[...Array(6)].map((_, index) => (
                   <div key={index} className="animate-pulse border-b border-[#E5E7EB] px-5 py-4 last:border-b-0">
@@ -405,7 +421,7 @@ export default function LibraryPage() {
               </div>
             ) : contents.length > 0 ? (
               <>
-                <div className="overflow-hidden border border-[#E5E7EB] bg-white shadow-sm">
+                <div className={`overflow-hidden border border-[#E5E7EB] bg-white shadow-sm transition-opacity ${loading ? 'opacity-60' : 'opacity-100'}`}>
                   <div className="hidden grid-cols-[72px_minmax(0,1fr)_160px_140px] gap-4 border-b border-[#E5E7EB] bg-[#FAFAF7] px-5 py-3 text-sm font-semibold text-[#6B7280] md:grid">
                     <div>STT</div>
                     <div>{isEn ? 'Content' : 'Nội dung'}</div>

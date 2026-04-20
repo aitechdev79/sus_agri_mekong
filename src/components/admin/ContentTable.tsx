@@ -194,7 +194,7 @@ export function ContentTable({
         {contents.length === 0 && (
           <div className="py-12 text-center">
             <div className="mb-2 text-lg text-gray-500">Chưa có nội dung nào</div>
-            <div className="text-gray-400">Nh???n &quot;Th??m N???i Dung&quot; ????? t???o n???i dung ?????u ti??n</div>
+            <div className="text-gray-400">Nhấn &quot;Thêm Nội Dung&quot; để tạo nội dung đầu tiên</div>
           </div>
         )}
       </div>
