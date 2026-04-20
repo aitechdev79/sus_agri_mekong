@@ -66,10 +66,10 @@ export default function HoatDongSection() {
       <div className="container mx-auto px-6 max-w-6xl">
         <div className="mb-16 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
           <div>
-            <h2 className="text-4xl font-black mb-6 md:text-5xl font-montserrat text-left tracking-tight" style={{ color: '#3C3C3B' }}>
+            <h2 className="text-3xl font-bold mb-4 md:text-4xl font-montserrat text-left tracking-tight" style={{ color: '#3C3C3B' }}>
               {isEn ? 'Project Activities' : 'Hoạt động dự án'}
             </h2>
-            <p className="text-xl font-montserrat text-left max-w-3xl leading-relaxed" style={{ color: '#6B7280' }}>
+            <p className="text-lg font-montserrat text-left max-w-3xl leading-relaxed" style={{ color: '#6B7280' }}>
               {isEn
                 ? 'Explore current and completed projects implemented with international partners.'
                 : 'Tìm hiểu thêm về các dự án đã và đang thực hiện của chúng tôi với các đối tác quốc tế.'}

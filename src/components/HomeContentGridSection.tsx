@@ -89,10 +89,10 @@ export default function HomeContentGridSection({
       <div className="container mx-auto px-6 max-w-6xl">
         <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
           <div>
-            <h2 className="text-3xl font-bold mb-4 md:text-4xl font-montserrat text-left" style={{ color: '#3C3C3B' }}>
+            <h2 className="text-3xl font-bold mb-4 md:text-4xl font-montserrat text-left tracking-tight" style={{ color: '#3C3C3B' }}>
               {isEn ? titleEn : titleVi}
             </h2>
-            <p className="text-lg font-montserrat text-left max-w-3xl" style={{ color: '#6B7280' }}>
+            <p className="text-lg font-montserrat text-left max-w-3xl leading-relaxed" style={{ color: '#6B7280' }}>
               {isEn ? descriptionEn : descriptionVi}
             </p>
           </div>

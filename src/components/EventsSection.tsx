@@ -109,10 +109,10 @@ export default function EventsSection() {
       <div className="container mx-auto px-6 max-w-6xl relative z-10">
         <div className="mb-12 flex items-center justify-between">
           <div>
-            <h2 className="text-3xl font-bold mb-2 md:text-4xl font-montserrat text-left" style={{ color: '#3C3C3B' }}>
+            <h2 className="text-3xl font-bold mb-4 md:text-4xl font-montserrat text-left tracking-tight" style={{ color: '#3C3C3B' }}>
               {isEn ? 'Events' : 'Sự kiện'}
             </h2>
-            <p className="text-lg font-montserrat text-left max-w-3xl" style={{ color: '#6B7280' }}>
+            <p className="text-lg font-montserrat text-left max-w-3xl leading-relaxed" style={{ color: '#6B7280' }}>
               {isEn
                 ? 'Track upcoming events and recently completed activities.'
                 : 'Theo dõi các sự kiện sắp diễn ra và những hoạt động đã tổ chức gần đây.'}

@@ -67,10 +67,10 @@ export default function ContentLibrarySection() {
     <section className="py-16 w-full">
       <div className="container mx-auto px-6 max-w-6xl relative z-10">
         <div className="mb-12 text-left">
-          <h2 className="font-bold mb-4 font-montserrat" style={{ fontSize: '40px', fontWeight: 700, color: '#3C3C3B' }}>
+          <h2 className="text-3xl font-bold mb-4 md:text-4xl font-montserrat text-left tracking-tight" style={{ color: '#3C3C3B' }}>
             {isEn ? 'Content Library' : 'Thư viện Nội dung'}
           </h2>
-          <p className="font-montserrat text-lg max-w-3xl" style={{ color: '#6B7280' }}>
+          <p className="font-montserrat text-lg leading-relaxed max-w-3xl" style={{ color: '#6B7280' }}>
             {isEn
               ? 'Access curated resources on policy, research, and sustainable practices'
               : 'Truy cập kho tài liệu phong phú về chính sách, nghiên cứu và thực hành bền vững'}
