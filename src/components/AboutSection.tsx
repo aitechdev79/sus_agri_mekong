@@ -103,8 +103,14 @@ export default function AboutSection() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-start">
           {infoCards.map((card) => (
             <Link key={card.id} href={card.href} className="group flex h-full flex-col self-start" aria-label={`${card.title} - ${card.description}`}>
-              <div className="relative aspect-[4/3] overflow-hidden mb-4">
-                <Image src={card.image} alt={card.title} fill className="object-cover group-hover:scale-110 transition-transform duration-500" sizes="(max-width: 768px) 100vw, 33vw" />
+              <div className={`relative aspect-[4/3] overflow-hidden mb-4 ${card.id === 'vcci' ? 'bg-white p-8' : ''}`}>
+                <Image
+                  src={card.image}
+                  alt={card.title}
+                  fill
+                  className={`${card.id === 'vcci' ? 'object-contain p-6 group-hover:scale-105' : 'object-cover group-hover:scale-110'} transition-transform duration-500`}
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                />
               </div>
 
               <div className="pb-4 relative flex-1 flex flex-col" style={{ minHeight: '120px' }}>

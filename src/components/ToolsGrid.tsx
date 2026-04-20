@@ -50,7 +50,7 @@ export default function ToolsGrid() {
                 }}
               >
                 <div className="flex flex-row items-center px-6 py-4 transition-transform duration-500 group-hover:scale-105" style={{ minHeight: '100px' }}>
-                  <div className="w-16 h-16 flex-shrink-0 mr-4 bg-[#0A7029] flex items-center justify-center text-white">
+                  <div className="hexagon-icon h-20 w-20 flex-shrink-0 mr-4 bg-[#0A7029] flex items-center justify-center text-white">
                     {tool.icon}
                   </div>
                   <div className="flex-1 flex flex-col justify-center">
@@ -77,7 +77,7 @@ export default function ToolsGrid() {
               aria-label={isEn ? 'Research & Reports' : 'Nghiên cứu và Báo cáo'}
             >
               <div className="flex flex-col items-center justify-center text-center p-6 h-full transition-transform duration-500 group-hover:scale-105" style={{ minHeight: '100px' }}>
-                <div className="mb-3 w-12 h-12 bg-white/20 flex items-center justify-center">
+                <div className="hexagon-icon mb-3 h-16 w-16 bg-white/20 flex items-center justify-center">
                   <BarChart3 className="w-8 h-8 text-white" strokeWidth={2.25} />
                 </div>
                 <h3 className="font-montserrat font-black text-2xl mb-1 text-white">
