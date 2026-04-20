@@ -21,22 +21,22 @@ export const HOME_STATS_FIELDS: Array<{
 }> = [
   {
     key: 'publishedReports',
-    labelVi: 'Số báo cáo được xuất bản',
+    labelVi: 'Báo cáo, nghiên cứu đã xuất bản',
     labelEn: 'Published reports',
   },
   {
     key: 'trackedPolicies',
-    labelVi: 'Số chính sách đã theo dõi',
+    labelVi: 'Chính sách, quy định pháp luật đã chia sẻ',
     labelEn: 'Tracked policies',
   },
   {
     key: 'members',
-    labelVi: 'Số thành viên tham gia',
+    labelVi: 'Hội viên và đối tác tham gia',
     labelEn: 'Community members',
   },
   {
     key: 'supportedInitiatives',
-    labelVi: 'Số sáng kiến được hỗ trợ',
+    labelVi: 'Thực hành điển hình được hỗ trợ',
     labelEn: 'Supported initiatives',
   },
 ]

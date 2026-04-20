@@ -56,7 +56,7 @@ export default function AboutSection() {
         ? 'Learn about VCCI and its role in sustainable business development.'
         : 'Tìm hiểu về Phòng Thương mại và Công nghiệp Việt Nam và vai trò trong phát triển doanh nghiệp',
       href: withLocalePrefix('/about-vcci', locale),
-      image: '/VCCI_blue.jpeg'
+      image: '/logo-vcci.png'
     },
     {
       id: 'doi-tac',

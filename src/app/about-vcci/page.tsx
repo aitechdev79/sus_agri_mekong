@@ -56,17 +56,23 @@ export default function AboutVCCIPage() {
                 </h2>
 
                 <div className="space-y-4">
-                  <p className="text-lg text-gray-700 leading-relaxed font-montserrat">
+                  <p className="text-lg text-gray-700 leading-relaxed font-montserrat text-justify">
                     {isEn
-                      ? 'The Vietnam Chamber of Commerce and Industry (VCCI) is a national organization representing the business community, entrepreneurs, employers, and business associations in Vietnam, with the mission to support sustainable business development.'
-                      : 'Liên đoàn Thương mại và Công nghiệp Việt Nam (VCCI) là tổ chức quốc gia tập hợp và đại diện cho cộng đồng doanh nghiệp, doanh nhân, người sử dụng lao động và các hiệp hội doanh nghiệp ở Việt Nam nhằm mục đích phát triển, bảo vệ và hỗ trợ cộng đồng doanh nghiệp phát triển bền vững.'}
+                      ? 'The Vietnam Chamber of Commerce and Industry (VCCI) is a national organization that brings together and represents the business community, entrepreneurs, employers, and business associations in Vietnam. Its purpose is to develop, protect, and support the business community, contribute to the country’s socio-economic development, and promote economic, trade, scientific, and technological cooperation with foreign partners on the basis of equality and mutual benefit, in accordance with the law.'
+                      : 'Liên đoàn Thương mại và Công nghiệp Việt Nam (VCCI) là tổ chức quốc gia tập hợp và đại diện cho cộng đồng doanh nghiệp, doanh nhân, người sử dụng lao động và các hiệp hội doanh nghiệp ở Việt Nam nhằm mục đích phát triển, bảo vệ và hỗ trợ cộng đồng doanh nghiệp, góp phần phát triển kinh tế – xã hội của đất nước, thúc đẩy các quan hệ hợp tác kinh tế, thương mại và khoa học – công nghệ với nước ngoài trên cơ sở bình đẳng và cùng có lợi, theo quy định của pháp luật.'}
+                  </p>
+
+                  <p className="text-lg text-gray-700 leading-relaxed font-montserrat text-justify">
+                    {isEn
+                      ? 'The VCCI Ho Chi Minh City Branch (VCCI-HCM) is the largest branch, operating in Ho Chi Minh City and southern provinces including Dong Nai, Lam Dong, Tay Ninh, and others.'
+                      : 'Chi nhánh VCCI khu vực Thành phố Hồ Chí Minh (VCCI-HCM) là Chi nhánh lớn nhất, hoạt động trên địa bàn TP.HCM và khu vực các tỉnh thành phía Nam: Đồng Nai, Lâm Đồng, Tây Ninh,...'}
                   </p>
 
                   <div className="pl-6 border-l-4 border-blue-500">
-                    <p className="text-lg text-gray-700 leading-relaxed font-montserrat">
+                    <p className="text-lg text-gray-700 leading-relaxed font-montserrat text-justify">
                       {isEn
-                        ? 'VCCI acts as a bridge between government and enterprises, helping strengthen business competitiveness and enabling sustainable integration into global value chains.'
-                        : 'VCCI đóng vai trò là cầu nối giữa nhà nước – doanh nghiệp để gắn kết cộng đồng doanh nghiệp và nâng cao năng lực cạnh tranh của doanh nghiệp, phát triển bền vững để tham gia vào chuỗi giá trị toàn cầu.'}
+                        ? 'VCCI acts as a bridge between the State and enterprises, connecting the business community and employers. Through business support activities, VCCI helps strengthen competitiveness and sustainable development so enterprises can participate in global value chains.'
+                        : 'VCCI đóng vai trò là cầu nối giữa Nhà nước – doanh nghiệp để gắn kết cộng đồng doanh nghiệp, người sử dụng lao động và thông qua các hoạt động hỗ trợ doanh nghiệp giúp nâng cao năng lực cạnh tranh, phát triển bền vững để tham gia vào chuỗi giá trị toàn cầu.'}
                     </p>
                   </div>
                 </div>
