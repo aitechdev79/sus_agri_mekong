@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { BarChart3, Cloud, Leaf, Search } from 'lucide-react';
+import { BarChart3, CloudCog, Leaf, Search } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { getLocaleFromPathname, withLocalePrefix } from '@/lib/content-locale';
 
@@ -27,7 +27,7 @@ export default function ToolsGrid() {
       id: 'ghg-inventory',
       title: isEn ? 'GHG Inventory Self-Assessment' : 'Tự đánh giá kiểm kê khí nhà kính',
       comingSoon: isEn ? 'Coming soon' : 'Sắp có',
-      icon: <Cloud className="w-8 h-8" strokeWidth={2.25} />
+      icon: <CloudCog className="w-8 h-8" strokeWidth={2.25} />
     }
   ];
 

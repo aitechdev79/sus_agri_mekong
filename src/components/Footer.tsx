@@ -22,6 +22,8 @@ export default function Footer() {
   const isEn = locale === 'en';
   const contactHref = withLocalePrefix('/contact', locale);
   const signupHref = withLocalePrefix('/auth/signup', locale);
+  const individualSignupHref = `${signupHref}?role=user`;
+  const businessSignupHref = `${signupHref}?role=business`;
 
   return (
     <footer className="relative z-20 bg-vn-dark text-white">
@@ -33,13 +35,14 @@ export default function Footer() {
                 {isEn ? 'Member Registration' : 'Đăng ký thành viên'}
               </Link>
             </h3>
-            <Link
-              href={signupHref}
-              className="font-montserrat text-base transition-colors duration-300 hover:text-vn-gold"
-              style={{ color: 'rgba(255, 255, 255, 0.8)' }}
-            >
-              {isEn ? 'Register now' : 'Đăng ký ngay'}
-            </Link>
+            <div className="flex flex-col gap-2 font-montserrat text-base" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>
+              <Link href={individualSignupHref} className="transition-colors duration-300 hover:text-vn-gold">
+                {isEn ? 'Individual' : 'Cá nhân'}
+              </Link>
+              <Link href={businessSignupHref} className="transition-colors duration-300 hover:text-vn-gold">
+                {isEn ? 'Business' : 'Doanh nghiệp'}
+              </Link>
+            </div>
           </div>
 
           <div>
