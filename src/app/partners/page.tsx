@@ -87,7 +87,7 @@ export default function PartnersPage() {
 
   const stateGroups: TextCard[] = [
     {
-      title: isEn ? 'Central state management agencies' : 'Cơ quan quản lý nhà nước tại Trung ương',
+      title: isEn ? 'Central state management agencies' : 'Cơ quan quản lý nhà nước tại trung ương',
       icon: <Building2 className="h-5 w-5" />,
       items: isEn
         ? [
@@ -106,7 +106,7 @@ export default function PartnersPage() {
           ],
     },
     {
-      title: isEn ? 'Local state management agencies' : 'Cơ quan quản lý Nhà nước tại địa phương',
+      title: isEn ? 'Local state management agencies' : 'Cơ quan quản lý nhà nước tại địa phương',
       icon: <Building2 className="h-5 w-5" />,
       items: isEn
         ? [

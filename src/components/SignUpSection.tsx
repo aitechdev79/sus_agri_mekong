@@ -30,6 +30,7 @@ export default function SignUpSection() {
   const isEn = locale === 'en';
   const [partners, setPartners] = useState<PartnerItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [carouselStart, setCarouselStart] = useState(0);
 
   useEffect(() => {
     const loadPartners = async () => {
@@ -66,8 +67,29 @@ export default function SignUpSection() {
     if (partners.length > 0) {
       return partners;
     }
-    return FALLBACK_PARTNERS.slice(0, 4);
+    return FALLBACK_PARTNERS;
   }, [partners]);
+
+  useEffect(() => {
+    if (displayPartners.length <= 4) {
+      setCarouselStart(0);
+      return;
+    }
+
+    const intervalId = window.setInterval(() => {
+      setCarouselStart((current) => (current + 1) % displayPartners.length);
+    }, 3000);
+
+    return () => window.clearInterval(intervalId);
+  }, [displayPartners.length]);
+
+  const visiblePartners = useMemo(() => {
+    if (displayPartners.length <= 4) {
+      return displayPartners;
+    }
+
+    return Array.from({ length: 4 }, (_, index) => displayPartners[(carouselStart + index) % displayPartners.length]);
+  }, [carouselStart, displayPartners]);
 
   return (
     <section className="relative bg-vn-rice-white py-20">
@@ -77,7 +99,7 @@ export default function SignUpSection() {
           <div className="flex items-start justify-between">
             <div style={{ maxWidth: '60%' }}>
               <p
-                className="mb-4 font-montserrat text-[18px] font-semibold uppercase tracking-wider"
+                className="mb-4 font-montserrat text-2xl font-bold uppercase tracking-wider"
                 style={{ color: 'rgba(60, 60, 59, 0.6)' }}
               >
                 {isEn ? 'Partners' : 'Đối tác'}
@@ -85,7 +107,7 @@ export default function SignUpSection() {
 
               <h2
                 className="font-montserrat text-vn-dark font-bold leading-tight"
-                style={{ fontSize: '30px', fontWeight: 700 }}
+                style={{ fontSize: '22px', fontWeight: 600 }}
               >
                 {isEn
                   ? 'Become a partner to connect with VCCI-HCM and receive updates on programs and content.'
@@ -118,8 +140,8 @@ export default function SignUpSection() {
             {isEn ? 'Loading partners...' : 'Đang tải đối tác...'}
           </div>
         ) : (
-          <div className="grid grid-cols-2 justify-center gap-6 md:grid-cols-[repeat(auto-fit,minmax(220px,1fr))] md:gap-8">
-            {displayPartners.map((partner) => (
+          <div className="grid grid-cols-4 justify-center gap-4 md:gap-8">
+            {visiblePartners.map((partner) => (
               <PartnerLogoCard
                 key={partner.id}
                 companyName={partner.companyName}
