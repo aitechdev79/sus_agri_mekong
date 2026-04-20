@@ -31,6 +31,7 @@ interface FileUploadZoneProps {
   multiple?: boolean
   accept?: string
   maxSize?: number // in MB
+  maxInputSize?: number | null // in MB. null disables input-size validation before client compression.
   onUploadComplete?: (files: UploadedFileData[]) => void
   onUploadError?: (error: string) => void
   className?: string
@@ -127,6 +128,7 @@ export function FileUploadZone({
   multiple = false,
   accept = "image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx",
   maxSize = 10,
+  maxInputSize = MAX_FILE_ONLY_IMAGE_INPUT_SIZE / 1024 / 1024,
   onUploadComplete,
   onUploadError,
   className = "",
@@ -144,7 +146,7 @@ export function FileUploadZone({
       const canResizeBeforeUpload = fileOnly && supportsCanvasResize(file)
 
       // Validate file size
-      if (canResizeBeforeUpload && file.size > MAX_FILE_ONLY_IMAGE_INPUT_SIZE) {
+      if (canResizeBeforeUpload && maxInputSize !== null && file.size > maxInputSize * 1024 * 1024) {
         onUploadError?.(`File "${file.name}" quá lớn. Kích thước tối đa trước khi nén: ${MAX_FILE_ONLY_IMAGE_INPUT_SIZE / 1024 / 1024}MB`)
         continue
       }
@@ -165,7 +167,7 @@ export function FileUploadZone({
     } else {
       setFiles(prev => [...prev, ...validFiles])
     }
-  }, [fileOnly, maxSize, multiple, onUploadError])
+    }, [fileOnly, maxInputSize, maxSize, multiple, onUploadError])
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault()

@@ -22,10 +22,6 @@ const CONTACT = {
     email: 'bea@vcci-hcm.org.vn',
     websiteLabel: 'Website',
     website: 'www.vcci-hcm.org.vn',
-    supportLabel: 'Hỗ trợ chương trình',
-    support: ['0366 006 126 (Ms. Minh Thư)', '0906 821 203 (Ms. Phương Thảo)'],
-    hoursLabel: 'Giờ làm việc',
-    hours: 'Thứ Hai - Thứ Sáu, 08:00 - 17:00',
   },
   en: {
     eyebrow: 'VCCI-HCM',
@@ -41,10 +37,6 @@ const CONTACT = {
     email: 'bea@vcci-hcm.org.vn',
     websiteLabel: 'Website',
     website: 'www.vcci-hcm.org.vn',
-    supportLabel: 'Program support',
-    support: ['0366 006 126 (Ms. Minh Thu)', '0906 821 203 (Ms. Phuong Thao)'],
-    hoursLabel: 'Working hours',
-    hours: 'Monday - Friday, 08:00 - 17:00',
   },
 } as const;
 
@@ -125,18 +117,6 @@ export default function ContactPage() {
                     </div>
                   );
                 })}
-              </div>
-
-              <div className="mt-8 rounded-xl bg-[#F6F3EA] p-6 font-montserrat">
-                <p className="font-bold text-[#1F2937]">{text.supportLabel}</p>
-                <div className="mt-3 space-y-1 text-[#4B5563]">
-                  {text.support.map((item) => (
-                    <p key={item}>{item}</p>
-                  ))}
-                </div>
-                <p className="mt-4 text-sm leading-relaxed text-[#4B5563]">
-                  <span className="font-semibold text-[#1F2937]">{text.hoursLabel}:</span> {text.hours}
-                </p>
               </div>
             </div>
           </div>

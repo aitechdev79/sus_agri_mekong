@@ -514,6 +514,9 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
                 value={formData.content}
                 onChange={(nextValue) => setFormData({ ...formData, content: nextValue })}
               />
+              <p className="mt-2 text-xs italic text-gray-500">
+                Ảnh kéo thả/dán vào nội dung sẽ được tự động nén. Ảnh quá lớn có thể không tải lên được.
+              </p>
             </div>
           </div>
 
@@ -554,6 +557,9 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
                 value={formData.contentEn}
                 onChange={(nextValue) => setFormData({ ...formData, contentEn: nextValue })}
               />
+              <p className="mt-2 text-xs italic text-gray-500">
+                Dragged or pasted images will be compressed automatically. Very large images may fail to upload.
+              </p>
             </div>
           </div>
 
@@ -777,7 +783,7 @@ export function ContentForm({ content, onClose, userRole, categories = [], onCat
                   multiple={false}
                   fileOnly={true}
                   accept="image/*"
-                  maxSize={1}
+                  maxInputSize={null}
                   onUploadComplete={(files) => {
                     if (files.length > 0) {
                       const file = files[0]
