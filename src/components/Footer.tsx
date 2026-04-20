@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Facebook, Linkedin, Mail, MapPin, Phone, Twitter, Youtube } from 'lucide-react';
+import { Facebook, Globe, Linkedin, Mail, MapPin, Phone, Twitter, Youtube } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { getLocaleFromPathname, withLocalePrefix } from '@/lib/content-locale';
 
@@ -64,27 +64,44 @@ export default function Footer() {
             <div className="space-y-3 font-montserrat text-sm leading-relaxed" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>
               <p className="font-semibold text-white">
                 {isEn
-                  ? 'Vietnam Chamber of Commerce and Industry - Ho Chi Minh City Branch'
-                  : 'Liên đoàn Thương mại & Công nghiệp Việt Nam - Chi nhánh Khu vực Thành phố Hồ Chí Minh'}
+                  ? 'Vietnam Chamber of Commerce and Industry - Ho Chi Minh Regional Branch (VCCI-HCM)'
+                  : 'Liên đoàn Thương mại & Công nghiệp Việt Nam - Chi nhánh khu vực Thành phố Hồ Chí Minh (VCCI-HCM)'}
+              </p>
+              <p>
+                {isEn
+                  ? 'Bureau for Employers’ Activities and Women Entrepreneurs Council'
+                  : 'Văn phòng Giới sử dụng lao động & Doanh nhân nữ'}
               </p>
               <p className="flex gap-2">
                 <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0 text-vn-gold" />
-                <span>171 Võ Thị Sáu, Phường Xuân Hoà, TP. HCM</span>
+                <span>
+                  {isEn
+                    ? '171 Vo Thi Sau Str., Xuan Hoa Ward, Ho Chi Minh City'
+                    : '171 Võ Thị Sáu, Phường Xuân Hoà, TP. Hồ Chí Minh'}
+                </span>
               </p>
               <p className="flex gap-2">
                 <Phone className="mt-0.5 h-4 w-4 flex-shrink-0 text-vn-gold" />
                 <span>
-                  <a href="tel:+842839326598" className="transition-colors hover:text-vn-gold">+84 28 3932 6598</a>
-                  <span className="mx-2">|</span>
-                  <a href="tel:+842839325472" className="transition-colors hover:text-vn-gold">+84 28 3932 5472</a>
+                  <a href="tel:+842839321205" className="transition-colors hover:text-vn-gold">(+84) 28 3932 1205</a>
+                  <span className="mx-2">-</span>
+                  <a href="tel:+842839326598" className="transition-colors hover:text-vn-gold">(+84) 28 3932 6598</a>
                 </span>
               </p>
               <p className="flex gap-2">
-                <Mail className="mt-0.5 h-4 w-4 flex-shrink-0 text-vn-gold" />
-                <a href="mailto:info@vcci-hcm.org.vn" className="transition-colors hover:text-vn-gold">
-                  info@vcci-hcm.org.vn
+                <Globe className="mt-0.5 h-4 w-4 flex-shrink-0 text-vn-gold" />
+                <a href="https://www.vcci-hcm.org.vn" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-vn-gold">
+                  www.vcci-hcm.org.vn
                 </a>
               </p>
+              {!isEn && (
+                <p className="flex gap-2">
+                  <Mail className="mt-0.5 h-4 w-4 flex-shrink-0 text-vn-gold" />
+                  <a href="mailto:bea@vcci-hcm.org.vn" className="transition-colors hover:text-vn-gold">
+                    bea@vcci-hcm.org.vn
+                  </a>
+                </p>
+              )}
             </div>
           </div>
 
@@ -117,8 +134,7 @@ export default function Footer() {
 
         <div className="mt-8 border-t border-white/20 pt-8 text-center">
           <p className="font-montserrat text-sm" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
-            © {new Date().getFullYear()} VCCI-HCM.{' '}
-            {isEn ? 'All rights reserved.' : 'Tất cả các quyền được bảo lưu.'}
+            © {new Date().getFullYear()} VCCI-HCM. {isEn ? 'All rights reserved.' : 'Tất cả các quyền được bảo lưu.'}
           </p>
         </div>
       </div>

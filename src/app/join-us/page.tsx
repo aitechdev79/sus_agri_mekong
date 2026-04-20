@@ -89,16 +89,16 @@ export default function JoinUsPage() {
                   {isEn ? 'Join the Partner Network' : 'Tham gia mạng lưới đối tác'}
                 </h1>
 
-                <p className="mt-5 text-base leading-relaxed text-slate-700">
+                <p className="mt-5 text-justify text-base leading-relaxed text-slate-700">
                   {isEn
                     ? 'Become a member of our collaboration network to advance business goals in innovation and sustainable development. We connect industry leaders to create positive solutions for Vietnam’s agricultural community.'
-                    : 'Làm thành viên của mạng lưới đối tác để thúc đẩy các mục tiêu kinh doanh trong lĩnh vực đổi mới và phát triển bền vững. Chúng tôi kết nối các doanh nghiệp hàng đầu để tạo ra những giải pháp tích cực cho cộng đồng nông nghiệp Việt Nam.'}
+                    : 'Tham gia thành viên của mạng lưới đối tác, doanh nghiệp liên kết cùng VCCI-HCM để kết nối, cập nhật thông tin và thúc đẩy các mục tiêu kinh doanh và phát triển bền vững. Tại đây chúng tôi kết nối các đối tác trong và ngoài nước, các doanh nghiệp, hiệp hội để xây dựng nền tảng phát triển bền vững cho cộng đồng doanh nghiệp tại Việt Nam.'}
                 </p>
-                <p className="mt-4 text-base leading-relaxed text-slate-700">
-                  {isEn
-                    ? 'By joining this global initiative, you can collaborate with leading organizations, share knowledge, and help build a more sustainable agricultural value chain.'
-                    : 'Doanh nghiệp sẽ có cơ hội hợp tác với các tổ chức hàng đầu, chia sẻ kiến thức và cùng nhau xây dựng một chuỗi cung ứng nông nghiệp bền vững.'}
-                </p>
+                {isEn && (
+                  <p className="mt-4 text-justify text-base leading-relaxed text-slate-700">
+                    By joining this global initiative, you can collaborate with leading organizations, share knowledge, and help build a more sustainable agricultural value chain.
+                  </p>
+                )}
               </div>
 
               <div className="relative min-h-72">
