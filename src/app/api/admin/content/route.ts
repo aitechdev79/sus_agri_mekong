@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import type { Prisma } from '@prisma/client';
 
 function getPagination(request: NextRequest) {
   const page = Number(request.nextUrl.searchParams.get('page') || 1);
@@ -25,9 +26,32 @@ export async function GET(request: NextRequest) {
     }
 
     const { page, limit, skip } = getPagination(request);
+    const search = request.nextUrl.searchParams.get('search')?.trim() || '';
+    const category = request.nextUrl.searchParams.get('category')?.trim() || '';
+    const type = request.nextUrl.searchParams.get('type')?.trim() || '';
+    const contentStatus = request.nextUrl.searchParams.get('status')?.trim() || '';
+    const where: Prisma.ContentWhereInput = {
+      ...(category ? { category } : {}),
+      ...(type ? { type: type as Prisma.EnumContentTypeFilter['equals'] } : {}),
+      ...(contentStatus ? { status: contentStatus as Prisma.EnumContentStatusFilter['equals'] } : {}),
+      ...(search
+        ? {
+            OR: [
+              { title: { contains: search, mode: 'insensitive' } },
+              { titleEn: { contains: search, mode: 'insensitive' } },
+              { description: { contains: search, mode: 'insensitive' } },
+              { descriptionEn: { contains: search, mode: 'insensitive' } },
+              { tags: { contains: search, mode: 'insensitive' } },
+              { author: { name: { contains: search, mode: 'insensitive' } } },
+              { author: { email: { contains: search, mode: 'insensitive' } } },
+            ],
+          }
+        : {}),
+    };
 
     const [content, total, published, draft, viewAggregate] = await Promise.all([
       prisma.content.findMany({
+        where,
         include: {
           author: {
             select: {
@@ -43,10 +67,11 @@ export async function GET(request: NextRequest) {
         skip,
         take: limit,
       }),
-      prisma.content.count(),
-      prisma.content.count({ where: { status: 'PUBLISHED' } }),
-      prisma.content.count({ where: { status: 'DRAFT' } }),
+      prisma.content.count({ where }),
+      prisma.content.count({ where: { ...where, status: 'PUBLISHED' } }),
+      prisma.content.count({ where: { ...where, status: 'DRAFT' } }),
       prisma.content.aggregate({
+        where,
         _sum: {
           viewCount: true,
         },

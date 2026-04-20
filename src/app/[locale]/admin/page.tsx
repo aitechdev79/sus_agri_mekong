@@ -12,6 +12,7 @@ import { ContentTable } from '@/components/admin/ContentTable'
 import { ContentForm } from '@/components/admin/ContentForm'
 import { AiNewsPanel } from '@/components/admin/AiNewsPanel'
 import { HomeStatsManager } from '@/components/admin/HomeStatsManager'
+import { ContentAdminFilters, type AdminContentFilters } from '@/components/admin/ContentAdminFilters'
 import { Button } from '@/components/ui/button'
 import { AdminContent } from '@/types/content'
 import { useAdminCategories } from '@/hooks/use-admin-categories'
@@ -45,6 +46,13 @@ export default function AdminPage() {
     total: 0,
     pages: 1
   })
+  const [searchInput, setSearchInput] = useState('')
+  const [filters, setFilters] = useState<AdminContentFilters>({
+    search: '',
+    category: '',
+    type: '',
+    status: ''
+  })
   const [managementStats, setManagementStats] = useState({
     totalUsers: 0,
     personalUsers: 0,
@@ -59,9 +67,17 @@ export default function AdminPage() {
     status !== 'loading' && !!session && (session.user.role === 'ADMIN' || session.user.role === 'MODERATOR')
   )
 
-  const fetchAdminData = useCallback(async (nextPage = page, nextLimit = limit) => {
+  const fetchAdminData = useCallback(async (nextPage = page, nextLimit = limit, nextFilters = filters) => {
     try {
-      const response = await fetch(`/api/admin/content?page=${nextPage}&limit=${nextLimit}`)
+      const params = new URLSearchParams({
+        page: String(nextPage),
+        limit: String(nextLimit)
+      })
+      if (nextFilters.search) params.set('search', nextFilters.search)
+      if (nextFilters.category) params.set('category', nextFilters.category)
+      if (nextFilters.type) params.set('type', nextFilters.type)
+      if (nextFilters.status) params.set('status', nextFilters.status)
+      const response = await fetch(`/api/admin/content?${params.toString()}`)
       if (!response.ok) {
         throw new Error('Failed to fetch admin content')
       }
@@ -92,7 +108,7 @@ export default function AdminPage() {
     } finally {
       setIsLoading(false)
     }
-  }, [page, limit])
+  }, [page, limit, filters])
 
   const fetchManagementStats = useCallback(async () => {
     try {
@@ -131,6 +147,30 @@ export default function AdminPage() {
     setLimit(nextLimit)
     setPage(1)
   }
+
+  const handleFilterChange = (nextFilters: AdminContentFilters) => {
+    setFilters(nextFilters)
+    setPage(1)
+  }
+
+  const handleClearFilters = () => {
+    setSearchInput('')
+    setFilters({ search: '', category: '', type: '', status: '' })
+    setPage(1)
+  }
+
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      setFilters((current) => {
+        const nextSearch = searchInput.trim()
+        if (current.search === nextSearch) return current
+        setPage(1)
+        return { ...current, search: nextSearch }
+      })
+    }, 300)
+
+    return () => window.clearTimeout(timeoutId)
+  }, [searchInput])
 
   useEffect(() => {
     if (status === 'loading') return
@@ -402,6 +442,15 @@ export default function AdminPage() {
                 </div>
               </div>
             </div>
+            <ContentAdminFilters
+              filters={filters}
+              searchInput={searchInput}
+              categories={categories}
+              onSearchInputChange={setSearchInput}
+              onFilterChange={handleFilterChange}
+              onClear={handleClearFilters}
+            />
+
             <div className="mb-4 flex flex-col gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
               <div className="text-sm text-slate-600">
                 Hiển thị {contents.length > 0 ? (pagination.page - 1) * pagination.limit + 1 : 0}
