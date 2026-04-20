@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 import Image from 'next/image';
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
-import { Building2, Factory, Globe2, Handshake } from 'lucide-react';
+import { Building2, Factory, Globe2 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { getLocaleFromPathname } from '@/lib/content-locale';
 
@@ -86,104 +86,98 @@ export default function PartnersPage() {
   const partnerGroups: TextCard[] = isEn
     ? [
         {
-          title: 'Government and institutions',
+          title: 'Central state management agencies',
           icon: <Building2 className="h-6 w-6" />,
           items: [
-            'Ministry of Labour (now under Ministry of Home Affairs)',
+            'Ministry of Labour, Invalids and Social Affairs (now merged into the Ministry of Home Affairs)',
+            'Ministry of Industry and Trade',
             'Vietnam General Confederation of Labour',
-            'Vietnam Farmers Union',
+            'Central Committee of the Vietnam Farmers Union',
+            'Other ministries and sectors...',
           ],
         },
         {
-          title: 'International NGO partners',
-          icon: <Globe2 className="h-6 w-6" />,
-          items: ['Oxfam', 'ILO (International Labour Organization)', 'DI (Development International)', 'NHO'],
-        },
-        {
-          title: 'Domestic industry associations',
-          icon: <Factory className="h-6 w-6" />,
-          items: [
-            'VASEP, VFA, and fisheries associations in Can Tho, An Giang, Ca Mau, Soc Trang',
-            'HAWA, BIFA, DOWA',
-            'CSID, VITAS',
-          ],
-        },
-        {
-          title: 'Core partner network',
-          icon: <Handshake className="h-6 w-6" />,
-          items: ['VCCI, Oxfam, DGD, Vietnam Farmers Union, VASEP, VFA, and local associations'],
-        },
-      ]
-    : [
-        {
-          title: 'Cơ quan quản lý và tổ chức',
+          title: 'Local state management agencies',
           icon: <Building2 className="h-6 w-6" />,
-          items: ['Bộ Lao động (nay thuộc Bộ Nội vụ)', 'Tổng Liên đoàn Lao động Việt Nam', 'Hội Nông dân Việt Nam'],
-        },
-        {
-          title: 'Đối tác NGO quốc tế',
-          icon: <Globe2 className="h-6 w-6" />,
-          items: ['Oxfam', 'ILO (Tổ chức Lao động Quốc tế)', 'DI (Development International)', 'NHO'],
-        },
-        {
-          title: 'Hiệp hội ngành nghề trong nước',
-          icon: <Factory className="h-6 w-6" />,
           items: [
-            'VASEP, VFA và các hiệp hội thủy sản tại Cần Thơ, An Giang, Cà Mau, Sóc Trăng',
-            'HAWA, BIFA, DOWA',
-            'CSID, VITAS',
+            'Provincial/municipal Departments of Labour, Invalids and Social Affairs (now Departments of Home Affairs)',
+            'Provincial/municipal Departments of Industry and Trade',
+            'Provincial/municipal Labour Federations',
+            'Provincial/municipal Vietnam Farmers Union chapters',
+            'Other local departments and sectors...',
           ],
         },
         {
-          title: 'Mạng lưới đối tác nòng cốt',
-          icon: <Handshake className="h-6 w-6" />,
-          items: ['VCCI, Oxfam, DGD, Hội Nông dân Việt Nam, VASEP, VFA và các hiệp hội địa phương'],
-        },
-      ];
-
-  const oxfamCards: LinkCard[] = isEn
-    ? [
-        {
-          title: 'GRAISEA Project',
-          description: 'Gender-transformative and responsible agricultural investment in Southeast Asia.',
-          note: '-> Supporting business capacity building in shrimp and rice value chains.',
-          href: 'https://graisea.github.io/',
+          title: 'Business associations and industry associations',
+          icon: <Factory className="h-6 w-6" />,
+          items: [
+            'Textiles, footwear, and handbags: Vietnam Textile and Apparel Association (VITAS); Ho Chi Minh City Association of Garment, Textile, Embroidery and Knitting (AGTEK); Vietnam Leather, Footwear and Handbag Association (LEFASO);...',
+            'Seafood: Vietnam Association of Seafood Exporters and Producers (VASEP), Can Tho Fisheries Association,...',
+            'Wood processing: Handicraft and Wood Industry Association of Ho Chi Minh City (HAWA); Binh Duong Furniture Association (BIFA); Dong Nai Wood and Handicraft Association (DOWA); Gia Lai Forest Products Association (FPA);...',
+            'Food: Vietnam Food Association (VFA); Vietnam Coffee-Cocoa Association (VICOFA); Vietnam Rubber Association (VRA); Vietnam Pepper and Spice Association (VPSA);...',
+            'Other industry associations...',
+          ],
         },
         {
-          title: 'Right To Food Project',
-          description:
-            'Promoting private-sector cooperation to develop inclusive business and responsible investment in Vietnam’s rice value chain.',
-          note: '-> Supporting businesses in the rice value chain.',
-          href: 'https://policy-practice.oxfam.org/resources/a-common-sense-approach-to-the-right-to-food-558742/',
-        },
-        {
-          title: 'DGD Project',
-          description:
-            'Improving international market access for shrimp and rice enterprises through better workplace skills and occupational safety.',
-          note: '-> Supporting enterprises in shrimp and rice processing value chains.',
-          href: 'https://vietnam.oxfam.org/kick-project-component-supporting-female-farmers-and-informal-workers',
+          title: 'International NGOs and programs',
+          icon: <Globe2 className="h-6 w-6" />,
+          items: [
+            'International Labour Organization (ILO)',
+            'Confederation of Norwegian Enterprise (NHO)',
+            'Oxfam in Vietnam',
+            'Confederation of Danish Industry (DI)',
+            'Investing in Women (IW)',
+            'Aus4Skills Program',
+            '...',
+          ],
         },
       ]
     : [
         {
-          title: 'Dự án GRAISEA',
-          description: 'Tăng cường bình đẳng giới và đầu tư kinh doanh nông nghiệp có trách nhiệm tại Đông Nam Á.',
-          note: '-> Hỗ trợ nâng cao năng lực doanh nghiệp trong chuỗi chế biến tôm và lúa gạo.',
-          href: 'https://graisea.github.io/',
+          title: 'Cơ quan quản lý nhà nước tại Trung ương',
+          icon: <Building2 className="h-6 w-6" />,
+          items: [
+            'Bộ Lao động, Thương binh & Xã hội (Nay sát nhập vào Bộ Nội vụ)',
+            'Bộ Công thương',
+            'Tổng Liên đoàn Lao động Việt Nam',
+            'Trung ương Hội Nông dân Việt Nam',
+            'Các Bộ ngành khác...',
+          ],
         },
         {
-          title: 'Dự án Right To Food',
-          description:
-            'Thúc đẩy hợp tác khu vực tư nhân nhằm phát triển mô hình kinh doanh toàn diện và đầu tư có trách nhiệm trong chuỗi giá trị lúa gạo tại Việt Nam.',
-          note: '-> Hỗ trợ doanh nghiệp trong chuỗi lúa gạo.',
-          href: 'https://policy-practice.oxfam.org/resources/a-common-sense-approach-to-the-right-to-food-558742/',
+          title: 'Cơ quan quản lý Nhà nước tại địa phương',
+          icon: <Building2 className="h-6 w-6" />,
+          items: [
+            'Sở Lao động, Thương binh & Xã hội (Nay là Sở Nội vụ) tỉnh, thành phố',
+            'Sở Công thương tỉnh, thành phố',
+            'Liên đoàn Lao động Việt Nam tỉnh, thành phố',
+            'Hội Nông dân Việt Nam tại tỉnh, thành phố',
+            'Các Sở ngành khác...',
+          ],
         },
         {
-          title: 'Dự án DGD',
-          description:
-            'Cải thiện khả năng tiếp cận thị trường quốc tế của doanh nghiệp tôm và lúa thông qua nâng cao kỹ năng làm việc và an toàn vệ sinh lao động.',
-          note: '-> Hỗ trợ doanh nghiệp trong chuỗi chế biến tôm và lúa gạo.',
-          href: 'https://vietnam.oxfam.org/kick-project-component-supporting-female-farmers-and-informal-workers',
+          title: 'Các Hiệp hội doanh nghiệp, Hiệp hội ngành nghề',
+          icon: <Factory className="h-6 w-6" />,
+          items: [
+            'Dệt may, da giày, túi xách: Hiệp hội Dệt may Việt Nam (VITAS); Hiệp hội Dệt may thời trang TP.HCM (AGTEK); Hiệp hội Da - Giày - Túi xách Việt Nam (LEFASO);...',
+            'Thủy sản: Hiệp hội Chế biến và Xuất khẩu Thủy sản Việt Nam (VASEP), Hiệp hội thủy sản Cần Thơ,...',
+            'Chế biến gỗ: Hội Mỹ nghệ và Chế biến gỗ TP.HCM (HAWA); Hiệp hội chế biến gỗ tỉnh Bình Dương (BIFA); Hiệp hội Gỗ và Thủ Công Mỹ Nghệ Đồng Nai (DOWA); Hiệp hội gỗ và lâm sản Gia Lai (FPA);...',
+            'Thực phẩm: Hiệp hội Lương thực Việt Nam (VFA); Hiệp hội Cà phê, Ca cao Việt Nam (VICOFA); Hiệp hội Cao su Việt Nam (VRA); Hiệp hội Hồ tiêu và cây gia vị Việt Nam (VPSA);...',
+            'Các Hiệp hội ngành nghề khác...',
+          ],
+        },
+        {
+          title: 'Các NGO và chương trình quốc tế',
+          icon: <Globe2 className="h-6 w-6" />,
+          items: [
+            'Tổ chức Lao động Quốc tế (ILO)',
+            'Liên đoàn Doanh nghiệp Nauy (NHO)',
+            'Tổ chức Oxfam tại Việt Nam',
+            'Liên đoàn Công nghiệp Đan Mạch (DI)',
+            'Investing in Women (IW)',
+            'Chương trình Aus4skills',
+            '...',
+          ],
         },
       ];
 
@@ -263,23 +257,6 @@ export default function PartnersPage() {
               {partnerGroups.map((card) => (
                 <PartnerGroupCard key={card.title} card={card} />
               ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="pb-8">
-          <div className="container mx-auto max-w-6xl px-6">
-            <div className="rounded-3xl bg-white p-6 shadow-sm md:p-8">
-              <div className="mb-8 flex justify-center">
-                <div className="relative mx-auto h-28 w-44 md:h-32 md:w-48">
-                  <Image src="/OX_HL_C_RGB.png" alt="Oxfam Logo" fill className="object-contain" sizes="220px" />
-                </div>
-              </div>
-              <div className="grid gap-5 md:grid-cols-3">
-                {oxfamCards.map((card) => (
-                  <ProjectLinkCard key={card.title} card={card} />
-                ))}
-              </div>
             </div>
           </div>
         </section>

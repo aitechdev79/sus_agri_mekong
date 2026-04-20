@@ -65,7 +65,7 @@ export default function AboutSection() {
         ? 'Connect with partner organizations to accelerate sustainable development.'
         : 'Kết nối với các đối tác và tổ chức hợp tác để thúc đẩy phát triển bền vững',
       href: withLocalePrefix('/partners', locale),
-      image: '/doitac_chienluoc2.jpg'
+      image: '/doi-tac-chien-luoc.jpg'
     }
   ];
 

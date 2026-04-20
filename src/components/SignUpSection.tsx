@@ -80,16 +80,16 @@ export default function SignUpSection() {
                 className="mb-4 font-montserrat text-[18px] font-semibold uppercase tracking-wider"
                 style={{ color: 'rgba(60, 60, 59, 0.6)' }}
               >
-                {isEn ? 'Become a partner' : 'Trở thành đối tác'}
+                {isEn ? 'Partners' : 'Đối tác'}
               </p>
 
               <h2
                 className="font-montserrat text-vn-dark font-bold leading-tight"
-                style={{ fontSize: '38.4px', fontWeight: 700 }}
+                style={{ fontSize: '30px', fontWeight: 700 }}
               >
                 {isEn
-                  ? 'Partners receive updates on new programs and content. Connect with businesses, experts and farmers in the ecosystem.'
-                  : 'Đối tác doanh nghiệp được cập nhật các chương trình và nội dung mới nhất. Được kết nối với cộng đồng doanh nghiệp, chuyên gia và nông dân.'}
+                  ? 'Become a partner to connect with VCCI-HCM and receive updates on programs and content.'
+                  : 'Trở thành đối tác để được kết nối, cập nhật các chương trình, nội dung với VCCI-HCM'}
               </h2>
             </div>
 
