@@ -30,9 +30,17 @@ const contentTypes = [
   { value: 'POLICY', label: 'Chính sách' },
   { value: 'NEWS', label: 'Tin tức' },
   { value: 'EVENT', label: 'Sự kiện' },
-  { value: 'VIDEO', label: 'Video' },
-  { value: 'INFOGRAPHIC', label: 'Infographic' },
 ]
+
+const creatableContentTypeValues = new Set([
+  '',
+  'DOCUMENT',
+  'STORY',
+  'PROJECT_ACTIVITY',
+  'POLICY',
+  'NEWS',
+  'EVENT',
+])
 
 const contentStatuses = [
   { value: '', label: 'Tất cả trạng thái' },
@@ -96,7 +104,7 @@ export function ContentAdminFilters({
           onChange={(event) => updateFilter('type', event.target.value)}
           className="h-11 rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500"
         >
-          {contentTypes.map((type) => (
+          {contentTypes.filter((type) => creatableContentTypeValues.has(type.value)).map((type) => (
             <option key={type.value} value={type.value}>
               {type.label}
             </option>

@@ -22,6 +22,7 @@ export default function AdminPage() {
   const [editingContent, setEditingContent] = useState<AdminContent | null>(null)
   const [contents, setContents] = useState<AdminContent[]>([])
   const [loading, setLoading] = useState(true)
+  const [hasLoadedContents, setHasLoadedContents] = useState(false)
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(20)
   const [pagination, setPagination] = useState({
@@ -101,6 +102,7 @@ export default function AdminPage() {
       setContents([])
     } finally {
       if (latestContentRequestRef.current === requestId) {
+        setHasLoadedContents(true)
         setLoading(false)
       }
     }
@@ -242,7 +244,7 @@ export default function AdminPage() {
     }
   }
 
-  if (status === 'loading' || loading) {
+  if (status === 'loading' || (loading && !hasLoadedContents)) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-emerald-50">
         <NavigationBar />

@@ -38,6 +38,7 @@ export default function AdminPage() {
   const [editingContent, setEditingContent] = useState<AdminContent | null>(null)
   const [contents, setContents] = useState<AdminContent[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [hasLoadedContents, setHasLoadedContents] = useState(false)
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(20)
   const [pagination, setPagination] = useState({
@@ -73,6 +74,7 @@ export default function AdminPage() {
     latestContentRequestRef.current = requestId
 
     try {
+      setIsLoading(true)
       const params = new URLSearchParams({
         page: String(nextPage),
         limit: String(nextLimit)
@@ -113,6 +115,7 @@ export default function AdminPage() {
       setContents([])
     } finally {
       if (latestContentRequestRef.current === requestId) {
+        setHasLoadedContents(true)
         setIsLoading(false)
       }
     }
@@ -259,7 +262,7 @@ export default function AdminPage() {
     }
   }
 
-  if (status === 'loading' || isLoading) {
+  if (status === 'loading' || (isLoading && !hasLoadedContents)) {
     return (
       <div className="min-h-screen flex flex-col bg-gradient-to-b from-sky-50 via-white to-emerald-50">
         <NavigationBar />
