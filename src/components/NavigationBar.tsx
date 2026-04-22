@@ -20,7 +20,7 @@ export default function NavigationBar() {
   const libraryHref = withLocalePrefix('/library', locale);
   const newsHref = withLocalePrefix('/news', locale);
   const eventsHref = withLocalePrefix('/tat-ca-su-kien', locale);
-  const exploreHref = withLocalePrefix('/vision-mission', locale);
+  const exploreHref = `${homeHref}#content-library`;
   const signInHref = withLocalePrefix('/auth/signin', locale);
   const signUpHref = withLocalePrefix('/auth/signup', locale);
   const switchLocaleHref = withLocalePrefix(normalizedPath, otherLocale);
