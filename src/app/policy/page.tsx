@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Loader2, Search } from 'lucide-react';
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
 import { usePathname } from 'next/navigation';
@@ -115,25 +115,6 @@ export default function PolicyPage() {
       description: locale === 'en' ? 'Global sustainability reporting framework' : 'Tiêu chuẩn báo cáo bền vững toàn cầu',
       areas: locale === 'en' ? ['ESG', 'Reporting', 'Transparency'] : ['ESG', 'Báo cáo', 'Minh bạch'],
       href: 'https://tqc.vn/grs-la-gi.htm',
-    },
-  ];
-
-  const expertQuotes = [
-    {
-      quote: locale === 'en'
-        ? 'Keeping up with ESG regulations is not only a compliance duty but also a strategic opportunity to improve competitiveness and reach international markets.'
-        : 'Việc cập nhật và tuân thủ các quy định pháp lý về ESG không chỉ là nghĩa vụ mà còn là cơ hội để doanh nghiệp nâng cao năng lực cạnh tranh và tiếp cận thị trường quốc tế.',
-      author: locale === 'en' ? 'Dr. Nguyen Van Minh' : 'TS. Nguyễn Văn Minh',
-      position: locale === 'en' ? 'Sustainable Development Policy Expert' : 'Chuyên gia Chính sách Phát triển Bền vững',
-      organization: 'Viện Chiến lược và Chính sách Tài nguyên Môi trường',
-    },
-    {
-      quote: locale === 'en'
-        ? 'Businesses should proactively align their operations with international standards such as SA8000 and BSCI to stay competitive in global value chains.'
-        : 'Doanh nghiệp cần chủ động theo dõi và điều chỉnh hoạt động kinh doanh phù hợp với các tiêu chuẩn quốc tế như SA8000, BSCI để đảm bảo vị thế trong chuỗi giá trị toàn cầu.',
-      author: locale === 'en' ? 'Lawyer Tran Thi Huong' : 'Luật sư Trần Thị Hương',
-      position: locale === 'en' ? 'Legal Director' : 'Giám đốc Pháp chế',
-      organization: 'Phòng Thương mại và Công nghiệp Việt Nam (VCCI)',
     },
   ];
 
@@ -260,8 +241,11 @@ export default function PolicyPage() {
                       value={searchInput}
                       onChange={(event) => setSearchInput(event.target.value)}
                       placeholder={isEn ? 'Search policy...' : 'Tìm kiếm policy...'}
-                      className="w-full rounded-md border border-gray-300 py-2.5 pl-10 pr-4 font-montserrat text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                      className="w-full rounded-md border border-gray-300 py-2.5 pl-10 pr-10 font-montserrat text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                     />
+                    {loadingPolicies && (
+                      <Loader2 className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin text-blue-600" />
+                    )}
                   </div>
                   <button
                     type="submit"
@@ -388,40 +372,6 @@ export default function PolicyPage() {
                     {standard.description}
                   </p>
                 </a>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="bg-white py-16">
-          <div className="container mx-auto max-w-6xl px-6">
-            <h2 className="mb-8 text-center font-montserrat text-3xl font-bold text-gray-800">
-              {isEn ? 'Expert Opinions' : 'Ý kiến Chuyên gia'}
-            </h2>
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-              {expertQuotes.map((item, index) => (
-                <div
-                  key={index}
-                  className="rounded-lg border-l-4 border-blue-600 bg-gradient-to-br from-blue-50 to-white p-8 shadow-md"
-                >
-                  <div className="mb-4">
-                    <svg
-                      className="h-10 w-10 text-blue-600 opacity-50"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z" />
-                    </svg>
-                  </div>
-                  <p className="mb-6 font-montserrat text-lg italic leading-relaxed text-gray-700">
-                    &ldquo;{item.quote}&rdquo;
-                  </p>
-                  <div className="border-t border-gray-200 pt-4">
-                    <p className="font-montserrat font-bold text-gray-800">{item.author}</p>
-                    <p className="font-montserrat text-sm text-gray-600">{item.position}</p>
-                    <p className="font-montserrat text-sm text-blue-600">{item.organization}</p>
-                  </div>
-                </div>
               ))}
             </div>
           </div>

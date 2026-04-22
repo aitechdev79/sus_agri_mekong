@@ -313,7 +313,7 @@ export default function LibraryPage() {
                   >
                     <div className="flex flex-col items-center p-6 text-center transition-transform duration-500 group-hover:scale-105">
                       <div
-                        className={`mb-4 flex h-16 w-16 items-center justify-center transition-transform duration-500 ${card.accentClassName}`}
+                        className={`hexagon-icon mb-4 flex h-20 w-20 items-center justify-center transition-transform duration-500 ${card.accentClassName}`}
                       >
                         {'imageIcon' in card ? (
                           <Image
@@ -553,7 +553,7 @@ export default function LibraryPage() {
                 <div key={index} className="bg-white p-6 shadow-sm">
                   <div className="mb-5 flex items-center gap-4">
                     {section.iconType === 'image' ? (
-                      <div className="relative h-14 w-14 flex-shrink-0 overflow-hidden bg-gray-100">
+                      <div className="hexagon-icon relative h-14 w-14 flex-shrink-0 overflow-hidden bg-[#FFF7DA]">
                         <Image
                           src={section.icon}
                           alt={section.title}
@@ -563,7 +563,7 @@ export default function LibraryPage() {
                         />
                       </div>
                     ) : (
-                      <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center bg-[#FFF7DA] text-2xl">
+                      <div className="hexagon-icon flex h-14 w-14 flex-shrink-0 items-center justify-center bg-[#FFF7DA] text-2xl">
                         {section.icon}
                       </div>
                     )}

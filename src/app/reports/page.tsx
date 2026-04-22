@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { ChevronLeft, ChevronRight, FileText, Search } from 'lucide-react';
+import { ChevronLeft, ChevronRight, FileText, Loader2, Search } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
@@ -160,8 +160,11 @@ export default function ReportsPage() {
                       value={searchInput}
                       onChange={(event) => setSearchInput(event.target.value)}
                       placeholder={isEn ? 'Search documents...' : 'Tìm kiếm tài liệu...'}
-                      className="w-full rounded-md border border-gray-300 py-2.5 pl-10 pr-4 font-montserrat text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                      className="w-full rounded-md border border-gray-300 py-2.5 pl-10 pr-10 font-montserrat text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
                     />
+                    {loading && (
+                      <Loader2 className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin text-indigo-600" />
+                    )}
                   </div>
                   <button type="submit" className="rounded-md bg-indigo-600 px-4 py-2.5 font-montserrat text-sm font-semibold text-white hover:bg-indigo-700">
                     {isEn ? 'Search' : 'Tìm'}
