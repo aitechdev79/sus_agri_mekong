@@ -32,6 +32,7 @@ export default function SignUpSection() {
   const [loading, setLoading] = useState(true);
   const [carouselStart, setCarouselStart] = useState(0);
   const [carouselTransition, setCarouselTransition] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const loadPartners = async () => {
@@ -70,6 +71,16 @@ export default function SignUpSection() {
     }
     return FALLBACK_PARTNERS;
   }, [partners]);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 767px)');
+    const updateIsMobile = () => setIsMobile(mediaQuery.matches);
+
+    updateIsMobile();
+    mediaQuery.addEventListener('change', updateIsMobile);
+
+    return () => mediaQuery.removeEventListener('change', updateIsMobile);
+  }, []);
 
   useEffect(() => {
     if (displayPartners.length <= 4) {
@@ -151,29 +162,51 @@ export default function SignUpSection() {
             {isEn ? 'Loading partners...' : 'Đang tải đối tác...'}
           </div>
         ) : (
-          <div className="overflow-hidden [--partner-gap:0.75rem] sm:[--partner-gap:1rem] lg:[--partner-gap:2rem] [--partner-per-view:1] sm:[--partner-per-view:2] lg:[--partner-per-view:4]">
-            <div
-              className={`flex gap-[var(--partner-gap)] ${carouselTransition ? 'transition-transform duration-700 ease-in-out' : ''}`}
-              style={{
-                transform: `translateX(calc(-${carouselStart} * ((100% - ((var(--partner-per-view) - 1) * var(--partner-gap))) / var(--partner-per-view) + var(--partner-gap))))`,
-              }}
-              onTransitionEnd={handleCarouselTransitionEnd}
-            >
-              {carouselPartners.map((partner, index) => (
-                <div
-                  key={`${partner.id}-${index}`}
-                  className="shrink-0"
-                  style={{ flexBasis: 'calc((100% - ((var(--partner-per-view) - 1) * var(--partner-gap))) / var(--partner-per-view))' }}
-                >
-                  <PartnerLogoCard
-                    companyName={partner.companyName}
-                    logoUrl={partner.logoUrl}
-                    website={partner.website}
-                  />
-                </div>
-              ))}
+          isMobile ? (
+            <div className="overflow-hidden">
+              <div
+                className={`flex ${carouselTransition ? 'transition-transform duration-700 ease-in-out' : ''}`}
+                style={{
+                  transform: `translateX(-${carouselStart * 100}%)`,
+                }}
+                onTransitionEnd={handleCarouselTransitionEnd}
+              >
+                {carouselPartners.map((partner, index) => (
+                  <div key={`${partner.id}-${index}`} className="w-full shrink-0 px-1">
+                    <PartnerLogoCard
+                      companyName={partner.companyName}
+                      logoUrl={partner.logoUrl}
+                      website={partner.website}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="overflow-hidden [--partner-gap:1rem] lg:[--partner-gap:2rem] [--partner-per-view:2] xl:[--partner-per-view:4]">
+              <div
+                className={`flex gap-[var(--partner-gap)] ${carouselTransition ? 'transition-transform duration-700 ease-in-out' : ''}`}
+                style={{
+                  transform: `translateX(calc(-${carouselStart} * ((100% - ((var(--partner-per-view) - 1) * var(--partner-gap))) / var(--partner-per-view) + var(--partner-gap))))`,
+                }}
+                onTransitionEnd={handleCarouselTransitionEnd}
+              >
+                {carouselPartners.map((partner, index) => (
+                  <div
+                    key={`${partner.id}-${index}`}
+                    className="shrink-0"
+                    style={{ flexBasis: 'calc((100% - ((var(--partner-per-view) - 1) * var(--partner-gap))) / var(--partner-per-view))' }}
+                  >
+                    <PartnerLogoCard
+                      companyName={partner.companyName}
+                      logoUrl={partner.logoUrl}
+                      website={partner.website}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )
         )}
       </div>
     </section>
