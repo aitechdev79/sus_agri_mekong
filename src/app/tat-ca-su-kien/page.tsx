@@ -24,9 +24,15 @@ function getPageHref(page: number, locale: string) {
   return page === 1 ? path : `${path}?page=${page}`;
 }
 
-function formatEventStart(date: Date | null | undefined, locale: string) {
+function formatEventStart(date: Date | string | null | undefined, locale: string) {
   if (!date) return locale === 'en' ? 'Not scheduled yet' : 'Chưa cập nhật thời gian';
   return formatVietnamDateTime(date, locale);
+}
+
+function parseEventDate(value: Date | string | null | undefined) {
+  if (!value) return null;
+  const date = value instanceof Date ? value : new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date;
 }
 
 export default async function TatCaSuKienPage({ params, searchParams }: PageProps) {
@@ -44,13 +50,18 @@ export default async function TatCaSuKienPage({ params, searchParams }: PageProp
   });
 
   const calendarEvents = items
-    .filter((item) => item.eventStartAt)
-    .map((item) => ({
-      id: item.id,
-      title: pickLocalizedText(locale, item.title, item.titleEn),
-      date: item.eventStartAt!.toISOString(),
-      isPast: item.eventStartAt!.getTime() < Date.now(),
-    }));
+    .map((item) => {
+      const eventStartAt = parseEventDate(item.eventStartAt);
+      if (!eventStartAt) return null;
+
+      return {
+        id: item.id,
+        title: pickLocalizedText(locale, item.title, item.titleEn),
+        date: eventStartAt.toISOString(),
+        isPast: eventStartAt.getTime() < Date.now(),
+      };
+    })
+    .filter((item): item is { id: string; title: string; date: string; isPast: boolean } => Boolean(item));
 
   const pageNumbers = Array.from({ length: pagination.pages }, (_, index) => index + 1).slice(
     Math.max(0, pagination.page - 3),
@@ -78,7 +89,8 @@ export default async function TatCaSuKienPage({ params, searchParams }: PageProp
                 {items.map((item) => {
                   const imageSrc = item.thumbnailUrl || item.imageUrl || '';
                   const localizedTitle = pickLocalizedText(locale, item.title, item.titleEn);
-                  const eventStartTime = item.eventStartAt?.getTime() ?? Number.NaN;
+                  const eventStartAt = parseEventDate(item.eventStartAt);
+                  const eventStartTime = eventStartAt?.getTime() ?? Number.NaN;
                   const hasValidEventStart = Number.isFinite(eventStartTime);
                   const isUpcoming = hasValidEventStart ? eventStartTime >= Date.now() : false;
 
@@ -110,7 +122,7 @@ export default async function TatCaSuKienPage({ params, searchParams }: PageProp
                             </div>
                             <div className="flex items-start gap-2">
                               <Calendar className="mt-0.5 h-4 w-4 flex-shrink-0" />
-                              <span>{formatEventStart(item.eventStartAt, locale)}</span>
+                              <span>{formatEventStart(eventStartAt, locale)}</span>
                             </div>
                           </div>
                         </div>

@@ -22,10 +22,10 @@ export interface EventListItem {
   descriptionEn: string | null;
   thumbnailUrl: string | null;
   imageUrl: string | null;
-  eventStartAt: Date | null;
-  eventEndAt: Date | null;
+  eventStartAt: Date | string | null;
+  eventEndAt: Date | string | null;
   eventLocation: string | null;
-  createdAt: Date;
+  createdAt: Date | string;
 }
 
 export interface PolicyListItem {
@@ -53,8 +53,8 @@ export interface NewsListItem {
   titleEn: string | null;
   description: string | null;
   descriptionEn: string | null;
-  publishedAt: Date | null;
-  createdAt: Date;
+  publishedAt: Date | string | null;
+  createdAt: Date | string;
   viewCount: number;
   thumbnailUrl: string | null;
   imageUrl: string | null;
@@ -70,8 +70,8 @@ export interface StoryListItem {
   thumbnailUrl: string | null;
   imageUrl: string | null;
   viewCount: number;
-  publishedAt: Date | null;
-  createdAt: Date;
+  publishedAt: Date | string | null;
+  createdAt: Date | string;
 }
 
 export interface ProjectActivityListItem {
