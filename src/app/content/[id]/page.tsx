@@ -4,45 +4,13 @@ import { notFound } from 'next/navigation';
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
 import { ContentViewTracker } from '@/components/content/ContentViewTracker';
-import { prisma } from '@/lib/prisma';
 import { renderRichTextContent } from '@/lib/rich-text';
 import { PublicContent } from '@/types/content';
 import { formatVietnamDate, formatVietnamDateTime } from '@/lib/vietnam-time';
 import { getPublishedDate } from '@/lib/content-dates';
+import { getPublishedContentById } from '@/lib/public-content-detail';
 
-async function getContent(contentId: string): Promise<PublicContent | null> {
-  try {
-    const content = await prisma.content.findUnique({
-      where: { id: contentId },
-      include: {
-        author: {
-          select: {
-            id: true,
-            name: true,
-            role: true,
-            organization: true,
-          },
-        },
-      },
-    });
-
-    if (!content) {
-      return null;
-    }
-
-    return {
-      ...content,
-      publishedAt: content.publishedAt?.toISOString() || null,
-      createdAt: content.createdAt.toISOString(),
-      updatedAt: content.updatedAt.toISOString(),
-      eventStartAt: content.eventStartAt?.toISOString() || null,
-      eventEndAt: content.eventEndAt?.toISOString() || null,
-    } as PublicContent;
-  } catch (error) {
-    console.error('Error fetching content:', error);
-    return null;
-  }
-}
+export const revalidate = 300;
 
 function extractYouTubeVideoId(url: string): string | null {
   const regex = /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/;
@@ -111,7 +79,10 @@ export default async function ContentDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const content = await getContent(id);
+  const content = await getPublishedContentById(id).catch((error) => {
+    console.error('Error fetching content:', error);
+    return null;
+  });
 
   if (!content || content.status !== 'PUBLISHED') {
     notFound();
@@ -307,6 +278,7 @@ export default async function ContentDetailPage({
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     allowFullScreen
+                    loading="lazy"
                   />
                 </div>
               </div>
