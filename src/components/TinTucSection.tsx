@@ -1,12 +1,11 @@
 import HomeContentGridSection from '@/components/HomeContentGridSection';
-import { getHomeNewsItems } from '@/lib/home-content';
+import type { HomeContentGridItem } from '@/lib/home-content';
 
-export default async function TinTucSection() {
-  const initialItems = await getHomeNewsItems(3).catch((error) => {
-    console.error('Failed to preload home news items:', error);
-    return [];
-  });
+interface TinTucSectionProps {
+  initialItems?: HomeContentGridItem[];
+}
 
+export default function TinTucSection({ initialItems }: TinTucSectionProps) {
   return (
     <HomeContentGridSection
       titleVi="Tin tức"

@@ -6,17 +6,23 @@ import DienHinhSection from '@/components/DienHinhSection';
 import TinTucSection from '@/components/TinTucSection';
 import LibraryAndToolsWrapper from '@/components/LibraryAndToolsWrapper';
 import ProjectsAndNewsWrapper from '@/components/ProjectsAndNewsWrapper';
+import { getHomeFeaturedContent } from '@/lib/home-content';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
-export default function LocaleHomePage() {
+export default async function LocaleHomePage() {
+  const featuredContent = await getHomeFeaturedContent().catch((error) => {
+    console.error('Failed to preload localized homepage content:', error);
+    return { stories: [], news: [] };
+  });
+
   return (
     <div className="min-h-screen">
       <main>
         <HeroSection />
         <AboutSection />
-        <DienHinhSection />
-        <TinTucSection />
+        <DienHinhSection initialItems={featuredContent.stories} />
+        <TinTucSection initialItems={featuredContent.news} />
         <ProjectsAndNewsWrapper />
         <LibraryAndToolsWrapper />
         <SignUpSection />

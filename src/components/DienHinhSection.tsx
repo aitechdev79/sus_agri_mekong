@@ -1,12 +1,11 @@
 import HomeContentGridSection from '@/components/HomeContentGridSection';
-import { getHomeStoryItems } from '@/lib/home-content';
+import type { HomeContentGridItem } from '@/lib/home-content';
 
-export default async function DienHinhSection() {
-  const initialItems = await getHomeStoryItems(3).catch((error) => {
-    console.error('Failed to preload home story items:', error);
-    return [];
-  });
+interface DienHinhSectionProps {
+  initialItems?: HomeContentGridItem[];
+}
 
+export default function DienHinhSection({ initialItems }: DienHinhSectionProps) {
   return (
     <HomeContentGridSection
       titleVi="Thực hành điển hình - Lan tỏa giá trị"

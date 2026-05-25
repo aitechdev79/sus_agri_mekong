@@ -39,6 +39,8 @@ export default function HomeContentGridSection({
   const isEn = locale === 'en';
 
   useEffect(() => {
+    if (initialItems) return;
+
     let isMounted = true;
 
     const fetchItems = async () => {

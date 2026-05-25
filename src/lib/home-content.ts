@@ -1,3 +1,4 @@
+import { unstable_cache } from 'next/cache';
 import { prisma } from '@/lib/prisma';
 
 export interface HomeContentGridItem {
@@ -23,7 +24,9 @@ function hasRichText(value?: string | null) {
   );
 }
 
-export async function getHomeStoryItems(limit = 3): Promise<HomeContentGridItem[]> {
+const HOME_FEATURED_LIMIT = 3;
+
+async function queryHomeStoryItems(): Promise<HomeContentGridItem[]> {
   const items = await prisma.content.findMany({
     where: {
       status: 'PUBLISHED',
@@ -46,7 +49,7 @@ export async function getHomeStoryItems(limit = 3): Promise<HomeContentGridItem[
       { publishedAt: { sort: 'desc', nulls: 'last' } },
       { createdAt: 'desc' },
     ],
-    take: limit,
+    take: HOME_FEATURED_LIMIT,
   });
 
   return items.map(({ content, contentEn, ...item }) => ({
@@ -55,7 +58,7 @@ export async function getHomeStoryItems(limit = 3): Promise<HomeContentGridItem[
   }));
 }
 
-export async function getHomeNewsItems(limit = 3): Promise<HomeContentGridItem[]> {
+async function queryHomeNewsItems(): Promise<HomeContentGridItem[]> {
   const items = await prisma.content.findMany({
     where: {
       status: 'PUBLISHED',
@@ -78,11 +81,32 @@ export async function getHomeNewsItems(limit = 3): Promise<HomeContentGridItem[]
       { publishedAt: { sort: 'desc', nulls: 'last' } },
       { createdAt: 'desc' },
     ],
-    take: limit,
+    take: HOME_FEATURED_LIMIT,
   });
 
   return items.map(({ content, contentEn, ...item }) => ({
     ...item,
     hasContent: hasRichText(content) || hasRichText(contentEn),
   }));
+}
+
+export const getHomeStoryItems = unstable_cache(
+  queryHomeStoryItems,
+  ['home-story-items'],
+  { revalidate: 60 }
+);
+
+export const getHomeNewsItems = unstable_cache(
+  queryHomeNewsItems,
+  ['home-news-items'],
+  { revalidate: 60 }
+);
+
+export async function getHomeFeaturedContent() {
+  const [stories, news] = await Promise.all([
+    getHomeStoryItems(),
+    getHomeNewsItems(),
+  ]);
+
+  return { stories, news };
 }
