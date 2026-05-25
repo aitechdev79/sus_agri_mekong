@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { usePathname } from 'next/navigation'
 import { getLocaleFromPathname } from '@/lib/content-locale'
 
@@ -8,14 +8,15 @@ interface SearchFiltersProps {
   selectedCategory: string
   selectedType: string
   onFilterChange: (filters: { category: string; type: string }) => void
+  initialCategories?: { slug: string; name: string; nameVi: string; nameEn?: string | null; count: number }[]
 }
 
-export function SearchFilters({ selectedCategory, selectedType, onFilterChange }: SearchFiltersProps) {
+export function SearchFilters({ selectedCategory, selectedType, onFilterChange, initialCategories = [] }: SearchFiltersProps) {
   const pathname = usePathname()
   const locale = getLocaleFromPathname(pathname)
   const isEn = locale === 'en'
-  const [categories, setCategories] = useState<{ slug: string; name: string; nameVi: string; nameEn?: string | null; count: number }[]>([])
-  const [loading, setLoading] = useState(true)
+  const [categories, setCategories] = useState<{ slug: string; name: string; nameVi: string; nameEn?: string | null; count: number }[]>(initialCategories)
+  const [loading, setLoading] = useState(initialCategories.length === 0)
 
   const contentTypes = [
     { value: '', label: isEn ? 'All types' : 'Tất cả loại' },
@@ -27,11 +28,7 @@ export function SearchFilters({ selectedCategory, selectedType, onFilterChange }
     { value: 'EVENT', label: isEn ? 'Event' : 'Sự kiện' }
   ]
 
-  useEffect(() => {
-    loadCategories()
-  }, [])
-
-  const loadCategories = async () => {
+  const loadCategories = useCallback(async () => {
     try {
       const response = await fetch('/api/categories')
       if (response.ok) {
@@ -43,7 +40,17 @@ export function SearchFilters({ selectedCategory, selectedType, onFilterChange }
     } finally {
       setLoading(false)
     }
-  }
+  }, [])
+
+  useEffect(() => {
+    if (initialCategories.length > 0) {
+      setCategories(initialCategories)
+      setLoading(false)
+      return
+    }
+
+    loadCategories()
+  }, [initialCategories, loadCategories])
 
   const handleCategoryChange = (category: string) => {
     onFilterChange({ category, type: selectedType })

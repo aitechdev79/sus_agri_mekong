@@ -86,6 +86,18 @@ export interface ProjectActivityListItem {
   imageUrl: string | null;
 }
 
+export interface LibraryListItem {
+  id: string;
+  title: string;
+  titleEn: string | null;
+  description: string | null;
+  descriptionEn: string | null;
+  type: string;
+  category: string;
+  publishedAt: Date | string | null;
+  createdAt: Date | string;
+}
+
 function normalizePage(value: number) {
   return Number.isFinite(value) && value > 0 ? Math.trunc(value) : 1;
 }
@@ -449,5 +461,74 @@ export const getPublicProjectActivitiesPage = unstable_cache(
     };
   },
   ['public-project-activities-page'],
+  { revalidate: 60 }
+);
+
+export const getPublicLibraryPage = unstable_cache(
+  async (pageValue = 1, limitValue = 10, search = '', category = '', type = ''): Promise<PublicListResponse<LibraryListItem>> => {
+    const page = normalizePage(pageValue);
+    const limit = normalizeLimit(limitValue, 10);
+    const skip = (page - 1) * limit;
+    const where: Prisma.ContentWhereInput = {
+      status: 'PUBLISHED',
+    };
+
+    const normalizedSearch = search.trim();
+    if (normalizedSearch) {
+      where.OR = [
+        { title: { contains: normalizedSearch, mode: 'insensitive' } },
+        { titleEn: { contains: normalizedSearch, mode: 'insensitive' } },
+        { description: { contains: normalizedSearch, mode: 'insensitive' } },
+        { descriptionEn: { contains: normalizedSearch, mode: 'insensitive' } },
+        { content: { contains: normalizedSearch, mode: 'insensitive' } },
+        { contentEn: { contains: normalizedSearch, mode: 'insensitive' } },
+      ];
+    }
+
+    if (category) {
+      where.category = category;
+    }
+
+    if (type) {
+      where.type = type.includes(',')
+        ? { in: type.split(',').map((value: string) => value.trim()) as never }
+        : (type as never);
+    }
+
+    const [contents, total] = await Promise.all([
+      prisma.content.findMany({
+        where,
+        select: {
+          id: true,
+          title: true,
+          titleEn: true,
+          description: true,
+          descriptionEn: true,
+          type: true,
+          category: true,
+          publishedAt: true,
+          createdAt: true,
+        },
+        orderBy: [
+          { publishedAt: { sort: 'desc', nulls: 'last' } },
+          { createdAt: 'desc' },
+        ],
+        skip,
+        take: limit,
+      }),
+      prisma.content.count({ where }),
+    ]);
+
+    return {
+      contents,
+      pagination: {
+        page,
+        limit,
+        total,
+        pages: Math.max(1, Math.ceil(total / limit)),
+      },
+    };
+  },
+  ['public-library-page'],
   { revalidate: 60 }
 );
