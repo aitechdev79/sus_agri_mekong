@@ -329,7 +329,7 @@ export default function SignUpPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full rounded-lg bg-blue-600 py-3 font-medium text-white transition-colors hover:bg-blue-700 disabled:opacity-60"
+                className="w-full rounded-lg bg-[#0A7029] py-3 font-medium text-white transition-colors hover:bg-[#086325] disabled:opacity-60"
               >
                 {isLoading ? text.signingUp : text.signUp}
               </button>
@@ -337,7 +337,7 @@ export default function SignUpPage() {
 
             <div className="mt-6 text-center text-gray-600">
               {text.hasAccount}{' '}
-              <Link href={`/${locale}/auth/signin`} className="font-medium text-blue-600 hover:text-blue-700">
+              <Link href={`/${locale}/auth/signin`} className="font-medium text-[#0A7029] hover:text-[#086325]">
                 {text.signIn}
               </Link>
             </div>
