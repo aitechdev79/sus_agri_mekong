@@ -28,6 +28,19 @@ export interface HomeEventItem {
   hasContent?: boolean;
 }
 
+export interface HomeProjectActivityItem {
+  id: string;
+  title: string;
+  titleEn?: string | null;
+  undertitle?: string | null;
+  description?: string | null;
+  descriptionEn?: string | null;
+  projectUrl?: string | null;
+  thumbnailUrl?: string | null;
+  imageUrl?: string | null;
+  hasContent?: boolean;
+}
+
 function hasRichText(value?: string | null) {
   if (!value) return false;
 
@@ -136,8 +149,41 @@ async function queryHomeEventItems(): Promise<HomeEventItem[]> {
   return items
     .filter((item): item is (typeof item & { eventStartAt: Date }) => item.eventStartAt instanceof Date)
     .map(({ content, contentEn, eventStartAt, ...item }) => ({
+      ...item,
+      eventStartAt: eventStartAt.toISOString(),
+      hasContent: hasRichText(content) || hasRichText(contentEn),
+    }));
+}
+
+async function queryHomeProjectActivityItems(): Promise<HomeProjectActivityItem[]> {
+  const items = await prisma.content.findMany({
+    where: {
+      status: 'PUBLISHED',
+      type: 'PROJECT_ACTIVITY',
+    },
+    select: {
+      id: true,
+      title: true,
+      titleEn: true,
+      undertitle: true,
+      description: true,
+      descriptionEn: true,
+      content: true,
+      contentEn: true,
+      projectUrl: true,
+      thumbnailUrl: true,
+      imageUrl: true,
+    },
+    orderBy: [
+      { displayOrder: { sort: 'asc', nulls: 'last' } },
+      { publishedAt: { sort: 'desc', nulls: 'last' } },
+      { createdAt: 'desc' },
+    ],
+    take: 3,
+  });
+
+  return items.map(({ content, contentEn, ...item }) => ({
     ...item,
-    eventStartAt: eventStartAt.toISOString(),
     hasContent: hasRichText(content) || hasRichText(contentEn),
   }));
 }
@@ -160,12 +206,19 @@ export const getHomeEventItems = unstable_cache(
   { revalidate: 60 }
 );
 
+export const getHomeProjectActivityItems = unstable_cache(
+  queryHomeProjectActivityItems,
+  ['home-project-activity-items'],
+  { revalidate: 60 }
+);
+
 export async function getHomeFeaturedContent() {
-  const [stories, news, events] = await Promise.all([
+  const [stories, news, events, projectActivities] = await Promise.all([
     getHomeStoryItems(),
     getHomeNewsItems(),
     getHomeEventItems(),
+    getHomeProjectActivityItems(),
   ]);
 
-  return { stories, news, events };
+  return { stories, news, events, projectActivities };
 }

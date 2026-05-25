@@ -20,14 +20,23 @@ interface ProjectActivityItem {
   hasContent?: boolean;
 }
 
-export default function HoatDongSection() {
+interface HoatDongSectionProps {
+  initialItems?: ProjectActivityItem[];
+}
+
+export default function HoatDongSection({ initialItems = [] }: HoatDongSectionProps) {
   const pathname = usePathname();
   const locale = getLocaleFromPathname(pathname);
   const isEn = locale === 'en';
-  const [items, setItems] = useState<ProjectActivityItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [items, setItems] = useState<ProjectActivityItem[]>(initialItems);
+  const [loading, setLoading] = useState(initialItems.length === 0);
 
   useEffect(() => {
+    if (initialItems.length > 0) {
+      setLoading(false);
+      return;
+    }
+
     let isMounted = true;
 
     const fetchItems = async () => {
@@ -59,7 +68,7 @@ export default function HoatDongSection() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [initialItems]);
 
   return (
     <section className="py-20 w-full bg-vn-rice-white">
