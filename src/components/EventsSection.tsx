@@ -14,15 +14,19 @@ interface EventItem {
   id: string;
   title: string;
   titleEn?: string | null;
-  description?: string;
+  description?: string | null;
   descriptionEn?: string | null;
-  thumbnailUrl?: string;
-  imageUrl?: string;
+  thumbnailUrl?: string | null;
+  imageUrl?: string | null;
   eventStartAt: string;
   eventLocation?: string | null;
   isAllDay?: boolean;
   projectUrl?: string | null;
   hasContent?: boolean;
+}
+
+interface EventsSectionProps {
+  initialItems?: EventItem[];
 }
 
 function formatEventDate(item: EventItem, locale: string) {
@@ -35,9 +39,9 @@ function formatEventDate(item: EventItem, locale: string) {
   return formatVietnamDateTime(date, locale);
 }
 
-export default function EventsSection() {
-  const [events, setEvents] = useState<EventItem[]>([]);
-  const [loading, setLoading] = useState(true);
+export default function EventsSection({ initialItems = [] }: EventsSectionProps) {
+  const [events, setEvents] = useState<EventItem[]>(initialItems);
+  const [loading, setLoading] = useState(initialItems.length === 0);
   const pathname = usePathname();
   const locale = getLocaleFromPathname(pathname);
   const isEn = locale === 'en';
@@ -45,6 +49,11 @@ export default function EventsSection() {
   const allEventsHref = `${localizedContentPrefix}/tat-ca-su-kien`;
 
   useEffect(() => {
+    if (initialItems.length > 0) {
+      setLoading(false);
+      return;
+    }
+
     const fetchEvents = async () => {
       try {
         const response = await fetch(`/api/content/events?_t=${Date.now()}`);
@@ -59,7 +68,7 @@ export default function EventsSection() {
     };
 
     fetchEvents();
-  }, []);
+  }, [initialItems]);
 
   const now = new Date();
   const upcomingEvents = events

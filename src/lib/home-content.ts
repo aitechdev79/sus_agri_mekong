@@ -13,6 +13,21 @@ export interface HomeContentGridItem {
   hasContent?: boolean;
 }
 
+export interface HomeEventItem {
+  id: string;
+  title: string;
+  titleEn?: string | null;
+  description?: string | null;
+  descriptionEn?: string | null;
+  thumbnailUrl?: string | null;
+  imageUrl?: string | null;
+  eventStartAt: string;
+  eventLocation?: string | null;
+  isAllDay?: boolean;
+  projectUrl?: string | null;
+  hasContent?: boolean;
+}
+
 function hasRichText(value?: string | null) {
   if (!value) return false;
 
@@ -90,6 +105,43 @@ async function queryHomeNewsItems(): Promise<HomeContentGridItem[]> {
   }));
 }
 
+async function queryHomeEventItems(): Promise<HomeEventItem[]> {
+  const items = await prisma.content.findMany({
+    where: {
+      status: 'PUBLISHED',
+      type: 'EVENT',
+    },
+    select: {
+      id: true,
+      title: true,
+      titleEn: true,
+      description: true,
+      descriptionEn: true,
+      content: true,
+      contentEn: true,
+      projectUrl: true,
+      thumbnailUrl: true,
+      imageUrl: true,
+      eventStartAt: true,
+      eventLocation: true,
+      isAllDay: true,
+    },
+    orderBy: [
+      { eventStartAt: { sort: 'asc', nulls: 'last' } },
+      { createdAt: 'desc' },
+    ],
+    take: 12,
+  });
+
+  return items
+    .filter((item): item is (typeof item & { eventStartAt: Date }) => item.eventStartAt instanceof Date)
+    .map(({ content, contentEn, eventStartAt, ...item }) => ({
+    ...item,
+    eventStartAt: eventStartAt.toISOString(),
+    hasContent: hasRichText(content) || hasRichText(contentEn),
+  }));
+}
+
 export const getHomeStoryItems = unstable_cache(
   queryHomeStoryItems,
   ['home-story-items'],
@@ -102,11 +154,18 @@ export const getHomeNewsItems = unstable_cache(
   { revalidate: 60 }
 );
 
+export const getHomeEventItems = unstable_cache(
+  queryHomeEventItems,
+  ['home-event-items'],
+  { revalidate: 60 }
+);
+
 export async function getHomeFeaturedContent() {
-  const [stories, news] = await Promise.all([
+  const [stories, news, events] = await Promise.all([
     getHomeStoryItems(),
     getHomeNewsItems(),
+    getHomeEventItems(),
   ]);
 
-  return { stories, news };
+  return { stories, news, events };
 }

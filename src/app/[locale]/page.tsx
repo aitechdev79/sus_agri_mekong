@@ -13,7 +13,7 @@ export const revalidate = 60;
 export default async function LocaleHomePage() {
   const featuredContent = await getHomeFeaturedContent().catch((error) => {
     console.error('Failed to preload localized homepage content:', error);
-    return { stories: [], news: [] };
+    return { stories: [], news: [], events: [] };
   });
 
   return (
@@ -23,7 +23,7 @@ export default async function LocaleHomePage() {
         <AboutSection />
         <DienHinhSection initialItems={featuredContent.stories} />
         <TinTucSection initialItems={featuredContent.news} />
-        <ProjectsAndNewsWrapper />
+        <ProjectsAndNewsWrapper initialEvents={featuredContent.events} />
         <LibraryAndToolsWrapper />
         <SignUpSection />
       </main>
