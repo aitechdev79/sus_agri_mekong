@@ -151,42 +151,29 @@ export default function SignUpSection() {
             {isEn ? 'Loading partners...' : 'Đang tải đối tác...'}
           </div>
         ) : (
-          <>
-            <div className="grid grid-cols-2 gap-4 md:hidden">
-              {displayPartners.slice(0, 4).map((partner) => (
-                <PartnerLogoCard
-                  key={partner.id}
-                  companyName={partner.companyName}
-                  logoUrl={partner.logoUrl}
-                  website={partner.website}
-                />
+          <div className="overflow-hidden [--partner-gap:0.75rem] sm:[--partner-gap:1rem] lg:[--partner-gap:2rem] [--partner-per-view:1] sm:[--partner-per-view:2] lg:[--partner-per-view:4]">
+            <div
+              className={`flex gap-[var(--partner-gap)] ${carouselTransition ? 'transition-transform duration-700 ease-in-out' : ''}`}
+              style={{
+                transform: `translateX(calc(-${carouselStart} * ((100% - ((var(--partner-per-view) - 1) * var(--partner-gap))) / var(--partner-per-view) + var(--partner-gap))))`,
+              }}
+              onTransitionEnd={handleCarouselTransitionEnd}
+            >
+              {carouselPartners.map((partner, index) => (
+                <div
+                  key={`${partner.id}-${index}`}
+                  className="shrink-0"
+                  style={{ flexBasis: 'calc((100% - ((var(--partner-per-view) - 1) * var(--partner-gap))) / var(--partner-per-view))' }}
+                >
+                  <PartnerLogoCard
+                    companyName={partner.companyName}
+                    logoUrl={partner.logoUrl}
+                    website={partner.website}
+                  />
+                </div>
               ))}
             </div>
-
-            <div className="hidden overflow-hidden [--partner-gap:1rem] md:block md:[--partner-gap:2rem]">
-              <div
-                className={`flex gap-[var(--partner-gap)] ${carouselTransition ? 'transition-transform duration-700 ease-in-out' : ''}`}
-                style={{
-                  transform: `translateX(calc(-${carouselStart} * ((100% - (3 * var(--partner-gap))) / 4 + var(--partner-gap))))`,
-                }}
-                onTransitionEnd={handleCarouselTransitionEnd}
-              >
-                {carouselPartners.map((partner, index) => (
-                  <div
-                    key={`${partner.id}-${index}`}
-                    className="shrink-0"
-                    style={{ flexBasis: 'calc((100% - (3 * var(--partner-gap))) / 4)' }}
-                  >
-                    <PartnerLogoCard
-                      companyName={partner.companyName}
-                      logoUrl={partner.logoUrl}
-                      website={partner.website}
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </>
+          </div>
         )}
       </div>
     </section>
