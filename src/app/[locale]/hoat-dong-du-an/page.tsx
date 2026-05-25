@@ -1,1 +1,1 @@
-export { default } from '@/app/hoat-dong-du-an/page'
+export { default, revalidate } from '@/app/hoat-dong-du-an/page'

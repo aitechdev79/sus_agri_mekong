@@ -9,7 +9,7 @@ import { formatVietnamDateInput } from '@/lib/vietnam-time';
 interface Event {
   id: string;
   title: string;
-  date: Date;
+  date: Date | string;
   isPast: boolean;
 }
 

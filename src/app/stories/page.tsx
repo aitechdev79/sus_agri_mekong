@@ -1,199 +1,110 @@
-'use client';
-
 import Link from 'next/link';
 import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
-import { useState, useEffect } from 'react';
-import { usePathname } from 'next/navigation';
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
-import { getLocaleFromPathname, pickLocalizedText, withLocalePrefix } from '@/lib/content-locale';
 import { formatVietnamDate } from '@/lib/vietnam-time';
 import { getPublishedDate } from '@/lib/content-dates';
+import { pickLocalizedText, withLocalePrefix } from '@/lib/content-locale';
+import { getPublicStoriesPage } from '@/lib/public-content-list';
 
-interface StoryItem {
-  id: string;
-  title: string;
-  titleEn?: string | null;
-  description?: string | null;
-  descriptionEn?: string | null;
-  publishedAt?: string | null;
-  createdAt: string;
-  viewCount: number;
+export const revalidate = 60;
+
+interface PageProps {
+  params?: Promise<{ locale?: string }>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }
 
-interface PaginatedResponse {
-  contents: StoryItem[];
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    pages: number;
-  };
+function getParam(value: string | string[] | undefined) {
+  return Array.isArray(value) ? value[0] : value;
 }
 
-export default function StoriesPage() {
-  const pathname = usePathname();
-  const locale = getLocaleFromPathname(pathname);
+function pageHref(page: number, locale: string) {
+  const path = withLocalePrefix('/stories', locale);
+  return page === 1 ? path : `${path}?page=${page}`;
+}
+
+export default async function StoriesPage({ params, searchParams }: PageProps) {
+  const routeParams = await params;
+  const queryParams = await searchParams;
+  const locale = routeParams?.locale === 'en' ? 'en' : 'vi';
   const isEn = locale === 'en';
+  const currentPage = Math.max(1, Number(getParam(queryParams?.page) || '1') || 1);
+  const itemsPerPage = 5;
   const contentDetailPrefix = withLocalePrefix('/content', locale);
 
-  const [storyItems, setStoryItems] = useState<StoryItem[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [loading, setLoading] = useState(true);
-  const itemsPerPage = 5;
+  const { contents: storyItems, pagination } = await getPublicStoriesPage(currentPage, itemsPerPage).catch((error) => {
+    console.error('Failed to preload stories page:', error);
+    return { contents: [], pagination: { page: 1, limit: itemsPerPage, total: 0, pages: 1 } };
+  });
 
-  useEffect(() => {
-    const fetchStories = async (page: number) => {
-      setLoading(true);
-      try {
-        const response = await fetch(`/api/content?type=STORY&page=${page}&limit=${itemsPerPage}`);
-        if (response.ok) {
-          const data: PaginatedResponse = await response.json();
-          setStoryItems(data.contents);
-          setTotalPages(data.pagination.pages);
-        }
-      } catch (error) {
-        console.error('Error fetching stories:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchStories(currentPage);
-  }, [currentPage]);
-
-  const formatDate = (dateString: string) => {
-    return formatVietnamDate(dateString, isEn ? 'en' : 'vi');
-  };
-
-  const goToPage = (page: number) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  };
-
-  const renderPaginationButtons = () => {
-    const buttons = [];
-    const maxButtons = 5;
-    let startPage = Math.max(1, currentPage - Math.floor(maxButtons / 2));
-    const endPage = Math.min(totalPages, startPage + maxButtons - 1);
-
-    if (endPage - startPage + 1 < maxButtons) {
-      startPage = Math.max(1, endPage - maxButtons + 1);
-    }
-
-    if (startPage > 1) {
-      buttons.push(
-        <button key="1" onClick={() => goToPage(1)} className="px-3 py-1 rounded border hover:bg-gray-100">
-          1
-        </button>
-      );
-      if (startPage > 2) buttons.push(<span key="dots1" className="px-2">...</span>);
-    }
-
-    for (let i = startPage; i <= endPage; i += 1) {
-      buttons.push(
-        <button
-          key={i}
-          onClick={() => goToPage(i)}
-          className={`px-3 py-1 rounded border ${i === currentPage ? 'bg-blue-600 text-white border-blue-600' : 'hover:bg-gray-100'}`}
-        >
-          {i}
-        </button>
-      );
-    }
-
-    if (endPage < totalPages) {
-      if (endPage < totalPages - 1) buttons.push(<span key="dots2" className="px-2">...</span>);
-      buttons.push(
-        <button key="last" onClick={() => goToPage(totalPages)} className="px-3 py-1 rounded border hover:bg-gray-100">
-          {isEn ? 'Last' : 'Trang cuối'}
-        </button>
-      );
-    }
-
-    return buttons;
-  };
+  const pageNumbers = Array.from({ length: pagination.pages }, (_, index) => index + 1).slice(
+    Math.max(0, pagination.page - 3),
+    Math.max(5, pagination.page + 2)
+  );
 
   return (
     <div className="min-h-screen bg-gray-50">
       <NavigationBar />
 
       <main className="container mx-auto px-6 py-20">
-        <div className="max-w-4xl mx-auto">
+        <div className="mx-auto max-w-4xl">
           <header className="mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900">{isEn ? 'Stories' : 'Điển hình'}</h1>
+            <h1 className="text-3xl font-bold text-gray-900 md:text-4xl">{isEn ? 'Stories' : 'Điển hình'}</h1>
           </header>
 
-          {loading ? (
-            <div className="space-y-4">
-              {[...Array(10)].map((_, i) => (
-                <div key={i} className="h-16 bg-gray-200 animate-pulse rounded" />
-              ))}
-            </div>
-          ) : (
-            <div className="bg-white rounded-lg shadow-sm">
-              <ul className="divide-y divide-gray-200">
-                {storyItems.map((item, index) => {
-                  const localizedTitle = pickLocalizedText(locale, item.title, item.titleEn);
-                  const localizedDescription = pickLocalizedText(locale, item.description, item.descriptionEn);
+          <div className="rounded-lg bg-white shadow-sm">
+            <ul className="divide-y divide-gray-200">
+              {storyItems.map((item, index) => {
+                const localizedTitle = pickLocalizedText(locale, item.title, item.titleEn);
+                const localizedDescription = pickLocalizedText(locale, item.description, item.descriptionEn);
 
-                  return (
-                    <li key={item.id}>
-                      <Link href={`${contentDetailPrefix}/${item.id}`} className="block px-6 py-4 hover:bg-gray-50 transition-colors">
-                        <div className="flex items-start justify-between">
-                          <div className="flex items-start space-x-3 flex-1">
-                            <span className="text-gray-500 font-medium flex-shrink-0 mt-1">{(currentPage - 1) * itemsPerPage + index + 1}.</span>
-                            <div className="flex-1 min-w-0">
-                              <h2 className="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors">{localizedTitle}</h2>
-                              {localizedDescription && <p className="text-sm text-gray-600 italic mt-1 line-clamp-2">{localizedDescription}</p>}
-                            </div>
-                          </div>
-
-                          <div className="flex items-center space-x-4 text-sm text-gray-500 ml-4 flex-shrink-0">
-                            <div className="flex items-center">
-                              <Calendar className="w-4 h-4 mr-1" />
-                              {formatDate(String(getPublishedDate(item)))}
-                            </div>
-                            <div className="text-gray-400">
-                              {item.viewCount} {isEn ? 'views' : 'lượt xem'}
-                            </div>
+                return (
+                  <li key={item.id}>
+                    <Link href={`${contentDetailPrefix}/${item.id}`} className="block px-6 py-4 transition-colors hover:bg-gray-50">
+                      <div className="flex items-start justify-between">
+                        <div className="flex min-w-0 flex-1 items-start space-x-3">
+                          <span className="mt-1 flex-shrink-0 font-medium text-gray-500">{(pagination.page - 1) * itemsPerPage + index + 1}.</span>
+                          <div className="min-w-0 flex-1">
+                            <h2 className="text-lg font-medium text-gray-900 transition-colors hover:text-blue-600">{localizedTitle}</h2>
+                            {localizedDescription && <p className="mt-1 line-clamp-2 text-sm italic text-gray-600">{localizedDescription}</p>}
                           </div>
                         </div>
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
 
-              {storyItems.length === 0 && (
-                <div className="text-center py-12 text-gray-500">{isEn ? 'No stories available' : 'Không có điển hình nào'}</div>
-              )}
-            </div>
-          )}
+                        <div className="ml-4 flex flex-shrink-0 items-center space-x-4 text-sm text-gray-500">
+                          <div className="flex items-center">
+                            <Calendar className="mr-1 h-4 w-4" />
+                            {formatVietnamDate(getPublishedDate(item), locale)}
+                          </div>
+                          <div className="text-gray-400">
+                            {item.viewCount} {isEn ? 'views' : 'lượt xem'}
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
 
-          {totalPages > 1 && (
+            {storyItems.length === 0 && (
+              <div className="py-12 text-center text-gray-500">{isEn ? 'No stories available' : 'Không có điển hình nào'}</div>
+            )}
+          </div>
+
+          {pagination.pages > 1 && (
             <div className="mt-8 flex justify-center">
               <div className="flex items-center space-x-2">
-                <button
-                  onClick={() => goToPage(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  className={`p-2 rounded border ${currentPage === 1 ? 'text-gray-400 cursor-not-allowed' : 'hover:bg-gray-100'}`}
-                >
-                  <ChevronLeft className="w-5 h-5" />
-                </button>
-
-                {renderPaginationButtons()}
-
-                <button
-                  onClick={() => goToPage(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                  className={`p-2 rounded border ${currentPage === totalPages ? 'text-gray-400 cursor-not-allowed' : 'hover:bg-gray-100'}`}
-                >
-                  <ChevronRight className="w-5 h-5" />
-                </button>
+                <Link href={pageHref(Math.max(1, pagination.page - 1), locale)} className={`rounded border p-2 ${pagination.page === 1 ? 'pointer-events-none text-gray-400' : 'hover:bg-gray-100'}`}>
+                  <ChevronLeft className="h-5 w-5" />
+                </Link>
+                {pageNumbers.map((page) => (
+                  <Link key={page} href={pageHref(page, locale)} className={`rounded border px-3 py-1 ${page === pagination.page ? 'border-blue-600 bg-blue-600 text-white' : 'hover:bg-gray-100'}`}>
+                    {page}
+                  </Link>
+                ))}
+                <Link href={pageHref(Math.min(pagination.pages, pagination.page + 1), locale)} className={`rounded border p-2 ${pagination.page === pagination.pages ? 'pointer-events-none text-gray-400' : 'hover:bg-gray-100'}`}>
+                  <ChevronRight className="h-5 w-5" />
+                </Link>
               </div>
             </div>
           )}

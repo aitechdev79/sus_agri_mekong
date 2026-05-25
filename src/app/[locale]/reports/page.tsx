@@ -1,1 +1,1 @@
-export { default } from '@/app/reports/page'
+export { default, revalidate } from '@/app/reports/page'

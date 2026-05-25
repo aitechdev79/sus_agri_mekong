@@ -1,1 +1,1 @@
-export { default } from '@/app/policy/page'
+export { default, revalidate } from '@/app/policy/page'

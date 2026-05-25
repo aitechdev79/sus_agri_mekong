@@ -1,117 +1,50 @@
-'use client';
-
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { ChevronLeft, ChevronRight, FileText, Loader2, Search } from 'lucide-react';
-import { usePathname } from 'next/navigation';
+import { ChevronLeft, ChevronRight, FileText, Search } from 'lucide-react';
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
-import { ContentListResponse } from '@/types/content';
-import { getLocaleFromPathname, pickLocalizedText, withLocalePrefix } from '@/lib/content-locale';
+import { pickLocalizedText, withLocalePrefix } from '@/lib/content-locale';
+import { getPublicReportsPage } from '@/lib/public-content-list';
 
-interface ReportDocument {
-  id: string;
-  title: string;
-  titleEn?: string | null;
-  description?: string | null;
-  descriptionEn?: string | null;
-  thumbnailUrl?: string | null;
-  imageUrl?: string | null;
-  fileUrl?: string | null;
+export const revalidate = 60;
+
+interface PageProps {
+  params?: Promise<{ locale?: string }>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }
 
-export default function ReportsPage() {
-  const pathname = usePathname();
-  const locale = getLocaleFromPathname(pathname);
+function getParam(value: string | string[] | undefined) {
+  return Array.isArray(value) ? value[0] : value;
+}
+
+function pageHref(page: number, searchTerm: string, locale: string) {
+  const path = withLocalePrefix('/reports', locale);
+  const params = new URLSearchParams();
+  if (page > 1) params.set('page', String(page));
+  if (searchTerm) params.set('search', searchTerm);
+  const query = params.toString();
+  return query ? `${path}?${query}` : path;
+}
+
+export default async function ReportsPage({ params, searchParams }: PageProps) {
+  const routeParams = await params;
+  const queryParams = await searchParams;
+  const locale = routeParams?.locale === 'en' ? 'en' : 'vi';
   const isEn = locale === 'en';
   const contentDetailPrefix = withLocalePrefix('/content', locale);
-
-  const [documents, setDocuments] = useState<ReportDocument[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [totalDocuments, setTotalDocuments] = useState(0);
-  const [searchInput, setSearchInput] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
+  const currentPage = Math.max(1, Number(getParam(queryParams?.page) || '1') || 1);
+  const searchTerm = (getParam(queryParams?.search) || '').trim();
   const itemsPerPage = 6;
 
-  useEffect(() => {
-    const fetchDocuments = async () => {
-      setLoading(true);
-      try {
-        const params = new URLSearchParams({
-          type: 'DOCUMENT',
-          page: currentPage.toString(),
-          limit: itemsPerPage.toString()
-        });
+  const { contents: documents, pagination } = await getPublicReportsPage(currentPage, itemsPerPage, searchTerm).catch((error) => {
+    console.error('Failed to preload report documents:', error);
+    return { contents: [], pagination: { page: 1, limit: itemsPerPage, total: 0, pages: 1 } };
+  });
 
-        if (searchTerm) {
-          params.append('search', searchTerm);
-        }
-
-        const response = await fetch(`/api/content?${params.toString()}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch documents');
-        }
-
-        const data: ContentListResponse<ReportDocument> = await response.json();
-        setDocuments(data.contents);
-        setTotalPages(data.pagination.pages || 1);
-        setTotalDocuments(data.pagination.total || 0);
-      } catch (error) {
-        console.error('Failed to load report documents:', error);
-        setDocuments([]);
-        setTotalPages(1);
-        setTotalDocuments(0);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchDocuments();
-  }, [currentPage, searchTerm]);
-
-  const goToPage = (page: number) => {
-    if (page < 1 || page > totalPages) return;
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setCurrentPage(1);
-    setSearchTerm(searchInput.trim());
-  };
-
-  const renderPaginationButtons = () => {
-    const buttons = [];
-    const maxButtons = 5;
-    let startPage = Math.max(1, currentPage - Math.floor(maxButtons / 2));
-    const endPage = Math.min(totalPages, startPage + maxButtons - 1);
-
-    if (endPage - startPage + 1 < maxButtons) {
-      startPage = Math.max(1, endPage - maxButtons + 1);
-    }
-
-    for (let page = startPage; page <= endPage; page += 1) {
-      buttons.push(
-        <button
-          key={page}
-          onClick={() => goToPage(page)}
-          className={`h-10 min-w-10 rounded-md border px-3 text-sm font-semibold transition-colors ${
-            page === currentPage
-              ? 'border-indigo-700 bg-indigo-700 text-white'
-              : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
-          }`}
-        >
-          {page}
-        </button>
-      );
-    }
-
-    return buttons;
-  };
+  const pageNumbers = Array.from({ length: pagination.pages }, (_, index) => index + 1).slice(
+    Math.max(0, pagination.page - 3),
+    Math.max(5, pagination.page + 2)
+  );
 
   return (
     <div className="min-h-screen bg-white">
@@ -132,7 +65,7 @@ export default function ReportsPage() {
               <p className="mt-6 max-w-3xl font-montserrat text-lg leading-relaxed text-indigo-100 md:text-xl">
                 {isEn
                   ? 'A curated collection of research documents, reports, and publications for quick reference.'
-                  : 'Tổng hợp các tài liệu nghiên cứu, báo cáo và ấn phẩm chuyên sâu để bạn tra cứu nhanh theo từng nội dung đã được xuất bản trên hệ thống.'}
+                  : 'Tổng hợp các tài liệu nghiên cứu, báo cáo và ấn phẩm chuyên sâu để tra cứu nhanh.'}
               </p>
             </div>
           </div>
@@ -143,28 +76,23 @@ export default function ReportsPage() {
             <div className="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
               <div>
                 <h2 className="font-montserrat text-3xl font-bold text-gray-900">{isEn ? 'Documents' : 'Tài liệu'}</h2>
-                {!loading && (
-                  <p className="mt-2 font-montserrat text-sm text-gray-500">
-                    {isEn ? `Found ${totalDocuments} documents` : `Tìm thấy ${totalDocuments} tài liệu`}
-                    {searchTerm ? (isEn ? ` for "${searchTerm}"` : ` cho "${searchTerm}"`) : ''}
-                  </p>
-                )}
+                <p className="mt-2 font-montserrat text-sm text-gray-500">
+                  {isEn ? `Found ${pagination.total} documents` : `Tìm thấy ${pagination.total} tài liệu`}
+                  {searchTerm ? (isEn ? ` for "${searchTerm}"` : ` cho "${searchTerm}"`) : ''}
+                </p>
               </div>
 
-              <form onSubmit={handleSearchSubmit} className="w-full md:w-[380px]">
+              <form action={withLocalePrefix('/reports', locale)} className="w-full md:w-[380px]">
                 <div className="flex items-center justify-end gap-2">
                   <div className="relative w-full">
                     <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
                     <input
                       type="text"
-                      value={searchInput}
-                      onChange={(event) => setSearchInput(event.target.value)}
+                      name="search"
+                      defaultValue={searchTerm}
                       placeholder={isEn ? 'Search documents...' : 'Tìm kiếm tài liệu...'}
-                      className="w-full rounded-md border border-gray-300 py-2.5 pl-10 pr-10 font-montserrat text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                      className="w-full rounded-md border border-gray-300 py-2.5 pl-10 pr-4 font-montserrat text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
                     />
-                    {loading && (
-                      <Loader2 className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin text-indigo-600" />
-                    )}
                   </div>
                   <button type="submit" className="rounded-md bg-indigo-600 px-4 py-2.5 font-montserrat text-sm font-semibold text-white hover:bg-indigo-700">
                     {isEn ? 'Search' : 'Tìm'}
@@ -173,13 +101,7 @@ export default function ReportsPage() {
               </form>
             </div>
 
-            {loading ? (
-              <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-                {Array.from({ length: itemsPerPage }).map((_, index) => (
-                  <div key={index} className="h-52 animate-pulse border border-gray-200 bg-gray-100" />
-                ))}
-              </div>
-            ) : documents.length === 0 ? (
+            {documents.length === 0 ? (
               <div className="border border-dashed border-gray-300 bg-gray-50 px-6 py-16 text-center">
                 <h3 className="font-montserrat text-xl font-bold text-gray-700">{isEn ? 'No documents yet' : 'Chưa có tài liệu nào'}</h3>
                 <p className="mt-2 font-montserrat text-sm text-gray-500">
@@ -226,30 +148,22 @@ export default function ReportsPage() {
                   })}
                 </div>
 
-                {totalPages > 1 && (
+                {pagination.pages > 1 && (
                   <div className="mt-10 flex justify-center">
                     <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => goToPage(currentPage - 1)}
-                        disabled={currentPage === 1}
-                        className={`flex h-10 w-10 items-center justify-center rounded-md border ${
-                          currentPage === 1 ? 'cursor-not-allowed border-gray-200 text-gray-300' : 'border-gray-300 text-gray-700 hover:bg-gray-50'
-                        }`}
-                      >
+                      <Link href={pageHref(Math.max(1, pagination.page - 1), searchTerm, locale)} className={`flex h-10 w-10 items-center justify-center rounded-md border ${pagination.page === 1 ? 'pointer-events-none border-gray-200 text-gray-300' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
                         <ChevronLeft className="h-5 w-5" />
-                      </button>
+                      </Link>
 
-                      {renderPaginationButtons()}
+                      {pageNumbers.map((page) => (
+                        <Link key={page} href={pageHref(page, searchTerm, locale)} className={`flex h-10 min-w-10 items-center justify-center rounded-md border px-3 text-sm font-semibold transition-colors ${page === pagination.page ? 'border-indigo-700 bg-indigo-700 text-white' : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'}`}>
+                          {page}
+                        </Link>
+                      ))}
 
-                      <button
-                        onClick={() => goToPage(currentPage + 1)}
-                        disabled={currentPage === totalPages}
-                        className={`flex h-10 w-10 items-center justify-center rounded-md border ${
-                          currentPage === totalPages ? 'cursor-not-allowed border-gray-200 text-gray-300' : 'border-gray-300 text-gray-700 hover:bg-gray-50'
-                        }`}
-                      >
+                      <Link href={pageHref(Math.min(pagination.pages, pagination.page + 1), searchTerm, locale)} className={`flex h-10 w-10 items-center justify-center rounded-md border ${pagination.page === pagination.pages ? 'pointer-events-none border-gray-200 text-gray-300' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
                         <ChevronRight className="h-5 w-5" />
-                      </button>
+                      </Link>
                     </div>
                   </div>
                 )}
