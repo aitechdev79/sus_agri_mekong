@@ -17,16 +17,16 @@ function normalizeWebsiteUrl(website: string | null) {
 export default function PartnerLogoCard({ companyName, logoUrl, website }: PartnerLogoCardProps) {
   const href = normalizeWebsiteUrl(website)
   const cardClassName =
-    'group flex h-36 items-center justify-center rounded-lg border border-gray-200 bg-white px-8 py-6 shadow-sm transition-all duration-300 hover:border-[#FFB81C] hover:shadow-lg'
+    'group flex h-28 items-center justify-center rounded-lg border border-gray-200 bg-white px-4 py-4 shadow-sm transition-all duration-300 hover:border-[#FFB81C] hover:shadow-lg sm:h-32 sm:px-6 md:h-36 md:px-8'
 
   const content = (
-    <div className="relative flex h-20 w-full max-w-[72%] items-center justify-center transition-transform duration-300 group-hover:scale-[1.03]">
+    <div className="relative flex h-14 w-full max-w-[78%] items-center justify-center transition-transform duration-300 group-hover:scale-[1.03] sm:h-16 md:h-20 md:max-w-[72%]">
       <Image
         src={logoUrl || '/Logo_Vinamilk_(2023).png'}
         alt={companyName}
         fill
         className="object-contain"
-        sizes="(max-width: 768px) 50vw, 220px"
+        sizes="(max-width: 640px) 42vw, (max-width: 768px) 38vw, 220px"
       />
     </div>
   )

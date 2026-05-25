@@ -105,22 +105,21 @@ export default function SignUpSection() {
   };
 
   return (
-    <section className="relative bg-vn-rice-white py-20">
+    <section className="relative bg-vn-rice-white py-14 md:py-20">
       <div className="absolute inset-0 bg-white/55" aria-hidden="true" />
-      <div className="container relative mx-auto max-w-6xl px-6">
-        <div className="relative mb-16">
-          <div className="flex items-start justify-between">
-            <div style={{ maxWidth: '60%' }}>
+      <div className="container relative mx-auto max-w-6xl px-4 sm:px-6">
+        <div className="relative mb-10 md:mb-16">
+          <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between md:gap-8">
+            <div className="md:max-w-[60%]">
               <p
-                className="mb-4 font-montserrat text-2xl font-bold uppercase tracking-wider"
+                className="mb-3 font-montserrat text-xl font-bold uppercase tracking-wider md:mb-4 md:text-2xl"
                 style={{ color: 'rgba(60, 60, 59, 0.6)' }}
               >
                 {isEn ? 'Partners' : 'Đối tác'}
               </p>
 
               <h2
-                className="font-montserrat text-vn-dark font-bold leading-tight"
-                style={{ fontSize: '22px', fontWeight: 600 }}
+                className="max-w-[18rem] text-balance font-montserrat text-[1.35rem] font-semibold leading-snug text-vn-dark md:max-w-none md:text-[22px] md:leading-tight"
               >
                 {isEn
                   ? 'Become a partner to connect with VCCI-HCM and receive updates on programs and content.'
@@ -130,8 +129,7 @@ export default function SignUpSection() {
 
             <Link
               href={withLocalePrefix('/join-us', locale)}
-              className="inline-flex flex-shrink-0 items-center gap-2 font-montserrat font-bold transition-all duration-300 hover:scale-105"
-              style={{ border: '2px solid #0A7029', color: '#0A7029', padding: '16px 32px', borderRadius: '8px', backgroundColor: 'transparent' }}
+              className="inline-flex w-full items-center justify-center gap-2 rounded-lg border-2 border-[#0A7029] px-5 py-4 text-center font-montserrat text-base font-bold text-[#0A7029] transition-colors duration-300 hover:bg-[#0A7029] hover:text-white md:w-auto md:flex-shrink-0 md:px-8 md:py-4"
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = '#0A7029';
                 e.currentTarget.style.color = 'white';
@@ -149,33 +147,46 @@ export default function SignUpSection() {
         </div>
 
         {loading && partners.length === 0 ? (
-          <div className="rounded-xl border border-gray-200 bg-white px-6 py-10 text-center text-sm text-gray-500">
+          <div className="rounded-xl border border-gray-200 bg-white px-6 py-8 text-center text-sm text-gray-500">
             {isEn ? 'Loading partners...' : 'Đang tải đối tác...'}
           </div>
         ) : (
-          <div className="overflow-hidden [--partner-gap:1rem] md:[--partner-gap:2rem]">
-            <div
-              className={`flex gap-[var(--partner-gap)] ${carouselTransition ? 'transition-transform duration-700 ease-in-out' : ''}`}
-              style={{
-                transform: `translateX(calc(-${carouselStart} * ((100% - (3 * var(--partner-gap))) / 4 + var(--partner-gap))))`,
-              }}
-              onTransitionEnd={handleCarouselTransitionEnd}
-            >
-              {carouselPartners.map((partner, index) => (
-                <div
-                  key={`${partner.id}-${index}`}
-                  className="shrink-0"
-                  style={{ flexBasis: 'calc((100% - (3 * var(--partner-gap))) / 4)' }}
-                >
-                  <PartnerLogoCard
-                    companyName={partner.companyName}
-                    logoUrl={partner.logoUrl}
-                    website={partner.website}
-                  />
-                </div>
+          <>
+            <div className="grid grid-cols-2 gap-4 md:hidden">
+              {displayPartners.slice(0, 4).map((partner) => (
+                <PartnerLogoCard
+                  key={partner.id}
+                  companyName={partner.companyName}
+                  logoUrl={partner.logoUrl}
+                  website={partner.website}
+                />
               ))}
             </div>
+
+            <div className="hidden overflow-hidden [--partner-gap:1rem] md:block md:[--partner-gap:2rem]">
+              <div
+                className={`flex gap-[var(--partner-gap)] ${carouselTransition ? 'transition-transform duration-700 ease-in-out' : ''}`}
+                style={{
+                  transform: `translateX(calc(-${carouselStart} * ((100% - (3 * var(--partner-gap))) / 4 + var(--partner-gap))))`,
+                }}
+                onTransitionEnd={handleCarouselTransitionEnd}
+              >
+                {carouselPartners.map((partner, index) => (
+                  <div
+                    key={`${partner.id}-${index}`}
+                    className="shrink-0"
+                    style={{ flexBasis: 'calc((100% - (3 * var(--partner-gap))) / 4)' }}
+                  >
+                    <PartnerLogoCard
+                      companyName={partner.companyName}
+                      logoUrl={partner.logoUrl}
+                      website={partner.website}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
+          </>
         )}
       </div>
     </section>
