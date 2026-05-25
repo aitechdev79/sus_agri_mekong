@@ -7,6 +7,8 @@ import TinTucSection from '@/components/TinTucSection';
 import LibraryAndToolsWrapper from '@/components/LibraryAndToolsWrapper';
 import ProjectsAndNewsWrapper from '@/components/ProjectsAndNewsWrapper';
 
+export const dynamic = 'force-dynamic';
+
 export default function Home() {
   return (
     <div className="min-h-screen">

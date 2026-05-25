@@ -1,8 +1,12 @@
-'use client';
-
 import HomeContentGridSection from '@/components/HomeContentGridSection';
+import { getHomeStoryItems } from '@/lib/home-content';
 
-export default function DienHinhSection() {
+export default async function DienHinhSection() {
+  const initialItems = await getHomeStoryItems(3).catch((error) => {
+    console.error('Failed to preload home story items:', error);
+    return [];
+  });
+
   return (
     <HomeContentGridSection
       titleVi="Thực hành điển hình - Lan tỏa giá trị"
@@ -13,6 +17,7 @@ export default function DienHinhSection() {
       viewAllHref="/tat-ca-dien-hinh"
       emptyVi="Chưa có nội dung điển hình."
       emptyEn="No best-practice content yet."
+      initialItems={initialItems}
     />
   );
 }

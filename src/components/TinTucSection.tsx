@@ -1,8 +1,12 @@
-'use client';
-
 import HomeContentGridSection from '@/components/HomeContentGridSection';
+import { getHomeNewsItems } from '@/lib/home-content';
 
-export default function TinTucSection() {
+export default async function TinTucSection() {
+  const initialItems = await getHomeNewsItems(3).catch((error) => {
+    console.error('Failed to preload home news items:', error);
+    return [];
+  });
+
   return (
     <HomeContentGridSection
       titleVi="Tin tức"
@@ -13,6 +17,7 @@ export default function TinTucSection() {
       viewAllHref="/news"
       emptyVi="Chưa có nội dung tin tức."
       emptyEn="No news content yet."
+      initialItems={initialItems}
     />
   );
 }

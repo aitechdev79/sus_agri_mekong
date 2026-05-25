@@ -5,18 +5,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { getLocaleFromPathname, pickLocalizedText, withLocalePrefix } from '@/lib/content-locale';
-
-interface HomeContentGridItem {
-  id: string;
-  title: string;
-  titleEn?: string | null;
-  description?: string | null;
-  descriptionEn?: string | null;
-  projectUrl?: string | null;
-  thumbnailUrl?: string | null;
-  imageUrl?: string | null;
-  hasContent?: boolean;
-}
+import type { HomeContentGridItem } from '@/lib/home-content';
 
 interface HomeContentGridSectionProps {
   titleVi: string;
@@ -28,6 +17,7 @@ interface HomeContentGridSectionProps {
   emptyVi: string;
   emptyEn: string;
   maxItems?: number;
+  initialItems?: HomeContentGridItem[];
 }
 
 export default function HomeContentGridSection({
@@ -39,10 +29,11 @@ export default function HomeContentGridSection({
   viewAllHref,
   emptyVi,
   emptyEn,
-  maxItems = 3
+  maxItems = 3,
+  initialItems
 }: HomeContentGridSectionProps) {
-  const [items, setItems] = useState<HomeContentGridItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [items, setItems] = useState<HomeContentGridItem[]>(() => initialItems?.slice(0, maxItems) || []);
+  const [loading, setLoading] = useState(!initialItems);
   const pathname = usePathname();
   const locale = getLocaleFromPathname(pathname);
   const isEn = locale === 'en';
@@ -66,7 +57,11 @@ export default function HomeContentGridSection({
         const data = await response.json();
 
         if (isMounted) {
-          setItems(Array.isArray(data) ? data.slice(0, maxItems) : []);
+          if (Array.isArray(data) && data.length > 0) {
+            setItems(data.slice(0, maxItems));
+          } else if (!initialItems) {
+            setItems([]);
+          }
         }
       } catch (error) {
         console.error(`Failed to load items from ${fetchUrl}:`, error);
@@ -82,7 +77,7 @@ export default function HomeContentGridSection({
     return () => {
       isMounted = false;
     };
-  }, [fetchUrl, maxItems]);
+  }, [fetchUrl, initialItems, maxItems]);
 
   return (
     <section className="py-16 bg-vn-rice-white">
