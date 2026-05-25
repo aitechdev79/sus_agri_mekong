@@ -4,6 +4,7 @@ interface PartnerLogoCardProps {
   companyName: string
   logoUrl: string | null
   website: string | null
+  priority?: boolean
 }
 
 function normalizeWebsiteUrl(website: string | null) {
@@ -14,7 +15,7 @@ function normalizeWebsiteUrl(website: string | null) {
   return null
 }
 
-export default function PartnerLogoCard({ companyName, logoUrl, website }: PartnerLogoCardProps) {
+export default function PartnerLogoCard({ companyName, logoUrl, website, priority = false }: PartnerLogoCardProps) {
   const href = normalizeWebsiteUrl(website)
   const cardClassName =
     'group flex h-28 items-center justify-center rounded-lg border border-gray-200 bg-white px-4 py-4 shadow-sm transition-all duration-300 hover:border-[#FFB81C] hover:shadow-lg sm:h-32 sm:px-6 md:h-36 md:px-8'
@@ -26,7 +27,8 @@ export default function PartnerLogoCard({ companyName, logoUrl, website }: Partn
         alt={companyName}
         fill
         className="object-contain"
-        sizes="(max-width: 640px) 42vw, (max-width: 768px) 38vw, 220px"
+        sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 25vw"
+        priority={priority}
       />
     </div>
   )

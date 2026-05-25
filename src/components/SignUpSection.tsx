@@ -13,6 +13,10 @@ interface PartnerItem {
   website: string | null;
 }
 
+interface SignUpSectionProps {
+  initialPartners?: PartnerItem[];
+}
+
 const FALLBACK_PARTNERS: PartnerItem[] = [
   { id: 'vinamilk', companyName: 'Vinamilk', logoUrl: '/Logo_Vinamilk_(2023).png', website: null },
   { id: 'john-deere', companyName: 'John Deere', logoUrl: '/John_Deere_logo.svg.png', website: null },
@@ -24,17 +28,23 @@ const FALLBACK_PARTNERS: PartnerItem[] = [
   { id: 'phan-bon-ca-mau', companyName: 'Phân bón Cà Mau', logoUrl: '/phan bon ca mau.png', website: null },
 ];
 
-export default function SignUpSection() {
+export default function SignUpSection({ initialPartners = [] }: SignUpSectionProps) {
   const pathname = usePathname();
   const locale = getLocaleFromPathname(pathname);
   const isEn = locale === 'en';
-  const [partners, setPartners] = useState<PartnerItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [partners, setPartners] = useState<PartnerItem[]>(initialPartners);
+  const [loading, setLoading] = useState(initialPartners.length === 0);
   const [carouselStart, setCarouselStart] = useState(0);
   const [carouselTransition, setCarouselTransition] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    if (initialPartners.length > 0) {
+      setPartners(initialPartners);
+      setLoading(false);
+      return;
+    }
+
     const loadPartners = async () => {
       try {
         setLoading(true);
@@ -63,7 +73,7 @@ export default function SignUpSection() {
     };
 
     loadPartners();
-  }, []);
+  }, [initialPartners]);
 
   const displayPartners = useMemo(() => {
     if (partners.length > 0) {
@@ -177,6 +187,7 @@ export default function SignUpSection() {
                       companyName={partner.companyName}
                       logoUrl={partner.logoUrl}
                       website={partner.website}
+                      priority={index < 1}
                     />
                   </div>
                 ))}
@@ -201,6 +212,7 @@ export default function SignUpSection() {
                       companyName={partner.companyName}
                       logoUrl={partner.logoUrl}
                       website={partner.website}
+                      priority={index < 2}
                     />
                   </div>
                 ))}

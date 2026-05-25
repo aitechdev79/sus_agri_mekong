@@ -41,6 +41,13 @@ export interface HomeProjectActivityItem {
   hasContent?: boolean;
 }
 
+export interface HomePartnerItem {
+  id: string;
+  companyName: string;
+  logoUrl: string | null;
+  website: string | null;
+}
+
 function hasRichText(value?: string | null) {
   if (!value) return false;
 
@@ -53,6 +60,8 @@ function hasRichText(value?: string | null) {
 }
 
 const HOME_FEATURED_LIMIT = 3;
+const PARTNERS_HOME_LIMIT_KEY = 'partners_home_limit';
+const DEFAULT_HOME_PARTNER_LIMIT = 4;
 
 async function queryHomeStoryItems(): Promise<HomeContentGridItem[]> {
   const items = await prisma.content.findMany({
@@ -188,6 +197,34 @@ async function queryHomeProjectActivityItems(): Promise<HomeProjectActivityItem[
   }));
 }
 
+async function queryHomePartnerItems(): Promise<HomePartnerItem[]> {
+  const setting = await prisma.appSetting.findUnique({
+    where: { key: PARTNERS_HOME_LIMIT_KEY },
+    select: { valueInt: true },
+  });
+  const homeLimit = setting?.valueInt && setting.valueInt > 0 ? setting.valueInt : DEFAULT_HOME_PARTNER_LIMIT;
+
+  const partners = await prisma.businessProfile.findMany({
+    where: {
+      status: 'APPROVED',
+      isPublic: true,
+      displayOrder: {
+        gte: 0,
+      },
+    },
+    select: {
+      id: true,
+      companyName: true,
+      logoUrl: true,
+      website: true,
+    },
+    orderBy: [{ displayOrder: 'asc' }, { updatedAt: 'desc' }],
+    take: homeLimit,
+  });
+
+  return partners;
+}
+
 export const getHomeStoryItems = unstable_cache(
   queryHomeStoryItems,
   ['home-story-items'],
@@ -212,13 +249,20 @@ export const getHomeProjectActivityItems = unstable_cache(
   { revalidate: 60 }
 );
 
+export const getHomePartnerItems = unstable_cache(
+  queryHomePartnerItems,
+  ['home-partner-items'],
+  { revalidate: 60 }
+);
+
 export async function getHomeFeaturedContent() {
-  const [stories, news, events, projectActivities] = await Promise.all([
+  const [stories, news, events, projectActivities, partners] = await Promise.all([
     getHomeStoryItems(),
     getHomeNewsItems(),
     getHomeEventItems(),
     getHomeProjectActivityItems(),
+    getHomePartnerItems(),
   ]);
 
-  return { stories, news, events, projectActivities };
+  return { stories, news, events, projectActivities, partners };
 }
