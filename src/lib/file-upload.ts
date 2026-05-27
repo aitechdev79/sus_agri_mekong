@@ -1,19 +1,20 @@
-import { writeFile, mkdir } from 'fs/promises'
-import { existsSync } from 'fs'
-import path from 'path'
 import { nanoid } from 'nanoid'
 import sharp from 'sharp'
 import mime from 'mime-types'
+import path from 'path'
+import { put } from '@vercel/blob'
 
 export interface UploadConfig {
   maxSize: number
   allowedTypes: string[]
   uploadDir: string
+  access: 'public' | 'private'
 }
 
 export interface UploadResult {
   success: boolean
   url?: string
+  thumbnailUrl?: string
   fileName?: string
   originalName?: string
   size?: number
@@ -25,8 +26,12 @@ const defaultConfig: UploadConfig = {
   maxSize: 10 * 1024 * 1024,
   allowedTypes: [
     'image/jpeg',
+    'image/jpg',
     'image/png',
     'image/webp',
+    'image/gif',
+    'image/bmp',
+    'image/avif',
     'application/pdf',
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -36,6 +41,7 @@ const defaultConfig: UploadConfig = {
     'video/quicktime',
   ],
   uploadDir: './uploads',
+  access: 'public',
 }
 
 export async function validateFile(
@@ -72,28 +78,33 @@ export async function saveFile(
       return { success: false, error: validation.error }
     }
 
-    const uploadDir = path.join(process.cwd(), 'public', finalConfig.uploadDir)
-    if (!existsSync(uploadDir)) {
-      await mkdir(uploadDir, { recursive: true })
-    }
-
-    const fileExtension = path.extname(file.name)
+    const fileExtension = getFileExtension(file)
     const fileName = `${nanoid()}_${Date.now()}${fileExtension}`
-    const filePath = path.join(uploadDir, fileName)
+    const pathname = buildUploadPath(finalConfig.uploadDir, fileName)
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
 
-    if (file.type.startsWith('image/')) {
-      await processImage(buffer, filePath, fileName, uploadDir)
-    } else {
-      await writeFile(filePath, buffer)
-    }
+    const uploadBuffer = file.type.startsWith('image/')
+      ? await optimizeImage(buffer)
+      : buffer
 
-    const publicUrl = `${finalConfig.uploadDir}/${fileName}`.replace('./uploads', '/uploads')
+    const uploaded = await put(pathname, uploadBuffer, {
+      access: finalConfig.access,
+      contentType: file.type,
+      addRandomSuffix: false,
+    })
+
+    let thumbnailUrl: string | undefined
+
+    if (file.type.startsWith('image/')) {
+      const thumbnail = await processImage(buffer, fileName, finalConfig.uploadDir, finalConfig.access)
+      thumbnailUrl = thumbnail?.url
+    }
 
     return {
       success: true,
-      url: publicUrl,
+      url: uploaded.url,
+      thumbnailUrl,
       fileName,
       originalName: file.name,
       size: file.size,
@@ -105,37 +116,75 @@ export async function saveFile(
   }
 }
 
-async function processImage(
-  buffer: Buffer,
-  filePath: string,
-  fileName: string,
-  uploadDir: string
-): Promise<void> {
+async function optimizeImage(buffer: Buffer): Promise<Buffer> {
   try {
-    await sharp(buffer)
-      .jpeg({ quality: 85 })
-      .png({ compressionLevel: 8 })
-      .webp({ quality: 85 })
+    return await sharp(buffer)
       .resize(1920, 1080, {
         fit: 'inside',
         withoutEnlargement: true,
       })
-      .toFile(filePath)
+      .toBuffer()
+  } catch (error) {
+    console.error('Image optimization error:', error)
+    return buffer
+  }
+}
 
-    const thumbnailFileName = `thumb_${fileName}`
-    const thumbnailPath = path.join(uploadDir, thumbnailFileName)
-
-    await sharp(buffer)
+async function processImage(
+  buffer: Buffer,
+  fileName: string,
+  uploadDir: string,
+  access: 'public' | 'private'
+): Promise<{ url: string } | null> {
+  try {
+    const thumbnailBuffer = await sharp(buffer)
       .resize(300, 200, {
         fit: 'cover',
         position: 'center',
       })
       .jpeg({ quality: 80 })
-      .toFile(thumbnailPath)
+      .toBuffer()
+
+    const thumbnailFileName = `thumb_${fileName}`
+    const thumbnailPath = buildUploadPath(uploadDir, thumbnailFileName)
+    return await put(thumbnailPath, thumbnailBuffer, {
+      access,
+      contentType: 'image/jpeg',
+      addRandomSuffix: false,
+    })
   } catch (error) {
     console.error('Image processing error:', error)
-    await writeFile(filePath, buffer)
+    return null
   }
+}
+
+function getFileExtension(file: File): string {
+  const originalExtension = file.name.includes('.') ? file.name.slice(file.name.lastIndexOf('.')) : ''
+  if (originalExtension) return originalExtension.toLowerCase()
+
+  switch (file.type) {
+    case 'image/jpeg':
+      return '.jpg'
+    case 'image/png':
+      return '.png'
+    case 'image/webp':
+      return '.webp'
+    case 'application/pdf':
+      return '.pdf'
+    case 'video/mp4':
+      return '.mp4'
+    case 'video/mpeg':
+      return '.mpeg'
+    case 'video/quicktime':
+      return '.mov'
+    default:
+      return ''
+  }
+}
+
+function buildUploadPath(uploadDir: string, fileName: string): string {
+  const normalizedDir = uploadDir.replace(/^\.?\/+/, '').replace(/\/+$/, '')
+  return normalizedDir ? `${normalizedDir}/${fileName}` : fileName
 }
 
 export function getFileInfo(fileName: string): {

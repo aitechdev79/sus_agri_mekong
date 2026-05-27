@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAuth } from "@/lib/auth-middleware";
+import { saveFile } from "@/lib/file-upload";
 
-const MAX_IMAGE_SIZE = 1 * 1024 * 1024; // 1MB (data URL mode)
+const MAX_IMAGE_SIZE = 1 * 1024 * 1024; // 1MB
 
 export async function POST(request: NextRequest) {
   try {
@@ -32,19 +33,23 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Use data URL like file-only upload to avoid filesystem writes on Vercel.
-    const bytes = await file.arrayBuffer();
-    const base64 = Buffer.from(bytes).toString("base64");
-    const dataUrl = `data:${file.type};base64,${base64}`;
+    const result = await saveFile(file, {
+      uploadDir: './uploads/business-logos',
+    });
+
+    if (!result.success) {
+      return NextResponse.json({ error: result.error }, { status: 400 });
+    }
 
     return NextResponse.json({
       success: true,
       file: {
-        url: dataUrl,
-        fileName: file.name,
-        originalName: file.name,
-        size: file.size,
-        type: file.type,
+        url: result.url,
+        fileName: result.fileName,
+        originalName: result.originalName,
+        size: result.size,
+        type: result.type,
+        thumbnailUrl: result.thumbnailUrl,
       },
     });
   } catch (error) {

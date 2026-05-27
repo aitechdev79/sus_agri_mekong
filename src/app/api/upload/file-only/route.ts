@@ -1,5 +1,6 @@
-﻿import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { requireModerator } from '@/lib/auth-middleware'
+import { saveFile } from '@/lib/file-upload'
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
 const ALLOWED_TYPES = [
@@ -32,7 +33,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Basic validation
     if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
         { error: `File quá lớn. Kích thước tối đa: ${MAX_FILE_SIZE / 1024 / 1024}MB` },
@@ -47,33 +47,27 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // For now, return a data URL for immediate use
-    // This is a temporary solution until proper cloud storage is implemented
-    const bytes = await file.arrayBuffer()
-    const base64 = Buffer.from(bytes).toString('base64')
-    const dataUrl = `data:${file.type};base64,${base64}`
+    const result = await saveFile(file, {
+      uploadDir: './uploads/file-only',
+    })
 
-    // For images under 1MB, we can use data URLs temporarily
-    if (file.type.startsWith('image/') && file.size < 1024 * 1024) {
-      return NextResponse.json({
-        success: true,
-        file: {
-          url: dataUrl,
-          fileName: file.name,
-          originalName: file.name,
-          size: file.size,
-          type: file.type,
-          // Use same data URL as thumbnail for small images
-          thumbnailUrl: dataUrl
-        }
-      })
+    if (!result.success) {
+      return NextResponse.json(
+        { error: result.error },
+        { status: 400 }
+      )
     }
 
-    // For larger files, return file info but suggest external hosting
     return NextResponse.json({
-      success: false,
-      error: 'File upload currently limited to images under 1MB on Vercel. Please use an external image hosting service and provide the URL instead.',
-      suggestion: 'You can use services like Imgur, Cloudinary, or upload to your own server and provide the direct URL.'
+      success: true,
+      file: {
+        url: result.url,
+        fileName: result.fileName,
+        originalName: result.originalName,
+        size: result.size,
+        type: result.type,
+        thumbnailUrl: result.thumbnailUrl,
+      }
     })
 
   } catch (error) {

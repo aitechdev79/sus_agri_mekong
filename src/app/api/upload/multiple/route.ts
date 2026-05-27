@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
             fileUrl: result.url,
             fileType: result.type,
             fileSize: result.size,
-            thumbnailUrl: file.type.startsWith('image/') ? result.url?.replace(result.fileName!, `thumb_${result.fileName}`) : undefined,
+            thumbnailUrl: file.type.startsWith('image/') ? result.thumbnailUrl : undefined,
             status: 'DRAFT',
             authorId: user.id
           }
@@ -72,6 +72,7 @@ export async function POST(request: NextRequest) {
         results.push({
           id: fileRecord.id,
           url: result.url,
+          thumbnailUrl: result.thumbnailUrl,
           fileName: result.fileName,
           originalName: result.originalName,
           size: result.size,
