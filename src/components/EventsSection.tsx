@@ -159,11 +159,7 @@ export default function EventsSection({ initialItems = [] }: EventsSectionProps)
                   <div className="flex flex-row items-center px-6 py-4 transition-transform duration-500 group-hover:scale-105" style={{ minHeight: '120px' }}>
                     <div className="relative w-24 h-24 md:w-32 md:h-32 flex-shrink-0 mr-6 bg-gray-100 overflow-hidden">
                       {(() => {
-                        let imageUrl = null;
-                        if (item.thumbnailUrl) {
-                          if (item.thumbnailUrl.includes('/uploads/')) imageUrl = getBestImageUrl(item.thumbnailUrl, null);
-                          else if (item.thumbnailUrl.startsWith('data:image/')) imageUrl = item.thumbnailUrl;
-                        }
+                        const imageUrl = getBestImageUrl(item.thumbnailUrl, null);
 
                         if (!imageUrl) {
                           return (
