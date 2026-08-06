@@ -266,14 +266,12 @@ export default function AdminPage() {
       <NavigationBar />
 
       <div className="container mx-auto px-4 pb-8 pt-24 md:pb-10">
-        <section className="mb-8 overflow-hidden rounded-3xl border border-sky-100 bg-white shadow-xl">
-          <div>
-            <div className="bg-sky-700 px-6 py-8 text-sky-50 md:px-8">
-              <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-              <p className="mt-3 max-w-xl text-sm text-sky-100">
+        <section className="mb-8 px-2 py-2 md:px-0">
+          <div className="px-4 py-6 md:px-0 md:py-4">
+            <h1 className="text-3xl font-bold text-slate-950">Admin Dashboard</h1>
+            <p className="mt-3 max-w-xl text-sm text-slate-700">
                 Quản lý toàn bộ nội dung, danh mục và người dùng trên cùng một không gian làm việc.
-              </p>
-            </div>
+            </p>
           </div>
         </section>
 
