@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { Calendar, Presentation } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import MiniEventCalendar from '@/components/MiniEventCalendar';
-import { getBestImageUrl } from '@/lib/image-utils';
+import { normalizeImageUrl } from '@/lib/image-utils';
 import { getLocaleFromPathname, pickLocalizedText } from '@/lib/content-locale';
 import { formatVietnamDate, formatVietnamDateTime } from '@/lib/vietnam-time';
 
@@ -37,6 +37,42 @@ function formatEventDate(item: EventItem, locale: string) {
   }
 
   return formatVietnamDateTime(date, locale);
+}
+
+function EventCardImage({ title, thumbnailUrl, imageUrl }: { title: string; thumbnailUrl?: string | null; imageUrl?: string | null }) {
+  const normalizedThumbnail = normalizeImageUrl(thumbnailUrl);
+  const normalizedImage = normalizeImageUrl(imageUrl);
+  const preferredSrc = normalizedThumbnail || normalizedImage;
+  const fallbackSrc = normalizedImage && normalizedImage !== normalizedThumbnail ? normalizedImage : null;
+  const [currentSrc, setCurrentSrc] = useState<string | null>(preferredSrc);
+
+  useEffect(() => {
+    setCurrentSrc(preferredSrc);
+  }, [preferredSrc]);
+
+  const handleError = () => {
+    if (fallbackSrc && currentSrc !== fallbackSrc) {
+      setCurrentSrc(fallbackSrc);
+      return;
+    }
+
+    setCurrentSrc(null);
+  };
+
+  if (!currentSrc) {
+    return (
+      <div className="w-full h-full bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center">
+        <Presentation className="w-10 h-10 text-blue-500" />
+      </div>
+    );
+  }
+
+  if (currentSrc.startsWith('data:image/') || currentSrc.startsWith('blob:')) {
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img src={currentSrc} alt={title} className="w-full h-full object-cover" onError={handleError} />;
+  }
+
+  return <Image src={currentSrc} alt={title} fill className="object-cover" onError={handleError} />;
 }
 
 export default function EventsSection({ initialItems = [] }: EventsSectionProps) {
@@ -158,24 +194,7 @@ export default function EventsSection({ initialItems = [] }: EventsSectionProps)
                 >
                   <div className="flex flex-row items-center px-6 py-4 transition-transform duration-500 group-hover:scale-105" style={{ minHeight: '120px' }}>
                     <div className="relative w-24 h-24 md:w-32 md:h-32 flex-shrink-0 mr-6 bg-gray-100 overflow-hidden">
-                      {(() => {
-                        const imageUrl = getBestImageUrl(item.thumbnailUrl, item.imageUrl);
-
-                        if (!imageUrl) {
-                          return (
-                            <div className="w-full h-full bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center">
-                              <Presentation className="w-10 h-10 text-blue-500" />
-                            </div>
-                          );
-                        }
-
-                        return imageUrl.startsWith('data:image/') ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img src={imageUrl} alt={title} className="w-full h-full object-cover" />
-                        ) : (
-                          <Image src={imageUrl} alt={title} fill className="object-cover" />
-                        );
-                      })()}
+                      <EventCardImage title={title} thumbnailUrl={item.thumbnailUrl} imageUrl={item.imageUrl} />
                     </div>
 
                     <div className="flex-1 flex flex-col justify-center">
