@@ -54,7 +54,7 @@ export default async function NewsPage({
           <header className="mb-8">
             <h1 className="mb-4 text-3xl font-bold leading-tight text-gray-900 md:text-4xl">{localizedTitle}</h1>
 
-            <div className="mb-6 flex flex-wrap items-center gap-4 text-sm text-gray-600">
+            <div className="mb-6 flex flex-wrap items-center gap-4 text-sm text-gray-700">
               <div className="flex items-center">
                 <Calendar className="mr-2 h-4 w-4" />
                 <span>
@@ -74,7 +74,7 @@ export default async function NewsPage({
               )}
             </div>
 
-            {localizedDescription && <div className="mb-6 rounded-lg bg-gray-100 p-4 text-lg text-gray-700">{localizedDescription}</div>}
+            {localizedDescription && <div className="mb-6 rounded-lg bg-gray-100 p-4 text-lg text-gray-800">{localizedDescription}</div>}
           </header>
 
           {(content.imageUrl || content.thumbnailUrl) && (
@@ -83,8 +83,8 @@ export default async function NewsPage({
             </div>
           )}
 
-          <div className="prose prose-lg mb-8 max-w-none [&_ul]:list-disc [&_ul]:list-inside [&_ul]:pl-2 [&_ol]:list-decimal [&_ol]:list-inside [&_ol]:pl-2 [&_li]:my-1 [&_li>p]:m-0 [&_li>p]:inline [&_blockquote]:my-6 [&_blockquote]:border-l-4 [&_blockquote]:border-green-700 [&_blockquote]:bg-green-50 [&_blockquote]:px-5 [&_blockquote]:py-4 [&_blockquote]:italic [&_blockquote_p]:text-gray-700">
-            <div className="leading-relaxed text-gray-800" dangerouslySetInnerHTML={{ __html: renderRichTextContent(localizedBody) }} />
+          <div className="prose prose-lg mb-8 max-w-none [&_ul]:list-disc [&_ul]:list-inside [&_ul]:pl-2 [&_ol]:list-decimal [&_ol]:list-inside [&_ol]:pl-2 [&_li]:my-1 [&_li>p]:m-0 [&_li>p]:inline [&_blockquote]:my-6 [&_blockquote]:border-l-4 [&_blockquote]:border-green-700 [&_blockquote]:bg-green-50 [&_blockquote]:px-5 [&_blockquote]:py-4 [&_blockquote]:italic [&_blockquote_p]:text-gray-800">
+            <div className="leading-relaxed text-gray-900" dangerouslySetInnerHTML={{ __html: renderRichTextContent(localizedBody) }} />
           </div>
 
           {content.videoUrl && (

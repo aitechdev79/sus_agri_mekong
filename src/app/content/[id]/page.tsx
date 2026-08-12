@@ -119,12 +119,12 @@ export default async function ContentDetailPage({
               </h1>
 
               {content.description && (
-                <p className="mb-6 text-lg italic leading-relaxed text-gray-600">
+                <p className="mb-6 text-lg italic leading-relaxed text-gray-700">
                   {content.description}
                 </p>
               )}
 
-              <div className="mb-2 flex items-center space-x-6 text-sm text-gray-500">
+              <div className="mb-2 flex items-center space-x-6 text-sm text-gray-700">
                 {content.type === 'EVENT' && eventRange && (
                   <div className="flex items-center">
                     <Calendar className="mr-2 h-4 w-4" />
@@ -142,7 +142,7 @@ export default async function ContentDetailPage({
               </div>
 
               {content.type === 'EVENT' && content.eventLocation && (
-                <div className="mb-2 text-sm text-gray-500">
+                <div className="mb-2 text-sm text-gray-700">
                   Địa điểm: {content.eventLocation}
                 </div>
               )}
@@ -170,7 +170,7 @@ export default async function ContentDetailPage({
                   <div className="sticky top-4 z-10 mb-4 flex flex-col gap-4 rounded-2xl border border-gray-200 bg-white/95 p-4 backdrop-blur sm:flex-row sm:items-center sm:justify-between">
                     <div>
                       <h2 className="text-lg font-semibold text-gray-900">Tài liệu PDF</h2>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-gray-700">
                         Dùng nút +/- của trình duyệt PDF để phóng to.
                       </p>
                     </div>
@@ -203,7 +203,7 @@ export default async function ContentDetailPage({
                       className="h-[70vh] w-full md:h-[80vh]"
                       aria-label={`PDF viewer for ${content.title}`}
                     >
-                      <div className="p-6 text-sm text-gray-600">
+                      <div className="p-6 text-sm text-gray-700">
                         <p>Trình duyệt của bạn không hỗ trợ hiển thị PDF trực tiếp.</p>
                         <a
                           href={pdfUrl}
@@ -239,27 +239,27 @@ export default async function ContentDetailPage({
                   <section>
                     <h2 className="mb-4 text-2xl font-semibold text-gray-900">Giới thiệu</h2>
                     <div
-                      className="prose prose-lg max-w-none text-justify prose-headings:text-gray-900 prose-p:leading-relaxed prose-p:text-gray-700 [&_ul]:list-disc [&_ul]:list-inside [&_ul]:pl-2 [&_ol]:list-decimal [&_ol]:list-inside [&_ol]:pl-2 [&_li]:my-1 [&_li>p]:inline [&_li>p]:m-0 [&_blockquote]:my-6 [&_blockquote]:border-l-4 [&_blockquote]:border-green-700 [&_blockquote]:bg-green-50 [&_blockquote]:px-5 [&_blockquote]:py-4 [&_blockquote]:italic [&_blockquote_p]:text-gray-700"
+                      className="prose prose-lg max-w-none text-justify prose-headings:text-gray-900 prose-p:leading-relaxed prose-p:text-gray-800 [&_ul]:list-disc [&_ul]:list-inside [&_ul]:pl-2 [&_ol]:list-decimal [&_ol]:list-inside [&_ol]:pl-2 [&_li]:my-1 [&_li>p]:inline [&_li>p]:m-0 [&_blockquote]:my-6 [&_blockquote]:border-l-4 [&_blockquote]:border-green-700 [&_blockquote]:bg-green-50 [&_blockquote]:px-5 [&_blockquote]:py-4 [&_blockquote]:italic [&_blockquote_p]:text-gray-800"
                       dangerouslySetInnerHTML={{ __html: renderRichTextContent(content.content) }}
                     />
                   </section>
                 )
               ) : (
                 <div
-                  className="prose prose-lg max-w-none text-justify prose-headings:text-gray-900 prose-p:leading-relaxed prose-p:text-gray-700 [&_ul]:list-disc [&_ul]:list-inside [&_ul]:pl-2 [&_ol]:list-decimal [&_ol]:list-inside [&_ol]:pl-2 [&_li]:my-1 [&_li>p]:inline [&_li>p]:m-0 [&_blockquote]:my-6 [&_blockquote]:border-l-4 [&_blockquote]:border-green-700 [&_blockquote]:bg-green-50 [&_blockquote]:px-5 [&_blockquote]:py-4 [&_blockquote]:italic [&_blockquote_p]:text-gray-700"
+                  className="prose prose-lg max-w-none text-justify prose-headings:text-gray-900 prose-p:leading-relaxed prose-p:text-gray-800 [&_ul]:list-disc [&_ul]:list-inside [&_ul]:pl-2 [&_ol]:list-decimal [&_ol]:list-inside [&_ol]:pl-2 [&_li]:my-1 [&_li>p]:inline [&_li>p]:m-0 [&_blockquote]:my-6 [&_blockquote]:border-l-4 [&_blockquote]:border-green-700 [&_blockquote]:bg-green-50 [&_blockquote]:px-5 [&_blockquote]:py-4 [&_blockquote]:italic [&_blockquote_p]:text-gray-800"
                   dangerouslySetInnerHTML={{ __html: renderRichTextContent(content.content) }}
                 />
               )}
 
               {externalUrl && (
                 <div className="mt-8 border-t border-gray-200 pt-6">
-                  <p className="text-xs italic text-gray-500">
+                  <p className="text-xs italic text-gray-700">
                     <span>{getExternalLabel(content.type)} </span>
                     <a
                       href={externalUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="break-all text-gray-500 underline hover:text-gray-700"
+                      className="break-all text-gray-700 underline hover:text-gray-900"
                     >
                       {externalUrl}
                     </a>
