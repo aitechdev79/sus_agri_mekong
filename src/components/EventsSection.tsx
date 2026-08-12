@@ -86,8 +86,8 @@ export default function EventsSection({ initialItems = [] }: EventsSectionProps)
 
   useEffect(() => {
     if (initialItems.length > 0) {
+      setEvents(initialItems);
       setLoading(false);
-      return;
     }
 
     const fetchEvents = async () => {
@@ -95,7 +95,7 @@ export default function EventsSection({ initialItems = [] }: EventsSectionProps)
         const response = await fetch(`/api/content/events?_t=${Date.now()}`);
         if (!response.ok) return;
         const data = await response.json();
-        setEvents(data);
+        setEvents(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error('Error fetching events:', error);
       } finally {
@@ -103,7 +103,7 @@ export default function EventsSection({ initialItems = [] }: EventsSectionProps)
       }
     };
 
-    fetchEvents();
+    void fetchEvents();
   }, [initialItems]);
 
   const now = new Date();
