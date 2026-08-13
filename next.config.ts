@@ -101,6 +101,25 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
+      // Vercel Blob storage
+      {
+        protocol: 'https',
+        hostname: 'public.blob.vercel-storage.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.public.blob.vercel-storage.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.blob.vercel-storage.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
   webpack: (config: { resolve: { fallback: Record<string, boolean | string> } }) => {
