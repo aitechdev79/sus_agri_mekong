@@ -239,14 +239,14 @@ export default async function ContentDetailPage({
                   <section>
                     <h2 className="mb-4 text-2xl font-semibold text-gray-900">Giới thiệu</h2>
                     <div
-                      className="prose prose-lg max-w-none text-justify prose-headings:text-gray-900 prose-headings:mb-4 prose-headings:mt-8 prose-p:my-4 prose-p:leading-relaxed prose-p:text-gray-800 [&_p:has(br:only-child)]:my-6 [&_ul]:list-disc [&_ul]:list-inside [&_ul]:pl-2 [&_ol]:list-decimal [&_ol]:list-inside [&_ol]:pl-2 [&_li]:my-1 [&_li>p]:inline [&_li>p]:m-0 [&_blockquote]:my-6 [&_blockquote]:border-l-4 [&_blockquote]:border-green-700 [&_blockquote]:bg-green-50 [&_blockquote]:px-5 [&_blockquote]:py-4 [&_blockquote]:italic [&_blockquote_p]:text-gray-800"
+                      className="prose prose-lg max-w-none text-justify prose-headings:text-gray-900 prose-headings:mb-4 prose-headings:mt-8 prose-p:leading-relaxed prose-p:text-gray-800 [&_p]:mt-0 [&_p]:mb-4 [&_p:has(br:only-child)]:my-5 [&_ul]:list-disc [&_ul]:list-inside [&_ul]:pl-2 [&_ol]:list-decimal [&_ol]:list-inside [&_ol]:pl-2 [&_li]:my-1 [&_li>p]:inline [&_li>p]:m-0 [&_blockquote]:my-6 [&_blockquote]:border-l-4 [&_blockquote]:border-green-700 [&_blockquote]:bg-green-50 [&_blockquote]:px-5 [&_blockquote]:py-4 [&_blockquote]:italic [&_blockquote_p]:text-gray-800"
                       dangerouslySetInnerHTML={{ __html: renderRichTextContent(content.content) }}
                     />
                   </section>
                 )
               ) : (
                 <div
-                  className="prose prose-lg max-w-none text-justify prose-headings:text-gray-900 prose-headings:mb-4 prose-headings:mt-8 prose-p:my-4 prose-p:leading-relaxed prose-p:text-gray-800 [&_p:has(br:only-child)]:my-6 [&_ul]:list-disc [&_ul]:list-inside [&_ul]:pl-2 [&_ol]:list-decimal [&_ol]:list-inside [&_ol]:pl-2 [&_li]:my-1 [&_li>p]:inline [&_li>p]:m-0 [&_blockquote]:my-6 [&_blockquote]:border-l-4 [&_blockquote]:border-green-700 [&_blockquote]:bg-green-50 [&_blockquote]:px-5 [&_blockquote]:py-4 [&_blockquote]:italic [&_blockquote_p]:text-gray-800"
+                  className="prose prose-lg max-w-none text-justify prose-headings:text-gray-900 prose-headings:mb-4 prose-headings:mt-8 prose-p:leading-relaxed prose-p:text-gray-800 [&_p]:mt-0 [&_p]:mb-4 [&_p:has(br:only-child)]:my-5 [&_ul]:list-disc [&_ul]:list-inside [&_ul]:pl-2 [&_ol]:list-decimal [&_ol]:list-inside [&_ol]:pl-2 [&_li]:my-1 [&_li>p]:inline [&_li>p]:m-0 [&_blockquote]:my-6 [&_blockquote]:border-l-4 [&_blockquote]:border-green-700 [&_blockquote]:bg-green-50 [&_blockquote]:px-5 [&_blockquote]:py-4 [&_blockquote]:italic [&_blockquote_p]:text-gray-800"
                   dangerouslySetInnerHTML={{ __html: renderRichTextContent(content.content) }}
                 />
               )}
