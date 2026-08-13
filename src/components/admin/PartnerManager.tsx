@@ -170,19 +170,41 @@ export function PartnerManager() {
       return
     }
 
-    await updatePartner(selectedPartner.id, {
+    const normalizedContactEmail = editForm.contactEmail.trim()
+    const normalizedPhone = editForm.phone.trim()
+    const normalizedWebsite = editForm.website.trim()
+    const normalizedProvince = editForm.province.trim()
+    const normalizedDescription = editForm.description.trim()
+    const normalizedReviewNotes = editForm.reviewNotes.trim()
+
+    const payload: Record<string, unknown> = {
       companyName: editForm.companyName.trim(),
-      contactEmail: editForm.contactEmail.trim() || null,
-      phone: editForm.phone.trim() || null,
-      website: editForm.website.trim() || null,
-      province: editForm.province.trim() || null,
-      description: editForm.description.trim() || null,
-      reviewNotes: editForm.reviewNotes.trim() || null,
       displayOrder: Math.trunc(parsedOrder),
       status: editForm.status,
       isPublic: editForm.isPublic,
       isVerified: editForm.isVerified,
-    })
+    }
+
+    if (normalizedContactEmail || selectedPartner.contactEmail) {
+      payload.contactEmail = normalizedContactEmail || null
+    }
+    if (normalizedPhone || selectedPartner.phone) {
+      payload.phone = normalizedPhone || null
+    }
+    if (normalizedWebsite || selectedPartner.website) {
+      payload.website = normalizedWebsite || null
+    }
+    if (normalizedProvince || selectedPartner.province) {
+      payload.province = normalizedProvince || null
+    }
+    if (normalizedDescription || selectedPartner.description) {
+      payload.description = normalizedDescription || null
+    }
+    if (normalizedReviewNotes || selectedPartner.reviewNotes) {
+      payload.reviewNotes = normalizedReviewNotes || null
+    }
+
+    await updatePartner(selectedPartner.id, payload)
   }
 
   const handleLogoFileChange = async (id: string, file: File | null) => {
