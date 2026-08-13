@@ -1,7 +1,7 @@
 ﻿'use client'
 
 import { useEffect, useState } from 'react'
-import { Search, Trash2, X } from 'lucide-react'
+import { Plus, Search, Trash2, X } from 'lucide-react'
 
 type PartnerStatus = 'DRAFT' | 'PENDING' | 'APPROVED' | 'REJECTED' | 'SUSPENDED'
 
@@ -45,6 +45,9 @@ export function PartnerManager() {
   const [loading, setLoading] = useState(true)
   const [homeDisplayLimit, setHomeDisplayLimit] = useState('4')
   const [savingHomeDisplayLimit, setSavingHomeDisplayLimit] = useState(false)
+  const [creating, setCreating] = useState(false)
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
+  const [newPartnerName, setNewPartnerName] = useState('')
   const [query, setQuery] = useState('')
   const [savingId, setSavingId] = useState('')
   const [uploadingId, setUploadingId] = useState('')
@@ -271,6 +274,55 @@ export function PartnerManager() {
     }
   }
 
+  const closeCreateModal = () => {
+    if (creating) return
+    setIsCreateModalOpen(false)
+    setNewPartnerName('')
+  }
+
+  const createPartner = async () => {
+    const companyName = newPartnerName.trim()
+    if (!companyName) {
+      alert('Vui lòng nhập tên đối tác')
+      return
+    }
+
+    try {
+      setCreating(true)
+      const response = await fetch('/api/admin/partners', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ companyName }),
+      })
+
+      const data = await response.json()
+      if (!response.ok || !data.partner) {
+        throw new Error(data.error || 'Không thể tạo đối tác')
+      }
+
+      const createdPartner: PartnerItem = data.partner
+      setPartners((prev) => {
+        const next = [...prev, createdPartner]
+        next.sort((a, b) => {
+          if (a.displayOrder !== b.displayOrder) return a.displayOrder - b.displayOrder
+          return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+        })
+        return next
+      })
+      setOrderDrafts((prev) => ({
+        ...prev,
+        [createdPartner.id]: String(createdPartner.displayOrder),
+      }))
+      setIsCreateModalOpen(false)
+      setNewPartnerName('')
+      openPartnerEditor(createdPartner)
+    } catch (createError) {
+      alert(createError instanceof Error ? createError.message : 'Đã có lỗi xảy ra khi tạo đối tác')
+    } finally {
+      setCreating(false)
+    }
+  }
+
   return (
     <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm md:p-6">
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
@@ -280,6 +332,14 @@ export function PartnerManager() {
             Quy ước hiển thị trang chủ: `displayOrder` &gt;= 0 là hiển thị, &lt; 0 là ẩn.
           </p>
         </div>
+        <button
+          type="button"
+          onClick={() => setIsCreateModalOpen(true)}
+          className="inline-flex items-center justify-center rounded-md bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700"
+        >
+          <Plus className="mr-2 h-4 w-4" />
+          Thêm đối tác
+        </button>
       </div>
 
       <div className="relative">
@@ -434,6 +494,59 @@ export function PartnerManager() {
       {loading && <p className="py-6 text-center text-sm text-slate-500">Đang tải danh sách đối tác...</p>}
       {!loading && filteredPartners.length === 0 && (
         <p className="py-6 text-center text-sm text-slate-500">Chưa có hồ sơ đối tác nào.</p>
+      )}
+
+      {isCreateModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-4">
+          <div className="w-full max-w-lg rounded-xl bg-white shadow-xl">
+            <div className="flex items-center justify-between border-b px-6 py-4">
+              <h3 className="text-lg font-semibold text-gray-900">Tạo đối tác mới</h3>
+              <button
+                type="button"
+                onClick={closeCreateModal}
+                className="rounded-md p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                aria-label="Đóng"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <div className="space-y-4 px-6 py-5 text-sm text-slate-700">
+              <div>
+                <label className="mb-1 block font-medium text-slate-900">Tên đối tác</label>
+                <input
+                  type="text"
+                  value={newPartnerName}
+                  onChange={(event) => setNewPartnerName(event.target.value)}
+                  placeholder="Nhập tên doanh nghiệp hoặc tổ chức"
+                  className="w-full rounded-md border border-slate-300 px-3 py-2"
+                  autoFocus
+                />
+                <p className="mt-2 text-xs text-slate-500">
+                  Hệ thống sẽ tạo hồ sơ tối giản trước. Logo, email, website, mô tả và các thông tin khác có thể bổ sung sau.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-2 border-t px-6 py-4">
+              <button
+                type="button"
+                onClick={closeCreateModal}
+                className="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+              >
+                Hủy
+              </button>
+              <button
+                type="button"
+                disabled={creating}
+                onClick={() => void createPartner()}
+                className="rounded-md bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700 disabled:opacity-60"
+              >
+                {creating ? 'Đang tạo...' : 'Tạo đối tác'}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       {selectedPartner && editForm && (
