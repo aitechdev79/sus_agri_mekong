@@ -2,6 +2,21 @@ import type { NextConfig } from "next";
 import createNextIntlPlugin from 'next-intl/plugin';
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      {
+        source: '/',
+        has: [
+          {
+            type: 'host',
+            value: 'www.sustainableplatform.org.vn',
+          },
+        ],
+        destination: 'https://benvung.org.vn/en',
+        permanent: true,
+      },
+    ];
+  },
   experimental: {
     forceSwcTransforms: true,
   },
